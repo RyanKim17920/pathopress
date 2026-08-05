@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 
-from pathopress.completion import ValidationResult, complete, validate
+from pathopress.completion import ValidationResult, complete, complete_soft_impute, validate
 
 
 class CompletionTests(unittest.TestCase):
@@ -49,6 +49,32 @@ class CompletionTests(unittest.TestCase):
             with self.subTest(matrix=matrix.tolist()):
                 with self.assertRaises(ValueError):
                     complete(matrix)
+
+    def test_complete_supports_bias_only_rank_zero(self) -> None:
+        matrix = np.array([[50.0, np.nan], [60.0, 70.0], [80.0, 90.0]])
+        completed = complete(matrix, rank=0)
+        self.assertTrue(np.isfinite(completed).all())
+        np.testing.assert_array_equal(completed[np.isfinite(matrix)], matrix[np.isfinite(matrix)])
+
+    def test_complete_rejects_negative_rank(self) -> None:
+        with self.assertRaisesRegex(ValueError, "non-negative"):
+            complete(np.array([[50.0]]), rank=-1)
+
+    def test_soft_impute_supports_raw_and_logit_spaces(self) -> None:
+        matrix = np.array([[50.0, np.nan], [60.0, 70.0], [80.0, 90.0]])
+        observed = np.isfinite(matrix)
+        for transform in ("identity", "logit"):
+            with self.subTest(transform=transform):
+                completed = complete_soft_impute(matrix, rank=1, transform=transform)
+                self.assertTrue(np.isfinite(completed).all())
+                np.testing.assert_array_equal(completed[observed], matrix[observed])
+
+    def test_soft_impute_validates_rank_and_transform(self) -> None:
+        matrix = np.array([[50.0, 60.0], [70.0, 80.0]])
+        with self.assertRaisesRegex(ValueError, "at least 1"):
+            complete_soft_impute(matrix, rank=0)
+        with self.assertRaisesRegex(ValueError, "identity.*logit"):
+            complete_soft_impute(matrix, rank=1, transform="sqrt")
 
 
 class ValidationTests(unittest.TestCase):

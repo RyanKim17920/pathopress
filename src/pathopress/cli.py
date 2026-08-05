@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 
 from .completion import validate
+from .imputation import build_imputation_rows, write_imputations
 from .matrix import filter_matrix, load_scores, make_matrix
 
 
@@ -25,10 +26,12 @@ def _matrix(args: argparse.Namespace) -> tuple[np.ndarray, list[str], list[str]]
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Audit a pathology benchmark score matrix")
-    parser.add_argument("command", choices=("audit", "validate"))
+    parser.add_argument("command", choices=("audit", "validate", "impute"))
     parser.add_argument("--scores", type=Path, default=Path("data/scores.csv"))
     parser.add_argument("--min-scores-per-model", type=int, default=3)
     parser.add_argument("--min-models-per-evaluation", type=int, default=5)
+    parser.add_argument("--rank", type=int, default=2)
+    parser.add_argument("--output", type=Path, default=Path("outputs/imputations_rank1.csv"))
     args = parser.parse_args()
     matrix, models, evaluations = _matrix(args)
     observed = int(np.sum(np.isfinite(matrix)))
@@ -43,6 +46,28 @@ def main() -> None:
         print(f"held_out_predictions={result.n_predictions}")
         print(f"median_absolute_error={result.median_absolute_error:.3f} points")
         print(f"mean_absolute_error={result.mean_absolute_error:.3f} points")
+    elif args.command == "impute":
+        if total == 0:
+            parser.error("no matrix cells remain after support filtering")
+        if args.rank < 0:
+            parser.error("rank must be non-negative")
+        score_rows = load_scores(args.scores)
+        metadata: dict[str, tuple[str, str]] = {}
+        for score in score_rows:
+            previous = metadata.setdefault(
+                score.evaluation_id, (score.suite_id, score.metric)
+            )
+            if previous != (score.suite_id, score.metric):
+                raise ValueError(
+                    f"inconsistent evaluation metadata: {score.evaluation_id}"
+                )
+        rows = build_imputation_rows(
+            matrix, models, evaluations, metadata, rank=args.rank
+        )
+        write_imputations(args.output, rows)
+        n_imputed = sum(row["status"] == "imputed" for row in rows)
+        print(f"output={args.output}")
+        print(f"imputed={n_imputed}")
 
 
 if __name__ == "__main__":

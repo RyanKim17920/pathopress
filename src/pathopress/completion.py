@@ -32,6 +32,15 @@ def _prepare(matrix: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     return transformed, means, stds
 
 
+def _prepare_identity(matrix: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    transformed = matrix.copy().astype(float)
+    means = np.nanmean(transformed, axis=0)
+    stds = np.nanstd(transformed, axis=0)
+    stds[~np.isfinite(stds) | (stds < 1e-8)] = 1.0
+    transformed = (transformed - means) / stds
+    return transformed, means, stds
+
+
 def _bias_als(
     matrix: np.ndarray,
     *,
@@ -100,6 +109,8 @@ def complete(
 ) -> np.ndarray:
     if matrix.ndim != 2 or not np.isfinite(matrix).any():
         raise ValueError("matrix must be a non-empty 2D array with observed scores")
+    if rank < 0:
+        raise ValueError("rank must be non-negative")
     if np.any(np.sum(np.isfinite(matrix), axis=1) == 0):
         raise ValueError("every model row must have at least one observed score")
     if np.any(np.sum(np.isfinite(matrix), axis=0) == 0):
@@ -114,6 +125,59 @@ def complete(
     predictions = _inverse_logit(completed_logit)
     predictions[np.isfinite(matrix)] = matrix[np.isfinite(matrix)]
     return np.clip(predictions, 0.0, 100.0)
+
+
+def complete_soft_impute(
+    matrix: np.ndarray,
+    *,
+    rank: int,
+    transform: str = "logit",
+    max_iterations: int = 100,
+    tolerance: float = 1e-4,
+) -> np.ndarray:
+    """BenchPress's iterative truncated-SVD rank-sweep method.
+
+    This is the method used for BenchPress's raw/logit rank U-curve, distinct
+    from the bias-ALS method used by its final default predictor.
+    """
+    if matrix.ndim != 2 or not np.isfinite(matrix).any():
+        raise ValueError("matrix must be a non-empty 2D array with observed scores")
+    if rank < 1:
+        raise ValueError("rank must be at least 1")
+    if transform not in {"identity", "logit"}:
+        raise ValueError("transform must be 'identity' or 'logit'")
+    if np.any(np.sum(np.isfinite(matrix), axis=0) == 0):
+        raise ValueError("every evaluation column must have at least one observed score")
+
+    observed = np.isfinite(matrix)
+    if transform == "logit":
+        working, means, stds = _prepare(matrix)
+    else:
+        working, means, stds = _prepare_identity(matrix)
+    column_mean = np.nanmean(working, axis=0)
+    imputed = working.copy()
+    missing = ~observed
+    imputed[missing] = np.broadcast_to(column_mean, imputed.shape)[missing]
+
+    for _ in range(max_iterations):
+        previous = imputed.copy()
+        left, singular, right = np.linalg.svd(imputed, full_matrices=False)
+        keep = min(rank, len(singular))
+        approximation = (
+            left[:, :keep] @ np.diag(singular[:keep]) @ right[:keep, :]
+        )
+        imputed = np.where(observed, working, approximation)
+        difference = float(np.sqrt(np.mean((imputed - previous) ** 2)))
+        relative = difference / (float(np.sqrt(np.mean(previous**2))) + 1e-12)
+        if relative < tolerance:
+            break
+
+    restored = imputed * stds + means
+    if transform == "logit":
+        restored = _inverse_logit(restored)
+        restored = np.clip(restored, 0.0, 100.0)
+    restored[observed] = matrix[observed]
+    return restored
 
 
 @dataclass(frozen=True)

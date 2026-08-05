@@ -45,6 +45,21 @@ still train target columns on other models; sparse probes retain all other
 published models. None prevents model-family, publication-selection,
 pretraining-data, temporal, or institutional leakage.
 
+`run_benchpress_style.py` adds the closer BenchPress reproduction: ten random
+within-model fold assignments × three folds and a bias-only/rank 1–10 sweep. It
+writes aggregate and fold-level metrics to `benchpress_style_results.json` and
+selected rank-1 out-of-fold diagnostics to
+`benchpress_style_predictions_rank1.csv`. Unlike the original feasibility
+protocols below, every observed cell is tested once per seed. Rank 1 currently
+wins by pooled MAE, pooled MedAE, and median fold MedAE.
+
+`run_soft_impute_rank_sweep.py` separately reproduces the method behind
+BenchPress's published rank U-curve: iterative truncated-SVD completion at
+ranks 1–10 in raw and logit spaces. Its MedAPE criterion narrowly chooses rank
+2 in both spaces; raw-space MedAE also chooses rank 2, while raw/logit MAE and
+logit-space MedAE choose rank 1. This is intentionally kept distinct from the
+bias-ALS default predictor.
+
 ## Results for the current matrix
 
 The primary-source-parsed, support-filtered matrix has 47 models, 28 evaluations,

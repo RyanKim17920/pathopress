@@ -29,7 +29,7 @@ The repository contains an MVP for the numerical core:
 
 - a citation-backed CSV score loader;
 - iterative support filtering for sparse model × evaluation matrices;
-- logit transform, per-evaluation standardization, and bias-decomposed rank-2 alternating least squares;
+- logit transform, per-evaluation standardization, and configurable bias-decomposed alternating least squares;
 - random-cell holdout smoke validation; and
 - `audit` and `validate` CLI commands.
 
@@ -57,6 +57,39 @@ The default CLI support thresholds (three evaluations per model and five models 
 On the present mixed seed pool, the default support filter retains 47 models × 28 evaluations and 806 primary-source-parsed cells (61.2%). These cells are machine extracted from pinned official tables but have not received dual human review. Random-cell validation gives a 1.046-point median absolute error and 2.450-point mean absolute error. Treat those numbers only as an executable smoke test: the pool combines endpoint families, missingness is structured, and random held-out cells are much easier than predicting a genuinely new release.
 
 A fixed rank sweep in [`experiments/`](experiments/) reinforces that warning. Rank 1 performs best on random-cell and sparse-probe aggregates, while rank 2 performs best when an entire suite block is hidden (4.312 MAE / 2.320 MedAE). PathoROB block prediction is much weaker (12.475 MAE) than HEST (1.268) or THUNDER (4.964), so BenchPress's global rank-2 finding does not transfer automatically.
+
+## BenchPress-style imputation and figures
+
+The repository also reproduces BenchPress's 10-seed × 3-fold within-model
+validation design and sweeps latent interaction ranks 0 through 10. Rank 1 is
+best on all three matched-fold error summaries: pooled MAE 2.427, pooled MedAE
+1.038, and median-of-fold MedAE 1.048. The task-column-median baseline is
+4.470/2.400 MAE/MedAE; bias-only rank 0 is 2.553/1.101 and inherited rank 2 is
+2.541/1.083. The primary point-estimate export therefore uses rank 1, not
+BenchPress's rank 2.
+
+The separate Soft-Impute SVD sweep used for BenchPress's published rank figure
+is more nuanced: its MedAPE criterion narrowly selects rank 2 in both raw and
+logit space, while pooled MAE and logit-space MedAE select rank 1. The current
+evidence therefore supports an effective interaction rank around 1–2, not a
+known exact matrix rank. Direct comparison with Microsoft's standalone default
+predictor produces identical rank-2 outputs on this matrix.
+
+Generate the complete point-estimate table and figures with:
+
+```bash
+pathopress impute --scores data/scores.csv --rank 1 --output outputs/imputations_rank1.csv
+python3 experiments/run_benchpress_style.py
+python3 experiments/run_soft_impute_rank_sweep.py
+python3 scripts/plot_benchpress_style.py
+```
+
+The current supported matrix has 806 reported and 510 imputed cells. Fully
+unobserved Patho-Bench and eva columns cannot yet be imputed; they need score
+anchors extracted from papers or model cards first. See
+[`docs/imputation.md`](docs/imputation.md) for metric definitions, the figure
+gallery, and the distinction between a point estimate and a confidence
+interval.
 
 ## Data contract
 
