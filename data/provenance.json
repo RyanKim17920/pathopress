@@ -2,6 +2,8 @@
   "schema_version": 2,
   "generator": "scripts/build_registry.py",
   "normalization": {
+    "macro-ovr-auc/bacc/cindex/balanced_accuracy/dice": "Raw metrics in [0,1] multiplied by 100.",
+    "weighted_kappa": "(kappa + 1) * 50, preserving the metric's mathematical [-1,1] domain on a 0-100 scale.",
     "f1": "Scores already reported on 0-100 scale; preserved.",
     "robustness_index": "Raw RI in [0,1] multiplied by 100.",
     "pearson_r": "(r + 1) * 50; logit(normalized/100) equals 2 * atanh(r), a scaled Fisher-z."
@@ -27,6 +29,11 @@
       "commit": "e43e74a99b75660b0014f790f25a33dd9f11e121",
       "local_path": "/tmp/pathopress_sources/eva"
     },
+    "eva_midnight": {
+      "url": "https://huggingface.co/kaiko-ai/midnight",
+      "commit": "adc6b15679c981cce6f9b018bbad09d16eeeda9f",
+      "local_path": "/tmp/pathopress_sources/eva_midnight"
+    },
     "thunder": {
       "url": "https://github.com/MICS-Lab/thunder",
       "commit": "3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f",
@@ -43,54 +50,100 @@
       "local_path": "/tmp/pathopress_sources/pathorob"
     }
   },
+  "source_reports": {
+    "exaone_path_2_5_pathobench": {
+      "url": "https://arxiv.org/abs/2512.14019v1",
+      "pdf_url": "https://arxiv.org/pdf/2512.14019v1",
+      "source_archive_url": "https://export.arxiv.org/e-print/2512.14019v1",
+      "source_archive_sha256": "0c479164dfab7ac48a1e1876649ef73efe9f457e064c3ab00ee960856d35a268",
+      "source_member": "tabs/pathobench_result.tex",
+      "snapshot_path": "/admin/home/ryan.kim/pathopress/source_data/exaone_path_2_5_pathobench_2512.14019v1.csv",
+      "snapshot_sha256": "26fbce672fe4cffe73ffc7459c63309efa5984377743fb27085d4c051a59586b",
+      "table": 4,
+      "reported_tasks": 80,
+      "reported_models": 7,
+      "score_cells": 560
+    },
+    "threads_pathobench_public": {
+      "url": "https://arxiv.org/abs/2501.16652v1",
+      "html_url": "https://arxiv.org/html/2501.16652v1",
+      "html_sha256": "a6c7af63c1f527eba692f83b362651e0e1d96d07e303520f90cd08f34b00c92f",
+      "source_archive_url": "https://export.arxiv.org/e-print/2501.16652v1",
+      "source_archive_sha256": "3d8b3f6779b9b0eae21be12e8917bd6f0bab26e3c7943470e378383d20a1de4f",
+      "snapshot_path": "/admin/home/ryan.kim/pathopress/source_data/threads_pathobench_2501.16652v1.csv",
+      "snapshot_sha256": "876ad2edb815c80d0191656930a5f0a2728802361981906e4c694916dd13ff61",
+      "reported_public_tasks": 42,
+      "reported_frozen_representations": 8,
+      "score_cells": 336,
+      "excluded_internal_tasks": 12,
+      "excluded_internal_cells": 96
+    },
+    "eva_pathology_leaderboards": {
+      "repository_score_cells": 195,
+      "midnight_model_card_score_cells": 180,
+      "selected_unique_cells": 265,
+      "alternate_source_conflicts": 110,
+      "conflict_audit_path": "/admin/home/ryan.kim/pathopress/data/eva_source_conflicts.csv"
+    }
+  },
   "counts": {
     "suites": 5,
-    "tasks": 150,
+    "tasks": 287,
     "tasks_by_suite": {
-      "pathobench": 95,
-      "eva": 13,
+      "pathobench": 217,
+      "eva": 28,
       "thunder": 21,
       "hest": 9,
       "pathorob": 12
     },
-    "dataset_artifacts": 80,
-    "task_identities": 143,
-    "protocols": 150,
+    "dataset_artifacts": 82,
+    "task_identities": 145,
+    "protocols": 287,
     "pathobench_sample_units": {
-      "case": 83,
-      "slide": 12
+      "case": 189,
+      "slide": 28
     },
     "pathobench_task_types": {
-      "classification": 85,
-      "survival": 10
+      "classification": 192,
+      "survival": 25
     },
     "pathobench_metrics": {
-      "macro-ovr-auc": 57,
-      "bacc": 19,
-      "weighted_kappa": 9,
-      "cindex": 10
+      "macro-ovr-auc": 157,
+      "bacc": 23,
+      "weighted_kappa": 12,
+      "cindex": 25
     },
-    "model_aliases": 81,
-    "scores": 815,
+    "pathobench_task_identities": 95,
+    "pathobench_exaone_protocol_variants": 80,
+    "pathobench_threads_protocol_variants": 42,
+    "eva_leaderboard_protocol_variants": 15,
+    "model_aliases": 123,
+    "scores": 1976,
     "scores_by_suite": {
+      "pathobench": 896,
+      "eva": 265,
       "hest": 234,
       "thunder": 512,
       "pathorob": 69
     },
     "scores_by_audit_status": {
-      "parsed_primary_source": 806,
+      "parsed_primary_source": 1967,
       "reported_external": 9
     },
     "scores_by_review_status": {
-      "machine_parsed_single_source": 815
+      "machine_parsed_single_source": 1976
     },
-    "deduplication_memberships": 23,
-    "deduplication_groups": 9,
-    "exact_duplicate_task_identities": 7,
+    "deduplication_memberships": 242,
+    "deduplication_groups": 93,
+    "exact_duplicate_task_identities": 91,
     "semantic_adjudication_groups": 2
   },
   "audit_notes": [
     "No network calls are made by the generator.",
+    "EXAONE Path 2.5 Table 4 supplies 560 point estimates: seven models across 80 exact official Patho-Bench task names under the paper's shared linear-probing settings. The reported AVERAGE row is excluded because it is derived, not an independent evaluation cell.",
+    "Fifteen current Patho-Bench HF tasks are absent from EXAONE Table 4 and remain unscored; the parser requires exact task-name matches and does not impute or fuzzy-map them.",
+    "THREADS supplies 336 public Patho-Bench-v1 cells across 42 tasks and eight frozen representation pipelines. Twelve internal tasks (96 cells), supervised/fine-tuned rows, and aggregate summaries are excluded.",
+    "EVA contributes 265 selected unique leaderboard cells. The current repository wins over the older Midnight model-card report for 110 overlapping cells; every alternate value remains in eva_source_conflicts.csv and is never averaged.",
     "HEST and THUNDER average columns are not independent evaluation cells and are excluded from scores.csv.",
     "Score rows are machine-parsed from one reporting source each. audit_status=parsed_primary_source is prototype evidence, not independent or dual-source verification.",
     "PathoROB external-publication rows are retained with audit_status=reported_external; PathoROB explicitly says those values were not validated by its authors.",

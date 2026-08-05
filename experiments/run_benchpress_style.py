@@ -12,8 +12,10 @@ import argparse
 import csv
 import hashlib
 import json
+import os
 import platform
 import sys
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -68,6 +70,33 @@ def metrics(actual: list[float], predicted: list[float]) -> dict[str, float | in
     }
 
 
+def _fit_fold(job: tuple[np.ndarray, np.ndarray, list[tuple[int, int]], int]):
+    """Fit one rank/fold job; kept top-level for process-pool portability."""
+    matrix, train, held, rank = job
+    row_supported = np.any(np.isfinite(train), axis=1)
+    col_supported = np.any(np.isfinite(train), axis=0)
+    row_ids = np.flatnonzero(row_supported)
+    col_ids = np.flatnonzero(col_supported)
+    row_map = {int(old): new for new, old in enumerate(row_ids)}
+    col_map = {int(old): new for new, old in enumerate(col_ids)}
+    predicted = complete(train[np.ix_(row_ids, col_ids)], rank=rank)
+    baseline = np.nanmedian(train, axis=0)
+    rows: list[tuple[int, int, float, float, float]] = []
+    for i, j in held:
+        if not row_supported[i] or not col_supported[j]:
+            continue
+        rows.append(
+            (
+                i,
+                j,
+                float(matrix[i, j]),
+                float(predicted[row_map[i], col_map[j]]),
+                float(baseline[j]),
+            )
+        )
+    return rows
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--scores", type=Path, default=PROJECT_ROOT / "data" / "scores.csv")
@@ -85,6 +114,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--n-seeds", type=int, default=10)
     parser.add_argument("--n-folds", type=int, default=3)
     parser.add_argument("--base-seed", type=int, default=42)
+    parser.add_argument("--workers", type=int, default=max(1, min(28, (os.cpu_count() or 2) - 1)))
     return parser.parse_args()
 
 
@@ -105,31 +135,29 @@ def main() -> None:
     ranks = tuple(range(0, 11))
     by_rank: dict[str, dict[str, object]] = {}
     prediction_rows: list[dict[str, object]] = []
-    for rank in ranks:
-        pooled_actual: list[float] = []
-        pooled_prediction: list[float] = []
-        fold_metrics: list[dict[str, object]] = []
-        suite_values: dict[str, tuple[list[float], list[float]]] = {}
-        for seed_offset in range(args.n_seeds):
-            seed = args.base_seed + seed_offset
-            for fold, (train, held) in enumerate(
-                make_folds(matrix, n_folds=args.n_folds, seed=seed)
-            ):
-                row_supported = np.any(np.isfinite(train), axis=1)
-                col_supported = np.any(np.isfinite(train), axis=0)
-                row_ids = np.flatnonzero(row_supported)
-                col_ids = np.flatnonzero(col_supported)
-                row_map = {int(old): new for new, old in enumerate(row_ids)}
-                col_map = {int(old): new for new, old in enumerate(col_ids)}
-                predicted = complete(train[np.ix_(row_ids, col_ids)], rank=rank)
-                baseline = np.nanmedian(train, axis=0)
+    fold_inputs = [
+        (args.base_seed + seed_offset, fold, train, held)
+        for seed_offset in range(args.n_seeds)
+        for fold, (train, held) in enumerate(
+            make_folds(
+                matrix,
+                n_folds=args.n_folds,
+                seed=args.base_seed + seed_offset,
+            )
+        )
+    ]
+    with ProcessPoolExecutor(max_workers=args.workers) as executor:
+        for rank in ranks:
+            pooled_actual: list[float] = []
+            pooled_prediction: list[float] = []
+            fold_metrics: list[dict[str, object]] = []
+            suite_values: dict[str, tuple[list[float], list[float]]] = {}
+            jobs = [(matrix, train, held, rank) for _, _, train, held in fold_inputs]
+            fitted = executor.map(_fit_fold, jobs)
+            for (seed, fold, _train, _held), fitted_rows in zip(fold_inputs, fitted):
                 fold_actual: list[float] = []
                 fold_prediction: list[float] = []
-                for i, j in held:
-                    if not row_supported[i] or not col_supported[j]:
-                        continue
-                    actual = float(matrix[i, j])
-                    estimate = float(predicted[row_map[i], col_map[j]])
+                for i, j, actual, estimate, baseline in fitted_rows:
                     suite, metric = metadata[evaluations[j]]
                     fold_actual.append(actual)
                     fold_prediction.append(estimate)
@@ -150,27 +178,27 @@ def main() -> None:
                                 "actual_normalized_score": f"{actual:.6f}",
                                 "predicted_normalized_score": f"{estimate:.6f}",
                                 "absolute_error": f"{abs(estimate - actual):.6f}",
-                                "column_median_baseline": f"{float(baseline[j]):.6f}",
+                                "column_median_baseline": f"{baseline:.6f}",
                             }
                         )
                 fold_metrics.append(
                     {"seed": seed, "fold": fold, **metrics(fold_actual, fold_prediction)}
                 )
-        pooled = metrics(pooled_actual, pooled_prediction)
-        fold_medae = np.asarray([float(row["medae"]) for row in fold_metrics])
-        by_rank[str(rank)] = {
-            "pooled": pooled,
-            "fold_medae": {
-                "median": round(float(np.median(fold_medae)), 6),
-                "q1": round(float(np.percentile(fold_medae, 25)), 6),
-                "q3": round(float(np.percentile(fold_medae, 75)), 6),
-            },
-            "by_suite": {
-                suite: metrics(actual, predicted)
-                for suite, (actual, predicted) in sorted(suite_values.items())
-            },
-            "folds": fold_metrics,
-        }
+            pooled = metrics(pooled_actual, pooled_prediction)
+            fold_medae = np.asarray([float(row["medae"]) for row in fold_metrics])
+            by_rank[str(rank)] = {
+                "pooled": pooled,
+                "fold_medae": {
+                    "median": round(float(np.median(fold_medae)), 6),
+                    "q1": round(float(np.percentile(fold_medae, 25)), 6),
+                    "q3": round(float(np.percentile(fold_medae, 75)), 6),
+                },
+                "by_suite": {
+                    suite: metrics(actual, predicted)
+                    for suite, (actual, predicted) in sorted(suite_values.items())
+                },
+                "folds": fold_metrics,
+            }
 
     args.predictions.parent.mkdir(parents=True, exist_ok=True)
     prediction_fields = (

@@ -41,8 +41,9 @@ def main() -> None:
     print(f"rank={args.rank}")
     print(f"max_absolute_difference={float(np.max(difference)):.12g}")
     print(f"mean_absolute_difference={float(np.mean(difference)):.12g}")
-    if not np.array_equal(ours, theirs):
-        raise SystemExit("predictors differ")
+    if not np.allclose(ours, theirs, rtol=1e-12, atol=1e-10):
+        raise SystemExit("predictors differ beyond floating-point tolerance")
+    print("predictors match within floating-point tolerance")
 
 
 if __name__ == "__main__":

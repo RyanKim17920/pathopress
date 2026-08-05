@@ -2,7 +2,7 @@
   "schema_version": 1,
   "input": {
     "scores_path": "data/scores.csv",
-    "scores_sha256": "a2399b315d75e163a28ef856fd15163dc56659b1f4f09b098ee3a1918d85ba58",
+    "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9",
     "verified_only": true,
     "support_filter": {
       "min_scores_per_model": 3,
@@ -10,13 +10,19 @@
     }
   },
   "matrix": {
-    "n_models": 47,
-    "n_evaluations": 28,
-    "n_observed": 806,
-    "density": 0.612462,
+    "n_models": 59,
+    "n_evaluations": 165,
+    "n_observed": 1967,
+    "density": 0.202054,
     "suites": {
+      "eva": {
+        "n_evaluations": 15
+      },
       "hest": {
         "n_evaluations": 9
+      },
+      "pathobench": {
+        "n_evaluations": 122
       },
       "pathorob": {
         "n_evaluations": 3
@@ -52,120 +58,120 @@
       "split_manifest": [
         {
           "split_id": "repeat_00",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 0,
-          "requested_cells": 161,
-          "cell_signature_sha256": "4a019a96022eb253d27b2496cc28e2d253b8537782ff49d377299428c200cb38"
+          "requested_cells": 393,
+          "cell_signature_sha256": "1437307fb9cb599d75bb1494014acb4b3c501a73f7942036ebff06049fa3b1c6"
         },
         {
           "split_id": "repeat_01",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 1,
-          "requested_cells": 161,
-          "cell_signature_sha256": "e0b983dd024772350b5297f0fcc9ba75888f48b6ceb83b46bddbe6c2f94e941d"
+          "requested_cells": 393,
+          "cell_signature_sha256": "8a505605c38c3d59e4158d496d816ab6a8a3ded64ff898238d79144ef77fb1e7"
         },
         {
           "split_id": "repeat_02",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 2,
-          "requested_cells": 161,
-          "cell_signature_sha256": "658e5697cbcaae68c3167d3160e3830004c727b2507f287e553996f5b806721e"
+          "requested_cells": 393,
+          "cell_signature_sha256": "30ad68a07c525e2ff74aa0cf64d8e06089b34fa6a5d04ec53b0270630ef7b348"
         },
         {
           "split_id": "repeat_03",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 3,
-          "requested_cells": 161,
-          "cell_signature_sha256": "b4e0ca40ba945d4b9417e9b2f4ea3185865e1a88c5320ac8a18160791df86e3c"
+          "requested_cells": 393,
+          "cell_signature_sha256": "89221c59905d0ad1f239c226902ec8799c33092bdf32a8cbc64b729804f53285"
         },
         {
           "split_id": "repeat_04",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 4,
-          "requested_cells": 161,
-          "cell_signature_sha256": "2cc2e7fd026f47df203d0cc778e849b4facb0f7ff96b778e54fca8e9401e9d74"
+          "requested_cells": 393,
+          "cell_signature_sha256": "92f4bb4d92a8a3f8f185fc125331053c1ebee36887d0161b3382d299c41f8222"
         },
         {
           "split_id": "repeat_05",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 5,
-          "requested_cells": 161,
-          "cell_signature_sha256": "e8dc3453ef6ae85472a84bdc41ff1d8c714913984ce9c91c0862ac3dc26b1962"
+          "requested_cells": 393,
+          "cell_signature_sha256": "6767f43036f3a7e26250509479c6b9caef12bf53432338e0333f40e6131a3888"
         },
         {
           "split_id": "repeat_06",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 6,
-          "requested_cells": 161,
-          "cell_signature_sha256": "3faef896c706d4861bc5f194c748e7378b3982311d5957af6b6368eed77fdc66"
+          "requested_cells": 393,
+          "cell_signature_sha256": "01557558463c30cff860b4ac78770005970c0ee23b8e6193e2505bf2afb16524"
         },
         {
           "split_id": "repeat_07",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 7,
-          "requested_cells": 161,
-          "cell_signature_sha256": "e384077d345e49b2e7cc64f179375ae65eaa69868446f38145aa2fd25191e3ea"
+          "requested_cells": 393,
+          "cell_signature_sha256": "8583b56a4bc68547691e01ee9d9db94d33490db618c36e8472470743dcc80b66"
         },
         {
           "split_id": "repeat_08",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 8,
-          "requested_cells": 161,
-          "cell_signature_sha256": "a3c2bef57ea4e8513881cd2f8a764fb0883b5617b3cfd199e6bf23da9fb5447c"
+          "requested_cells": 393,
+          "cell_signature_sha256": "c9a49bb922f5d78ba1327fdd50b546e9a09edb3c325626c63cce6b35ac642fd8"
         },
         {
           "split_id": "repeat_09",
-          "n_held_out": 161,
+          "n_held_out": 393,
           "repeat": 9,
-          "requested_cells": 161,
-          "cell_signature_sha256": "ffe5455f0730b9878bfbc918dd8764449a052aa38cbf88e5ea1b2e1bd1f7ef5d"
+          "requested_cells": 393,
+          "cell_signature_sha256": "e3809cd0b11a55239cbe1d4e7b70df0275eefe64680af194cc7bb0c1e6726e1f"
         }
       ],
       "by_rank": {
         "1": {
-          "n_predictions": 1610,
-          "mae": 2.325668,
-          "medae": 1.013032,
+          "n_predictions": 3930,
+          "mae": 2.834996,
+          "medae": 1.526795,
           "n_splits": 10,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "2": {
-          "n_predictions": 1610,
-          "mae": 2.449604,
-          "medae": 1.045707,
+          "n_predictions": 3930,
+          "mae": 2.996708,
+          "medae": 1.571015,
           "n_splits": 10,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "3": {
-          "n_predictions": 1610,
-          "mae": 2.613646,
-          "medae": 1.071189,
+          "n_predictions": 3930,
+          "mae": 3.075536,
+          "medae": 1.566925,
           "n_splits": 10,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "4": {
-          "n_predictions": 1610,
-          "mae": 2.641283,
-          "medae": 1.11623,
+          "n_predictions": 3930,
+          "mae": 3.19717,
+          "medae": 1.693235,
           "n_splits": 10,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "5": {
-          "n_predictions": 1610,
-          "mae": 2.654516,
-          "medae": 1.162348,
+          "n_predictions": 3930,
+          "mae": 3.058172,
+          "medae": 1.637053,
           "n_splits": 10,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "6": {
-          "n_predictions": 1610,
-          "mae": 2.913107,
-          "medae": 1.202913,
+          "n_predictions": 3930,
+          "mae": 3.029498,
+          "medae": 1.649107,
           "n_splits": 10,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
@@ -176,12 +182,28 @@
       "description": "For each suite, hide every suite score of each model that also has a score in another suite.",
       "split_manifest": [
         {
+          "split_id": "eva",
+          "n_held_out": 202,
+          "suite": "eva",
+          "n_bridge_models": 14,
+          "n_suite_columns": 15,
+          "cell_signature_sha256": "5d8f739b09fd540569bcd5bef194bc10793dca98000f725a5d3698e1d7bf864a"
+        },
+        {
           "split_id": "hest",
-          "n_held_out": 171,
+          "n_held_out": 207,
           "suite": "hest",
-          "n_bridge_models": 19,
+          "n_bridge_models": 23,
           "n_suite_columns": 9,
-          "cell_signature_sha256": "ce0dab3403024fc3167829dda9095a039bfb6ce4fc34ff30ce694318ddff4c5f"
+          "cell_signature_sha256": "3bc93289ab48053c2215856cec9d5a2918db0e970ceab2c58934b514b0b7750e"
+        },
+        {
+          "split_id": "pathobench",
+          "n_held_out": 286,
+          "suite": "pathobench",
+          "n_bridge_models": 5,
+          "n_suite_columns": 122,
+          "cell_signature_sha256": "e221d17ecbf706159993d1c406729b080fb71951667e935387315db72f5a6039"
         },
         {
           "split_id": "pathorob",
@@ -202,100 +224,200 @@
       ],
       "overall_by_rank": {
         "1": {
-          "n_predictions": 485,
-          "mae": 4.359579,
-          "medae": 2.429094,
-          "n_splits": 3,
+          "n_predictions": 1009,
+          "mae": 5.612789,
+          "medae": 3.525174,
+          "n_splits": 5,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "2": {
-          "n_predictions": 485,
-          "mae": 4.31158,
-          "medae": 2.320337,
-          "n_splits": 3,
+          "n_predictions": 1009,
+          "mae": 5.380934,
+          "medae": 3.485449,
+          "n_splits": 5,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "3": {
-          "n_predictions": 485,
-          "mae": 4.368498,
-          "medae": 2.459314,
-          "n_splits": 3,
+          "n_predictions": 1009,
+          "mae": 5.391243,
+          "medae": 3.431784,
+          "n_splits": 5,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "4": {
-          "n_predictions": 485,
-          "mae": 4.395371,
-          "medae": 2.40394,
-          "n_splits": 3,
+          "n_predictions": 1009,
+          "mae": 5.206731,
+          "medae": 3.233636,
+          "n_splits": 5,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "5": {
-          "n_predictions": 485,
-          "mae": 4.38327,
-          "medae": 2.513962,
-          "n_splits": 3,
+          "n_predictions": 1009,
+          "mae": 4.952972,
+          "medae": 3.055638,
+          "n_splits": 5,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "6": {
-          "n_predictions": 485,
-          "mae": 4.408142,
-          "medae": 2.492855,
-          "n_splits": 3,
+          "n_predictions": 1009,
+          "mae": 5.111004,
+          "medae": 3.174767,
+          "n_splits": 5,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         }
       },
       "by_suite": {
-        "hest": {
+        "eva": {
           "1": {
-            "n_predictions": 171,
-            "mae": 1.318144,
-            "medae": 1.171711,
+            "n_predictions": 202,
+            "mae": 8.875708,
+            "medae": 7.04632,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "2": {
-            "n_predictions": 171,
-            "mae": 1.268299,
-            "medae": 1.080197,
+            "n_predictions": 202,
+            "mae": 8.058869,
+            "medae": 6.468531,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "3": {
-            "n_predictions": 171,
-            "mae": 1.28889,
-            "medae": 1.165208,
+            "n_predictions": 202,
+            "mae": 8.360587,
+            "medae": 7.117865,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "4": {
-            "n_predictions": 171,
-            "mae": 1.310268,
-            "medae": 1.148591,
+            "n_predictions": 202,
+            "mae": 7.341101,
+            "medae": 5.598228,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "5": {
-            "n_predictions": 171,
-            "mae": 1.306031,
-            "medae": 1.177112,
+            "n_predictions": 202,
+            "mae": 6.562673,
+            "medae": 5.041937,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "6": {
-            "n_predictions": 171,
-            "mae": 1.3261,
-            "medae": 1.206173,
+            "n_predictions": 202,
+            "mae": 7.151959,
+            "medae": 5.236832,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          }
+        },
+        "hest": {
+          "1": {
+            "n_predictions": 207,
+            "mae": 1.48599,
+            "medae": 1.289659,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "2": {
+            "n_predictions": 207,
+            "mae": 1.471818,
+            "medae": 1.221873,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "3": {
+            "n_predictions": 207,
+            "mae": 1.459737,
+            "medae": 1.218768,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "4": {
+            "n_predictions": 207,
+            "mae": 1.444492,
+            "medae": 1.211136,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "5": {
+            "n_predictions": 207,
+            "mae": 1.419713,
+            "medae": 1.21941,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "6": {
+            "n_predictions": 207,
+            "mae": 1.425698,
+            "medae": 1.175635,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          }
+        },
+        "pathobench": {
+          "1": {
+            "n_predictions": 286,
+            "mae": 4.264258,
+            "medae": 2.640107,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "2": {
+            "n_predictions": 286,
+            "mae": 4.15475,
+            "medae": 2.616482,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "3": {
+            "n_predictions": 286,
+            "mae": 4.137952,
+            "medae": 2.573665,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "4": {
+            "n_predictions": 286,
+            "mae": 4.263017,
+            "medae": 2.628828,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "5": {
+            "n_predictions": 286,
+            "mae": 4.155814,
+            "medae": 2.434503,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "6": {
+            "n_predictions": 286,
+            "mae": 4.221139,
+            "medae": 2.528286,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
@@ -304,48 +426,48 @@
         "pathorob": {
           "1": {
             "n_predictions": 42,
-            "mae": 12.188706,
-            "medae": 9.577974,
+            "mae": 14.438457,
+            "medae": 10.868582,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "2": {
             "n_predictions": 42,
-            "mae": 12.475075,
-            "medae": 9.343904,
+            "mae": 14.45039,
+            "medae": 11.371626,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "3": {
             "n_predictions": 42,
-            "mae": 12.277278,
-            "medae": 8.870316,
+            "mae": 14.945967,
+            "medae": 10.906194,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "4": {
             "n_predictions": 42,
-            "mae": 12.126904,
-            "medae": 8.92656,
+            "mae": 15.378102,
+            "medae": 11.625199,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "5": {
             "n_predictions": 42,
-            "mae": 12.516273,
-            "medae": 8.937313,
+            "mae": 13.738744,
+            "medae": 11.089302,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "6": {
             "n_predictions": 42,
-            "mae": 12.831065,
-            "medae": 9.909222,
+            "mae": 13.953139,
+            "medae": 11.038273,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
@@ -354,48 +476,48 @@
         "thunder": {
           "1": {
             "n_predictions": 272,
-            "mae": 5.062749,
-            "medae": 3.98411,
+            "mae": 6.38536,
+            "medae": 5.211252,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "2": {
             "n_predictions": 272,
-            "mae": 4.96428,
-            "medae": 3.905089,
+            "mae": 6.255991,
+            "medae": 4.754753,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "3": {
             "n_predictions": 272,
-            "mae": 5.083366,
-            "medae": 3.981241,
+            "mae": 6.020499,
+            "medae": 4.622541,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "4": {
             "n_predictions": 272,
-            "mae": 5.141063,
-            "medae": 3.915802,
+            "mae": 5.90653,
+            "medae": 4.469256,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "5": {
             "n_predictions": 272,
-            "mae": 5.062026,
-            "medae": 3.999242,
+            "mae": 5.928007,
+            "medae": 4.34532,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "6": {
             "n_predictions": 272,
-            "mae": 5.04515,
-            "medae": 3.961327,
+            "mae": 5.970258,
+            "medae": 4.670724,
             "n_splits": 1,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
@@ -407,17 +529,43 @@
       "description": "For each eligible model independently, reveal a fixed random k of its scores and hide all its other known scores; all other models remain fully observed.",
       "split_manifest": [
         {
+          "split_id": "k3:chief-patch-mean",
+          "n_held_out": 39,
+          "k": 3,
+          "model": "chief-patch-mean",
+          "n_observed_model_cells": 42,
+          "probe_evaluations": [
+            "pathobench.threads2025.bracs.slidelevel-fine",
+            "pathobench.threads2025.cptac_brca.pik3ca-mutation",
+            "pathobench.threads2025.cptac_gbm.tp53-mutation"
+          ],
+          "held_cell_signature_sha256": "26962ac15756515968b1852cdd343291608d6b852f7cfd52769950cd63ae4b2d"
+        },
+        {
+          "split_id": "k3:chief-slide",
+          "n_held_out": 119,
+          "k": 3,
+          "model": "chief-slide",
+          "n_observed_model_cells": 122,
+          "probe_evaluations": [
+            "pathobench.threads2025.bcnb.er",
+            "pathobench.threads2025.bracs.slidelevel-coarse",
+            "pathobench.threads2025.cptac_lscc.keap1-mutation"
+          ],
+          "held_cell_signature_sha256": "87676992170a456006c0d00a757bf90101fb9af5432807396c6c02b1642c9e11"
+        },
+        {
           "split_id": "k3:clip-b",
           "n_held_out": 13,
           "k": 3,
           "model": "clip-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.spider_breast.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.bracs.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing"
           ],
-          "held_cell_signature_sha256": "10909ff9afb287f914a0c6280b8644eef296039a7b4dbd0357afc811d471a6d6"
+          "held_cell_signature_sha256": "0f3e8d590c85a317dd318f83c4ca47543ada84de7e2e482f594aa03b97c0e65c"
         },
         {
           "split_id": "k3:clip-l",
@@ -426,11 +574,11 @@
           "model": "clip-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.spider_skin.linear_probing",
-            "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing"
           ],
-          "held_cell_signature_sha256": "0a98ce6fc21accfa1521faa92d36a21700c52b5a524bdf966ab30ac988ba9256"
+          "held_cell_signature_sha256": "a32d92df979ccb64dffc4e2a0f6a30ae65a42814cd68da5aaff3a563a00df2d3"
         },
         {
           "split_id": "k3:conch",
@@ -439,24 +587,24 @@
           "model": "conch",
           "n_observed_model_cells": 28,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "thunder.bracs.linear_probing",
-            "thunder.spider_colorectal.linear_probing"
+            "hest.idc.gene_expression",
+            "hest.skcm.gene_expression",
+            "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "de92927e1e05945edda16f21b9e682b0bc92bd649402863c4f1527a4eec2e468"
+          "held_cell_signature_sha256": "9cffba9b5d0f9650cd4e3475433bf788474293bc8976a21047f698e8993e0aeb"
         },
         {
           "split_id": "k3:conch-1.5",
-          "n_held_out": 25,
+          "n_held_out": 67,
           "k": 3,
           "model": "conch-1.5",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 70,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "thunder.ccrcc.linear_probing",
-            "thunder.spider_thorax.linear_probing"
+            "hest.prad.gene_expression",
+            "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation",
+            "thunder.spider_colorectal.linear_probing"
           ],
-          "held_cell_signature_sha256": "dc79b53478643d25392e64e78b718aa1205b11effeb9daf9636783e50ceda2e4"
+          "held_cell_signature_sha256": "a031e95f344645f9a9189039fefe0768640dc862dd525077b65c0b86edfd27da"
         },
         {
           "split_id": "k3:ctranspath",
@@ -465,11 +613,11 @@
           "model": "ctranspath",
           "n_observed_model_cells": 12,
           "probe_evaluations": [
-            "hest.idc.gene_expression",
-            "hest.skcm.gene_expression",
-            "pathorob.tcga_2x2.robustness_index"
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression",
+            "pathorob.tolkach_esca.robustness_index"
           ],
-          "held_cell_signature_sha256": "f0d5e42c66ec7cfc522e90982aafab83d560ef381eb2477c326b314ceda76e3a"
+          "held_cell_signature_sha256": "7cbaeb9161ea1fbc5d204431bddd33eefac88e8386a7d135e06bbd5199522d28"
         },
         {
           "split_id": "k3:dinov2-b",
@@ -478,11 +626,11 @@
           "model": "dinov2-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bracs.linear_probing",
-            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.spider_thorax.linear_probing",
             "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "905c23d31064e3ceca67175ff6afbecdd346edfa1a7590f33b33bac11a27c898"
+          "held_cell_signature_sha256": "cda15cca1b9f81ee4f00544ab7286f2a52a7dd55b5879f44439057787995d480"
         },
         {
           "split_id": "k3:dinov2-l",
@@ -491,11 +639,37 @@
           "model": "dinov2-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
-            "thunder.tcga_tils.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.bracs.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.esca.linear_probing"
           ],
-          "held_cell_signature_sha256": "439153912d19d0092e89d8daed175f24d7da57266c9b48fb8f67eb55c8abc4a9"
+          "held_cell_signature_sha256": "5aab8b74e6ef39f2634f70197a33c21a5e5220addd1063e184e7611b7b2cddb4"
+        },
+        {
+          "split_id": "k3:dinov2-vit-g-14-initial",
+          "n_held_out": 9,
+          "k": 3,
+          "model": "dinov2-vit-g-14-initial",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.patch_camelyon_10shot.test"
+          ],
+          "held_cell_signature_sha256": "a03031baee4ecf770bc9a0a6a465b1a91ef7ac0ff06eab69b3fc41fcad452d65"
+        },
+        {
+          "split_id": "k3:dinov2-vit-g-14-natural-images",
+          "n_held_out": 9,
+          "k": 3,
+          "model": "dinov2-vit-g-14-natural-images",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.monusac.test"
+          ],
+          "held_cell_signature_sha256": "2964d7c248315842ead466d9d46086480eea856a7e202408fa2c1a8b8c278ba2"
         },
         {
           "split_id": "k3:dinov3-b",
@@ -504,11 +678,11 @@
           "model": "dinov3-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "172cb4a8db99f6f0bdc4066d4e11f57f14b6afaaca8a374e3f0bb4b41b2820c6"
+          "held_cell_signature_sha256": "0ff2e9c6bd2e60ab44d41885d054a43016f948385c6f6eecee41bac2d4b6bb28"
         },
         {
           "split_id": "k3:dinov3-l",
@@ -517,11 +691,11 @@
           "model": "dinov3-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.mhist.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.bach.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "c63838cd239ab1b69d82ba25d5dde1d7170ac5caba1b6f0014c3eded7873d847"
+          "held_cell_signature_sha256": "44aa98af0ee2fb7dcf492005e42ba94d7107a2c941573e9cc2726e02dc6b3fd0"
         },
         {
           "split_id": "k3:dinov3-s",
@@ -530,11 +704,24 @@
           "model": "dinov3-s",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_tils.linear_probing"
+            "thunder.bach.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "61261fc97c7b1b3fe3c0a06681af80c7c2b11c567c70d6518e8bc067243a5978"
+          "held_cell_signature_sha256": "1143a1018ccd2e6de818a40e3bc2a78e3ead3e8dc4a0ae61afef245bfe59114c"
+        },
+        {
+          "split_id": "k3:exaone-path-2.5-slide",
+          "n_held_out": 77,
+          "k": 3,
+          "model": "exaone-path-2.5-slide",
+          "n_observed_model_cells": 80,
+          "probe_evaluations": [
+            "pathobench.exaone2025.cptac_ccrcc.os",
+            "pathobench.exaone2025.hancook.os-treatment-rdc",
+            "pathobench.exaone2025.ovarian.response"
+          ],
+          "held_cell_signature_sha256": "c0fa156f0a90920069333e996971de849a1966abd43ef4f36bdcace0409a611e"
         },
         {
           "split_id": "k3:genbio-pathfm",
@@ -543,11 +730,11 @@
           "model": "genbio-pathfm",
           "n_observed_model_cells": 25,
           "probe_evaluations": [
-            "hest.skcm.gene_expression",
-            "thunder.bracs.linear_probing",
-            "thunder.mhist.linear_probing"
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing"
           ],
-          "held_cell_signature_sha256": "a3e04a8491dd45f3969ef819e6aaa29f33649327c7d95e89eb6ee83629c14c27"
+          "held_cell_signature_sha256": "a05eb43d88108204cc080b756eeb5a4c115ce830a34ebd9044238b5e74081578"
         },
         {
           "split_id": "k3:gpfm",
@@ -556,24 +743,24 @@
           "model": "gpfm",
           "n_observed_model_cells": 9,
           "probe_evaluations": [
-            "hest.lung.gene_expression",
+            "hest.idc.gene_expression",
             "hest.paad.gene_expression",
-            "hest.read.gene_expression"
+            "hest.prad.gene_expression"
           ],
-          "held_cell_signature_sha256": "b0aa7d2310379827f7056951f67c3415c5f348f756c9d9f950449dd30f6667df"
+          "held_cell_signature_sha256": "469d5f24e1d239205051afea85aecf77e257e2092e697fdf3aacf53962cb3903"
         },
         {
           "split_id": "k3:h-optimus-0",
-          "n_held_out": 25,
+          "n_held_out": 120,
           "k": 3,
           "model": "h-optimus-0",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 123,
           "probe_evaluations": [
-            "hest.lung.gene_expression",
-            "thunder.bracs.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "hest.ccrcc.gene_expression",
+            "pathobench.exaone2025.cptac_lscc.immune-class",
+            "thunder.tcga_crc_msi.linear_probing"
           ],
-          "held_cell_signature_sha256": "ae604243f9bf6311160f95592efe97e5ea5ddf1622c011985929cf72d9f301b1"
+          "held_cell_signature_sha256": "953ddba244171fd55142311027df9e8247659ffbbb9b107424195058fbf6e25b"
         },
         {
           "split_id": "k3:h-optimus-1",
@@ -582,11 +769,11 @@
           "model": "h-optimus-1",
           "n_observed_model_cells": 25,
           "probe_evaluations": [
-            "hest.lymph_idc.gene_expression",
-            "hest.prad.gene_expression",
-            "hest.read.gene_expression"
+            "hest.skcm.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing"
           ],
-          "held_cell_signature_sha256": "579249e3a4ffa149b395084fd6a5164ea64941090fa364f362e9e906a0d5e6b0"
+          "held_cell_signature_sha256": "ce71b8dbe08af5a86aa1189f7bde06cee8b167065438092afab1a9d1d744311b"
         },
         {
           "split_id": "k3:h0-mini",
@@ -595,11 +782,11 @@
           "model": "h0-mini",
           "n_observed_model_cells": 28,
           "probe_evaluations": [
-            "thunder.mhist.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.spider_thorax.linear_probing"
+            "hest.lung.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "thunder.break_his.linear_probing"
           ],
-          "held_cell_signature_sha256": "039bc8fbc7254742600188d86821d17a4d0a1e1452a8486d14102948d60a21f0"
+          "held_cell_signature_sha256": "bd5ec4ca5e4d63043609f35883b4077c4b9e7ba32c9bc720e9ab45f5cc5a86ad"
         },
         {
           "split_id": "k3:hibou-b",
@@ -608,50 +795,50 @@
           "model": "hibou-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
+            "thunder.bracs.linear_probing",
             "thunder.mhist.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
             "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "be58ad5ef6969daa57b421acceafa9d332c4af50b9a2e72b2b0fe1b3aaaa6629"
+          "held_cell_signature_sha256": "9e7f9e59f5a16bc57e5cf9bb12866f39b8b942535bb83333c3f021ed3ce1f257"
         },
         {
           "split_id": "k3:hibou-l",
-          "n_held_out": 22,
+          "n_held_out": 37,
           "k": 3,
           "model": "hibou-l",
-          "n_observed_model_cells": 25,
+          "n_observed_model_cells": 40,
           "probe_evaluations": [
-            "thunder.spider_breast.linear_probing",
+            "thunder.crc.linear_probing",
             "thunder.spider_skin.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.spider_thorax.linear_probing"
           ],
-          "held_cell_signature_sha256": "402541701d3852ce1358a5a7a6cdeb4f49b0f1383fccf39b86f33ff74a203aaf"
+          "held_cell_signature_sha256": "61ee8b963374edfdc99b36edfad757a2dede5a01cd94d960e16e4c1db8b120b8"
         },
         {
           "split_id": "k3:kaiko-vit-b-16",
-          "n_held_out": 6,
+          "n_held_out": 19,
           "k": 3,
           "model": "kaiko-vit-b-16",
-          "n_observed_model_cells": 9,
+          "n_observed_model_cells": 22,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "hest.coad.gene_expression",
-            "hest.lung.gene_expression"
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "hest.paad.gene_expression"
           ],
-          "held_cell_signature_sha256": "e6e1f8caed553c2d56e26088c448e78311119081d3875d2997c296efefa8499f"
+          "held_cell_signature_sha256": "cb6e9d977643fd00792da1be35007b0cb9e44333c091feaaf9dc0ea1e179139d"
         },
         {
           "split_id": "k3:kaiko-vit-b-8",
-          "n_held_out": 9,
+          "n_held_out": 24,
           "k": 3,
           "model": "kaiko-vit-b-8",
-          "n_observed_model_cells": 12,
+          "n_observed_model_cells": 27,
           "probe_evaluations": [
-            "hest.idc.gene_expression",
-            "hest.lung.gene_expression",
-            "pathorob.tcga_2x2.robustness_index"
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.panda_small.validation"
           ],
-          "held_cell_signature_sha256": "95d4cf95abc5d4ff1b5c468113ba76029087c97ebfa09d3726629a95db70bc0a"
+          "held_cell_signature_sha256": "9c11f05a544d4dfeb05012b157ab2129d9c6dddde2fdff189d93386ac8f0a568"
         },
         {
           "split_id": "k3:kaiko-vit-b-unspecified-patch",
@@ -660,50 +847,50 @@
           "model": "kaiko-vit-b-unspecified-patch",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
+            "thunder.bracs.linear_probing",
             "thunder.break_his.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.spider_skin.linear_probing"
+            "thunder.patch_camelyon.linear_probing"
           ],
-          "held_cell_signature_sha256": "ad9aa245a54a118aacac0a92919664f27ae4949938f6eefad7f4d805f31b35ea"
+          "held_cell_signature_sha256": "e7e83d0dfcf12ad85d68e174e85cd7a516e19be0115844831d4ac91fbd484ebb"
         },
         {
           "split_id": "k3:kaiko-vit-l-14",
-          "n_held_out": 6,
+          "n_held_out": 19,
           "k": 3,
           "model": "kaiko-vit-l-14",
-          "n_observed_model_cells": 9,
+          "n_observed_model_cells": 22,
           "probe_evaluations": [
             "hest.ccrcc.gene_expression",
-            "hest.lung.gene_expression",
-            "hest.read.gene_expression"
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression"
           ],
-          "held_cell_signature_sha256": "0c1c1afa628685442b2dfcfd8d0a1c65da6f620b978edf026454b2f867942b8a"
+          "held_cell_signature_sha256": "20a38cbfe2a61bd837cb4d517c93bea0419ee5053790169bdd3935d89512a8b4"
         },
         {
           "split_id": "k3:kaiko-vit-s-16",
-          "n_held_out": 6,
+          "n_held_out": 19,
           "k": 3,
           "model": "kaiko-vit-s-16",
-          "n_observed_model_cells": 9,
+          "n_observed_model_cells": 22,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "hest.idc.gene_expression",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.panda_small.validation",
             "hest.skcm.gene_expression"
           ],
-          "held_cell_signature_sha256": "f8d9e8e8b7d1c42947197b37f57bb97858305c81d308f77bc75a1bb6b3ddf93d"
+          "held_cell_signature_sha256": "464fbd61de2abf0b872f0fd068d5f02e7bc27a987586444e06c511b5f1ada458"
         },
         {
           "split_id": "k3:kaiko-vit-s-8",
-          "n_held_out": 6,
+          "n_held_out": 19,
           "k": 3,
           "model": "kaiko-vit-s-8",
-          "n_observed_model_cells": 9,
+          "n_observed_model_cells": 22,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "hest.prad.gene_expression",
-            "hest.skcm.gene_expression"
+            "eva.leaderboard.patch_camelyon.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "hest.idc.gene_expression"
           ],
-          "held_cell_signature_sha256": "ad1a072646f5758c449fc6cf53aedfc3d5f1331ec4d7d05bb64dddb4e702744e"
+          "held_cell_signature_sha256": "f830e5c94e19d0f80654ad2b42f373a99dce63ddb79731dee71ad7c8b77df52f"
         },
         {
           "split_id": "k3:kaiko-vit-s-unspecified-patch",
@@ -712,11 +899,11 @@
           "model": "kaiko-vit-s-unspecified-patch",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.esca.linear_probing",
-            "thunder.mhist.linear_probing",
-            "thunder.spider_breast.linear_probing"
+            "thunder.crc.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "11376cc70b7d9f5036afbff59a5194b80b4cf7b33cc2636b9751639e11df2454"
+          "held_cell_signature_sha256": "a43bf600a2e4f6adc015e571fd26c1aa9239625f8273c28d72da20f6bfc94481"
         },
         {
           "split_id": "k3:keep",
@@ -725,11 +912,24 @@
           "model": "keep",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.esca.linear_probing",
-            "thunder.mhist.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.bracs.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_skin.linear_probing"
           ],
-          "held_cell_signature_sha256": "11e36e6a686aefef5389848042a3f5e7c094ba45f2098bfe012baab0e85777a9"
+          "held_cell_signature_sha256": "9e5602da2073434ca7e165344f29afd9fbfcb85c76a8eff5fa5dc2f0ebba38c5"
+        },
+        {
+          "split_id": "k3:lunit-vit-s-16",
+          "n_held_out": 12,
+          "k": 3,
+          "model": "lunit-vit-s-16",
+          "n_observed_model_cells": 15,
+          "probe_evaluations": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.panda_small.validation"
+          ],
+          "held_cell_signature_sha256": "36a624623b4548e80a9eef76ddeb1813ffdaa3ff03bb7601b5c23abdf480c92e"
         },
         {
           "split_id": "k3:lunit-vit-s-8",
@@ -738,24 +938,50 @@
           "model": "lunit-vit-s-8",
           "n_observed_model_cells": 9,
           "probe_evaluations": [
-            "hest.lung.gene_expression",
-            "hest.read.gene_expression",
+            "hest.ccrcc.gene_expression",
+            "hest.lymph_idc.gene_expression",
             "hest.skcm.gene_expression"
           ],
-          "held_cell_signature_sha256": "1b077129a893e60e9fbc6616d023aa500e1e9523675895b584a3f9edcf37df36"
+          "held_cell_signature_sha256": "987ec6a4189efa83fc36c40b2284a8ea694a1ce8d5160b06114b05131c675250"
         },
         {
           "split_id": "k3:midnight",
-          "n_held_out": 22,
+          "n_held_out": 37,
           "k": 3,
           "model": "midnight",
-          "n_observed_model_cells": 25,
+          "n_observed_model_cells": 40,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "thunder.ccrcc.linear_probing",
-            "thunder.crc.linear_probing"
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.spider_colorectal.linear_probing"
           ],
-          "held_cell_signature_sha256": "d6d7ad0f12e1889185e99d61ee8a4ca097b43d3fd7c25a6cf5dc71d8e1ee4576"
+          "held_cell_signature_sha256": "48c07f2048ef9a9c7025cc6d37f5384d305a1eb51db5fc1cb006f2249b3f52d0"
+        },
+        {
+          "split_id": "k3:midnight-92k",
+          "n_held_out": 9,
+          "k": 3,
+          "model": "midnight-92k",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.patch_camelyon_10shot.test"
+          ],
+          "held_cell_signature_sha256": "615bc4c3d6f60ccc6d51b6489512b1958ca2ed92eb2f153c660f4099b98fca00"
+        },
+        {
+          "split_id": "k3:midnight-92k-392",
+          "n_held_out": 9,
+          "k": 3,
+          "model": "midnight-92k-392",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.patch_camelyon_10shot.test"
+          ],
+          "held_cell_signature_sha256": "d16c931440c527fb12d8e1165c0afd2f18ddc411b1ed4aab7a5ac4c80afe8647"
         },
         {
           "split_id": "k3:musk",
@@ -764,11 +990,11 @@
           "model": "musk",
           "n_observed_model_cells": 28,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
+            "hest.lymph_idc.gene_expression",
+            "thunder.ccrcc.linear_probing",
             "thunder.spider_breast.linear_probing"
           ],
-          "held_cell_signature_sha256": "be6239e63f20b2c75a392c8177a0af0dda92ffda28c1dcded32caf9694a96f42"
+          "held_cell_signature_sha256": "829b3c3ff361c8e94ec76fda2408bf954e5ecd1ff5aed8e60ca0894973f561f6"
         },
         {
           "split_id": "k3:openmidnight",
@@ -777,37 +1003,37 @@
           "model": "openmidnight",
           "n_observed_model_cells": 25,
           "probe_evaluations": [
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.spider_thorax.linear_probing"
+            "hest.idc.gene_expression",
+            "hest.prad.gene_expression",
+            "thunder.esca.linear_probing"
           ],
-          "held_cell_signature_sha256": "ff7595e14844943702ce0b8ab5c278f7eddf22c5314f267d15ea9db52f599b59"
+          "held_cell_signature_sha256": "9aa82cb981937ebfd82a897f36f0d83b46820ba5b3d014a098d73d6d59d3eae9"
         },
         {
           "split_id": "k3:phikon",
-          "n_held_out": 25,
+          "n_held_out": 40,
           "k": 3,
           "model": "phikon",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "pathorob.camelyon.robustness_index",
-            "thunder.esca.linear_probing",
+            "eva.leaderboard.mhist.test",
+            "hest.read.gene_expression",
             "thunder.spider_thorax.linear_probing"
           ],
-          "held_cell_signature_sha256": "c3b11efae8a8a2de0a9c3f3fbffec59450866a8fd653772a40bb597b5a3da3d9"
+          "held_cell_signature_sha256": "3eb9fe80945725b2ee8615510e3e9f34290efee4eae3ee23edf04307b87d86b8"
         },
         {
           "split_id": "k3:phikon-v2",
-          "n_held_out": 25,
+          "n_held_out": 40,
           "k": 3,
           "model": "phikon-v2",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "hest.lymph_idc.gene_expression",
-            "hest.skcm.gene_expression",
-            "thunder.spider_thorax.linear_probing"
+            "eva.leaderboard.crc.validation",
+            "hest.prad.gene_expression",
+            "thunder.bach.linear_probing"
           ],
-          "held_cell_signature_sha256": "afb6d102e97d0bcff9528423179f30ca9c985e57d5278129f25f2ef8c89ad113"
+          "held_cell_signature_sha256": "b2adce5dc43cb850aa1103cc6b70969e768d29df612f10128132a863d7bba9e3"
         },
         {
           "split_id": "k3:plip",
@@ -816,24 +1042,50 @@
           "model": "plip",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.spider_colorectal.linear_probing",
-            "thunder.tcga_tils.linear_probing",
+            "thunder.bach.linear_probing",
+            "thunder.ccrcc.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "2807165c6ca9fa7ec8f39c6a248c362e4f47d5d8d406168a2f358f432c774b59"
+          "held_cell_signature_sha256": "3858193144d7a986af66fd4a0ce7fa4c081e829a4531a02c684a9470e722182d"
+        },
+        {
+          "split_id": "k3:prism-slide",
+          "n_held_out": 119,
+          "k": 3,
+          "model": "prism-slide",
+          "n_observed_model_cells": 122,
+          "probe_evaluations": [
+            "pathobench.exaone2025.cptac_brca.immune-class",
+            "pathobench.exaone2025.hancook.vascular-invasion-v",
+            "pathobench.exaone2025.imp.grade"
+          ],
+          "held_cell_signature_sha256": "c6388a7b0267f603994703420477ca079ad21a78dde0b4b7716baa8e8c1ea914"
         },
         {
           "split_id": "k3:prov-gigapath",
-          "n_held_out": 25,
+          "n_held_out": 82,
           "k": 3,
           "model": "prov-gigapath",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 85,
           "probe_evaluations": [
-            "pathorob.tcga_2x2.robustness_index",
-            "thunder.ccrcc.linear_probing",
-            "thunder.spider_thorax.linear_probing"
+            "pathobench.threads2025.cptac_gbm.egfr-mutation",
+            "pathobench.threads2025.sr386_.died-within-5-years",
+            "pathobench.threads2025.sr386_.ras-mutant-binary"
           ],
-          "held_cell_signature_sha256": "09d7c8a2c24e342662d1a258113affa3410cfbb96eacec5d08d7b5225fc16e84"
+          "held_cell_signature_sha256": "4e7bcf4a3eb656b3ab45f702fec379f59beb4383489d7a3dd8cea23b9c08de2a"
+        },
+        {
+          "split_id": "k3:prov-gigapath-slide",
+          "n_held_out": 119,
+          "k": 3,
+          "model": "prov-gigapath-slide",
+          "n_observed_model_cells": 122,
+          "probe_evaluations": [
+            "pathobench.exaone2025.natbrca.lymphovascular-invasion",
+            "pathobench.exaone2025.panda.isup-grade",
+            "pathobench.threads2025.boehmk_.pfs"
+          ],
+          "held_cell_signature_sha256": "f77b30bba754cbe72e95c2c10d9768504f61079070750c3dbedc3948427040ff"
         },
         {
           "split_id": "k3:quiltnet",
@@ -842,11 +1094,11 @@
           "model": "quiltnet",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_tils.linear_probing"
+            "thunder.crc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "51e568ecd48f5f14ae53260e7d80bd8f3a282eec2a9fe8cd70efe4659a5c7e87"
+          "held_cell_signature_sha256": "4a0134a798a1b75b911e5090dc6c2380406d4d02f355732e508ed24de1d5e74e"
         },
         {
           "split_id": "k3:resnet50",
@@ -855,63 +1107,89 @@
           "model": "resnet50",
           "n_observed_model_cells": 9,
           "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
             "hest.coad.gene_expression",
-            "hest.lung.gene_expression",
             "hest.read.gene_expression"
           ],
-          "held_cell_signature_sha256": "9a5b688d34e17dfe4641fe911247a42fd595558d6ac269c7ad038c8f8e185efb"
+          "held_cell_signature_sha256": "a558a568d921bb977d0bcb58d6aa5addb41566c0f8d70ede99ee4b41858f9390"
+        },
+        {
+          "split_id": "k3:threads-slide",
+          "n_held_out": 39,
+          "k": 3,
+          "model": "threads-slide",
+          "n_observed_model_cells": 42,
+          "probe_evaluations": [
+            "pathobench.threads2025.cptac_gbm.tp53-mutation",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "pathobench.threads2025.cptac_pda.smad4-mutation"
+          ],
+          "held_cell_signature_sha256": "7c429679e6b636e506c88e776747d8f8a75225dc04806b02f018b68dc7137a28"
+        },
+        {
+          "split_id": "k3:titan-slide",
+          "n_held_out": 77,
+          "k": 3,
+          "model": "titan-slide",
+          "n_observed_model_cells": 80,
+          "probe_evaluations": [
+            "pathobench.exaone2025.bc_therapy.grade",
+            "pathobench.exaone2025.cptac_coad.tp53-mutation",
+            "pathobench.exaone2025.imp.grade"
+          ],
+          "held_cell_signature_sha256": "2b043b634690a13841d4ab4b6e5c27258a99b4d810dd842997c8c5aabf939c79"
         },
         {
           "split_id": "k3:uni",
-          "n_held_out": 25,
+          "n_held_out": 40,
           "k": 3,
           "model": "uni",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "thunder.break_his.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.crc.linear_probing"
+            "pathorob.camelyon.robustness_index",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
           ],
-          "held_cell_signature_sha256": "883e09d48fa22273d7d6fd36a396adb50f17e75ff1eee8e237edfaa5c08b59a1"
+          "held_cell_signature_sha256": "26d42f88c8c46e6ba493118adbb0276ebae0c46e3e6382027bc62da2ee99405d"
         },
         {
           "split_id": "k3:uni2-h",
-          "n_held_out": 25,
+          "n_held_out": 120,
           "k": 3,
           "model": "uni2-h",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 123,
           "probe_evaluations": [
             "hest.skcm.gene_expression",
-            "pathorob.tolkach_esca.robustness_index",
-            "thunder.tcga_uniform.linear_probing"
+            "pathobench.exaone2025.bc_therapy.residual-cancer-burden",
+            "pathobench.exaone2025.boehmk_.pfs"
           ],
-          "held_cell_signature_sha256": "484c3d478be5d3263a42373e8fda7e42f417fb417cbef9caae899fa4e7cb8407"
+          "held_cell_signature_sha256": "2b67f242ca95315eb854c8645a3a76432f8d1de83ac477f90babdd9efbd5ad94"
         },
         {
           "split_id": "k3:virchow",
-          "n_held_out": 25,
+          "n_held_out": 67,
           "k": 3,
           "model": "virchow",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 70,
           "probe_evaluations": [
-            "hest.lung.gene_expression",
-            "hest.lymph_idc.gene_expression",
-            "thunder.break_his.linear_probing"
+            "hest.coad.gene_expression",
+            "pathobench.threads2025.cptac_lscc.arid1a-mutation",
+            "thunder.tcga_crc_msi.linear_probing"
           ],
-          "held_cell_signature_sha256": "a6883a58ba5e057d9bee26f020df64e2dd76ebdd0755697cd9a0f875ebeb6094"
+          "held_cell_signature_sha256": "3ff0abce816aed69da35751697b2e183b294a4c6cf1dcdffad268b3213aaa158"
         },
         {
           "split_id": "k3:virchow-2",
-          "n_held_out": 25,
+          "n_held_out": 40,
           "k": 3,
           "model": "virchow-2",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "hest.lung.gene_expression",
-            "hest.prad.gene_expression",
-            "thunder.mhist.linear_probing"
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.paad.gene_expression"
           ],
-          "held_cell_signature_sha256": "06eafdd042e1b916efa8ecf00691e8dc1b354f44430326948ae3faf86056ae15"
+          "held_cell_signature_sha256": "2f63da85e9ed16a1460bdb9bf21e3509ddbcfd351bd46a0d05c0fc1e0928a4d2"
         },
         {
           "split_id": "k3:vit-b",
@@ -920,11 +1198,11 @@
           "model": "vit-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.esca.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing"
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "c94261043a914ff9fc89916ab0d5003ff80a65660a4c967ba6ff9a0aa5373803"
+          "held_cell_signature_sha256": "3413094e07cb418a557baba97762f0155f2577733332e3a9faeb01ffe4edecd5"
         },
         {
           "split_id": "k3:vit-l",
@@ -933,11 +1211,41 @@
           "model": "vit-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.spider_breast.linear_probing"
+            "thunder.crc.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "8317f53c0628a311bcf9b2f9d29c77b28b4ff21537242eb5e4ebec499eb18b1a"
+          "held_cell_signature_sha256": "748b2d489d466a3973bf89a2e6b89607f734bdb0c986d23516415cad105b1971"
+        },
+        {
+          "split_id": "k5:chief-patch-mean",
+          "n_held_out": 37,
+          "k": 5,
+          "model": "chief-patch-mean",
+          "n_observed_model_cells": 42,
+          "probe_evaluations": [
+            "pathobench.threads2025.bcnb.pr",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathobench.threads2025.cptac_pda.os",
+            "pathobench.threads2025.cptac_pda.smad4-mutation",
+            "pathobench.threads2025.ebrains.diagnosis"
+          ],
+          "held_cell_signature_sha256": "a15516aeff4d8cbf00831b483dfb7884d60649b134efa0d74e2d94e4181067e2"
+        },
+        {
+          "split_id": "k5:chief-slide",
+          "n_held_out": 117,
+          "k": 5,
+          "model": "chief-slide",
+          "n_observed_model_cells": 122,
+          "probe_evaluations": [
+            "pathobench.exaone2025.cptac_coad.pik3ca-mutation",
+            "pathobench.exaone2025.cptac_lscc.immune-class",
+            "pathobench.exaone2025.ebrains.diagnosis",
+            "pathobench.threads2025.imp.grade",
+            "pathobench.threads2025.mbc_.recist"
+          ],
+          "held_cell_signature_sha256": "02df16be18723e45f5df9ddf83e35834149e468f16e242d3e37f4f112d3a43cc"
         },
         {
           "split_id": "k5:clip-b",
@@ -948,11 +1256,11 @@
           "probe_evaluations": [
             "thunder.crc.linear_probing",
             "thunder.spider_breast.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "3bd8c18196d645191d7cd961ddc66c2bc074d0ed0b092c3b6a1207a75a78a06c"
+          "held_cell_signature_sha256": "6fa24c3bb341626928fbc4a77c9910cb824365e5e4ea84af35b69af6d2b26af9"
         },
         {
           "split_id": "k5:clip-l",
@@ -961,13 +1269,13 @@
           "model": "clip-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.ccrcc.linear_probing",
             "thunder.mhist.linear_probing",
-            "thunder.spider_colorectal.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_tils.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "f6dee2de16a84375c2edc41b7ec8e62d6a5f29ae5ab2031b21e3de85c3db12c6"
+          "held_cell_signature_sha256": "ef3a43673816a3c1194b2e1064e70aa3ecc642a320d428805c98006661796b9e"
         },
         {
           "split_id": "k5:conch",
@@ -977,27 +1285,27 @@
           "n_observed_model_cells": 28,
           "probe_evaluations": [
             "hest.ccrcc.gene_expression",
-            "hest.lung.gene_expression",
-            "pathorob.tolkach_esca.robustness_index",
             "thunder.ccrcc.linear_probing",
-            "thunder.spider_skin.linear_probing"
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing"
           ],
-          "held_cell_signature_sha256": "54f110762399192096cbe706cc02ba8e4b2e7efd7a06fbd72d47704940664cbd"
+          "held_cell_signature_sha256": "332026cc2fb04a1d5298dbca3848f515b21a99022fb94de01b3bd72ac4749560"
         },
         {
           "split_id": "k5:conch-1.5",
-          "n_held_out": 23,
+          "n_held_out": 65,
           "k": 5,
           "model": "conch-1.5",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 70,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "hest.idc.gene_expression",
-            "hest.paad.gene_expression",
-            "thunder.ccrcc.linear_probing",
-            "thunder.spider_breast.linear_probing"
+            "pathobench.threads2025.boehmk_.pfs",
+            "pathobench.threads2025.bracs.slidelevel-fine",
+            "pathobench.threads2025.imp.grade",
+            "pathobench.threads2025.sr386_.os",
+            "thunder.spider_colorectal.linear_probing"
           ],
-          "held_cell_signature_sha256": "b550d4910da67ebe3a04c1fb6f6fd4294de50eef78d72f9ae5eb584dae2ef458"
+          "held_cell_signature_sha256": "382679635b1a1a52c031183ba63a6d822c093d2f5444407d15c8ff0d9c54fc21"
         },
         {
           "split_id": "k5:ctranspath",
@@ -1006,13 +1314,13 @@
           "model": "ctranspath",
           "n_observed_model_cells": 12,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "hest.paad.gene_expression",
-            "hest.prad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.lymph_idc.gene_expression",
             "hest.read.gene_expression",
-            "pathorob.tcga_2x2.robustness_index"
+            "pathorob.tcga_2x2.robustness_index",
+            "pathorob.tolkach_esca.robustness_index"
           ],
-          "held_cell_signature_sha256": "82752cba3adeb34f84d54c5d4f268320d22ffb45f517ffb66fd1cf2336b012a5"
+          "held_cell_signature_sha256": "4d2ab00c4b606bebc55c1bf51480cfb7d01c7b5fcc9e0aa6236a3474eae690f3"
         },
         {
           "split_id": "k5:dinov2-b",
@@ -1021,13 +1329,13 @@
           "model": "dinov2-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.crc.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
             "thunder.mhist.linear_probing",
-            "thunder.spider_skin.linear_probing"
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "d28398cca386e6f5078514d576860d681cc5e058a7f6f5f84ecca8da79466ee4"
+          "held_cell_signature_sha256": "47d1c75967b5503455a533e8d07a07f1a89070fd73065c8636f383d1908e2b84"
         },
         {
           "split_id": "k5:dinov2-l",
@@ -1036,13 +1344,43 @@
           "model": "dinov2-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
             "thunder.break_his.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_tils.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
             "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "9238c66c09d1fac3583af63bb5fef1db738d671774fe50d943cdbe1487136edb"
+          "held_cell_signature_sha256": "94503f5719a92a2f7cd068e965cebe21ca656e805b1433cef830b16ce15d1f9e"
+        },
+        {
+          "split_id": "k5:dinov2-vit-g-14-initial",
+          "n_held_out": 7,
+          "k": 5,
+          "model": "dinov2-vit-g-14-initial",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.patch_camelyon.test",
+            "eva.leaderboard.patch_camelyon_10shot.test"
+          ],
+          "held_cell_signature_sha256": "98dcbf519ff2ad78e713eccdf3b10e2811d9d15516eca18bb628462924017f60"
+        },
+        {
+          "split_id": "k5:dinov2-vit-g-14-natural-images",
+          "n_held_out": 7,
+          "k": 5,
+          "model": "dinov2-vit-g-14-natural-images",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.test"
+          ],
+          "held_cell_signature_sha256": "17cff656b10259404442c57e6bf4f9104c8376692a549451e1e3b7dea832a638"
         },
         {
           "split_id": "k5:dinov3-b",
@@ -1051,13 +1389,13 @@
           "model": "dinov3-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
+            "thunder.bracs.linear_probing",
             "thunder.mhist.linear_probing",
             "thunder.spider_breast.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing"
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "b7f6bf8d4659ed6f7025dccb7fd408031fa381e92088c5585b9cefd83accf2c6"
+          "held_cell_signature_sha256": "e188f93a0ef15e87e022d3cf61e51b0095dfa84748a32cd1b71bac441e8b4179"
         },
         {
           "split_id": "k5:dinov3-l",
@@ -1066,13 +1404,13 @@
           "model": "dinov3-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.crc.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.mhist.linear_probing",
-            "thunder.spider_breast.linear_probing",
-            "thunder.spider_skin.linear_probing"
+            "thunder.bach.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "aebfc953aae60f99aa281c8288d9f12b7cf3e7c9fe9ee234728449722f783bce"
+          "held_cell_signature_sha256": "027adf4f405318267d152790c1de33742699638c4d1ca32667a4596eb6f59020"
         },
         {
           "split_id": "k5:dinov3-s",
@@ -1081,13 +1419,28 @@
           "model": "dinov3-s",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_skin.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
             "thunder.tcga_crc_msi.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "a1e453956689fb92e03da9d6a98a1da91030d222c31c7b5d09d30a4a41ba5878"
+          "held_cell_signature_sha256": "9abe4941b2358ee4f3a1a7159d87c9f15693b9bf2b096e119d0828c67a05291a"
+        },
+        {
+          "split_id": "k5:exaone-path-2.5-slide",
+          "n_held_out": 75,
+          "k": 5,
+          "model": "exaone-path-2.5-slide",
+          "n_observed_model_cells": 80,
+          "probe_evaluations": [
+            "pathobench.exaone2025.bc_therapy.residual-cancer-burden",
+            "pathobench.exaone2025.cptac_ccrcc.vhl-mutation",
+            "pathobench.exaone2025.cptac_coad.pik3ca-mutation",
+            "pathobench.exaone2025.cptac_pda.smad4-mutation",
+            "pathobench.exaone2025.hancook.grading-scc-conventional-keratinizing"
+          ],
+          "held_cell_signature_sha256": "a14f9424392d066f38422a706f0dd2cbbb9067d86c9c92a6417f9f33d52080e6"
         },
         {
           "split_id": "k5:genbio-pathfm",
@@ -1096,13 +1449,13 @@
           "model": "genbio-pathfm",
           "n_observed_model_cells": 25,
           "probe_evaluations": [
-            "thunder.ccrcc.linear_probing",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
             "thunder.esca.linear_probing",
-            "thunder.spider_colorectal.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
           ],
-          "held_cell_signature_sha256": "9289cd8df6447c7d659226056d9a4c5bcc5a2900c4df176bd43c89504eddfa6a"
+          "held_cell_signature_sha256": "6082203526923e71c8ce9f6ced130c60192f2641f78b68c3f661136561a9024a"
         },
         {
           "split_id": "k5:gpfm",
@@ -1111,28 +1464,28 @@
           "model": "gpfm",
           "n_observed_model_cells": 9,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
             "hest.idc.gene_expression",
             "hest.lung.gene_expression",
-            "hest.lymph_idc.gene_expression",
-            "hest.paad.gene_expression"
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression"
           ],
-          "held_cell_signature_sha256": "97a4b23317d3d3e46df2df9b204689fd8101035fd5aa01ddc4321016b18d5782"
+          "held_cell_signature_sha256": "2bd0d78aa3582df5eefc45ad26664daae0b920083361d5295d5d7e7d49055e40"
         },
         {
           "split_id": "k5:h-optimus-0",
-          "n_held_out": 23,
+          "n_held_out": 118,
           "k": 5,
           "model": "h-optimus-0",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 123,
           "probe_evaluations": [
-            "hest.idc.gene_expression",
-            "hest.prad.gene_expression",
+            "pathobench.exaone2025.cptac_coad.apc-mutation",
+            "pathobench.exaone2025.cptac_luad.immune-class",
             "pathorob.camelyon.robustness_index",
-            "thunder.mhist.linear_probing",
+            "pathorob.tolkach_esca.robustness_index",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "71f359fedb8e8783ca5b212efcb42d9c807fac6051a5b0abcfad9baff4a226c1"
+          "held_cell_signature_sha256": "b5b3043c0b78d84e5e7a3f35f3dc527ba62f1020b2c1687ac9547781fedf2d8e"
         },
         {
           "split_id": "k5:h-optimus-1",
@@ -1141,13 +1494,13 @@
           "model": "h-optimus-1",
           "n_observed_model_cells": 25,
           "probe_evaluations": [
-            "hest.idc.gene_expression",
-            "hest.lymph_idc.gene_expression",
-            "thunder.bracs.linear_probing",
-            "thunder.break_his.linear_probing",
-            "thunder.patch_camelyon.linear_probing"
+            "hest.ccrcc.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.paad.gene_expression",
+            "thunder.bach.linear_probing",
+            "thunder.spider_colorectal.linear_probing"
           ],
-          "held_cell_signature_sha256": "9568bf23e86bf8b35a4d81b12c27e751f82ff9d05c22079458708f2757b5320a"
+          "held_cell_signature_sha256": "84ba4704780ab4cc4a60e4780f643465ae97044783fc4e65cfbe8ef7abf59302"
         },
         {
           "split_id": "k5:h0-mini",
@@ -1156,13 +1509,13 @@
           "model": "h0-mini",
           "n_observed_model_cells": 28,
           "probe_evaluations": [
-            "hest.lymph_idc.gene_expression",
-            "thunder.bracs.linear_probing",
-            "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
-            "thunder.wilds.linear_probing"
+            "hest.ccrcc.gene_expression",
+            "hest.prad.gene_expression",
+            "thunder.crc.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "f5c949c395b2e28603b48e4ae4f132e0202350894a9af033ff2765551c64feed"
+          "held_cell_signature_sha256": "0b58a2e9ea424bf212b1a6ce4eeb7c8d6fee5c502672b4b2df9c80c3e472a31f"
         },
         {
           "split_id": "k5:hibou-b",
@@ -1171,58 +1524,58 @@
           "model": "hibou-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.break_his.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.mhist.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_tils.linear_probing",
             "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "3e072b429c7eecc11e77dc7f291d8fa5cf4984b4ffe137c61e1fd79a10de4d3d"
+          "held_cell_signature_sha256": "a69534356918375480a8ac125be5d2bcc23ef0fb5a32562fb368e2d88f1b9ae2"
         },
         {
           "split_id": "k5:hibou-l",
-          "n_held_out": 20,
+          "n_held_out": 35,
           "k": 5,
           "model": "hibou-l",
-          "n_observed_model_cells": 25,
+          "n_observed_model_cells": 40,
           "probe_evaluations": [
-            "hest.paad.gene_expression",
-            "hest.prad.gene_expression",
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.camelyon16_small.validation",
+            "hest.skcm.gene_expression",
             "thunder.mhist.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
             "thunder.spider_colorectal.linear_probing"
           ],
-          "held_cell_signature_sha256": "bbd92cedcae08d9e7e5ae5d2c893d1ff3475531f3fed71ec00db4c06180db3f3"
+          "held_cell_signature_sha256": "1391664cc3825eb470a7ef61a4605ad6a16b6547bbcfffcbe158a682998ec277"
         },
         {
           "split_id": "k5:kaiko-vit-b-16",
-          "n_held_out": 4,
+          "n_held_out": 17,
           "k": 5,
           "model": "kaiko-vit-b-16",
-          "n_observed_model_cells": 9,
+          "n_observed_model_cells": 22,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "hest.coad.gene_expression",
-            "hest.idc.gene_expression",
-            "hest.prad.gene_expression",
-            "hest.skcm.gene_expression"
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "hest.lung.gene_expression",
+            "hest.paad.gene_expression"
           ],
-          "held_cell_signature_sha256": "7309f6a399e2038ee5df6d9ec71a776cc839c4a6587cf0c63ac2237c61f0f570"
+          "held_cell_signature_sha256": "a71870816263253aaa438b3d894dc1bc1f384411bf1cc31080f44b7c819c8d08"
         },
         {
           "split_id": "k5:kaiko-vit-b-8",
-          "n_held_out": 7,
+          "n_held_out": 22,
           "k": 5,
           "model": "kaiko-vit-b-8",
-          "n_observed_model_cells": 12,
+          "n_observed_model_cells": 27,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "hest.paad.gene_expression",
-            "hest.prad.gene_expression",
-            "hest.skcm.gene_expression",
-            "pathorob.tcga_2x2.robustness_index"
+            "eva.leaderboard.camelyon16_small.validation",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.panda_small.validation",
+            "hest.paad.gene_expression"
           ],
-          "held_cell_signature_sha256": "b283ee470472f24ce14837131d5d899d2226660e9fe77bc365a74452bc81cfc9"
+          "held_cell_signature_sha256": "83fc2dc6da766d10fb51a9b2a3d5ef9cef234e45a33f6512241001f6a7dd323f"
         },
         {
           "split_id": "k5:kaiko-vit-b-unspecified-patch",
@@ -1231,58 +1584,58 @@
           "model": "kaiko-vit-b-unspecified-patch",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.break_his.linear_probing",
-            "thunder.spider_colorectal.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing"
           ],
-          "held_cell_signature_sha256": "5258bfa7239b1fc3ce16a27a6bd590331a8c312591d835eaeed3725de60ae776"
+          "held_cell_signature_sha256": "c551a2605a50e40a8e6cd2934b95d51587f0f99325ef4adf45270648cc75d42e"
         },
         {
           "split_id": "k5:kaiko-vit-l-14",
-          "n_held_out": 4,
+          "n_held_out": 17,
           "k": 5,
           "model": "kaiko-vit-l-14",
-          "n_observed_model_cells": 9,
+          "n_observed_model_cells": 22,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "hest.idc.gene_expression",
-            "hest.lung.gene_expression",
-            "hest.lymph_idc.gene_expression",
-            "hest.prad.gene_expression"
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.panda_small.validation",
+            "hest.lymph_idc.gene_expression"
           ],
-          "held_cell_signature_sha256": "458f3c3dc1512d23a7ed1acc8db7ca64268c447bd7c7c55e1b69abfff7d33d16"
+          "held_cell_signature_sha256": "c5cf1bfb5b729eb7a2375e5dbb8b0dbd28f6037541042bb059d315a50f9fddc6"
         },
         {
           "split_id": "k5:kaiko-vit-s-16",
-          "n_held_out": 4,
+          "n_held_out": 17,
           "k": 5,
           "model": "kaiko-vit-s-16",
-          "n_observed_model_cells": 9,
+          "n_observed_model_cells": 22,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "hest.idc.gene_expression",
-            "hest.prad.gene_expression",
-            "hest.read.gene_expression",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.monusac.test",
+            "hest.lung.gene_expression",
             "hest.skcm.gene_expression"
           ],
-          "held_cell_signature_sha256": "bb25f9c9764caeb9ed15f680e0dd2d8bb4fdf0ff4552b579be5e0f3f0badd4d4"
+          "held_cell_signature_sha256": "11b885050a55c1026f63a23265c0bc19ee58aede079acd3bddee71a8c7fd39a5"
         },
         {
           "split_id": "k5:kaiko-vit-s-8",
-          "n_held_out": 4,
+          "n_held_out": 17,
           "k": 5,
           "model": "kaiko-vit-s-8",
-          "n_observed_model_cells": 9,
+          "n_observed_model_cells": 22,
           "probe_evaluations": [
+            "eva.leaderboard.crc.validation",
+            "hest.idc.gene_expression",
             "hest.lung.gene_expression",
-            "hest.lymph_idc.gene_expression",
-            "hest.paad.gene_expression",
-            "hest.read.gene_expression",
-            "hest.skcm.gene_expression"
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression"
           ],
-          "held_cell_signature_sha256": "345adb27e22ab6f848a6a3ba659e39aaefc95f48db67c2fea74023f769d7f2b2"
+          "held_cell_signature_sha256": "ea52ba474ffd1bbf64440f09dcf325cff63aebe5debf2c2dd1d79d9a8956b0dd"
         },
         {
           "split_id": "k5:kaiko-vit-s-unspecified-patch",
@@ -1291,13 +1644,13 @@
           "model": "kaiko-vit-s-unspecified-patch",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bracs.linear_probing",
-            "thunder.crc.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.mhist.linear_probing",
-            "thunder.tcga_tils.linear_probing"
+            "thunder.bach.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing"
           ],
-          "held_cell_signature_sha256": "25489733fac4e72f2b043d825b6b07e04c47afa528f3e7f6f522cf9e9d227b2b"
+          "held_cell_signature_sha256": "090c24143923635364dd78aa9f79d2b7ae6cac3c94ec98fe68f1c958b8e25a8d"
         },
         {
           "split_id": "k5:keep",
@@ -1306,13 +1659,28 @@
           "model": "keep",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
-            "thunder.ccrcc.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
             "thunder.spider_skin.linear_probing",
-            "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "7e4c7ba8a7b0d91f944473791241328dce6044e163eab6679e2c47dbce74fa6c"
+          "held_cell_signature_sha256": "7299bed6b5da12ff084e8331dc07f70976467895abbb618e478c98117248f455"
+        },
+        {
+          "split_id": "k5:lunit-vit-s-16",
+          "n_held_out": 10,
+          "k": 5,
+          "model": "lunit-vit-s-16",
+          "n_observed_model_cells": 15,
+          "probe_evaluations": [
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.camelyon16_small.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.validation"
+          ],
+          "held_cell_signature_sha256": "eb0988752de049772e9528322bc520fa9628edb71365b9098e6891bcfaed3107"
         },
         {
           "split_id": "k5:lunit-vit-s-8",
@@ -1321,28 +1689,58 @@
           "model": "lunit-vit-s-8",
           "n_observed_model_cells": 9,
           "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
             "hest.coad.gene_expression",
-            "hest.idc.gene_expression",
-            "hest.lymph_idc.gene_expression",
+            "hest.lung.gene_expression",
             "hest.paad.gene_expression",
-            "hest.skcm.gene_expression"
+            "hest.read.gene_expression"
           ],
-          "held_cell_signature_sha256": "dc9c0aa2bed5625634483e583697a33c846484b9f14937b6a42337a4f82d7885"
+          "held_cell_signature_sha256": "48c4d58fc60cd390e04ffbc8008d98038fda873951a03f6707ac1823e1d894af"
         },
         {
           "split_id": "k5:midnight",
-          "n_held_out": 20,
+          "n_held_out": 35,
           "k": 5,
           "model": "midnight",
-          "n_observed_model_cells": 25,
+          "n_observed_model_cells": 40,
           "probe_evaluations": [
-            "hest.idc.gene_expression",
-            "thunder.bracs.linear_probing",
-            "thunder.mhist.linear_probing",
-            "thunder.spider_breast.linear_probing",
-            "thunder.spider_colorectal.linear_probing"
+            "hest.lung.gene_expression",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_thorax.linear_probing"
           ],
-          "held_cell_signature_sha256": "857f06d32f053033e5937762468cb031702b3582c5d132292494c3b8b17b73d9"
+          "held_cell_signature_sha256": "a9c7d8d2d1252f6591d9a6abc8131b8c5a2d345d1f34f641275f4a2744961d4f"
+        },
+        {
+          "split_id": "k5:midnight-92k",
+          "n_held_out": 7,
+          "k": 5,
+          "model": "midnight-92k",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.monusac.test"
+          ],
+          "held_cell_signature_sha256": "1838bf1d0d7247a262c2657b066c0c76534409047e0610058c22a69821959f0d"
+        },
+        {
+          "split_id": "k5:midnight-92k-392",
+          "n_held_out": 7,
+          "k": 5,
+          "model": "midnight-92k-392",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.monusac.test"
+          ],
+          "held_cell_signature_sha256": "ecef5a8518471d2fdae919f5d0d5433599656a54add0c1803223140980db17c0"
         },
         {
           "split_id": "k5:musk",
@@ -1351,13 +1749,13 @@
           "model": "musk",
           "n_observed_model_cells": 28,
           "probe_evaluations": [
-            "pathorob.camelyon.robustness_index",
-            "pathorob.tolkach_esca.robustness_index",
-            "thunder.break_his.linear_probing",
-            "thunder.spider_thorax.linear_probing",
+            "hest.ccrcc.gene_expression",
+            "hest.idc.gene_expression",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_tils.linear_probing",
             "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "b560c24a79edbe006a23793c6c0c871a739005c73b6ab33acb8aa48f187d14f5"
+          "held_cell_signature_sha256": "bc082fb7c9a4d2d6cfaad16d1ddadf7aa4c053f3b36c57597e7c9ec8f4e9529e"
         },
         {
           "split_id": "k5:openmidnight",
@@ -1366,43 +1764,43 @@
           "model": "openmidnight",
           "n_observed_model_cells": 25,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "hest.paad.gene_expression",
-            "thunder.bach.linear_probing",
-            "thunder.bracs.linear_probing",
-            "thunder.spider_colorectal.linear_probing"
+            "hest.skcm.gene_expression",
+            "thunder.crc.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
           ],
-          "held_cell_signature_sha256": "7bbd56849ac9659afa6cdf10276c8eccbc83476d44fc27e0d3fecdbb7e7f47e2"
+          "held_cell_signature_sha256": "ed4ea0614d4a6ea41d8b0b22ce4f468610c457546bdbf5cc244be674deb85129"
         },
         {
           "split_id": "k5:phikon",
-          "n_held_out": 23,
+          "n_held_out": 38,
           "k": 5,
           "model": "phikon",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "pathorob.tcga_2x2.robustness_index",
+            "hest.lung.gene_expression",
+            "hest.skcm.gene_expression",
+            "thunder.bach.linear_probing",
             "thunder.bracs.linear_probing",
-            "thunder.spider_colorectal.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing"
+            "thunder.ccrcc.linear_probing"
           ],
-          "held_cell_signature_sha256": "f91c8fa9c15fc690535cdf3c0f7ec08457030bc4b1d44229436b6b7b851fbafd"
+          "held_cell_signature_sha256": "859782768b90fdd7488766881a44a2d6e422cfb33df9ac73f1dd096dbc3d210e"
         },
         {
           "split_id": "k5:phikon-v2",
-          "n_held_out": 23,
+          "n_held_out": 38,
           "k": 5,
           "model": "phikon-v2",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "thunder.bach.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_thorax.linear_probing"
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing"
           ],
-          "held_cell_signature_sha256": "1941b6b2bb0b5bb472e4538b81e97164de28304eb2ca18d79303c1609c06d5e8"
+          "held_cell_signature_sha256": "0c8af15d87a95350fff34033a04d613e33aa4cefebbecc7d2a61a4ea138a429f"
         },
         {
           "split_id": "k5:plip",
@@ -1411,28 +1809,58 @@
           "model": "plip",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bracs.linear_probing",
-            "thunder.break_his.linear_probing",
+            "thunder.bach.linear_probing",
+            "thunder.crc.linear_probing",
             "thunder.spider_colorectal.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "38bb57d66eaad9e087665958db3193a5a72fe352f2167cbbf16acbe71c6706d4"
+          "held_cell_signature_sha256": "0b71d0b6f11c5779517626b9450ae956b63c011863b54e88dd34dc3050bf4665"
+        },
+        {
+          "split_id": "k5:prism-slide",
+          "n_held_out": 117,
+          "k": 5,
+          "model": "prism-slide",
+          "n_observed_model_cells": 122,
+          "probe_evaluations": [
+            "pathobench.exaone2025.bcnb.her2",
+            "pathobench.threads2025.cptac_pda.os",
+            "pathobench.threads2025.natbrca.lymphovascular-invasion",
+            "pathobench.threads2025.sr386_.os",
+            "pathobench.threads2025.sr386_.ras-mutant-binary"
+          ],
+          "held_cell_signature_sha256": "333ae1a95ba6c7187eaa3ad76236671d80b1a8f0eceb204d4be941260094e41c"
         },
         {
           "split_id": "k5:prov-gigapath",
-          "n_held_out": 23,
+          "n_held_out": 80,
           "k": 5,
           "model": "prov-gigapath",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 85,
           "probe_evaluations": [
-            "hest.prad.gene_expression",
-            "hest.read.gene_expression",
-            "thunder.break_his.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.tcga_tils.linear_probing"
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.mhist.test",
+            "pathobench.threads2025.cptac_lscc.keap1-mutation",
+            "pathobench.threads2025.natbrca.lymphovascular-invasion",
+            "pathobench.threads2025.sr386_.braf-mutant-binary"
           ],
-          "held_cell_signature_sha256": "d23544fb16cbdb393506e273fd0aecb440080933c6040931acae47dc96058e55"
+          "held_cell_signature_sha256": "f1a3c0e81e72be1dec6a8034ebe7e914d06250fe66527b8999d87261c6179061"
+        },
+        {
+          "split_id": "k5:prov-gigapath-slide",
+          "n_held_out": 117,
+          "k": 5,
+          "model": "prov-gigapath-slide",
+          "n_observed_model_cells": 122,
+          "probe_evaluations": [
+            "pathobench.exaone2025.cptac_coad.acvr2a-mutation",
+            "pathobench.exaone2025.cptac_luad.immune-class",
+            "pathobench.exaone2025.hancook.perineural-invasion-pn",
+            "pathobench.exaone2025.sr386_.ras-mutant-binary",
+            "pathobench.threads2025.mut-het-rcc.pbrm1-mutation"
+          ],
+          "held_cell_signature_sha256": "69afd235e7745c50787815c0415e2ef3291ed9368ee490178419230c327addb0"
         },
         {
           "split_id": "k5:quiltnet",
@@ -1441,13 +1869,13 @@
           "model": "quiltnet",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.break_his.linear_probing",
             "thunder.ccrcc.linear_probing",
-            "thunder.spider_breast.linear_probing",
             "thunder.spider_colorectal.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.spider_thorax.linear_probing"
           ],
-          "held_cell_signature_sha256": "c87d84d5046f859a79695e620f2513c75bc8e2a070969f106f03edf9f2637558"
+          "held_cell_signature_sha256": "32a74ba027a9f752b1c40c8431352f382bc188bb08aecb2492a65c907d1a7449"
         },
         {
           "split_id": "k5:resnet50",
@@ -1456,73 +1884,103 @@
           "model": "resnet50",
           "n_observed_model_cells": 9,
           "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.lung.gene_expression",
             "hest.lymph_idc.gene_expression",
-            "hest.paad.gene_expression",
-            "hest.prad.gene_expression",
-            "hest.read.gene_expression",
-            "hest.skcm.gene_expression"
+            "hest.prad.gene_expression"
           ],
-          "held_cell_signature_sha256": "599b6d8657342333eb41616121796c8b63d5f04e2d5d4851daa7a59273ac6275"
+          "held_cell_signature_sha256": "fe536028dbddb8e85a3f545b874cf217f2ed6e239945ee80930696d96bbfd449"
+        },
+        {
+          "split_id": "k5:threads-slide",
+          "n_held_out": 37,
+          "k": 5,
+          "model": "threads-slide",
+          "n_observed_model_cells": 42,
+          "probe_evaluations": [
+            "pathobench.threads2025.boehmk_.pfs",
+            "pathobench.threads2025.cptac_lscc.arid1a-mutation",
+            "pathobench.threads2025.cptac_luad.os",
+            "pathobench.threads2025.cptac_luad.tp53-mutation",
+            "pathobench.threads2025.panda.isup-grade"
+          ],
+          "held_cell_signature_sha256": "5293d8dbb8129078b4bdce8aa2180ff34e34458e5f93159e1a741af58baa1762"
+        },
+        {
+          "split_id": "k5:titan-slide",
+          "n_held_out": 75,
+          "k": 5,
+          "model": "titan-slide",
+          "n_observed_model_cells": 80,
+          "probe_evaluations": [
+            "pathobench.exaone2025.bcnb.her2",
+            "pathobench.exaone2025.cptac_ccrcc.pbrm1-mutation",
+            "pathobench.exaone2025.cptac_coad.pik3ca-mutation",
+            "pathobench.exaone2025.imp.grade",
+            "pathobench.exaone2025.sr386_.ras-mutant-binary"
+          ],
+          "held_cell_signature_sha256": "8d6c77b72d51b9b2643f410d83fec0281c22a1e07b5885cd215438f391d2af77"
         },
         {
           "split_id": "k5:uni",
-          "n_held_out": 23,
+          "n_held_out": 38,
           "k": 5,
           "model": "uni",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "thunder.crc.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_breast.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing"
+            "eva.leaderboard.panda_small.validation",
+            "hest.idc.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.skcm.gene_expression",
+            "pathorob.camelyon.robustness_index"
           ],
-          "held_cell_signature_sha256": "49979de59d74ecfa2a1997286268b33733221fcca896e02b684af611075719c8"
+          "held_cell_signature_sha256": "2233d706e705c2fdd525980586f817626d94dd47db3c518249554167cef8b765"
         },
         {
           "split_id": "k5:uni2-h",
-          "n_held_out": 23,
+          "n_held_out": 118,
           "k": 5,
           "model": "uni2-h",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 123,
           "probe_evaluations": [
-            "pathorob.tcga_2x2.robustness_index",
-            "pathorob.tolkach_esca.robustness_index",
-            "thunder.ccrcc.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.patch_camelyon.linear_probing"
+            "eva.leaderboard.patch_camelyon.test",
+            "pathobench.exaone2025.bcnb.her2",
+            "pathobench.exaone2025.cptac_ccrcc.os",
+            "pathobench.exaone2025.cptac_luad.os",
+            "pathobench.exaone2025.ebrains.idh-status"
           ],
-          "held_cell_signature_sha256": "f35012bd931a03bbfc15a96c1a2ef2458187e286aacf41054b7aa2a9fdcc6656"
+          "held_cell_signature_sha256": "866ddb999236f85a9ec554980e0f2bf066c2b076e1ae25910b8d98c5b434ad83"
         },
         {
           "split_id": "k5:virchow",
-          "n_held_out": 23,
+          "n_held_out": 65,
           "k": 5,
           "model": "virchow",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 70,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "hest.skcm.gene_expression",
-            "thunder.crc.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "pathobench.threads2025.bcnb.er",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "pathobench.threads2025.cptac_luad.os",
+            "thunder.break_his.linear_probing",
+            "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "2f6898bfefe92545cd8ba750dea220c72de01b9c7a93f1b142aaa432b1c027cb"
+          "held_cell_signature_sha256": "c38bff279ed4db839ec8aa958286e408dc3d3b7a1fd3f474374b05eb05c84ff9"
         },
         {
           "split_id": "k5:virchow-2",
-          "n_held_out": 23,
+          "n_held_out": 38,
           "k": 5,
           "model": "virchow-2",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "hest.lymph_idc.gene_expression",
-            "pathorob.tcga_2x2.robustness_index",
-            "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.mhist.test",
             "thunder.mhist.linear_probing",
-            "thunder.spider_colorectal.linear_probing"
+            "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "3b80f10b0dfb77736ee24917dcec5e87bb971758d7f1a3e6ce64e493531691e3"
+          "held_cell_signature_sha256": "398ecac612a035227722bf5bd4750e1848bf32c77caa7d916d9ba4901c4a3ded"
         },
         {
           "split_id": "k5:vit-b",
@@ -1531,13 +1989,13 @@
           "model": "vit-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bracs.linear_probing",
-            "thunder.crc.linear_probing",
-            "thunder.mhist.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.tcga_tils.linear_probing"
+            "thunder.ccrcc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "05a9114269bd0bac5fa7a381498ed12148c7d13f98e3070043ffba1b92397af3"
+          "held_cell_signature_sha256": "303530c54b1d631166b91b624adcad9df7a237b48e2d61cef73424cb4bbfd578"
         },
         {
           "split_id": "k5:vit-l",
@@ -1548,11 +2006,51 @@
           "probe_evaluations": [
             "thunder.crc.linear_probing",
             "thunder.esca.linear_probing",
-            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
             "thunder.tcga_crc_msi.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "dd461c4efadb7e6ad93b9337b380859f3ec7a9fc9d9e5618548145e07464e8ca"
+          "held_cell_signature_sha256": "eb21d659cf153e0a446fb9c4367dfa412b922f8065bee1290da89eb91565fc5b"
+        },
+        {
+          "split_id": "k10:chief-patch-mean",
+          "n_held_out": 32,
+          "k": 10,
+          "model": "chief-patch-mean",
+          "n_observed_model_cells": 42,
+          "probe_evaluations": [
+            "pathobench.threads2025.bcnb.pr",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathobench.threads2025.cptac_coad.kras-mutation",
+            "pathobench.threads2025.cptac_lscc.keap1-mutation",
+            "pathobench.threads2025.cptac_luad.egfr-mutation",
+            "pathobench.threads2025.cptac_luad.os",
+            "pathobench.threads2025.cptac_pda.smad4-mutation",
+            "pathobench.threads2025.ebrains.diagnosis",
+            "pathobench.threads2025.imp.grade",
+            "pathobench.threads2025.sr386_.mmr-loss-binary"
+          ],
+          "held_cell_signature_sha256": "048b0623421d146a2bc44a54e716bb8b65f99398eafe7b802b4db73f4aea60fc"
+        },
+        {
+          "split_id": "k10:chief-slide",
+          "n_held_out": 112,
+          "k": 10,
+          "model": "chief-slide",
+          "n_observed_model_cells": 122,
+          "probe_evaluations": [
+            "pathobench.exaone2025.bracs.slidelevel-coarse",
+            "pathobench.exaone2025.cptac_coad.arid1a-mutation",
+            "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+            "pathobench.exaone2025.cptac_hnsc.histologic-grade",
+            "pathobench.exaone2025.cptac_hnsc.os",
+            "pathobench.exaone2025.cptac_lscc.arid1a-mutation",
+            "pathobench.exaone2025.cptac_luad.kras-mutation",
+            "pathobench.exaone2025.imp.grade",
+            "pathobench.threads2025.bcnb.pr",
+            "pathobench.threads2025.mbc_.recist"
+          ],
+          "held_cell_signature_sha256": "2d142bcf8b5a6e45fcb51e0255284788a6a24576bc58a9838145509c1e890c2a"
         },
         {
           "split_id": "k10:clip-b",
@@ -1562,17 +2060,17 @@
           "n_observed_model_cells": 16,
           "probe_evaluations": [
             "thunder.bach.linear_probing",
-            "thunder.bracs.linear_probing",
-            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
             "thunder.mhist.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
             "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_thorax.linear_probing",
             "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_tils.linear_probing",
             "thunder.tcga_uniform.linear_probing",
             "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "fb20dd4a08314e928c82c8fe2a7ed2f1db56f68ea01ecb4beeda873c3e59f63c"
+          "held_cell_signature_sha256": "db0989ef552078dc158220e58d746b45d4629f3f3e502b406d32ceb95347acb7"
         },
         {
           "split_id": "k10:clip-l",
@@ -1581,18 +2079,18 @@
           "model": "clip-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
+            "thunder.bach.linear_probing",
             "thunder.break_his.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.crc.linear_probing",
             "thunder.esca.linear_probing",
             "thunder.patch_camelyon.linear_probing",
             "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
             "thunder.spider_thorax.linear_probing",
             "thunder.tcga_crc_msi.linear_probing",
             "thunder.tcga_tils.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "c376b95120506f25dd4d53944ed5f2d75ed2d7273b023a9f45d4b5666bd42a36"
+          "held_cell_signature_sha256": "18ffd275bb2e9cea1a9dcd1b3ab51f9c13d26f025a119627b2e120f060c437c7"
         },
         {
           "split_id": "k10:conch",
@@ -1601,38 +2099,38 @@
           "model": "conch",
           "n_observed_model_cells": 28,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
+            "hest.paad.gene_expression",
             "hest.prad.gene_expression",
             "hest.read.gene_expression",
             "pathorob.camelyon.robustness_index",
-            "pathorob.tolkach_esca.robustness_index",
-            "thunder.bach.linear_probing",
             "thunder.mhist.linear_probing",
-            "thunder.spider_colorectal.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "0f87631e9956e5a7e4c6b59dcee3f0d96580da742b8287a8b9c076824f22a1b1"
+          "held_cell_signature_sha256": "b3cbb20a5f34c17c9fcc884adfcec9ed9370ea1884d9b84d203eec8d8af13d6c"
         },
         {
           "split_id": "k10:conch-1.5",
-          "n_held_out": 18,
+          "n_held_out": 60,
           "k": 10,
           "model": "conch-1.5",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 70,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "hest.lung.gene_expression",
-            "hest.read.gene_expression",
-            "hest.skcm.gene_expression",
-            "pathorob.tcga_2x2.robustness_index",
-            "pathorob.tolkach_esca.robustness_index",
-            "thunder.spider_colorectal.linear_probing",
-            "thunder.spider_skin.linear_probing",
+            "hest.lymph_idc.gene_expression",
+            "pathobench.threads2025.boehmk_.pfs",
+            "pathobench.threads2025.cptac_brca.pik3ca-mutation",
+            "pathobench.threads2025.cptac_coad.kras-mutation",
+            "pathobench.threads2025.cptac_gbm.tp53-mutation",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.spider_breast.linear_probing",
             "thunder.spider_thorax.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "239b85783770ae2707ce5aa25c75eeb769848340ad18ce13cf61527ae09fdac9"
+          "held_cell_signature_sha256": "a03f79a4dd5ddef3366ccf901af5dea588321a4587fcc6827dfabec405c68d07"
         },
         {
           "split_id": "k10:ctranspath",
@@ -1641,18 +2139,18 @@
           "model": "ctranspath",
           "n_observed_model_cells": 12,
           "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
             "hest.coad.gene_expression",
             "hest.lung.gene_expression",
             "hest.lymph_idc.gene_expression",
             "hest.paad.gene_expression",
             "hest.prad.gene_expression",
             "hest.read.gene_expression",
-            "hest.skcm.gene_expression",
             "pathorob.camelyon.robustness_index",
             "pathorob.tcga_2x2.robustness_index",
             "pathorob.tolkach_esca.robustness_index"
           ],
-          "held_cell_signature_sha256": "4687542502bc78580b0a51509aa06e2507241d0a5b695e3fc616bf282a29a2ad"
+          "held_cell_signature_sha256": "66f90f0f088003fe44eb7e3ea028e7f67a25e2dfa94c84ac49f54425d37a68ca"
         },
         {
           "split_id": "k10:dinov2-b",
@@ -1661,18 +2159,18 @@
           "model": "dinov2-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
+            "thunder.bach.linear_probing",
             "thunder.bracs.linear_probing",
             "thunder.break_his.linear_probing",
             "thunder.ccrcc.linear_probing",
-            "thunder.esca.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.mhist.linear_probing",
             "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
             "thunder.spider_colorectal.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.spider_thorax.linear_probing"
           ],
-          "held_cell_signature_sha256": "4f15629bba4549c0d9482ae2d8e7cfed08b34084efc54942e3a16304ca32723d"
+          "held_cell_signature_sha256": "ed2e7a98f2ac69ec65b5ea459f6144ef8f1113a9ee7a1bf8e22eb1dbdd217813"
         },
         {
           "split_id": "k10:dinov2-l",
@@ -1681,18 +2179,58 @@
           "model": "dinov2-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
             "thunder.bracs.linear_probing",
-            "thunder.break_his.linear_probing",
-            "thunder.ccrcc.linear_probing",
             "thunder.crc.linear_probing",
-            "thunder.spider_breast.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
             "thunder.spider_skin.linear_probing",
             "thunder.tcga_crc_msi.linear_probing",
             "thunder.tcga_tils.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "1a6ce114172ffd37b17b0634e5a8d2152a29b8d602ad0dac76e7a33bd2b82af3"
+          "held_cell_signature_sha256": "6686b90f339fe72bc652172341ba72839bd54c6903dd4b113cc418eb28f944fb"
+        },
+        {
+          "split_id": "k10:dinov2-vit-g-14-initial",
+          "n_held_out": 2,
+          "k": 10,
+          "model": "dinov2-vit-g-14-initial",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.patch_camelyon.test"
+          ],
+          "held_cell_signature_sha256": "d46d58e2b9c9b90ff8dc5fe059d2296515ee5e4b119c07a4b8953eac16c48845"
+        },
+        {
+          "split_id": "k10:dinov2-vit-g-14-natural-images",
+          "n_held_out": 2,
+          "k": 10,
+          "model": "dinov2-vit-g-14-natural-images",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.patch_camelyon.test"
+          ],
+          "held_cell_signature_sha256": "c4974ea632e99bd8f5f512ee445b2593bf2233b0e50950933e1e996c77fe757a"
         },
         {
           "split_id": "k10:dinov3-b",
@@ -1701,18 +2239,18 @@
           "model": "dinov3-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
             "thunder.ccrcc.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
+            "thunder.crc.linear_probing",
             "thunder.spider_breast.linear_probing",
             "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
             "thunder.spider_thorax.linear_probing",
             "thunder.tcga_crc_msi.linear_probing",
             "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
             "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "791b81b98fb44fa4f22b67557729966bb0ad0f4ecf1ecc0c4c5936c13af811f7"
+          "held_cell_signature_sha256": "ab2a76592b3fe69992f96d7b0ec87663c8d30a22bcf099247a901da76d8c5ad6"
         },
         {
           "split_id": "k10:dinov3-l",
@@ -1721,18 +2259,18 @@
           "model": "dinov3-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.ccrcc.linear_probing",
-            "thunder.mhist.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
             "thunder.spider_breast.linear_probing",
             "thunder.spider_colorectal.linear_probing",
             "thunder.spider_skin.linear_probing",
             "thunder.spider_thorax.linear_probing",
             "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "f7a6a5d04848e42e04ffd1defd8859a83ce8f6ebf006a08683e3c97ec04e0ccf"
+          "held_cell_signature_sha256": "6d2d80ceb2754d0c5358ced216196d6a8a5f8da72d04df27d8bc740cec113cca"
         },
         {
           "split_id": "k10:dinov3-s",
@@ -1741,18 +2279,38 @@
           "model": "dinov3-s",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
+            "thunder.bracs.linear_probing",
             "thunder.ccrcc.linear_probing",
-            "thunder.crc.linear_probing",
             "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
             "thunder.patch_camelyon.linear_probing",
             "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
             "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
             "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "18657e63f5cd390d1690c40361699ae95d2d69561c107a79ae7b02ad98d4d35e"
+          "held_cell_signature_sha256": "6c54af0ee25557417bdce82365d7e1fc70d41b0fe2d4961567604c0f32b2422f"
+        },
+        {
+          "split_id": "k10:exaone-path-2.5-slide",
+          "n_held_out": 70,
+          "k": 10,
+          "model": "exaone-path-2.5-slide",
+          "n_observed_model_cells": 80,
+          "probe_evaluations": [
+            "pathobench.exaone2025.cptac_brca.pik3ca-mutation",
+            "pathobench.exaone2025.cptac_ccrcc.bap1-mutation",
+            "pathobench.exaone2025.cptac_ccrcc.os",
+            "pathobench.exaone2025.cptac_coad.acvr2a-mutation",
+            "pathobench.exaone2025.cptac_lscc.histologic-grade",
+            "pathobench.exaone2025.cptac_pda.immune-class",
+            "pathobench.exaone2025.hancook.vascular-invasion-v",
+            "pathobench.exaone2025.herroi.response",
+            "pathobench.exaone2025.mbc_.os",
+            "pathobench.exaone2025.sr386_.died-within-5-years"
+          ],
+          "held_cell_signature_sha256": "400dda4adada72bd74682170d2323a0d7a7a4f0b46c154174d13705984ef832b"
         },
         {
           "split_id": "k10:genbio-pathfm",
@@ -1761,38 +2319,38 @@
           "model": "genbio-pathfm",
           "n_observed_model_cells": 25,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
             "hest.idc.gene_expression",
-            "thunder.bach.linear_probing",
-            "thunder.bracs.linear_probing",
+            "hest.lung.gene_expression",
+            "hest.read.gene_expression",
             "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
             "thunder.mhist.linear_probing",
             "thunder.spider_breast.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
             "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "76c5241c30f0a36b55d5eaf6c099a21f66698b529627703d3b9093a8883a9d27"
+          "held_cell_signature_sha256": "7acfb707a2c42a54812975c491f3cf6fb902dd37091e81d2cde3de1f052c8e78"
         },
         {
           "split_id": "k10:h-optimus-0",
-          "n_held_out": 18,
+          "n_held_out": 113,
           "k": 10,
           "model": "h-optimus-0",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 123,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "hest.lymph_idc.gene_expression",
-            "pathorob.camelyon.robustness_index",
-            "thunder.bach.linear_probing",
-            "thunder.mhist.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
-            "thunder.wilds.linear_probing"
+            "hest.ccrcc.gene_expression",
+            "hest.skcm.gene_expression",
+            "pathobench.exaone2025.cptac_ccrcc.bap1-mutation",
+            "pathobench.exaone2025.cptac_ccrcc.immune-class",
+            "pathobench.exaone2025.cptac_coad.kras-mutation",
+            "pathobench.exaone2025.cptac_hnsc.histologic-grade",
+            "pathobench.exaone2025.hancook.grading-scc-conventional-keratinizing",
+            "pathobench.exaone2025.hancook.primarily-metastasis",
+            "pathobench.exaone2025.hancook.primary-tumor-site",
+            "thunder.spider_colorectal.linear_probing"
           ],
-          "held_cell_signature_sha256": "87aa3603f7b937735d8b383ec973e1707d4e118bcb8b9a4c5dfc3cbd45757e05"
+          "held_cell_signature_sha256": "7043e2f0ee20f22103be986d52c215e47b9bfc12cf9707141c0917f9587465d9"
         },
         {
           "split_id": "k10:h-optimus-1",
@@ -1801,18 +2359,18 @@
           "model": "h-optimus-1",
           "n_observed_model_cells": 25,
           "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
             "hest.coad.gene_expression",
-            "hest.lymph_idc.gene_expression",
             "hest.paad.gene_expression",
             "hest.prad.gene_expression",
-            "thunder.break_his.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.mhist.linear_probing",
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
             "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "9276f0c779ea0370f83dc2d52705fb89aafb5247068a93e9b99799281b1bae2e"
+          "held_cell_signature_sha256": "3454108ada54b03da744dbb3a1461ac44c5a35f94d0f6789e4ef7d7226a609d2"
         },
         {
           "split_id": "k10:h0-mini",
@@ -1822,17 +2380,17 @@
           "n_observed_model_cells": 28,
           "probe_evaluations": [
             "hest.ccrcc.gene_expression",
-            "hest.coad.gene_expression",
-            "hest.paad.gene_expression",
-            "hest.read.gene_expression",
-            "hest.skcm.gene_expression",
-            "pathorob.tcga_2x2.robustness_index",
-            "thunder.bach.linear_probing",
-            "thunder.break_his.linear_probing",
+            "hest.lymph_idc.gene_expression",
+            "pathorob.camelyon.robustness_index",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.crc.linear_probing",
             "thunder.spider_breast.linear_probing",
-            "thunder.spider_skin.linear_probing"
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "f56ab1c3734b2b79f525ab8c2a09cf63c53d26e16229bc3eff1cc1eb7f819a63"
+          "held_cell_signature_sha256": "d868baf7c4c08d5c9dd1c5678dcf74ba6e2eb08a7394028920293e668d5e618c"
         },
         {
           "split_id": "k10:hibou-b",
@@ -1841,58 +2399,78 @@
           "model": "hibou-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
             "thunder.bracs.linear_probing",
-            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
             "thunder.crc.linear_probing",
             "thunder.esca.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
             "thunder.spider_colorectal.linear_probing",
-            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
             "thunder.tcga_tils.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "3c9ad5b5c18612bc87f4018b418fcfb44ae84c927aa69192a931f2507d5138cb"
+          "held_cell_signature_sha256": "8290dd0dddd66a032794c027b70d900c87a9695d566095bae410df975fdd56a0"
         },
         {
           "split_id": "k10:hibou-l",
-          "n_held_out": 15,
+          "n_held_out": 30,
           "k": 10,
           "model": "hibou-l",
-          "n_observed_model_cells": 25,
+          "n_observed_model_cells": 40,
           "probe_evaluations": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "hest.lung.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.skcm.gene_expression",
+            "thunder.ccrcc.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "f925c2989b516a5ffca00948f1ff418de8ddc42e2f7596076ae0db4107cc3412"
+        },
+        {
+          "split_id": "k10:kaiko-vit-b-16",
+          "n_held_out": 12,
+          "k": 10,
+          "model": "kaiko-vit-b-16",
+          "n_observed_model_cells": 22,
+          "probe_evaluations": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.panda_small.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "eva.leaderboard.patch_camelyon.validation",
             "hest.ccrcc.gene_expression",
             "hest.coad.gene_expression",
             "hest.idc.gene_expression",
-            "hest.prad.gene_expression",
-            "hest.read.gene_expression",
-            "hest.skcm.gene_expression",
-            "thunder.esca.linear_probing",
-            "thunder.spider_breast.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "hest.read.gene_expression"
           ],
-          "held_cell_signature_sha256": "09619a998119627efc52fdee92673f74312220e1ebc8e6e63a5c2f30638d43f6"
+          "held_cell_signature_sha256": "05e4cc296ff246eb35317dddeeb2165a6b6a5132c1559fa68d4143054dd2adc8"
         },
         {
           "split_id": "k10:kaiko-vit-b-8",
-          "n_held_out": 2,
+          "n_held_out": 17,
           "k": 10,
           "model": "kaiko-vit-b-8",
-          "n_observed_model_cells": 12,
+          "n_observed_model_cells": 27,
           "probe_evaluations": [
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.camelyon16_small.test",
             "hest.ccrcc.gene_expression",
             "hest.coad.gene_expression",
-            "hest.idc.gene_expression",
-            "hest.lung.gene_expression",
             "hest.lymph_idc.gene_expression",
             "hest.paad.gene_expression",
-            "hest.prad.gene_expression",
-            "hest.read.gene_expression",
+            "hest.skcm.gene_expression",
             "pathorob.camelyon.robustness_index",
             "pathorob.tcga_2x2.robustness_index"
           ],
-          "held_cell_signature_sha256": "109a51445aa87d11a72c32eed82c6d5dcdd2e675933e043e4a1bf9a2ea552657"
+          "held_cell_signature_sha256": "fb5c5332c99fa22d894c19b44130b08b711947e051b1bd566d727c3710d401c7"
         },
         {
           "split_id": "k10:kaiko-vit-b-unspecified-patch",
@@ -1906,13 +2484,73 @@
             "thunder.break_his.linear_probing",
             "thunder.ccrcc.linear_probing",
             "thunder.crc.linear_probing",
-            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
             "thunder.spider_skin.linear_probing",
-            "thunder.spider_thorax.linear_probing",
             "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_tils.linear_probing"
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "d1a9b2d2db1b57b88c467b0950a154b33a13faf862e4ed569549cfb7bcfed623"
+          "held_cell_signature_sha256": "4e535fc6422d54fe0ed282ae6ce32460aa7274b42e7a07072cf0ddfeaccd3335"
+        },
+        {
+          "split_id": "k10:kaiko-vit-l-14",
+          "n_held_out": 12,
+          "k": 10,
+          "model": "kaiko-vit-l-14",
+          "n_observed_model_cells": 22,
+          "probe_evaluations": [
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.camelyon16_small.validation",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.panda_small.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "hest.idc.gene_expression",
+            "hest.skcm.gene_expression"
+          ],
+          "held_cell_signature_sha256": "b123aa0ce268f167eb2a448bb25f2216d2969ec06ba93b096f1ad9a6c04b4ba9"
+        },
+        {
+          "split_id": "k10:kaiko-vit-s-16",
+          "n_held_out": 12,
+          "k": 10,
+          "model": "kaiko-vit-s-16",
+          "n_observed_model_cells": 22,
+          "probe_evaluations": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.panda_small.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "hest.idc.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression"
+          ],
+          "held_cell_signature_sha256": "fd9858e8efe60310236737a0fb87daf0b1ae29c64acf801148bcaab13be6186c"
+        },
+        {
+          "split_id": "k10:kaiko-vit-s-8",
+          "n_held_out": 12,
+          "k": 10,
+          "model": "kaiko-vit-s-8",
+          "n_observed_model_cells": 22,
+          "probe_evaluations": [
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.panda_small.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "hest.ccrcc.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.prad.gene_expression"
+          ],
+          "held_cell_signature_sha256": "edb58fa4862e13da5ba5c897e27724cea0cac4060febe7a00c8a867e08738596"
         },
         {
           "split_id": "k10:kaiko-vit-s-unspecified-patch",
@@ -1922,17 +2560,17 @@
           "n_observed_model_cells": 16,
           "probe_evaluations": [
             "thunder.bach.linear_probing",
-            "thunder.bracs.linear_probing",
             "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
             "thunder.crc.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_breast.linear_probing",
-            "thunder.spider_skin.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_thorax.linear_probing",
             "thunder.tcga_crc_msi.linear_probing",
             "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "903441f7f1feaf7cca7bc7e564d55f065553ac374652c437d2ef75b1d63c4fd2"
+          "held_cell_signature_sha256": "c6b3ed80d6ef276dd7a5d064cd46fd20bec4fb87deb87f188f442c74765163b8"
         },
         {
           "split_id": "k10:keep",
@@ -1941,38 +2579,98 @@
           "model": "keep",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bracs.linear_probing",
-            "thunder.break_his.linear_probing",
-            "thunder.crc.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_breast.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
-            "thunder.wilds.linear_probing"
-          ],
-          "held_cell_signature_sha256": "d8f89097bb234d322ada45250687e143b50b5ca0824e70f45e297cecb0dd65f6"
-        },
-        {
-          "split_id": "k10:midnight",
-          "n_held_out": 15,
-          "k": 10,
-          "model": "midnight",
-          "n_observed_model_cells": 25,
-          "probe_evaluations": [
-            "hest.idc.gene_expression",
-            "hest.paad.gene_expression",
             "thunder.bach.linear_probing",
-            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
             "thunder.crc.linear_probing",
             "thunder.esca.linear_probing",
             "thunder.mhist.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "cd6dd097d3daf441a86de802304e4941fd8dc3915a3364192f86853c28d68ad6"
+        },
+        {
+          "split_id": "k10:lunit-vit-s-16",
+          "n_held_out": 5,
+          "k": 10,
+          "model": "lunit-vit-s-16",
+          "n_observed_model_cells": 15,
+          "probe_evaluations": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.panda_small.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test"
+          ],
+          "held_cell_signature_sha256": "7c991d355c5680602db1c5e830613f1c5ba2edefcdf0c8d2da05e1a0c98d295f"
+        },
+        {
+          "split_id": "k10:midnight",
+          "n_held_out": 30,
+          "k": 10,
+          "model": "midnight",
+          "n_observed_model_cells": 40,
+          "probe_evaluations": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.panda_small.validation",
+            "hest.ccrcc.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "a4ffa09146fa94bf89641f93ca41a8f7ea504ea8560128ddb75369e4eb4e6ce3"
+          "held_cell_signature_sha256": "26194b9b286c8f7e85662c8bc2b51aac3e5c027038cca9dc6d1f78e67f84d08d"
+        },
+        {
+          "split_id": "k10:midnight-92k",
+          "n_held_out": 2,
+          "k": 10,
+          "model": "midnight-92k",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.patch_camelyon.test",
+            "eva.leaderboard.patch_camelyon_10shot.test"
+          ],
+          "held_cell_signature_sha256": "1598f03858925862961a6447a227ee1ddf14e06d470fa9ccfdc9ed0cf48134b3"
+        },
+        {
+          "split_id": "k10:midnight-92k-392",
+          "n_held_out": 2,
+          "k": 10,
+          "model": "midnight-92k-392",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.panda_small.test",
+            "eva.leaderboard.patch_camelyon.test",
+            "eva.leaderboard.patch_camelyon_10shot.test"
+          ],
+          "held_cell_signature_sha256": "ab4b1479c7945b8dee412cd58e9901a87bb92040fc3b5fe9d31e7aa9e157d96b"
         },
         {
           "split_id": "k10:musk",
@@ -1983,16 +2681,16 @@
           "probe_evaluations": [
             "hest.ccrcc.gene_expression",
             "hest.idc.gene_expression",
-            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
             "hest.read.gene_expression",
-            "thunder.break_his.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_breast.linear_probing",
+            "hest.skcm.gene_expression",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.bach.linear_probing",
             "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "d8dafadb449960c534d9317f2c23c537a8071b640d458e385c8859ed6892f767"
+          "held_cell_signature_sha256": "2bd5544ce84e85f2f4e9afeafa5a4906b2fe35800d520a064e301307906faaf6"
         },
         {
           "split_id": "k10:openmidnight",
@@ -2001,58 +2699,58 @@
           "model": "openmidnight",
           "n_observed_model_cells": 25,
           "probe_evaluations": [
+            "hest.idc.gene_expression",
+            "hest.lung.gene_expression",
             "hest.lymph_idc.gene_expression",
-            "hest.skcm.gene_expression",
             "thunder.bach.linear_probing",
-            "thunder.ccrcc.linear_probing",
+            "thunder.bracs.linear_probing",
             "thunder.crc.linear_probing",
             "thunder.esca.linear_probing",
-            "thunder.spider_colorectal.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_tils.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
             "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "c9b0cffdd10b9ab9ce592135aad19c901684f686f3a84ebec2b488fbbce36f27"
+          "held_cell_signature_sha256": "ead24528a52e0411c69390d8a95e90d47958bc820de08aa764e192b05bc916bb"
         },
         {
           "split_id": "k10:phikon",
-          "n_held_out": 18,
+          "n_held_out": 33,
           "k": 10,
           "model": "phikon",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "hest.idc.gene_expression",
-            "hest.lung.gene_expression",
-            "hest.read.gene_expression",
-            "hest.skcm.gene_expression",
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.crc.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.monusac.test",
+            "eva.leaderboard.patch_camelyon.validation",
             "pathorob.camelyon.robustness_index",
-            "pathorob.tcga_2x2.robustness_index",
-            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
             "thunder.crc.linear_probing",
-            "thunder.tcga_tils.linear_probing"
+            "thunder.tcga_crc_msi.linear_probing"
           ],
-          "held_cell_signature_sha256": "c80ec133acdb4511fde31daa3976ee5a5aa8437768eb49089cb27f584685c552"
+          "held_cell_signature_sha256": "250e87f28124d0065d14f3e925ac1d3d674d013a9d862cbbfcb6f8bfb5e2c751"
         },
         {
           "split_id": "k10:phikon-v2",
-          "n_held_out": 18,
+          "n_held_out": 33,
           "k": 10,
           "model": "phikon-v2",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
+            "eva.leaderboard.camelyon16_small.test",
+            "hest.ccrcc.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
             "pathorob.camelyon.robustness_index",
-            "pathorob.tcga_2x2.robustness_index",
-            "pathorob.tolkach_esca.robustness_index",
-            "thunder.bach.linear_probing",
             "thunder.bracs.linear_probing",
-            "thunder.break_his.linear_probing",
-            "thunder.mhist.linear_probing",
+            "thunder.ccrcc.linear_probing",
             "thunder.spider_skin.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_tils.linear_probing"
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
           ],
-          "held_cell_signature_sha256": "b44b384f3a2491cb992072c121c8ade7781a228f962e7de71017e136ad2c7119"
+          "held_cell_signature_sha256": "bab79d05c0b8606a0c6c4d384c28b5134a59d5e6ffaac3b13d3dcca35584845d"
         },
         {
           "split_id": "k10:plip",
@@ -2062,37 +2760,77 @@
           "n_observed_model_cells": 16,
           "probe_evaluations": [
             "thunder.bach.linear_probing",
-            "thunder.bracs.linear_probing",
-            "thunder.ccrcc.linear_probing",
             "thunder.crc.linear_probing",
             "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
             "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
             "thunder.spider_skin.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
             "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "c00f6280323fcc8b98b49a44e53468f94b903f25f1a924a09fef646943a0da1d"
+          "held_cell_signature_sha256": "09d56d6fe62ce35f9d5d96693c7a9aa60cce8ea7bc166cfee5c74a7497302721"
+        },
+        {
+          "split_id": "k10:prism-slide",
+          "n_held_out": 112,
+          "k": 10,
+          "model": "prism-slide",
+          "n_observed_model_cells": 122,
+          "probe_evaluations": [
+            "pathobench.exaone2025.cptac_brca.pik3ca-mutation",
+            "pathobench.exaone2025.cptac_hnsc.immune-class",
+            "pathobench.exaone2025.cptac_ucec.immune-class",
+            "pathobench.exaone2025.cptac_ucec.pten-mutation",
+            "pathobench.exaone2025.ebrains.diagnosis",
+            "pathobench.exaone2025.hancook.grading-scc-conventional-keratinizing",
+            "pathobench.exaone2025.hancook.primarily-metastasis",
+            "pathobench.exaone2025.ovarian.response",
+            "pathobench.exaone2025.sr386_.os",
+            "pathobench.threads2025.bracs.slidelevel-coarse"
+          ],
+          "held_cell_signature_sha256": "dd08d56ee1793d95779814a8a13f2c45031a8d8e10d59fcac0a2c7d4b77b56d8"
         },
         {
           "split_id": "k10:prov-gigapath",
-          "n_held_out": 18,
+          "n_held_out": 75,
           "k": 10,
           "model": "prov-gigapath",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 85,
           "probe_evaluations": [
-            "hest.idc.gene_expression",
-            "hest.lung.gene_expression",
-            "hest.lymph_idc.gene_expression",
-            "hest.paad.gene_expression",
-            "hest.prad.gene_expression",
-            "hest.read.gene_expression",
-            "pathorob.tolkach_esca.robustness_index",
-            "thunder.bach.linear_probing",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "pathobench.threads2025.cptac_coad.kras-mutation",
+            "pathobench.threads2025.cptac_luad.stk11-mutation",
+            "pathobench.threads2025.sr386_.braf-mutant-binary",
+            "pathobench.threads2025.sr386_.died-within-5-years",
+            "thunder.esca.linear_probing",
             "thunder.mhist.linear_probing",
-            "thunder.tcga_tils.linear_probing"
+            "thunder.spider_colorectal.linear_probing"
           ],
-          "held_cell_signature_sha256": "2a2889ab8e523c7cc2b5a9abc5dc42d6379fe07f30db8793a275233529a5b248"
+          "held_cell_signature_sha256": "f45f41eaa452033691c03ea3b1965bffc367b1686c84dead9ae3f1cb0510c841"
+        },
+        {
+          "split_id": "k10:prov-gigapath-slide",
+          "n_held_out": 112,
+          "k": 10,
+          "model": "prov-gigapath-slide",
+          "n_observed_model_cells": 122,
+          "probe_evaluations": [
+            "pathobench.exaone2025.cptac_ccrcc.vhl-mutation",
+            "pathobench.exaone2025.cptac_hnsc.os",
+            "pathobench.exaone2025.cptac_luad.egfr-mutation",
+            "pathobench.exaone2025.hancook.grading-scc-conventional-nonkeratinizing",
+            "pathobench.exaone2025.hancook.lymphovascular-invasion-l",
+            "pathobench.exaone2025.hancook.vascular-invasion-v",
+            "pathobench.exaone2025.sr386_.died-within-5-years",
+            "pathobench.exaone2025.visiomel.relapse-overall",
+            "pathobench.threads2025.bcnb.her2",
+            "pathobench.threads2025.bracs.slidelevel-coarse"
+          ],
+          "held_cell_signature_sha256": "37bcad3c2b6d93b0d6aaf1e64b2bc88a2cd8a82aaa3c64f55556ad1d4084ccf9"
         },
         {
           "split_id": "k10:quiltnet",
@@ -2104,95 +2842,135 @@
             "thunder.bracs.linear_probing",
             "thunder.break_his.linear_probing",
             "thunder.ccrcc.linear_probing",
+            "thunder.esca.linear_probing",
             "thunder.mhist.linear_probing",
             "thunder.patch_camelyon.linear_probing",
-            "thunder.spider_breast.linear_probing",
             "thunder.spider_colorectal.linear_probing",
-            "thunder.spider_skin.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "896cd4870b73b7271524b682d29bcb6594fa41a686018f094383941f6e9718b7"
+          "held_cell_signature_sha256": "3f10241e5377b2292599bf5e165cbc0f9412e19dd841c07df7ac3231becaab53"
+        },
+        {
+          "split_id": "k10:threads-slide",
+          "n_held_out": 32,
+          "k": 10,
+          "model": "threads-slide",
+          "n_observed_model_cells": 42,
+          "probe_evaluations": [
+            "pathobench.threads2025.bcnb.her2",
+            "pathobench.threads2025.bracs.slidelevel-coarse",
+            "pathobench.threads2025.cptac_brca.pik3ca-mutation",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathobench.threads2025.cptac_gbm.egfr-mutation",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "pathobench.threads2025.imp.grade",
+            "pathobench.threads2025.mbc_.os",
+            "pathobench.threads2025.sr386_.mmr-loss-binary",
+            "pathobench.threads2025.sr386_.os"
+          ],
+          "held_cell_signature_sha256": "e56dc81ef2184f4a3e869bc5c4473cae0cdf227aa326f4d1379d3e948e3ed692"
+        },
+        {
+          "split_id": "k10:titan-slide",
+          "n_held_out": 70,
+          "k": 10,
+          "model": "titan-slide",
+          "n_observed_model_cells": 80,
+          "probe_evaluations": [
+            "pathobench.exaone2025.bcnb.her2",
+            "pathobench.exaone2025.cptac_ccrcc.vhl-mutation",
+            "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+            "pathobench.exaone2025.cptac_hnsc.casp8-mutation",
+            "pathobench.exaone2025.cptac_hnsc.histologic-grade",
+            "pathobench.exaone2025.cptac_ucec.immune-class",
+            "pathobench.exaone2025.herroi.response",
+            "pathobench.exaone2025.mut-het-rcc.setd2-mutation",
+            "pathobench.exaone2025.natbrca.lymphovascular-invasion",
+            "pathobench.exaone2025.ovarian.response"
+          ],
+          "held_cell_signature_sha256": "7fccad2e30d656d1a0043146f92359274fc9564c198dd6efca7122fedfcb9ee8"
         },
         {
           "split_id": "k10:uni",
-          "n_held_out": 18,
+          "n_held_out": 33,
           "k": 10,
           "model": "uni",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
+            "eva.leaderboard.camelyon16_small.validation",
+            "eva.leaderboard.panda_small.validation",
+            "hest.idc.gene_expression",
             "hest.lung.gene_expression",
             "hest.prad.gene_expression",
-            "pathorob.camelyon.robustness_index",
-            "thunder.bach.linear_probing",
-            "thunder.bracs.linear_probing",
-            "thunder.crc.linear_probing",
-            "thunder.spider_breast.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_tils.linear_probing",
-            "thunder.wilds.linear_probing"
-          ],
-          "held_cell_signature_sha256": "cb0b57b4052063b142c23c07f58db56e1b03d01149ea972517410d6f8c0cd36f"
-        },
-        {
-          "split_id": "k10:uni2-h",
-          "n_held_out": 18,
-          "k": 10,
-          "model": "uni2-h",
-          "n_observed_model_cells": 28,
-          "probe_evaluations": [
-            "hest.coad.gene_expression",
-            "hest.prad.gene_expression",
             "hest.read.gene_expression",
-            "pathorob.tolkach_esca.robustness_index",
             "thunder.bracs.linear_probing",
             "thunder.break_his.linear_probing",
             "thunder.ccrcc.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.spider_colorectal.linear_probing"
           ],
-          "held_cell_signature_sha256": "c3bd2812a28c2b2de2ffa21cbee06766a5e9e76c77194a2bd48ffc13fdd80c4e"
+          "held_cell_signature_sha256": "2d2c2227d2999307b54853b5fe82ccc1def3cc9373faf6719623efc8d068a36a"
+        },
+        {
+          "split_id": "k10:uni2-h",
+          "n_held_out": 113,
+          "k": 10,
+          "model": "uni2-h",
+          "n_observed_model_cells": 123,
+          "probe_evaluations": [
+            "hest.lymph_idc.gene_expression",
+            "hest.read.gene_expression",
+            "pathobench.exaone2025.cptac_ccrcc.os",
+            "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+            "pathobench.exaone2025.hancook.perineural-invasion-pn",
+            "pathobench.exaone2025.visiomel.relapse-noprev-melanoma",
+            "thunder.bracs.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "5cb90ed42ff3559a65a50638aec3c7d209ec15a2ff84ee070f0ad89607e31d03"
         },
         {
           "split_id": "k10:virchow",
-          "n_held_out": 18,
+          "n_held_out": 60,
           "k": 10,
           "model": "virchow",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 70,
           "probe_evaluations": [
-            "hest.ccrcc.gene_expression",
-            "hest.idc.gene_expression",
-            "pathorob.tcga_2x2.robustness_index",
-            "thunder.ccrcc.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "pathobench.threads2025.cptac_lscc.keap1-mutation",
+            "pathobench.threads2025.cptac_pda.os",
+            "pathobench.threads2025.ebrains.diagnosis-group",
+            "pathobench.threads2025.mbc_.recist",
+            "pathobench.threads2025.panda.isup-grade",
+            "pathobench.threads2025.sr386_.died-within-5-years",
             "thunder.mhist.linear_probing",
-            "thunder.patch_camelyon.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "76a10101a470d2acbdaaee016cc5a2cd6ff744eb4dff77795d2d1c30a96473d3"
+          "held_cell_signature_sha256": "941b32c8e4c3d08804c552196209eeed5376d3bbc2ae95f2d2a0a052df2c5193"
         },
         {
           "split_id": "k10:virchow-2",
-          "n_held_out": 18,
+          "n_held_out": 33,
           "k": 10,
           "model": "virchow-2",
-          "n_observed_model_cells": 28,
+          "n_observed_model_cells": 43,
           "probe_evaluations": [
-            "hest.lung.gene_expression",
-            "hest.lymph_idc.gene_expression",
-            "hest.paad.gene_expression",
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.camelyon16_small.test",
+            "eva.leaderboard.consep.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "hest.ccrcc.gene_expression",
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
             "pathorob.camelyon.robustness_index",
-            "pathorob.tolkach_esca.robustness_index",
-            "thunder.esca.linear_probing",
-            "thunder.spider_breast.linear_probing",
-            "thunder.spider_colorectal.linear_probing",
-            "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.tcga_crc_msi.linear_probing"
           ],
-          "held_cell_signature_sha256": "38fd8a7f4a9a2611867b9039b9e889e5bbc9bb29d7f2b0d6c457da590ca4c425"
+          "held_cell_signature_sha256": "c67b676180228b70781a863159d433c877a84aa9ea6e52666341cf873d1c2675"
         },
         {
           "split_id": "k10:vit-b",
@@ -2201,18 +2979,18 @@
           "model": "vit-b",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bracs.linear_probing",
-            "thunder.break_his.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.crc.linear_probing",
+            "thunder.bach.linear_probing",
             "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
             "thunder.spider_breast.linear_probing",
             "thunder.spider_colorectal.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing",
             "thunder.tcga_tils.linear_probing",
-            "thunder.tcga_uniform.linear_probing"
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
           ],
-          "held_cell_signature_sha256": "1e38881c869539140fa8505a851c54680c21832ed180d31229edd37ba3aee8e5"
+          "held_cell_signature_sha256": "e7a78aa738ba7b4c74e48aaa7441b0d23f99ad6681fc968aa0b38252cb525d40"
         },
         {
           "split_id": "k10:vit-l",
@@ -2221,66 +2999,66 @@
           "model": "vit-l",
           "n_observed_model_cells": 16,
           "probe_evaluations": [
-            "thunder.bach.linear_probing",
             "thunder.bracs.linear_probing",
             "thunder.break_his.linear_probing",
             "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
             "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
             "thunder.spider_colorectal.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.tcga_uniform.linear_probing",
-            "thunder.wilds.linear_probing"
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_tils.linear_probing"
           ],
-          "held_cell_signature_sha256": "4649f2d4d4a87e24f42d1ce09c0911f8ce604b2428783dbaa6528f2f2084195a"
+          "held_cell_signature_sha256": "2b3224df708a627e2588600e7eb75241b98f10abfe4527c10a6b3b012157d188"
         }
       ],
       "overall_by_rank": {
         "1": {
-          "n_predictions": 1633,
-          "mae": 2.397996,
-          "medae": 1.11317,
-          "n_splits": 116,
+          "n_predictions": 4896,
+          "mae": 3.19038,
+          "medae": 1.817465,
+          "n_splits": 156,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "2": {
-          "n_predictions": 1633,
-          "mae": 2.580677,
-          "medae": 1.141739,
-          "n_splits": 116,
+          "n_predictions": 4896,
+          "mae": 3.249239,
+          "medae": 1.88611,
+          "n_splits": 156,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "3": {
-          "n_predictions": 1633,
-          "mae": 2.543676,
-          "medae": 1.106293,
-          "n_splits": 116,
+          "n_predictions": 4896,
+          "mae": 3.311072,
+          "medae": 1.869264,
+          "n_splits": 156,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "4": {
-          "n_predictions": 1633,
-          "mae": 2.489841,
-          "medae": 1.167476,
-          "n_splits": 116,
+          "n_predictions": 4896,
+          "mae": 3.40346,
+          "medae": 1.920433,
+          "n_splits": 156,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "5": {
-          "n_predictions": 1633,
-          "mae": 2.631124,
-          "medae": 1.171127,
-          "n_splits": 116,
+          "n_predictions": 4896,
+          "mae": 3.397671,
+          "medae": 1.915417,
+          "n_splits": 156,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         },
         "6": {
-          "n_predictions": 1633,
-          "mae": 2.619833,
-          "medae": 1.179984,
-          "n_splits": 116,
+          "n_predictions": 4896,
+          "mae": 3.131855,
+          "medae": 1.809937,
+          "n_splits": 156,
           "n_unsupported_row": 0,
           "n_unsupported_column": 0
         }
@@ -2288,150 +3066,150 @@
       "by_probe_count": {
         "10": {
           "1": {
-            "n_predictions": 385,
-            "mae": 2.171395,
-            "medae": 1.142613,
-            "n_splits": 34,
+            "n_predictions": 1422,
+            "mae": 2.968354,
+            "medae": 1.717575,
+            "n_splits": 50,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "2": {
-            "n_predictions": 385,
-            "mae": 2.397172,
-            "medae": 1.140672,
-            "n_splits": 34,
+            "n_predictions": 1422,
+            "mae": 3.121784,
+            "medae": 1.885783,
+            "n_splits": 50,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "3": {
-            "n_predictions": 385,
-            "mae": 2.427343,
-            "medae": 1.107919,
-            "n_splits": 34,
+            "n_predictions": 1422,
+            "mae": 3.190968,
+            "medae": 1.869264,
+            "n_splits": 50,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "4": {
-            "n_predictions": 385,
-            "mae": 2.460415,
-            "medae": 1.206382,
-            "n_splits": 34,
+            "n_predictions": 1422,
+            "mae": 3.372535,
+            "medae": 1.930776,
+            "n_splits": 50,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "5": {
-            "n_predictions": 385,
-            "mae": 2.672554,
-            "medae": 1.277835,
-            "n_splits": 34,
+            "n_predictions": 1422,
+            "mae": 3.58856,
+            "medae": 2.069541,
+            "n_splits": 50,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "6": {
-            "n_predictions": 385,
-            "mae": 2.705267,
-            "medae": 1.227474,
-            "n_splits": 34,
+            "n_predictions": 1422,
+            "mae": 3.08545,
+            "medae": 1.925937,
+            "n_splits": 50,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           }
         },
         "3": {
           "1": {
-            "n_predictions": 665,
-            "mae": 2.400349,
-            "medae": 1.111937,
-            "n_splits": 41,
+            "n_predictions": 1790,
+            "mae": 3.436124,
+            "medae": 1.883527,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "2": {
-            "n_predictions": 665,
-            "mae": 2.771616,
-            "medae": 1.114557,
-            "n_splits": 41,
+            "n_predictions": 1790,
+            "mae": 3.424908,
+            "medae": 1.869621,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "3": {
-            "n_predictions": 665,
-            "mae": 2.715255,
-            "medae": 1.12756,
-            "n_splits": 41,
+            "n_predictions": 1790,
+            "mae": 3.328946,
+            "medae": 1.878411,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "4": {
-            "n_predictions": 665,
-            "mae": 2.565195,
-            "medae": 1.125449,
-            "n_splits": 41,
+            "n_predictions": 1790,
+            "mae": 3.313964,
+            "medae": 1.904174,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "5": {
-            "n_predictions": 665,
-            "mae": 2.604051,
-            "medae": 1.13323,
-            "n_splits": 41,
+            "n_predictions": 1790,
+            "mae": 3.311999,
+            "medae": 1.916791,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "6": {
-            "n_predictions": 665,
-            "mae": 2.57998,
-            "medae": 1.129992,
-            "n_splits": 41,
+            "n_predictions": 1790,
+            "mae": 3.11033,
+            "medae": 1.726037,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           }
         },
         "5": {
           "1": {
-            "n_predictions": 583,
-            "mae": 2.544956,
-            "medae": 1.09946,
-            "n_splits": 41,
+            "n_predictions": 1684,
+            "mae": 3.116649,
+            "medae": 1.852156,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "2": {
-            "n_predictions": 583,
-            "mae": 2.484064,
-            "medae": 1.188988,
-            "n_splits": 41,
+            "n_predictions": 1684,
+            "mae": 3.170138,
+            "medae": 1.902795,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "3": {
-            "n_predictions": 583,
-            "mae": 2.424788,
-            "medae": 1.093283,
-            "n_splits": 41,
+            "n_predictions": 1684,
+            "mae": 3.393489,
+            "medae": 1.846231,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "4": {
-            "n_predictions": 583,
-            "mae": 2.423322,
-            "medae": 1.166218,
-            "n_splits": 41,
+            "n_predictions": 1684,
+            "mae": 3.524702,
+            "medae": 1.924534,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "5": {
-            "n_predictions": 583,
-            "mae": 2.634646,
-            "medae": 1.132306,
-            "n_splits": 41,
+            "n_predictions": 1684,
+            "mae": 3.327547,
+            "medae": 1.791244,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           },
           "6": {
-            "n_predictions": 583,
-            "mae": 2.608873,
-            "medae": 1.207166,
-            "n_splits": 41,
+            "n_predictions": 1684,
+            "mae": 3.19392,
+            "medae": 1.793891,
+            "n_splits": 53,
             "n_unsupported_row": 0,
             "n_unsupported_column": 0
           }

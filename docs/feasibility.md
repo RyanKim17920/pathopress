@@ -29,7 +29,7 @@ A pathology analogue would therefore:
 5. estimate supported missing cells with calibrated uncertainty; and
 6. recommend the next real evaluations with the highest information value.
 
-It would **not** combine the images from HEST and PANDA, shorten the task datasets, or make the Patho-Bench/eva/THUNDER runners interchangeable. Those remain upstream execution systems.
+It would **not** combine the images from HEST and PANDA, shorten the task datasets, or make the Patho-Bench/EVA/THUNDER runners interchangeable. Those remain upstream execution systems.
 
 ## Audited suite inventory
 
@@ -38,7 +38,7 @@ The counts below intentionally distinguish paper claims, documentation, and exec
 | Suite | Current audited inventory | Current-versus-paper/documentation drift | Primary sources |
 |---|---|---|---|
 | Patho-Bench | 95 tasks across 33 public data sources: 85 classification and 10 survival; 83 case-level and 12 slide-level. Primary metrics: 57 macro one-vs-rest AUC, 19 balanced accuracy, 9 quadratic-weighted kappa, and 10 concordance index. | The live README says 95 tasks/33 sources. The THREADS paper/HF artifacts are useful provenance but must not override current split/config files without a versioned record. | [GitHub](https://github.com/mahmoodlab/patho-bench), [Hugging Face](https://huggingface.co/datasets/MahmoodLab/Patho-Bench), [Patho-Bench paper](https://arxiv.org/abs/2502.06750), [THREADS paper](https://arxiv.org/abs/2501.16652) |
-| eva | 13 canonical pathology identities: 11 patch-level tasks and two slide-level tasks. The pathology set covers BACH, BRACS, BreakHis (selected four-class task), CRC-100K, GleasonArvaniti, MHIST, PatchCamelyon, UniToPatho, MoNuSAC, CoNSeP, BCSS, Camelyon16, and PANDA. | The dataset documentation displays 14 because `PANDASmall` is listed beside full PANDA. It is a subset/setting variant, not a new dataset × target × granularity identity. | [GitHub](https://github.com/kaiko-ai/eva), [dataset documentation](https://kaiko-ai.github.io/eva/main/datasets/), [paper](https://openreview.net/forum?id=FNBQOPj18N) |
+| EVA | 13 canonical pathology identities: 11 patch-level tasks and two slide-level tasks. The pathology set covers BACH, BRACS, BreakHis (selected four-class task), CRC-100K, GleasonArvaniti, MHIST, PatchCamelyon, UniToPatho, MoNuSAC, CoNSeP, BCSS, Camelyon16, and PANDA. | The dataset documentation displays 14 because `PANDASmall` is listed beside full PANDA. It is a subset/setting variant, not a new dataset × target × granularity identity. | [GitHub](https://github.com/kaiko-ai/eva), [dataset documentation](https://kaiko-ai.github.io/eva/main/datasets/), [paper](https://openreview.net/forum?id=FNBQOPj18N) |
 | THUNDER | 21 current task configurations. Classification (17): BACH, BRACS, BreakHis, CCRCC, CRC-100K, ESCA, MHIST, PatchCamelyon, Camelyon17-WILDS, TCGA CRC-MSI, TCGA TILs, TCGA Uniform, SPIDER Breast, Colorectal, Skin, and Thorax, plus code-present/pending STARC9. Segmentation (4): OCELOT, PanNuke, SegPath Epithelial, and SegPath Lymphocytes. | Current documentation exposes 20; executable code exposes 21; the NeurIPS paper describes 16 datasets. This is normal living-suite drift and demonstrates why commits and extraction dates belong in the registry. | [GitHub](https://github.com/MICS-Lab/thunder), [API inventory](https://mics-lab.github.io/thunder/api/), [NeurIPS paper](https://papers.nips.cc/paper_files/paper/2025/hash/e3a2bd22ef74970b2fff74a16f806237-Abstract-Datasets_and_Benchmarks_Track.html) |
 | HEST-Benchmark | Nine morphology-to-expression tasks, each predicting 50 highly variable genes at 112 × 112 μm regions: IDC, PRAD, PAAD, SKCM, COAD, READ, CCRCC, LUNG, and LYMPH_IDC. | The live leaderboard has grown from 11 evaluated models in the original benchmark description to 25 public models as of its 2026-04-03 result table; tasks remain nine. | [GitHub](https://github.com/mahmoodlab/HEST), [Hugging Face benchmark data](https://huggingface.co/datasets/MahmoodLab/hest-bench), [paper](https://arxiv.org/abs/2406.16192) |
 | PathoROB | Four dataset configurations × three metrics = 12 robustness endpoints. The configurations are TCGA 2×2, TCGA 4×4, CAMELYON, and Tolkach ESCA; the metrics are Robustness Index, Average Performance Drop, and Clustering Score. Together they cover 28 biological classes and 34 centers. | The user-facing code uses a shared `tcga` handle for the two TCGA configurations. The live Robustness Index leaderboard displays TCGA 2×2, CAMELYON, Tolkach ESCA, and an average; that average is a derived summary, not a fourth dataset or independent matrix column. Preserve TCGA 2×2 and 4×4 as separate protocols. | [GitHub](https://github.com/bifold-pathomics/PathoROB), [Hugging Face collection](https://huggingface.co/collections/bifold-pathomics/pathorob), [paper](https://arxiv.org/abs/2507.17845) |
@@ -47,7 +47,7 @@ HEST and PathoROB should initially be modeled as separate strata. HEST's gene-wi
 
 ## Deduplication result
 
-For Patho-Bench, eva, and THUNDER, an exact identity key of **dataset × prediction target × observation granularity** produces:
+For Patho-Bench, EVA, and THUNDER, an exact identity key of **dataset × prediction target × observation granularity** produces:
 
 - **122 unique code-backed identities**, including THUNDER's `STARC9` configuration;
 - **121 unique documented identities** when that unlisted/pending entry is excluded; and
@@ -57,25 +57,50 @@ The overlaps are:
 
 | Suites | Shared task identity | Important caveat |
 |---|---|---|
-| eva ↔ THUNDER | BACH patch classification | Confirm class map, resampling, split, and metric before aligning scores. |
-| eva ↔ THUNDER | BRACS patch classification | Same named dataset does not imply the same split or adaptation head. |
-| eva ↔ THUNDER | BreakHis selected four-class patch classification | BreakHis also appears as an eight-class task elsewhere; those targets are not duplicates. |
-| eva ↔ THUNDER | CRC-100K nine-class patch classification | Dataset aliases such as CRC/NCT-CRC-HE must resolve to a versioned artifact. |
-| eva ↔ THUNDER | MHIST binary patch classification | Verify official split versus generated folds. |
-| eva ↔ THUNDER | PatchCamelyon binary patch classification | Do not confuse this with Camelyon16 slide-level classification. |
-| Patho-Bench ↔ eva | Full PANDA slide-level ISUP grading | `PANDASmall` is a subset/protocol variant; kappa, label aggregation, and split must remain explicit. |
+| EVA ↔ THUNDER | BACH patch classification | Confirm class map, resampling, split, and metric before aligning scores. |
+| EVA ↔ THUNDER | BRACS patch classification | Same named dataset does not imply the same split or adaptation head. |
+| EVA ↔ THUNDER | BreakHis selected four-class patch classification | BreakHis also appears as an eight-class task elsewhere; those targets are not duplicates. |
+| EVA ↔ THUNDER | CRC-100K nine-class patch classification | Dataset aliases such as CRC/NCT-CRC-HE must resolve to a versioned artifact. |
+| EVA ↔ THUNDER | MHIST binary patch classification | Verify official split versus generated folds. |
+| EVA ↔ THUNDER | PatchCamelyon binary patch classification | Do not confuse this with Camelyon16 slide-level classification. |
+| Patho-Bench ↔ EVA | Full PANDA slide-level ISUP grading | `PANDASmall` is a subset/protocol variant; kappa, label aggregation, and split must remain explicit. |
 
 Thus the intuition that “lots are repeated” is only partly borne out. There are many recurring **dataset families, cancer types, and outcome concepts**, but only seven exact task identities under a deliberately conservative key. Broader fuzzy clustering is useful for navigation and meta-analysis, not safe deduplication.
 
-The machine-readable registry materializes this audit in [`data/tasks.csv`](../data/tasks.csv) and [`data/deduplication.csv`](../data/deduplication.csv), with pinned upstream commits in [`data/provenance.json`](../data/provenance.json). The complete 95-row Patho-Bench inventory lives there rather than being copied into this narrative report.
+The machine-readable registry materializes this audit in [`data/tasks.csv`](../data/tasks.csv) and [`data/deduplication.csv`](../data/deduplication.csv), with pinned upstream commits in [`data/provenance.json`](../data/provenance.json). It currently contains 287 protocols over 145 task identities. The complete 95-identity Patho-Bench inventory and its paper-specific protocol variants live there rather than being copied into this narrative report.
 
-## Current seed score matrix
+## Current expanded score matrix
 
-The initial generated score pool has **815 measured cells** from primary live result tables: 234 HEST cells, 512 THUNDER cells (32 models × 16 paper-era tasks), and 69 PathoROB cells (23 models × the three currently reported Robustness Index dataset columns). The other PathoROB endpoints remain cataloged but unobserved. Patho-Bench and eva are represented in the task registry, but their score extraction is not yet part of this seed. This asymmetry is important: an inventory can be complete while its model × evaluation matrix is not.
+The generated score pool has **1,976 measured cells**: 896 Patho-Bench, 265
+EVA, 234 HEST, 512 THUNDER, and 69 PathoROB. The exact paper/Hugging Face
+sources, protocol boundaries, THREADS internal-cohort quarantine, and 110 EVA
+alternate-source conflicts are documented in
+[`score-source-coverage.md`](score-source-coverage.md) and
+[`data/eva_source_conflicts.csv`](../data/eva_source_conflicts.csv).
 
-With the MVP's permissive support filter, 47 models × 28 evaluations and 806 observations remain (61.2% filled). A random-cell smoke test currently produces 1,610 held-out predictions with 1.046 normalized points median absolute error and 2.450 mean absolute error. This is evidence that the pipeline runs, **not evidence of publishable completion quality**. The test leaks the easier correlations of a dense, mixed, contemporaneous pool and does not simulate a new model, new suite, later release, or protocol shift. The release gates below therefore supersede this smoke result.
+With the primary support filter, 59 models × 165 evaluations and 1,967
+observations remain (20.2054% filled). Matched-fold rank-1 bias-ALS gives
+3.005264 MAE, 1.603026 MedAE, and 1.609435 median fold MedAE, versus
+4.092133/2.477500 for the column-median baseline. Rank 0 is
+3.056250/1.711456 and rank 2 is 3.117610/1.632035. Raw and logit Soft-Impute
+both select rank 1. The rank-1 completed artifact contains 1,967 reported and
+7,768 imputed cells.
 
-The more demanding fixed-split experiment in [`experiments/`](../experiments/) finds that rank 1 is best for random-cell and pooled sparse-probe prediction, while rank 2 is best by MAE for leave-one-suite-block-out prediction (4.312 MAE / 2.320 MedAE, 485 cells). At rank 2, suite-block MAE is 1.268 for HEST, 4.964 for THUNDER, and 12.475 for PathoROB. This is encouraging for a coherent HEST/classification pilot but direct evidence against assuming one global rank or one error guarantee across pathology endpoint families.
+The more demanding fixed-split experiment in [`experiments/`](../experiments/)
+finds rank-1 random-cell error of 2.834996/1.526795 MAE/MedAE and pooled sparse
+new-model error of 3.190380/1.817465. Hiding an entire suite raises rank-1 error
+to 5.612789/3.525174; rank 5 is best overall on that stress test at
+4.952972/3.055638. Rank-1 suite-block MAE is 4.2643 for Patho-Bench, 8.8757 for
+EVA, 1.4860 for HEST, 14.4385 for PathoROB, and 6.3854 for THUNDER. This is
+direct evidence against assuming one global rank or one error guarantee across
+pathology endpoint families.
+
+Probe selection is useful but remains retrospective. From a 1.900 MedAE
+full-matrix baseline, all-known scorecard MedAE reaches 1.481124 with five
+probes and 1.196456 with ten; hidden-only values are 1.612112 and 1.539134.
+Held-out-model hidden-cell MedAE is 1.951271 and 1.879857. Literal-average MAE
+is 3.203489/2.908513 all-known and 1.684778/1.231976 held out. The exact selected
+probe lists are in the result artifact and span multiple suites.
 
 ## The canonical four-layer model
 
@@ -107,7 +132,9 @@ Deduplicate layer 2 for the catalog, but construct matrix columns from layer 3. 
 
 ## Matrix feasibility and release gates
 
-The current numerical MVP is enough to test a seed matrix; it is not enough to claim BenchPress-like performance. Each proposed matrix stratum should pass all of these gates.
+The expanded numerical pilot is enough to test matrix completion; it is not
+enough to claim prospective BenchPress-like performance. Each proposed matrix
+stratum should pass all of these gates.
 
 ### 1. Identity and provenance gate
 
@@ -178,7 +205,7 @@ Ship measured/predicted labeling, provenance views, versioned snapshots, contrib
 - [Patho-Bench's HF dataset card](https://huggingface.co/datasets/MahmoodLab/Patho-Bench) identifies a non-commercial Creative Commons license for its split/config artifacts; its repository does not redistribute all raw WSI data. Each underlying cohort keeps its own access terms.
 - [HEST](https://github.com/mahmoodlab/HEST/blob/main/LICENSE.md) is CC BY-NC-SA 4.0 and its full data are terabyte-scale. Commercial redistribution/use requires separate analysis.
 - [PathoROB code](https://github.com/bifold-pathomics/PathoROB) is BSD-3-Clause, but its subsampled datasets retain source licenses: CAMELYON is CC0, TCGA-UT is CC BY-NC-SA 4.0, and Tolkach ESCA is CC BY-SA 4.0 with a PathoROB-specific grant noted by the authors.
-- [eva](https://github.com/kaiko-ai/eva/blob/main/LICENSE) is Apache-2.0 and [THUNDER](https://github.com/MICS-Lab/thunder/blob/main/LICENSE) is CC BY 4.0 at repository level. Dataset and model licenses remain separate. Many supported Hugging Face weights are gated and require acceptance of usage conditions.
+- [EVA](https://github.com/kaiko-ai/eva/blob/main/LICENSE) is Apache-2.0 and [THUNDER](https://github.com/MICS-Lab/thunder/blob/main/LICENSE) is CC BY 4.0 at repository level. Dataset and model licenses remain separate. Many supported Hugging Face weights are gated and require acceptance of usage conditions.
 
 The safest public artifact is a provenance-rich facts table containing identifiers, reported numeric results, and short factual protocol metadata. Do not mirror images, labels, model weights, or substantial copyrighted tables unless their licenses and access terms explicitly permit it. Record the source license per artifact and obtain legal review for a commercial product.
 

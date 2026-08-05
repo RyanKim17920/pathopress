@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import html
 import json
 import re
@@ -17,12 +18,28 @@ import subprocess
 from pathlib import Path
 from typing import Iterable
 
+try:
+    from evidence.eva_scores import (
+        merge_scores as merge_eva_scores,
+        parse_midnight_scores,
+        parse_repository_scores as parse_eva_repository_scores,
+        required_additional_protocols,
+    )
+except ModuleNotFoundError:  # imported as scripts.build_registry in tests/tools
+    from scripts.evidence.eva_scores import (
+        merge_scores as merge_eva_scores,
+        parse_midnight_scores,
+        parse_repository_scores as parse_eva_repository_scores,
+        required_additional_protocols,
+    )
+
 
 REPOSITORIES = {
     "benchpress": "https://github.com/microsoft/benchpress",
     "pathobench": "https://github.com/mahmoodlab/Patho-Bench",
     "pathobench_hf": "https://huggingface.co/datasets/MahmoodLab/Patho-Bench",
     "eva": "https://github.com/kaiko-ai/eva",
+    "eva_midnight": "https://huggingface.co/kaiko-ai/midnight",
     "thunder": "https://github.com/MICS-Lab/thunder",
     "hest": "https://github.com/mahmoodlab/HEST",
     "pathorob": "https://github.com/bifold-pathomics/PathoROB",
@@ -96,6 +113,17 @@ DEDUP_FIELDS = [
     "rationale",
 ]
 
+EVA_CONFLICT_FIELDS = [
+    "model_id",
+    "evaluation_id",
+    "selected_value",
+    "selected_reference_url",
+    "alternate_value",
+    "alternate_reference_url",
+    "absolute_difference",
+    "decision",
+]
+
 
 def git(repo: Path, *args: str) -> str:
     return subprocess.check_output(
@@ -157,6 +185,31 @@ MODEL_IDS = {
     "kaiko-s-16": "kaiko-vit-s-16",
     "kaiko-b-8": "kaiko-vit-b-8",
     "kaiko-b-16": "kaiko-vit-b-16",
+    "prism": "prism",
+    "chief": "chief",
+    "titan": "titan",
+    "exaone-path-2-5": "exaone-path-2.5",
+}
+
+EXAONE_MODEL_IDS = {
+    "CHIEF": "chief-slide",
+    "GigaPath": "prov-gigapath-slide",
+    "PRISM": "prism-slide",
+    "TITAN": "titan-slide",
+    "H-optimus-0": "h-optimus-0",
+    "UNI2-h": "uni2-h",
+    "EXAONE Path 2.5": "exaone-path-2.5-slide",
+}
+
+THREADS_MODEL_IDS = {
+    "Virchow Mean Pooling": "virchow",
+    "GigaPath Mean Pooling": "prov-gigapath",
+    "Chief Mean Pooling": "chief-patch-mean",
+    "CONCHv1.5 Mean Pooling": "conch-1.5",
+    "PRISM": "prism-slide",
+    "GigaPath": "prov-gigapath-slide",
+    "CHIEF": "chief-slide",
+    "Threads": "threads-slide",
 }
 
 
@@ -168,7 +221,9 @@ def canonical_model(alias: str) -> str:
 def write_csv(path: Path, fields: list[str], rows: Iterable[dict[str, object]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fields, extrasaction="raise")
+        writer = csv.DictWriter(
+            handle, fieldnames=fields, extrasaction="raise", lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(rows)
 
@@ -262,6 +317,82 @@ def build_pathobench(source: Path, commit: str) -> list[dict[str, object]]:
     return rows
 
 
+def build_exaone_pathobench_protocols(
+    snapshot: Path, tasks: list[dict[str, object]]
+) -> list[dict[str, object]]:
+    """Materialize EXAONE's reported recipe as distinct runnable protocols."""
+    by_id = {str(row["evaluation_id"]): row for row in tasks}
+    with snapshot.open(newline="", encoding="utf-8") as handle:
+        evidence = list(csv.DictReader(handle))
+    unique: dict[str, dict[str, str]] = {}
+    for row in evidence:
+        evaluation_id = row["evaluation_id"]
+        previous = unique.setdefault(evaluation_id, row)
+        if any(previous[key] != row[key] for key in ("base_evaluation_id", "metric", "source_task")):
+            raise ValueError(f"inconsistent EXAONE protocol metadata for {evaluation_id}")
+    rows: list[dict[str, object]] = []
+    for evaluation_id, evidence_row in sorted(unique.items()):
+        base_id = evidence_row["base_evaluation_id"]
+        if base_id not in by_id:
+            raise ValueError(f"EXAONE protocol references missing base task: {base_id}")
+        base = by_id[base_id]
+        row = dict(base)
+        row.update(
+            {
+                "evaluation_id": evaluation_id,
+                "protocol_id": evaluation_id,
+                "endpoint": "exaone2025_cox_probe" if base["task_type"] == "survival" else "exaone2025_linear_probe",
+                "metric": evidence_row["metric"],
+                "protocol": "EXAONE Path 2.5 Table 4 protocol: official Patho-Bench predefined 5-fold/50-fold splits; fixed THREADS-style logistic-regression linear probe for classification and Cox probe for survival; all classification tasks use macro one-vs-rest AUROC and survival uses C-index.",
+                "reference_url": evidence_row["reference_url"],
+                "audit_status": "parsed_primary_source",
+                "audit_notes": f"Protocol variant of {base_id}; shares task_identity_id and dataset_artifact_id but is kept separate because EXAONE reports macro-OvR AUROC for every classification task, including tasks whose current HF config uses bacc or weighted_kappa.",
+            }
+        )
+        rows.append(row)
+    if len(rows) != 80:
+        raise ValueError(f"expected 80 EXAONE Patho-Bench protocol rows, found {len(rows)}")
+    return rows
+
+
+def build_threads_pathobench_protocols(
+    snapshot: Path, tasks: list[dict[str, object]]
+) -> list[dict[str, object]]:
+    """Materialize the public THREADS paper block as versioned protocols."""
+    by_id = {str(row["evaluation_id"]): row for row in tasks}
+    with snapshot.open(newline="", encoding="utf-8") as handle:
+        evidence = list(csv.DictReader(handle))
+    unique: dict[str, dict[str, str]] = {}
+    for row in evidence:
+        evaluation_id = row["evaluation_id"]
+        previous = unique.setdefault(evaluation_id, row)
+        if any(previous[key] != row[key] for key in ("base_evaluation_id", "metric", "source_table")):
+            raise ValueError(f"inconsistent THREADS protocol metadata for {evaluation_id}")
+    rows: list[dict[str, object]] = []
+    for evaluation_id, evidence_row in sorted(unique.items()):
+        base_id = evidence_row["base_evaluation_id"]
+        if base_id not in by_id:
+            raise ValueError(f"THREADS protocol references missing base task: {base_id}")
+        base = by_id[base_id]
+        row = dict(base)
+        row.update(
+            {
+                "evaluation_id": evaluation_id,
+                "protocol_id": evaluation_id,
+                "endpoint": "threads2025_coxnet" if base["task_type"] == "survival" else "threads2025_balanced_linear_probe",
+                "metric": evidence_row["metric"],
+                "protocol": "THREADS Extended Data protocol: frozen representation, balanced linear probe with fixed cost 0.5 for classification or paper-reported CoxNet for survival, evaluated on the Patho-Bench-v1 public split/fold recipe.",
+                "reference_url": evidence_row["reference_url"],
+                "audit_status": "parsed_primary_source",
+                "audit_notes": f"Public protocol variant of {base_id}, extracted from THREADS Extended Data Table {evidence_row['source_table']}; internal MGB tasks and supervised/fine-tuned rows are excluded.",
+            }
+        )
+        rows.append(row)
+    if len(rows) != 42:
+        raise ValueError(f"expected 42 THREADS public protocol rows, found {len(rows)}")
+    return rows
+
+
 def build_eva(source: Path, commit: str) -> list[dict[str, object]]:
     root = source / "configs/vision/pathology/offline"
     excluded = {"camelyon16_small.yaml", "panda_small.yaml", "patch_camelyon_10shot.yaml"}
@@ -302,6 +433,64 @@ def build_eva(source: Path, commit: str) -> list[dict[str, object]]:
         )
     if len(rows) != 13:
         raise ValueError(f"expected 13 canonical EVA tasks, found {len(rows)}")
+    return rows
+
+
+def build_eva_leaderboard_protocols(
+    source: Path, commit: str, tasks: list[dict[str, object]]
+) -> list[dict[str, object]]:
+    """Add each reported EVA leaderboard column as a distinct protocol."""
+    by_id = {str(row["evaluation_id"]): row for row in tasks}
+    rows: list[dict[str, object]] = []
+    for spec in required_additional_protocols():
+        evaluation_id = spec["evaluation_id"]
+        config_rel = f"configs/vision/pathology/offline/{spec['config']}"
+        config_path = source / config_rel
+        if not config_path.is_file():
+            raise ValueError(f"missing EVA leaderboard config: {config_rel}")
+        dataset = Path(spec["config"]).stem
+        identity_dataset = (
+            "patch_camelyon" if dataset == "patch_camelyon_10shot" else dataset
+        )
+        base = by_id.get(f"eva.{identity_dataset}")
+        if base is not None:
+            row = dict(base)
+        else:
+            endpoint = Path(spec["config"]).parent.name
+            row = {
+                "suite_id": "eva",
+                "dataset_id": dataset,
+                "task_name": f"{dataset} {endpoint}",
+                "task_family": endpoint,
+                "target": f"{dataset} {endpoint} target",
+                "sample_unit": "slide" if dataset in {"camelyon16_small", "panda_small"} else "image",
+                "task_type": endpoint,
+                "num_samples": "not_reported",
+                "dataset_artifact_id": f"artifact.eva.{dataset}",
+                "task_identity_id": f"task.eva.{dataset}.{endpoint}",
+            }
+        row.update(
+            {
+                "evaluation_id": evaluation_id,
+                "protocol_id": evaluation_id,
+                "endpoint": f"leaderboard_{spec['split']}_{row['task_type']}",
+                "metric": spec["metric"],
+                "direction": "higher",
+                "protocol": (
+                    f"EVA pathology leaderboard; reported split={spec['split']}; "
+                    f"reported metric={spec['metric']}; mean over {spec['runs']} runs. "
+                    "Config monitor metrics are checkpoint-selection metadata and are not substituted for the documented leaderboard metric."
+                ),
+                "reference_url": blob_url("eva", commit, config_rel),
+                "audit_status": "parsed_primary_source",
+                "audit_notes": (
+                    f"Protocol-specific score column backed by {spec['config']}; kept distinct from the generic EVA config row and from other report splits."
+                ),
+            }
+        )
+        rows.append(row)
+    if len(rows) != 15 or len({str(row["evaluation_id"]) for row in rows}) != 15:
+        raise ValueError("expected 15 distinct EVA leaderboard protocols")
     return rows
 
 
@@ -507,6 +696,7 @@ def score_row(
     source_locator: str,
     lineage: str,
     audit: str = "parsed_primary_source",
+    uncertainty: str = "not_reported",
 ) -> dict[str, object]:
     return {
         "model_id": model_id,
@@ -521,10 +711,148 @@ def score_row(
         "source_locator": source_locator,
         "extraction_date": "2026-08-05",
         "review_status": "machine_parsed_single_source",
-        "uncertainty": "not_reported",
+        "uncertainty": uncertainty,
         "lineage": lineage,
         "audit_status": audit,
     }
+
+
+def parse_exaone_pathobench_scores(
+    snapshot: Path, tasks: list[dict[str, object]]
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    """Load the 80-task, seven-model Patho-Bench table from EXAONE Path 2.5."""
+    task_contracts = {
+        str(row["evaluation_id"]): row for row in tasks if row["suite_id"] == "pathobench"
+    }
+    expected_models = {
+        "CHIEF", "GigaPath", "PRISM", "TITAN", "H-optimus-0", "UNI2-h",
+        "EXAONE Path 2.5",
+    }
+    scores: list[dict[str, object]] = []
+    aliases: dict[str, dict[str, object]] = {}
+    seen_cells: set[tuple[str, str]] = set()
+    seen_tasks: set[str] = set()
+    with snapshot.open(newline="", encoding="utf-8") as handle:
+        rows = list(csv.DictReader(handle))
+    required = {
+        "source_task", "base_evaluation_id", "evaluation_id", "metric", "model_alias", "value",
+        "reference_url", "source_archive_sha256",
+    }
+    if not rows or set(rows[0]) != required:
+        raise ValueError(f"unexpected EXAONE Patho-Bench snapshot schema: {set(rows[0]) if rows else set()}")
+    for row in rows:
+        evaluation_id = row["evaluation_id"]
+        if evaluation_id not in task_contracts:
+            raise ValueError(f"EXAONE Table 4 references unknown task: {evaluation_id}")
+        contract = task_contracts[evaluation_id]
+        if row["metric"] != contract["metric"]:
+            raise ValueError(
+                f"metric mismatch for {evaluation_id}: {row['metric']} != {contract['metric']}"
+            )
+        alias = row["model_alias"]
+        if alias not in expected_models:
+            raise ValueError(f"unexpected EXAONE Table 4 model: {alias}")
+        model_id = EXAONE_MODEL_IDS[alias]
+        cell = (model_id, evaluation_id)
+        if cell in seen_cells:
+            raise ValueError(f"duplicate EXAONE Table 4 cell: {cell}")
+        seen_cells.add(cell)
+        seen_tasks.add(evaluation_id)
+        value = float(row["value"])
+        if not 0.0 <= value <= 1.0:
+            raise ValueError(f"out-of-range EXAONE Table 4 score: {row}")
+        ref = row["reference_url"]
+        aliases[alias] = alias_row(
+            alias,
+            model_id,
+            "pathobench",
+            ref,
+            "Model column in EXAONE Path 2.5 Table 4; all columns use the paper's shared linear-probing settings. H-optimus-0 and UNI2-h use mean pooling as explicitly reported.",
+        )
+        scores.append(
+            score_row(
+                alias,
+                model_id,
+                evaluation_id,
+                value,
+                value * 100.0,
+                "pathobench",
+                row["metric"],
+                ref,
+                f"paper=EXAONE Path 2.5|table=4|source_task={row['source_task']}|model_column={alias}",
+                f"arxiv:2512.14019v1 source@sha256:{row['source_archive_sha256']}:tabs/pathobench_result.tex -> scripts/extract_exaone_pathobench.py -> {snapshot.name} -> build_registry.py -> scores.csv",
+            )
+        )
+    if len(scores) != 560 or len(seen_tasks) != 80 or {row["model_alias"] for row in rows} != expected_models:
+        raise ValueError(
+            f"EXAONE Table 4 audit failed: scores={len(scores)}, tasks={len(seen_tasks)}, "
+            f"models={sorted({row['model_alias'] for row in rows})}"
+        )
+    return scores, list(aliases.values())
+
+
+def parse_threads_pathobench_scores(
+    snapshot: Path, tasks: list[dict[str, object]]
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    """Load the 42-task, eight-representation public THREADS result block."""
+    contracts = {
+        str(row["evaluation_id"]): row for row in tasks if row["suite_id"] == "pathobench"
+    }
+    with snapshot.open(newline="", encoding="utf-8") as handle:
+        evidence = list(csv.DictReader(handle))
+    required = {
+        "source_table", "base_evaluation_id", "evaluation_id", "metric", "model_alias",
+        "value", "uncertainty", "reference_url", "source_archive_sha256",
+        "source_html_sha256",
+    }
+    if not evidence or set(evidence[0]) != required:
+        raise ValueError("unexpected THREADS snapshot schema")
+    scores: list[dict[str, object]] = []
+    aliases: dict[str, dict[str, object]] = {}
+    seen: set[tuple[str, str]] = set()
+    for row in evidence:
+        evaluation_id = row["evaluation_id"]
+        contract = contracts.get(evaluation_id)
+        if contract is None or contract["metric"] != row["metric"]:
+            raise ValueError(f"THREADS task/metric contract mismatch: {evaluation_id}")
+        alias = row["model_alias"]
+        if alias not in THREADS_MODEL_IDS:
+            raise ValueError(f"unexpected THREADS representation: {alias}")
+        model_id = THREADS_MODEL_IDS[alias]
+        cell = (model_id, evaluation_id)
+        if cell in seen:
+            raise ValueError(f"duplicate THREADS score cell: {cell}")
+        seen.add(cell)
+        value = float(row["value"])
+        if not -1.0 <= value <= 1.0:
+            raise ValueError(f"out-of-range THREADS score: {row}")
+        normalized = (value + 1.0) * 50.0 if row["metric"] == "weighted_kappa" else value * 100.0
+        ref = row["reference_url"]
+        aliases[alias] = alias_row(
+            alias,
+            model_id,
+            "pathobench",
+            ref,
+            "Frozen representation row in THREADS Extended Data. Patch-encoder mean-pooling and slide-encoder rows have deliberately distinct model IDs.",
+        )
+        scores.append(
+            score_row(
+                alias,
+                model_id,
+                evaluation_id,
+                value,
+                normalized,
+                "pathobench",
+                row["metric"],
+                ref,
+                f"paper=THREADS|extended_data_table={row['source_table']}|model_row={alias}|base_task={row['base_evaluation_id']}",
+                f"arxiv:2501.16652v1 source@sha256:{row['source_archive_sha256']} -> scripts/extract_threads_pathobench.py -> {snapshot.name} -> build_registry.py -> scores.csv",
+                uncertainty=row["uncertainty"],
+            )
+        )
+    if len(scores) != 336 or len(seen) != 336:
+        raise ValueError(f"THREADS public score audit failed: {len(scores)}")
+    return scores, list(aliases.values())
 
 
 def parse_hest_scores(source: Path, commit: str) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
@@ -657,12 +985,47 @@ def build_dedup(tasks: list[dict[str, object]]) -> list[dict[str, object]]:
     for task in tasks:
         identity_members.setdefault(str(task["task_identity_id"]), []).append(str(task["evaluation_id"]))
     duplicates = {identity: sorted(members) for identity, members in identity_members.items() if len(members) > 1}
-    if set(duplicates) != set(EXACT_TASK_IDENTITIES) or len(duplicates) != 7:
-        raise ValueError(f"expected seven exact duplicate task identities, found {duplicates}")
+    protocol_variant_identities = {
+        identity
+        for identity, members in duplicates.items()
+        if any(
+            member.startswith((
+                "pathobench.exaone2025.",
+                "pathobench.threads2025.",
+                "eva.leaderboard.",
+            ))
+            for member in members
+        )
+    }
+    expected_duplicate_identities = set(EXACT_TASK_IDENTITIES) | protocol_variant_identities
+    pathobench_variant_identities = {
+        identity for identity, members in duplicates.items()
+        if any(member.startswith("pathobench.exaone2025.") for member in members)
+    }
+    eva_variant_identities = {
+        identity for identity, members in duplicates.items()
+        if any(member.startswith("eva.leaderboard.") for member in members)
+    }
+    if (
+        set(duplicates) != expected_duplicate_identities
+        or len(pathobench_variant_identities) != 80
+        or len(eva_variant_identities) != 11
+    ):
+        raise ValueError(
+            "exact duplicate task identity audit failed: "
+            f"pathobench_variants={len(pathobench_variant_identities)}, "
+            f"eva_variants={len(eva_variant_identities)}, duplicates={duplicates}"
+        )
 
     rows = []
     for identity, members in sorted(duplicates.items()):
-        canonical = members[0]
+        canonical = next(
+            (
+                member for member in members
+                if not member.startswith(("pathobench.exaone2025.", "pathobench.threads2025.", "eva.leaderboard."))
+            ),
+            members[0],
+        )
         for member in members:
             rows.append(
                 {
@@ -672,7 +1035,7 @@ def build_dedup(tasks: list[dict[str, object]]) -> list[dict[str, object]]:
                     "canonical_evaluation_id": canonical,
                     "member_evaluation_id": member,
                     "decision": "link_only",
-                    "rationale": "Duplicate task_identity_id derived from the materialized task contract; retain distinct protocol_id values and do not overwrite protocol-specific scores.",
+                    "rationale": "Shared dataset artifact and prediction target, but potentially different runnable protocol and metric; retain distinct protocol_id values and never overwrite protocol-specific scores.",
                 }
             )
 
@@ -703,6 +1066,18 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sources", type=Path, default=Path("/tmp/pathopress_sources"))
     parser.add_argument("--output", type=Path, default=Path("data"))
+    parser.add_argument(
+        "--exaone-pathobench-snapshot",
+        type=Path,
+        default=Path(__file__).resolve().parents[1]
+        / "source_data/exaone_path_2_5_pathobench_2512.14019v1.csv",
+    )
+    parser.add_argument(
+        "--threads-pathobench-snapshot",
+        type=Path,
+        default=Path(__file__).resolve().parents[1]
+        / "source_data/threads_pathobench_2501.16652v1.csv",
+    )
     args = parser.parse_args()
 
     commits = {name: git(args.sources / name, "rev-parse", "HEAD") for name in REPOSITORIES}
@@ -714,14 +1089,17 @@ def main() -> None:
         *build_pathorob(commits["pathorob"]),
     ]
     materialize_task_contracts(tasks)
-    expected = {"pathobench": 95, "eva": 13, "thunder": 21, "hest": 9, "pathorob": 12}
+    tasks.extend(build_exaone_pathobench_protocols(args.exaone_pathobench_snapshot, tasks))
+    tasks.extend(build_threads_pathobench_protocols(args.threads_pathobench_snapshot, tasks))
+    tasks.extend(build_eva_leaderboard_protocols(args.sources / "eva", commits["eva"], tasks))
+    expected = {"pathobench": 217, "eva": 28, "thunder": 21, "hest": 9, "pathorob": 12}
     actual = {suite: sum(row["suite_id"] == suite for row in tasks) for suite in expected}
     if actual != expected:
         raise ValueError(f"task inventory mismatch: {actual}")
 
     suite_protocols = {
-        "pathobench": "Public WSI task splits spanning seven clinical task families; task-specific downstream heads.",
-        "eva": "Canonical offline pathology configs only; explicit reduced-data protocol variants excluded.",
+        "pathobench": "95 public WSI task identities plus 80 EXAONE-2025 and 42 THREADS-2025 explicitly versioned result protocols.",
+        "eva": "Thirteen canonical offline configs plus 15 split- and reduced-data-specific leaderboard protocols.",
         "thunder": "All code-backed dataset configs represented by a primary linear-probe or segmentation endpoint.",
         "hest": "PCA-256 plus ridge regression morphology-to-gene-expression benchmark; Pearson r.",
         "pathorob": "Four dataset endpoints (TCGA 2x2, TCGA 4x4, Camelyon, Tolkach ESCA) crossed with three robustness metrics.",
@@ -746,12 +1124,44 @@ def main() -> None:
     hest_scores, hest_aliases = parse_hest_scores(args.sources / "hest", commits["hest"])
     thunder_scores, thunder_aliases = parse_thunder_scores(args.sources / "thunder", commits["thunder"])
     pathorob_scores, pathorob_aliases = parse_pathorob_scores(args.sources / "pathorob", commits["pathorob"])
-    scores = hest_scores + thunder_scores + pathorob_scores
+    pathobench_scores, pathobench_aliases = parse_exaone_pathobench_scores(
+        args.exaone_pathobench_snapshot, tasks
+    )
+    threads_scores, threads_aliases = parse_threads_pathobench_scores(
+        args.threads_pathobench_snapshot, tasks
+    )
+    eva_repository_scores = parse_eva_repository_scores(
+        args.sources / "eva", commits["eva"]
+    )
+    eva_midnight_scores = parse_midnight_scores(
+        args.sources / "eva_midnight", commits["eva_midnight"]
+    )
+    eva_selected, eva_conflicts = merge_eva_scores(
+        eva_repository_scores, eva_midnight_scores
+    )
+    eva_scores = [row.registry_row("2026-08-05") for row in eva_selected]
+    scores = (
+        pathobench_scores + threads_scores + eva_scores
+        + hest_scores + thunder_scores + pathorob_scores
+    )
     for row in scores:
         missing = [field for field in SCORE_FIELDS if row.get(field) in (None, "")]
         if missing:
             raise ValueError(f"score evidence row has blank contract fields {missing}: {row}")
-    aliases = hest_aliases + thunder_aliases + pathorob_aliases
+    eva_aliases = [
+        alias_row(
+            row.reported_model_alias,
+            row.model_id,
+            "eva",
+            row.reference_url,
+            "Reported EVA leaderboard alias mapped by the source-specific exact alias table.",
+        )
+        for row in eva_selected
+    ]
+    aliases = (
+        pathobench_aliases + threads_aliases + eva_aliases
+        + hest_aliases + thunder_aliases + pathorob_aliases
+    )
     aliases = sorted(
         {(row["suite_id"], row["alias"]): row for row in aliases}.values(),
         key=lambda row: (str(row["model_id"]), str(row["suite_id"]), str(row["alias"])),
@@ -763,11 +1173,18 @@ def main() -> None:
     write_csv(args.output / "model_aliases.csv", ALIAS_FIELDS, aliases)
     write_csv(args.output / "scores.csv", SCORE_FIELDS, scores)
     write_csv(args.output / "deduplication.csv", DEDUP_FIELDS, dedup)
+    write_csv(
+        args.output / "eva_source_conflicts.csv",
+        EVA_CONFLICT_FIELDS,
+        eva_conflicts,
+    )
 
     provenance = {
         "schema_version": 2,
         "generator": "scripts/build_registry.py",
         "normalization": {
+            "macro-ovr-auc/bacc/cindex/balanced_accuracy/dice": "Raw metrics in [0,1] multiplied by 100.",
+            "weighted_kappa": "(kappa + 1) * 50, preserving the metric's mathematical [-1,1] domain on a 0-100 scale.",
             "f1": "Scores already reported on 0-100 scale; preserved.",
             "robustness_index": "Raw RI in [0,1] multiplied by 100.",
             "pearson_r": "(r + 1) * 50; logit(normalized/100) equals 2 * atanh(r), a scaled Fisher-z.",
@@ -780,6 +1197,44 @@ def main() -> None:
             }
             for name, url in REPOSITORIES.items()
         },
+        "source_reports": {
+            "exaone_path_2_5_pathobench": {
+                "url": "https://arxiv.org/abs/2512.14019v1",
+                "pdf_url": "https://arxiv.org/pdf/2512.14019v1",
+                "source_archive_url": "https://export.arxiv.org/e-print/2512.14019v1",
+                "source_archive_sha256": "0c479164dfab7ac48a1e1876649ef73efe9f457e064c3ab00ee960856d35a268",
+                "source_member": "tabs/pathobench_result.tex",
+                "snapshot_path": str(args.exaone_pathobench_snapshot.resolve()),
+                "snapshot_sha256": hashlib.sha256(
+                    args.exaone_pathobench_snapshot.read_bytes()
+                ).hexdigest(),
+                "table": 4,
+                "reported_tasks": 80,
+                "reported_models": 7,
+                "score_cells": 560,
+            },
+            "threads_pathobench_public": {
+                "url": "https://arxiv.org/abs/2501.16652v1",
+                "html_url": "https://arxiv.org/html/2501.16652v1",
+                "html_sha256": "a6c7af63c1f527eba692f83b362651e0e1d96d07e303520f90cd08f34b00c92f",
+                "source_archive_url": "https://export.arxiv.org/e-print/2501.16652v1",
+                "source_archive_sha256": "3d8b3f6779b9b0eae21be12e8917bd6f0bab26e3c7943470e378383d20a1de4f",
+                "snapshot_path": str(args.threads_pathobench_snapshot.resolve()),
+                "snapshot_sha256": hashlib.sha256(args.threads_pathobench_snapshot.read_bytes()).hexdigest(),
+                "reported_public_tasks": 42,
+                "reported_frozen_representations": 8,
+                "score_cells": 336,
+                "excluded_internal_tasks": 12,
+                "excluded_internal_cells": 96,
+            },
+            "eva_pathology_leaderboards": {
+                "repository_score_cells": len(eva_repository_scores),
+                "midnight_model_card_score_cells": len(eva_midnight_scores),
+                "selected_unique_cells": len(eva_scores),
+                "alternate_source_conflicts": len(eva_conflicts),
+                "conflict_audit_path": str((args.output / "eva_source_conflicts.csv").resolve()),
+            }
+        },
         "counts": {
             "suites": len(suites),
             "tasks": len(tasks),
@@ -790,9 +1245,13 @@ def main() -> None:
             "pathobench_sample_units": {unit: sum(row["suite_id"] == "pathobench" and row["sample_unit"] == unit for row in tasks) for unit in ("case", "slide")},
             "pathobench_task_types": {kind: sum(row["suite_id"] == "pathobench" and row["task_type"] == kind for row in tasks) for kind in ("classification", "survival")},
             "pathobench_metrics": {metric: sum(row["suite_id"] == "pathobench" and row["metric"] == metric for row in tasks) for metric in ("macro-ovr-auc", "bacc", "weighted_kappa", "cindex")},
+            "pathobench_task_identities": len({row["task_identity_id"] for row in tasks if row["suite_id"] == "pathobench"}),
+            "pathobench_exaone_protocol_variants": sum(str(row["evaluation_id"]).startswith("pathobench.exaone2025.") for row in tasks),
+            "pathobench_threads_protocol_variants": sum(str(row["evaluation_id"]).startswith("pathobench.threads2025.") for row in tasks),
+            "eva_leaderboard_protocol_variants": sum(str(row["evaluation_id"]).startswith("eva.leaderboard.") for row in tasks),
             "model_aliases": len(aliases),
             "scores": len(scores),
-            "scores_by_suite": {suite: sum(row["suite_id"] == suite for row in scores) for suite in ("hest", "thunder", "pathorob")},
+            "scores_by_suite": {suite: sum(row["suite_id"] == suite for row in scores) for suite in ("pathobench", "eva", "hest", "thunder", "pathorob")},
             "scores_by_audit_status": {status: sum(row["audit_status"] == status for row in scores) for status in ("parsed_primary_source", "reported_external")},
             "scores_by_review_status": {"machine_parsed_single_source": sum(row["review_status"] == "machine_parsed_single_source" for row in scores)},
             "deduplication_memberships": len(dedup),
@@ -802,6 +1261,10 @@ def main() -> None:
         },
         "audit_notes": [
             "No network calls are made by the generator.",
+            "EXAONE Path 2.5 Table 4 supplies 560 point estimates: seven models across 80 exact official Patho-Bench task names under the paper's shared linear-probing settings. The reported AVERAGE row is excluded because it is derived, not an independent evaluation cell.",
+            "Fifteen current Patho-Bench HF tasks are absent from EXAONE Table 4 and remain unscored; the parser requires exact task-name matches and does not impute or fuzzy-map them.",
+            "THREADS supplies 336 public Patho-Bench-v1 cells across 42 tasks and eight frozen representation pipelines. Twelve internal tasks (96 cells), supervised/fine-tuned rows, and aggregate summaries are excluded.",
+            "EVA contributes 265 selected unique leaderboard cells. The current repository wins over the older Midnight model-card report for 110 overlapping cells; every alternate value remains in eva_source_conflicts.csv and is never averaged.",
             "HEST and THUNDER average columns are not independent evaluation cells and are excluded from scores.csv.",
             "Score rows are machine-parsed from one reporting source each. audit_status=parsed_primary_source is prototype evidence, not independent or dual-source verification.",
             "PathoROB external-publication rows are retained with audit_status=reported_external; PathoROB explicitly says those values were not validated by its authors.",

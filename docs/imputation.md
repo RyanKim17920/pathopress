@@ -13,14 +13,17 @@ MedAE          = median of all absolute errors
 ```
 
 MAE gives extra weight to occasional large misses. MedAE describes a typical
-prediction instance: a MedAE of 1.083 means half of evaluated imputations were
-within 1.083 normalized points and half were farther away. Neither value is a
+prediction instance: a MedAE of 1.603026 means half of evaluated imputations
+were within 1.603026 normalized points and half were farther away. Neither value is a
 confidence interval, clinical error, or universal accuracy percentage.
 
 The common display scale is metric-specific:
 
 | Suite | Source metric | Normalized scale | Meaning of one point |
 | --- | --- | --- | --- |
+| Patho-Bench | AUC, balanced accuracy, or c-index in 0–1 | `100 × value` | `0.01` source-metric unit |
+| Patho-Bench | weighted kappa in −1–1 | `50 × (kappa + 1)` | `0.02` kappa |
+| EVA | balanced accuracy or Dice in 0–1 | `100 × value` | `0.01` source-metric unit |
 | THUNDER | F1 reported on 0–100 | unchanged | one F1 point |
 | HEST | Pearson correlation `r` | `50 × (r + 1)` | `0.02 r` |
 | PathoROB | Robustness Index | `100 × RI` | `0.01 RI` |
@@ -34,22 +37,22 @@ errors.
 The reproduction assigns every observed score within each model to one of
 three folds, repeats that assignment for seeds 42 through 51, and predicts the
 held-out cells from the remaining scores. Every source cell is therefore tested
-once per seed, giving 8,060 rank-1 prediction instances from 806 distinct cells.
+once per seed, giving 19,670 rank-1 prediction instances from 1,967 distinct cells.
 
 For the selected rank 1:
 
 | Aggregation | Result |
 | --- | ---: |
-| Pooled MAE | 2.427 |
-| Pooled MedAE | 1.038 |
-| Median of 30 fold MedAEs | 1.048 |
-| Within 1 point | 48.5% |
-| Within 3 points | 81.7% |
-| Within 5 points | 88.8% |
-| Within 10 points | 95.4% |
+| Pooled MAE | 3.005264 |
+| Pooled MedAE | 1.603026 |
+| Median of 30 fold MedAEs | 1.609435 |
+| Within 1 point | 35.9532% |
+| Within 3 points | 69.6492% |
+| Within 5 points | 82.7758% |
+| Within 10 points | 94.4331% |
 
-The matching task-column-median baseline has MAE 4.470 and MedAE 2.400, versus
-rank 1's 2.427 and 1.038. This is evidence that the model is using cross-task
+The matching task-column-median baseline has MAE 4.092133 and MedAE 2.477500,
+versus rank 1's 3.005264 and 1.603026. This is evidence that the model is using cross-task
 structure, although it is not yet a prospective or family-held-out test.
 
 This matches BenchPress's fold construction and reports both pooled and
@@ -70,24 +73,29 @@ reported cells are solid and point estimates are translucent.
 
 [`outputs/imputations_rank1.csv`](../outputs/imputations_rank1.csv) contains one
 row for every supported model/evaluation pair. `status=observed` means the score
-was reported and is preserved exactly. `status=imputed` marks one of the 510
-rank-1 point estimates. The file includes source-metric estimates, row/column
-support counts, a rank-2 comparison, and the absolute rank-1/rank-2 difference.
+was reported and is preserved exactly. `status=imputed` marks one of the 7,768
+rank-1 point estimates. The file has 1,967 reported rows and includes
+source-metric estimates, row/column support counts, a rank-2 comparison, and the
+absolute rank-1/rank-2 difference.
 
 The rank difference is a sensitivity diagnostic, not an uncertainty interval.
 The ten internal ALS starts stabilize numerical optimization; they are not ten
 independent samples. A public prediction service should add calibrated
 uncertainty and abstain for weakly supported or out-of-family cells.
 
-The remaining catalog-only tasks cannot be completed: an entirely unobserved
-column has no learned task bias or latent factor. Patho-Bench and eva result
-tables must be extracted before their columns become imputable.
+Catalog-only tasks with no observed column still cannot be completed because
+they have no learned task bias or latent factor. Patho-Bench and EVA now supply
+896 and 265 score cells respectively; their exact numerical coverage is
+documented in [`score-source-coverage.md`](score-source-coverage.md), including
+the 110 EVA alternate-source conflicts retained in
+[`data/eva_source_conflicts.csv`](../data/eva_source_conflicts.csv).
 
 ## Is the pathology matrix rank 1?
 
 For the final bias-ALS predictor, **one latent interaction factor is preferred**.
 On identical matched folds, rank 1 has MAE/MedAE
-2.427/1.038, versus 2.553/1.101 for bias-only rank 0, 2.541/1.083 for rank 2,
+3.005264/1.603026, versus 3.056250/1.711456 for bias-only rank 0 and
+3.117610/1.632035 for rank 2,
 and worse errors for every tested rank through 10.
 
 That is not a claim that the raw data matrix has exact algebraic rank 1. The
@@ -101,12 +109,11 @@ so an interaction rank of 1 can have algebraic rank up to roughly 3 in the
 transformed score space. Inverse logit and per-column inverse transforms can
 raise the algebraic rank again. With incomplete, noisy, heterogeneous data
 there is no uniquely observable “true rank”; cross-validation only says that
-additional latent interaction dimensions overfit this seed matrix. Individual
-suites may still have different effective ranks, and rank should be selected
-again as Patho-Bench and eva score columns are added. In the separate
-leave-one-suite-block-out experiment, rank 2 beats rank 1 by only 0.048 MAE;
-that small reversal is another reason to retain rank sensitivity rather than
-declare a universal intrinsic rank.
+additional latent interaction dimensions overfit these matched random folds.
+The stricter leave-one-suite-block-out experiment prefers rank 5 overall at
+4.952972 MAE and 3.055638 MedAE, versus rank 1 at 5.612789/3.525174. That
+reversal is a reason to retain rank sensitivity rather than declare a universal
+intrinsic rank.
 
 ## How exact is the BenchPress reproduction?
 
@@ -127,11 +134,9 @@ BenchPress's *rank-discovery figure* is a different algorithm from its final
 predictor: iterative truncated-SVD Soft-Impute in raw and logit spaces. The
 matching pathology reproduction is in
 [`soft_impute_rank_sweep_results.json`](../experiments/soft_impute_rank_sweep_results.json)
-and [its graph](../figures/soft_impute_rank_sweep.png). By BenchPress's plotted
-MedAPE criterion, rank 2 narrowly wins in both spaces. By pooled MAE, pooled
-MedAE in logit space, and bias-ALS cross-validation, rank 1 wins. The difference
-between ranks 1 and 2 is small enough that the responsible conclusion is
-“effective interaction rank around 1–2,” not an exact intrinsic rank.
+and [its graph](../figures/soft_impute_rank_sweep.png). Both the raw-space and
+logit-space sweeps choose rank 1 on the expanded matrix, agreeing with the
+bias-ALS within-model cross-validation result.
 
 ## Probe-policy figures
 
@@ -154,10 +159,16 @@ not be interpreted as clinical utility.
 
 This ranking is the first step of greedy selection: lower one-probe scorecard
 MedAE means greater conditional predictive utility, and the chart expresses it
-as improvement over the 2.100-point column-median baseline. Coverage is printed
+as improvement over the 1.900-point full-matrix baseline. Coverage is printed
 on every bar because a probe with no published result for a target model
-reveals nothing. The all-THUNDER top of the list reflects the current block
-structure and 68% THUNDER row coverage.
+reveals nothing. The final selected trajectories span multiple suites; the
+exact ordered probe lists are in the result artifact.
+
+At five and ten probes, all-known scorecard MedAE is 1.481124 and 1.196456;
+hidden-only MedAE is 1.612112 and 1.539134. On held-out models, hidden-cell
+MedAE is 1.951271 and 1.879857. The literal per-model-average MAE is 3.203489
+and 2.908513 for all-known selection, versus 1.684778 and 1.231976 for the
+held-out-model evaluation.
 
 Machine-readable results are in
 [`experiments/probe_selection_results_rank1.json`](../experiments/probe_selection_results_rank1.json)

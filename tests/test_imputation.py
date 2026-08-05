@@ -38,6 +38,9 @@ class ImputationTests(unittest.TestCase):
 
     def test_native_metric_inverse_maps(self) -> None:
         self.assertAlmostEqual(to_native_score(80.0, "pearson_r"), 0.6)
+        self.assertAlmostEqual(to_native_score(80.0, "weighted_kappa"), 0.6)
+        self.assertAlmostEqual(to_native_score(82.2, "balanced_accuracy"), 0.822)
+        self.assertAlmostEqual(to_native_score(82.2, "macro-ovr-auc"), 0.822)
         self.assertAlmostEqual(to_native_score(82.2, "robustness_index"), 0.822)
         self.assertAlmostEqual(to_native_score(65.6, "f1"), 65.6)
 

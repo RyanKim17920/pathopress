@@ -63,34 +63,47 @@ wins by pooled MAE, pooled MedAE, and median fold MedAE.
 
 `run_soft_impute_rank_sweep.py` separately reproduces the method behind
 BenchPress's published rank U-curve: iterative truncated-SVD completion at
-ranks 1–10 in raw and logit spaces. Its MedAPE criterion narrowly chooses rank
-2 in both spaces; raw-space MedAE also chooses rank 2, while raw/logit MAE and
-logit-space MedAE choose rank 1. This is intentionally kept distinct from the
-bias-ALS default predictor.
+ranks 1–10 in raw and logit spaces. Both spaces choose rank 1 on the expanded
+matrix. This is intentionally kept distinct from the bias-ALS default
+predictor.
 
 ## Results for the current matrix
 
-The primary-source-parsed, support-filtered matrix has 47 models, 28 evaluations,
-and 806 observed cells (61.25% density). These cells have not yet received dual
-human review. Rank 1 is the strongest simple choice in the
-random-cell and sparse-probe aggregates; rank 2 has the lowest suite-block MAE.
+The primary-source-parsed, support-filtered matrix has 59 models, 165
+evaluations, and 1,967 observed cells (20.2054% density). These cells have not
+yet received dual human review. Rank 1 is selected by the matched BenchPress
+within-model CV and is strongest among ranks 1–6 for random-cell validation.
+The suite-block stress test instead prefers rank 5.
+
+Matched-fold rank-1 bias-ALS gives 3.005264 MAE, 1.603026 MedAE, and 1.609435
+median fold MedAE, versus 4.092133/2.477500 for the column-median baseline.
+Rank 0 is 3.056250/1.711456 and rank 2 is 3.117610/1.632035. Both raw and logit
+Soft-Impute sweeps independently select rank 1.
 
 | Protocol | Best rank by MAE | n | MAE | MedAE |
 | --- | ---: | ---: | ---: | ---: |
-| Fixed random-cell holdout | 1 | 1,610 | 2.326 | 1.013 |
-| Leave-one-suite-block-out | 2 | 485 | 4.312 | 2.320 |
-| Sparse new-model probes, pooled | 1 | 1,633 | 2.398 | 1.113 |
+| Fixed random-cell holdout | 1 | 3,930 | 2.834996 | 1.526795 |
+| Leave-one-suite-block-out | 5 | 1,009 | 4.952972 | 3.055638 |
+| Sparse new-model probes, pooled | 1 | 4,896 | 3.190380 | 1.817465 |
 
-Suite-block difficulty is highly uneven at rank 2: HEST is 1.268/1.080
-MAE/MedAE (`n=171`), THUNDER is 4.964/3.905 (`n=272`), and PathoROB is
-12.475/9.344 (`n=42`). PathoROB currently contributes only three published
-aggregate score columns, so this is a small, structurally different block and
-should not be generalized to its full task inventory.
+For comparison at the selected completion rank 1, suite-block MAE is 4.2643 for
+Patho-Bench, 8.8757 for EVA, 1.4860 for HEST, 14.4385 for PathoROB, and 6.3854
+for THUNDER. Overall rank-1 suite-block error is 5.612789 MAE and 3.525174
+MedAE. PathoROB contributes only three supported columns, so its result is a
+small, structurally different block and should not be generalized to its full
+task inventory.
 
-At rank 1, sparse probes give MAE/MedAE of 2.400/1.112 for `k=3` (`n=665`),
-2.545/1.099 for `k=5` (`n=583`), and 2.171/1.143 for `k=10` (`n=385`). These
+At rank 1, sparse probes give MAE/MedAE of 3.436124/1.883527 for `k=3`
+(`n=1,790`), 3.116649/1.852156 for `k=5` (`n=1,684`), and
+2.968354/1.717575 for `k=10` (`n=1,422`). These
 rows do not form a controlled learning curve: increasing `k` changes both the
 eligible target cells and their sample count, and the script uses one fixed
 probe draw per model. Compare ranks within a row, not errors across `k`, unless
 a future experiment fixes a common eligible-model/target set and repeats probe
 draws.
+
+The probe-selection artifact records the exact cross-suite probe lists.
+All-known scorecard MedAE is 1.481124 at five probes and 1.196456 at ten;
+hidden-only MedAE is 1.612112 and 1.539134. Held-out-model hidden-cell MedAE is
+1.951271 and 1.879857. Literal-average MAE is 3.203489 and 2.908513 for the
+all-known protocol, and 1.684778 and 1.231976 for held-out models.

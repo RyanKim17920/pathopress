@@ -5,7 +5,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import sys
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import numpy as np
@@ -18,6 +20,14 @@ sys.path.insert(0, str(PROJECT_ROOT / "experiments"))
 from pathopress.completion import complete_soft_impute  # noqa: E402
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
 from run_benchpress_style import make_folds, metrics  # noqa: E402
+
+
+def _soft_job(job):
+    transform, rank, train, held, matrix = job
+    estimate = complete_soft_impute(train, rank=rank, transform=transform)
+    actual = [float(matrix[i, j]) for i, j in held]
+    predicted = [float(estimate[i, j]) for i, j in held]
+    return transform, rank, actual, predicted, float(metrics(actual, predicted)["medae"])
 
 
 def main() -> None:
@@ -33,20 +43,31 @@ def main() -> None:
         for seed in range(42, 52)
         for fold, (train, held) in enumerate(make_folds(matrix, n_folds=3, seed=seed))
     ]
+    aggregate = {
+        (transform, rank): ([], [], [])
+        for transform in transforms
+        for rank in ranks
+    }
+    jobs = [
+        (transform, rank, train, held, matrix)
+        for transform in transforms
+        for rank in ranks
+        for _seed, _fold, train, held in folds
+    ]
+    workers = max(1, min(8, (os.cpu_count() or 2) - 1))
+    with ProcessPoolExecutor(max_workers=workers) as executor:
+        for transform, rank, fold_actual, fold_prediction, medae in executor.map(
+            _soft_job, jobs
+        ):
+            actual, predicted, fold_medae = aggregate[(transform, rank)]
+            actual.extend(fold_actual)
+            predicted.extend(fold_prediction)
+            fold_medae.append(medae)
     results: dict[str, dict[str, object]] = {}
     for transform in transforms:
         results[transform] = {}
         for rank in ranks:
-            actual: list[float] = []
-            predicted: list[float] = []
-            fold_medae: list[float] = []
-            for seed, fold, train, held in folds:
-                estimate = complete_soft_impute(train, rank=rank, transform=transform)
-                fold_actual = [float(matrix[i, j]) for i, j in held]
-                fold_prediction = [float(estimate[i, j]) for i, j in held]
-                actual.extend(fold_actual)
-                predicted.extend(fold_prediction)
-                fold_medae.append(float(metrics(fold_actual, fold_prediction)["medae"]))
+            actual, predicted, fold_medae = aggregate[(transform, rank)]
             results[transform][str(rank)] = {
                 "pooled": metrics(actual, predicted),
                 "fold_medae_median": round(float(np.median(fold_medae)), 6),
@@ -69,6 +90,7 @@ def main() -> None:
             "base_seed": 42,
             "soft_impute_max_iterations": 100,
             "soft_impute_tolerance": 1e-4,
+            "workers": workers,
         },
         "input": {"scores_sha256": hashlib.sha256(scores_path.read_bytes()).hexdigest()},
         "results": results,

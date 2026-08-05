@@ -6,8 +6,11 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 from collections import defaultdict
 from pathlib import Path
+
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/pathopress-matplotlib")
 
 import matplotlib
 
@@ -23,7 +26,15 @@ MAGENTA = "#D81B60"
 BLUE = "#2878B5"
 TEAL = "#00897B"
 GRID = "#E5E1D8"
-SUITE_COLORS = {"hest": TEAL, "thunder": MAGENTA, "pathorob": BLUE}
+ORANGE = "#E67E22"
+VIOLET = "#6C5CE7"
+SUITE_COLORS = {
+    "pathobench": ORANGE,
+    "eva": VIOLET,
+    "hest": TEAL,
+    "thunder": MAGENTA,
+    "pathorob": BLUE,
+}
 
 
 def _style() -> None:
@@ -59,6 +70,16 @@ def _short_name(value: str) -> str:
         return f"HEST {parts[1].upper()}"
     if value.startswith("pathorob."):
         return f"PathoROB {parts[1].replace('_', ' ')}"
+    if value.startswith("eva.leaderboard."):
+        dataset = parts[2].replace("camelyon16_small", "CAM16-S")
+        dataset = dataset.replace("patch_camelyon", "PCam").replace("_", " ")
+        return f"EVA {dataset} {parts[-1]}"
+    if value.startswith("pathobench.threads2025."):
+        task = parts[-1].replace("-mutation", "").replace("-", " ").upper()
+        return f"THREADS {task}"
+    if value.startswith("pathobench.exaone2025."):
+        task = parts[-1].replace("-mutation", "").replace("-", " ").upper()
+        return f"EXAONE {task}"
     return value
 
 
@@ -113,8 +134,8 @@ def render_curves(payload: dict[str, object], output_base: Path) -> None:
                 ax.annotate(
                     name,
                     (step, float(row[all_key][all_metric])),  # type: ignore[index]
-                    xytext=(-2, -7), textcoords="offset points",
-                    rotation=31, ha="right", va="top", fontsize=7.1,
+                    xytext=(0, 10 if step % 2 else 22), textcoords="offset points",
+                    rotation=36, ha="left", va="bottom", fontsize=6.8,
                     color=MAGENTA,
                     bbox=dict(boxstyle="round,pad=0.1", facecolor="white", edgecolor="none", alpha=0.78),
                 )
@@ -156,11 +177,13 @@ def render_informativeness(csv_path: Path, output_base: Path, top_n: int = 15) -
     fig, ax = plt.subplots(figsize=(9.0, 6.5))
     bars = ax.barh(names, improvements, color=colors, alpha=0.9)
     for bar, coverage in zip(bars, coverages):
+        width = bar.get_width()
         ax.text(
-            bar.get_width() + 0.025,
+            width + (0.025 if width >= 0 else -0.025),
             bar.get_y() + bar.get_height() / 2,
             f"{coverage:.0f}% coverage",
-            va="center", fontsize=8, color=CHARCOAL,
+            va="center", ha="left" if width >= 0 else "right",
+            fontsize=8, color=CHARCOAL,
         )
     ax.axvline(0, color=CHARCOAL, lw=0.8)
     ax.set_xlabel("Reduction in all-known scorecard MedAE vs column-median baseline")

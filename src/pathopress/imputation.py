@@ -32,7 +32,16 @@ def to_native_score(normalized_score: float, metric: str) -> float:
     """Map the common 0--100 score back to the source metric's scale."""
     if metric == "pearson_r":
         return normalized_score / 50.0 - 1.0
-    if metric == "robustness_index":
+    if metric == "weighted_kappa":
+        return normalized_score / 50.0 - 1.0
+    if metric in {
+        "macro-ovr-auc",
+        "bacc",
+        "cindex",
+        "balanced_accuracy",
+        "dice",
+        "robustness_index",
+    }:
         return normalized_score / 100.0
     return normalized_score
 

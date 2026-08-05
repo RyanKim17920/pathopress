@@ -44,11 +44,13 @@ redundancy and predictive coverage in the assembled score matrix.
 
 Coverage must accompany the ranking. A selected probe supplies information
 only for models that actually have a published value in that column. This is
-especially important here because the current 47-by-28 pathology matrix is
-suite-blocked: many models occur in only HEST, THUNDER, or PathoROB, and only
-11 models span all three. A probe can consequently appear informative because
-it identifies a well-covered suite block rather than because its dataset is a
-universally useful assay.
+especially important because the current 59-by-165 primary matrix is only
+20.2054% observed and remains suite-blocked. A probe can consequently appear
+informative because it identifies a well-covered source block rather than
+because its dataset is a universally useful assay. The final selected probe
+trajectories span multiple suites; their exact ordered IDs and every candidate
+score are preserved in
+[`experiments/probe_selection_results_rank1.json`](../experiments/probe_selection_results_rank1.json).
 
 ## Arithmetic-average prediction is separate
 
@@ -95,6 +97,14 @@ cross-validation and Soft-Impute rank sweep, and now adds the probe-selection
 and ranking primitives. Confidence calibration and temporal validation remain
 future work; the latter cannot be run until model release dates are collected.
 
+On the expanded matrix, the full-matrix baseline is 1.900 MedAE. All-known
+scorecard MedAE is 1.481124 with five probes and 1.196456 with ten; excluding
+the revealed cells gives 1.612112 and 1.539134. Isolated held-out-model
+hidden-cell MedAE is 1.951271 and 1.879857. Literal per-model-average MAE is
+3.203489/2.908513 for all-known five/ten probes and 1.684778/1.231976 for the
+held-out-model evaluation. These protocols answer different questions and
+should not be collapsed into one headline.
+
 ## Pathology-specific changes required for credible use
 
 - Keep evaluation-protocol columns distinct even when two suites use the same
@@ -110,9 +120,10 @@ future work; the latter cannot be run until model release dates are collected.
   gaps.
 - Do not call a probe set “low cost” until runtime, sample count, compute,
   tissue access, and licensing requirements have been audited.
-- Add Patho-Bench and eva score anchors before making broad claims. Their task
-  catalogs are inventoried, but their score columns are absent from the current
-  supported completion matrix.
+- Treat the new Patho-Bench and EVA blocks as paper-specific protocol evidence,
+  not interchangeable reruns. Their 896 and 265 cells, source conflicts, and
+  exclusions are documented in
+  [`score-source-coverage.md`](score-source-coverage.md).
 
 ## Upstream implementation map
 

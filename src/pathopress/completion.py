@@ -58,6 +58,9 @@ def _bias_als(
     observed_values = matrix[observed]
     global_mean = float(np.mean(observed_values))
     ridge = np.eye(rank + 1) * regularization
+    observed_float = observed.astype(float)
+    row_counts = observed_float.sum(axis=1)
+    col_counts = observed_float.sum(axis=0)
 
     def run_one(run_seed: int) -> np.ndarray:
         rng = np.random.RandomState(run_seed)
@@ -67,20 +70,76 @@ def _bias_als(
         row_factors = rng.normal(0.0, 0.01, size=(n_models, rank))
         col_factors = rng.normal(0.0, 0.01, size=(n_evaluations, rank))
         for _ in range(iterations):
-            for i, js in enumerate(row_observed):
-                if not js.size:
-                    continue
-                target = matrix[i, js] - mean - col_bias[js]
-                design = np.column_stack([np.ones(js.size), col_factors[js]])
-                solution = np.linalg.solve(design.T @ design + ridge, design.T @ target)
-                row_bias[i], row_factors[i] = solution[0], solution[1:]
-            for j, rows in enumerate(col_observed):
-                if not rows.size:
-                    continue
-                target = matrix[rows, j] - mean - row_bias[rows]
-                design = np.column_stack([np.ones(rows.size), row_factors[rows]])
-                solution = np.linalg.solve(design.T @ design + ridge, design.T @ target)
-                col_bias[j], col_factors[j] = solution[0], solution[1:]
+            if rank <= 1:
+                # The probe search invokes tens of thousands of rank-1 fits.
+                # Compute the same ridge sufficient statistics in matrix form;
+                # this is algebraically identical to the per-row 1x1/2x2
+                # solves below, while retaining initialized factors for an
+                # intentionally empty target row.
+                row_target = np.where(
+                    observed, matrix - mean - col_bias[None, :], 0.0
+                )
+                if rank == 0:
+                    supported = row_counts > 0
+                    row_bias[supported] = (
+                        row_target.sum(axis=1)[supported]
+                        / (row_counts[supported] + regularization)
+                    )
+                else:
+                    factor = col_factors[:, 0]
+                    a00 = row_counts + regularization
+                    a01 = observed_float @ factor
+                    a11 = observed_float @ (factor * factor) + regularization
+                    b0 = row_target.sum(axis=1)
+                    b1 = row_target @ factor
+                    determinant = a00 * a11 - a01 * a01
+                    supported = row_counts > 0
+                    row_bias[supported] = (
+                        (b0 * a11 - b1 * a01) / determinant
+                    )[supported]
+                    row_factors[supported, 0] = (
+                        (a00 * b1 - a01 * b0) / determinant
+                    )[supported]
+
+                col_target = np.where(
+                    observed, matrix - mean - row_bias[:, None], 0.0
+                )
+                if rank == 0:
+                    supported = col_counts > 0
+                    col_bias[supported] = (
+                        col_target.sum(axis=0)[supported]
+                        / (col_counts[supported] + regularization)
+                    )
+                else:
+                    factor = row_factors[:, 0]
+                    a00 = col_counts + regularization
+                    a01 = observed_float.T @ factor
+                    a11 = observed_float.T @ (factor * factor) + regularization
+                    b0 = col_target.sum(axis=0)
+                    b1 = col_target.T @ factor
+                    determinant = a00 * a11 - a01 * a01
+                    supported = col_counts > 0
+                    col_bias[supported] = (
+                        (b0 * a11 - b1 * a01) / determinant
+                    )[supported]
+                    col_factors[supported, 0] = (
+                        (a00 * b1 - a01 * b0) / determinant
+                    )[supported]
+            else:
+                for i, js in enumerate(row_observed):
+                    if not js.size:
+                        continue
+                    target = matrix[i, js] - mean - col_bias[js]
+                    design = np.column_stack([np.ones(js.size), col_factors[js]])
+                    solution = np.linalg.solve(design.T @ design + ridge, design.T @ target)
+                    row_bias[i], row_factors[i] = solution[0], solution[1:]
+                for j, rows in enumerate(col_observed):
+                    if not rows.size:
+                        continue
+                    target = matrix[rows, j] - mean - row_bias[rows]
+                    design = np.column_stack([np.ones(rows.size), row_factors[rows]])
+                    solution = np.linalg.solve(design.T @ design + ridge, design.T @ target)
+                    col_bias[j], col_factors[j] = solution[0], solution[1:]
             interactions = np.einsum(
                 "ij,ij->i",
                 row_factors[observed_cells[:, 0]],

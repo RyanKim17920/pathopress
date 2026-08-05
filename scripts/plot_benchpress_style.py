@@ -31,9 +31,17 @@ MAGENTA = "#D33682"
 BLUE = "#268BD2"
 VIOLET = "#6C71C4"
 TEAL = "#2AA198"
+ORANGE = "#CB6D1D"
+GREEN = "#4C956C"
 GRAY = "#93A1A1"
 CHARCOAL = "#333333"
-SUITE_COLORS = {"hest": MAGENTA, "thunder": BLUE, "pathorob": TEAL}
+SUITE_COLORS = {
+    "pathobench": ORANGE,
+    "eva": VIOLET,
+    "hest": MAGENTA,
+    "thunder": BLUE,
+    "pathorob": TEAL,
+}
 
 
 def apply_style() -> None:
@@ -74,7 +82,7 @@ def load_matrix(scores_path: Path):
 
 def matrix_order(matrix, models, evaluations, metadata):
     row_order = np.argsort(-np.sum(np.isfinite(matrix), axis=1), kind="stable")
-    suite_rank = {"hest": 0, "thunder": 1, "pathorob": 2}
+    suite_rank = {"pathobench": 0, "eva": 1, "thunder": 2, "hest": 3, "pathorob": 4}
     col_order = np.asarray(
         sorted(
             range(len(evaluations)),
@@ -179,7 +187,11 @@ def plot_validation(results_path: Path, predictions_path: Path, output_dir: Path
     ax.grid(axis="y", alpha=0.25)
 
     ax = axes[0, 1]
-    for suite in ("hest", "thunder", "pathorob"):
+    suites = sorted(
+        result["by_rank"][str(prediction_rank)]["by_suite"],
+        key=lambda suite: {"pathobench": 0, "eva": 1, "thunder": 2, "hest": 3, "pathorob": 4}.get(suite, 99),
+    )
+    for suite in suites:
         rows = [row for row in predictions if row["suite_id"] == suite]
         actual = np.asarray([float(row["actual_normalized_score"]) for row in rows])
         predicted = np.asarray([float(row["predicted_normalized_score"]) for row in rows])
@@ -194,7 +206,6 @@ def plot_validation(results_path: Path, predictions_path: Path, output_dir: Path
     ax.legend(frameon=False, markerscale=2)
 
     ax = axes[1, 0]
-    suites = ["hest", "thunder", "pathorob"]
     selected = result["by_rank"][str(prediction_rank)]
     mae = [selected["by_suite"][suite]["mae"] for suite in suites]
     medae = [selected["by_suite"][suite]["medae"] for suite in suites]
