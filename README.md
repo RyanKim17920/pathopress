@@ -91,6 +91,39 @@ anchors extracted from papers or model cards first. See
 gallery, and the distinction between a point estimate and a confidence
 interval.
 
+## Probe selection and benchmark informativeness
+
+PathoPress now reproduces the logic behind BenchPress's GitHub hero curve. It
+greedily selects evaluation columns that best reconstruct the fixed set of 806
+published cells, compares them with 10 nested random probe orders, and repeats
+selection on a 70% model-training split before isolated evaluation on the held
+out 30% of models.
+
+The faithful all-known curve falls from a 2.100-point column-median baseline to
+0.634 MedAE with five probes and 0.241 with ten. Those headline values include
+the measured probe cells as exact zero-error predictions, as BenchPress does.
+When those cells are excluded, the corresponding errors are 0.907 and 0.792.
+Held-out-model hidden-cell MedAE is 0.968 at five probes and 0.906 at ten.
+
+The companion table ranks every single evaluation by its one-probe reduction
+in scorecard MedAE and includes model coverage. The first ten entries are all
+THUNDER columns, which is a warning about the current suite-blocked matrix, not
+evidence that those datasets are intrinsically the ten most useful pathology
+datasets. A second panel reports literal per-model mean-score prediction; that
+is an additional diagnostic and is not what BenchPress calls “overall score
+prediction.”
+
+Generate the artifacts with:
+
+```bash
+python3 experiments/run_probe_selection.py
+python3 scripts/plot_probe_selection.py
+```
+
+See [`docs/benchpress-parity.md`](docs/benchpress-parity.md) for the audited
+upstream protocol, the exact meaning of informativeness, and the remaining
+work for confidence, temporal, low-cost, and pathology-family validation.
+
 ## Data contract
 
 PathoPress keeps four concepts distinct:

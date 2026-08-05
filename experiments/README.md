@@ -45,6 +45,14 @@ still train target columns on other models; sparse probes retain all other
 published models. None prevents model-family, publication-selection,
 pretraining-data, temporal, or institutional leakage.
 
+`run_probe_selection.py` reproduces the BenchPress all-known global-probe
+protocol with pooled MedAE, 10 nested random probe orders, and deterministic
+greedy forward selection through 10 columns. It additionally exports strict
+hidden-cell metrics, per-model average error, one-probe informativeness, and a
+70/30 isolated held-out-model validation. Its generated JSON records the
+audited upstream commit, configuration, input hash, selected trajectories, and
+candidate scores.
+
 `run_benchpress_style.py` adds the closer BenchPress reproduction: ten random
 within-model fold assignments × three folds and a bias-only/rank 1–10 sweep. It
 writes aggregate and fold-level metrics to `benchpress_style_results.json` and

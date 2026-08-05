@@ -11,5 +11,13 @@ the pinned score matrix and experiment JSON/CSV artifacts.
   suite errors, and the absolute-error distribution.
 - `soft_impute_rank_sweep`: the exact raw/logit iterative truncated-SVD method
   used for BenchPress's rank-discovery figure, with both MedAPE and MedAE views.
+- `probe_selection_rank1`: BenchPress-style random/greedy scorecard
+  reconstruction, strict held-out-model validation, and literal row-average
+  prediction.
+- `probe_informativeness_rank1`: one-probe candidate ranking with suite and
+  observed-model coverage.
 
 PNG files are convenient for review; PDFs are the vector publication assets.
+
+Regenerate the probe figures with `python3 scripts/plot_probe_selection.py`
+after running `python3 experiments/run_probe_selection.py`.

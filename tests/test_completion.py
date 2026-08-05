@@ -50,6 +50,17 @@ class CompletionTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     complete(matrix)
 
+    def test_complete_can_explicitly_allow_an_empty_target_row(self) -> None:
+        matrix = np.array(
+            [[np.nan, np.nan], [60.0, 70.0], [80.0, 90.0]]
+        )
+
+        completed = complete(matrix, rank=0, allow_empty_rows=True)
+
+        self.assertTrue(np.isfinite(completed).all())
+        observed = np.isfinite(matrix)
+        np.testing.assert_array_equal(completed[observed], matrix[observed])
+
     def test_complete_supports_bias_only_rank_zero(self) -> None:
         matrix = np.array([[50.0, np.nan], [60.0, 70.0], [80.0, 90.0]])
         completed = complete(matrix, rank=0)

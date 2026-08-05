@@ -132,3 +132,35 @@ MedAPE criterion, rank 2 narrowly wins in both spaces. By pooled MAE, pooled
 MedAE in logit space, and bias-ALS cross-validation, rank 1 wins. The difference
 between ranks 1 and 2 is small enough that the responsible conclusion is
 “effective interaction rank around 1–2,” not an exact intrinsic rank.
+
+## Probe-policy figures
+
+![BenchPress-style scorecard and literal-average curves](../figures/probe_selection_rank1.png)
+
+The left panel follows the upstream hero protocol: the magenta greedy curve is
+selected and evaluated on the all-known matrix, and exact probe cells remain in
+the denominator. The gray curve is the median of 10 nested global random probe
+orders with an interquartile band. The blue curve selects probes using 70% of
+model rows, then evaluates hidden non-probe cells on each held-out model in
+isolation. It is deliberately not joined to the full-matrix zero-probe
+baseline, because its model population is different.
+
+The right panel answers the separate literal-average question by averaging the
+true and reconstructed values over each model's own fixed published target
+cells. Its unit is still a mixture of normalized endpoint scales, so it should
+not be interpreted as clinical utility.
+
+![Single-evaluation informativeness](../figures/probe_informativeness_rank1.png)
+
+This ranking is the first step of greedy selection: lower one-probe scorecard
+MedAE means greater conditional predictive utility, and the chart expresses it
+as improvement over the 2.100-point column-median baseline. Coverage is printed
+on every bar because a probe with no published result for a target model
+reveals nothing. The all-THUNDER top of the list reflects the current block
+structure and 68% THUNDER row coverage.
+
+Machine-readable results are in
+[`experiments/probe_selection_results_rank1.json`](../experiments/probe_selection_results_rank1.json)
+and [`outputs/probe_informativeness_rank1.csv`](../outputs/probe_informativeness_rank1.csv).
+The exact protocol and its limitations are documented in
+[`benchpress-parity.md`](benchpress-parity.md).

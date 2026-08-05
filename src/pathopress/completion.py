@@ -106,12 +106,13 @@ def complete(
     *,
     rank: int = 2,
     regularization: float = 0.1,
+    allow_empty_rows: bool = False,
 ) -> np.ndarray:
     if matrix.ndim != 2 or not np.isfinite(matrix).any():
         raise ValueError("matrix must be a non-empty 2D array with observed scores")
     if rank < 0:
         raise ValueError("rank must be non-negative")
-    if np.any(np.sum(np.isfinite(matrix), axis=1) == 0):
+    if not allow_empty_rows and np.any(np.sum(np.isfinite(matrix), axis=1) == 0):
         raise ValueError("every model row must have at least one observed score")
     if np.any(np.sum(np.isfinite(matrix), axis=0) == 0):
         raise ValueError("every evaluation column must have at least one observed score")
