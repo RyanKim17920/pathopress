@@ -1,0 +1,100 @@
+{
+  "schema_version": 2,
+  "generator": "scripts/build_registry.py",
+  "normalization": {
+    "f1": "Scores already reported on 0-100 scale; preserved.",
+    "robustness_index": "Raw RI in [0,1] multiplied by 100.",
+    "pearson_r": "(r + 1) * 50; logit(normalized/100) equals 2 * atanh(r), a scaled Fisher-z."
+  },
+  "repositories": {
+    "benchpress": {
+      "url": "https://github.com/microsoft/benchpress",
+      "commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
+      "local_path": "/tmp/pathopress_sources/benchpress"
+    },
+    "pathobench": {
+      "url": "https://github.com/mahmoodlab/Patho-Bench",
+      "commit": "660e77044640e3d7d2f1150cc6721e97454993bf",
+      "local_path": "/tmp/pathopress_sources/pathobench"
+    },
+    "pathobench_hf": {
+      "url": "https://huggingface.co/datasets/MahmoodLab/Patho-Bench",
+      "commit": "60fde3a9138b2fb27a163ed6f3e2cf0ef7e8f387",
+      "local_path": "/tmp/pathopress_sources/pathobench_hf"
+    },
+    "eva": {
+      "url": "https://github.com/kaiko-ai/eva",
+      "commit": "e43e74a99b75660b0014f790f25a33dd9f11e121",
+      "local_path": "/tmp/pathopress_sources/eva"
+    },
+    "thunder": {
+      "url": "https://github.com/MICS-Lab/thunder",
+      "commit": "3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f",
+      "local_path": "/tmp/pathopress_sources/thunder"
+    },
+    "hest": {
+      "url": "https://github.com/mahmoodlab/HEST",
+      "commit": "3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3",
+      "local_path": "/tmp/pathopress_sources/hest"
+    },
+    "pathorob": {
+      "url": "https://github.com/bifold-pathomics/PathoROB",
+      "commit": "6583cf0b0d902c8cc032308262fa3a3befdc0687",
+      "local_path": "/tmp/pathopress_sources/pathorob"
+    }
+  },
+  "counts": {
+    "suites": 5,
+    "tasks": 150,
+    "tasks_by_suite": {
+      "pathobench": 95,
+      "eva": 13,
+      "thunder": 21,
+      "hest": 9,
+      "pathorob": 12
+    },
+    "dataset_artifacts": 80,
+    "task_identities": 143,
+    "protocols": 150,
+    "pathobench_sample_units": {
+      "case": 83,
+      "slide": 12
+    },
+    "pathobench_task_types": {
+      "classification": 85,
+      "survival": 10
+    },
+    "pathobench_metrics": {
+      "macro-ovr-auc": 57,
+      "bacc": 19,
+      "weighted_kappa": 9,
+      "cindex": 10
+    },
+    "model_aliases": 81,
+    "scores": 815,
+    "scores_by_suite": {
+      "hest": 234,
+      "thunder": 512,
+      "pathorob": 69
+    },
+    "scores_by_audit_status": {
+      "parsed_primary_source": 806,
+      "reported_external": 9
+    },
+    "scores_by_review_status": {
+      "machine_parsed_single_source": 815
+    },
+    "deduplication_memberships": 23,
+    "deduplication_groups": 9,
+    "exact_duplicate_task_identities": 7,
+    "semantic_adjudication_groups": 2
+  },
+  "audit_notes": [
+    "No network calls are made by the generator.",
+    "HEST and THUNDER average columns are not independent evaluation cells and are excluded from scores.csv.",
+    "Score rows are machine-parsed from one reporting source each. audit_status=parsed_primary_source is prototype evidence, not independent or dual-source verification.",
+    "PathoROB external-publication rows are retained with audit_status=reported_external; PathoROB explicitly says those values were not validated by its authors.",
+    "Exact dedup groups are derived from duplicate task_identity_id values. Two broader semantic-overlap groups remain manually adjudicated and keep separate task identities.",
+    "evaluation_id is retained as a compatibility alias equal to protocol_id; protocol-specific scores are never overwritten during deduplication."
+  ]
+}

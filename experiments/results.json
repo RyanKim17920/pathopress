@@ -1,0 +1,2450 @@
+{
+  "schema_version": 1,
+  "input": {
+    "scores_path": "data/scores.csv",
+    "scores_sha256": "a2399b315d75e163a28ef856fd15163dc56659b1f4f09b098ee3a1918d85ba58",
+    "verified_only": true,
+    "support_filter": {
+      "min_scores_per_model": 3,
+      "min_models_per_evaluation": 5
+    }
+  },
+  "matrix": {
+    "n_models": 47,
+    "n_evaluations": 28,
+    "n_observed": 806,
+    "density": 0.612462,
+    "suites": {
+      "hest": {
+        "n_evaluations": 9
+      },
+      "pathorob": {
+        "n_evaluations": 3
+      },
+      "thunder": {
+        "n_evaluations": 16
+      }
+    }
+  },
+  "configuration": {
+    "seed": 42,
+    "ranks": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "completion_regularization": 0.1,
+    "completion_internal_iterations": 40,
+    "completion_internal_ensembles": 10,
+    "error_unit": "normalized-score points on a 0-100 scale"
+  },
+  "runtime": {
+    "python_version": "3.12.3",
+    "numpy_version": "2.4.6",
+    "script_sha256": "11fae5b5099b97e3717476ac78051bae53493af3c0cbe527f986ad84aff211f5"
+  },
+  "protocols": {
+    "random_cell": {
+      "description": "Greedy fixed 20% observed-cell holdouts retaining at least two training scores per row and three per column.",
+      "split_manifest": [
+        {
+          "split_id": "repeat_00",
+          "n_held_out": 161,
+          "repeat": 0,
+          "requested_cells": 161,
+          "cell_signature_sha256": "4a019a96022eb253d27b2496cc28e2d253b8537782ff49d377299428c200cb38"
+        },
+        {
+          "split_id": "repeat_01",
+          "n_held_out": 161,
+          "repeat": 1,
+          "requested_cells": 161,
+          "cell_signature_sha256": "e0b983dd024772350b5297f0fcc9ba75888f48b6ceb83b46bddbe6c2f94e941d"
+        },
+        {
+          "split_id": "repeat_02",
+          "n_held_out": 161,
+          "repeat": 2,
+          "requested_cells": 161,
+          "cell_signature_sha256": "658e5697cbcaae68c3167d3160e3830004c727b2507f287e553996f5b806721e"
+        },
+        {
+          "split_id": "repeat_03",
+          "n_held_out": 161,
+          "repeat": 3,
+          "requested_cells": 161,
+          "cell_signature_sha256": "b4e0ca40ba945d4b9417e9b2f4ea3185865e1a88c5320ac8a18160791df86e3c"
+        },
+        {
+          "split_id": "repeat_04",
+          "n_held_out": 161,
+          "repeat": 4,
+          "requested_cells": 161,
+          "cell_signature_sha256": "2cc2e7fd026f47df203d0cc778e849b4facb0f7ff96b778e54fca8e9401e9d74"
+        },
+        {
+          "split_id": "repeat_05",
+          "n_held_out": 161,
+          "repeat": 5,
+          "requested_cells": 161,
+          "cell_signature_sha256": "e8dc3453ef6ae85472a84bdc41ff1d8c714913984ce9c91c0862ac3dc26b1962"
+        },
+        {
+          "split_id": "repeat_06",
+          "n_held_out": 161,
+          "repeat": 6,
+          "requested_cells": 161,
+          "cell_signature_sha256": "3faef896c706d4861bc5f194c748e7378b3982311d5957af6b6368eed77fdc66"
+        },
+        {
+          "split_id": "repeat_07",
+          "n_held_out": 161,
+          "repeat": 7,
+          "requested_cells": 161,
+          "cell_signature_sha256": "e384077d345e49b2e7cc64f179375ae65eaa69868446f38145aa2fd25191e3ea"
+        },
+        {
+          "split_id": "repeat_08",
+          "n_held_out": 161,
+          "repeat": 8,
+          "requested_cells": 161,
+          "cell_signature_sha256": "a3c2bef57ea4e8513881cd2f8a764fb0883b5617b3cfd199e6bf23da9fb5447c"
+        },
+        {
+          "split_id": "repeat_09",
+          "n_held_out": 161,
+          "repeat": 9,
+          "requested_cells": 161,
+          "cell_signature_sha256": "ffe5455f0730b9878bfbc918dd8764449a052aa38cbf88e5ea1b2e1bd1f7ef5d"
+        }
+      ],
+      "by_rank": {
+        "1": {
+          "n_predictions": 1610,
+          "mae": 2.325668,
+          "medae": 1.013032,
+          "n_splits": 10,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "2": {
+          "n_predictions": 1610,
+          "mae": 2.449604,
+          "medae": 1.045707,
+          "n_splits": 10,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "3": {
+          "n_predictions": 1610,
+          "mae": 2.613646,
+          "medae": 1.071189,
+          "n_splits": 10,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "4": {
+          "n_predictions": 1610,
+          "mae": 2.641283,
+          "medae": 1.11623,
+          "n_splits": 10,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "5": {
+          "n_predictions": 1610,
+          "mae": 2.654516,
+          "medae": 1.162348,
+          "n_splits": 10,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "6": {
+          "n_predictions": 1610,
+          "mae": 2.913107,
+          "medae": 1.202913,
+          "n_splits": 10,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        }
+      }
+    },
+    "leave_one_suite_block_out": {
+      "description": "For each suite, hide every suite score of each model that also has a score in another suite.",
+      "split_manifest": [
+        {
+          "split_id": "hest",
+          "n_held_out": 171,
+          "suite": "hest",
+          "n_bridge_models": 19,
+          "n_suite_columns": 9,
+          "cell_signature_sha256": "ce0dab3403024fc3167829dda9095a039bfb6ce4fc34ff30ce694318ddff4c5f"
+        },
+        {
+          "split_id": "pathorob",
+          "n_held_out": 42,
+          "suite": "pathorob",
+          "n_bridge_models": 14,
+          "n_suite_columns": 3,
+          "cell_signature_sha256": "34e30ba6afa4e164eba102a27dda2bcfcbf1bfe42cbac01fdf3406d6f704b38d"
+        },
+        {
+          "split_id": "thunder",
+          "n_held_out": 272,
+          "suite": "thunder",
+          "n_bridge_models": 17,
+          "n_suite_columns": 16,
+          "cell_signature_sha256": "6cfbdf1bdf6e1568d5833df3658d48248417fbdc283ad00dbbe74d447d7402fb"
+        }
+      ],
+      "overall_by_rank": {
+        "1": {
+          "n_predictions": 485,
+          "mae": 4.359579,
+          "medae": 2.429094,
+          "n_splits": 3,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "2": {
+          "n_predictions": 485,
+          "mae": 4.31158,
+          "medae": 2.320337,
+          "n_splits": 3,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "3": {
+          "n_predictions": 485,
+          "mae": 4.368498,
+          "medae": 2.459314,
+          "n_splits": 3,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "4": {
+          "n_predictions": 485,
+          "mae": 4.395371,
+          "medae": 2.40394,
+          "n_splits": 3,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "5": {
+          "n_predictions": 485,
+          "mae": 4.38327,
+          "medae": 2.513962,
+          "n_splits": 3,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "6": {
+          "n_predictions": 485,
+          "mae": 4.408142,
+          "medae": 2.492855,
+          "n_splits": 3,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        }
+      },
+      "by_suite": {
+        "hest": {
+          "1": {
+            "n_predictions": 171,
+            "mae": 1.318144,
+            "medae": 1.171711,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "2": {
+            "n_predictions": 171,
+            "mae": 1.268299,
+            "medae": 1.080197,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "3": {
+            "n_predictions": 171,
+            "mae": 1.28889,
+            "medae": 1.165208,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "4": {
+            "n_predictions": 171,
+            "mae": 1.310268,
+            "medae": 1.148591,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "5": {
+            "n_predictions": 171,
+            "mae": 1.306031,
+            "medae": 1.177112,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "6": {
+            "n_predictions": 171,
+            "mae": 1.3261,
+            "medae": 1.206173,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          }
+        },
+        "pathorob": {
+          "1": {
+            "n_predictions": 42,
+            "mae": 12.188706,
+            "medae": 9.577974,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "2": {
+            "n_predictions": 42,
+            "mae": 12.475075,
+            "medae": 9.343904,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "3": {
+            "n_predictions": 42,
+            "mae": 12.277278,
+            "medae": 8.870316,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "4": {
+            "n_predictions": 42,
+            "mae": 12.126904,
+            "medae": 8.92656,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "5": {
+            "n_predictions": 42,
+            "mae": 12.516273,
+            "medae": 8.937313,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "6": {
+            "n_predictions": 42,
+            "mae": 12.831065,
+            "medae": 9.909222,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          }
+        },
+        "thunder": {
+          "1": {
+            "n_predictions": 272,
+            "mae": 5.062749,
+            "medae": 3.98411,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "2": {
+            "n_predictions": 272,
+            "mae": 4.96428,
+            "medae": 3.905089,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "3": {
+            "n_predictions": 272,
+            "mae": 5.083366,
+            "medae": 3.981241,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "4": {
+            "n_predictions": 272,
+            "mae": 5.141063,
+            "medae": 3.915802,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "5": {
+            "n_predictions": 272,
+            "mae": 5.062026,
+            "medae": 3.999242,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "6": {
+            "n_predictions": 272,
+            "mae": 5.04515,
+            "medae": 3.961327,
+            "n_splits": 1,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          }
+        }
+      }
+    },
+    "sparse_new_model_probe": {
+      "description": "For each eligible model independently, reveal a fixed random k of its scores and hide all its other known scores; all other models remain fully observed.",
+      "split_manifest": [
+        {
+          "split_id": "k3:clip-b",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "clip-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "10909ff9afb287f914a0c6280b8644eef296039a7b4dbd0357afc811d471a6d6"
+        },
+        {
+          "split_id": "k3:clip-l",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "clip-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "0a98ce6fc21accfa1521faa92d36a21700c52b5a524bdf966ab30ac988ba9256"
+        },
+        {
+          "split_id": "k3:conch",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "conch",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "thunder.bracs.linear_probing",
+            "thunder.spider_colorectal.linear_probing"
+          ],
+          "held_cell_signature_sha256": "de92927e1e05945edda16f21b9e682b0bc92bd649402863c4f1527a4eec2e468"
+        },
+        {
+          "split_id": "k3:conch-1.5",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "conch-1.5",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "held_cell_signature_sha256": "dc79b53478643d25392e64e78b718aa1205b11effeb9daf9636783e50ceda2e4"
+        },
+        {
+          "split_id": "k3:ctranspath",
+          "n_held_out": 9,
+          "k": 3,
+          "model": "ctranspath",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "hest.idc.gene_expression",
+            "hest.skcm.gene_expression",
+            "pathorob.tcga_2x2.robustness_index"
+          ],
+          "held_cell_signature_sha256": "f0d5e42c66ec7cfc522e90982aafab83d560ef381eb2477c326b314ceda76e3a"
+        },
+        {
+          "split_id": "k3:dinov2-b",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "dinov2-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "905c23d31064e3ceca67175ff6afbecdd346edfa1a7590f33b33bac11a27c898"
+        },
+        {
+          "split_id": "k3:dinov2-l",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "dinov2-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "439153912d19d0092e89d8daed175f24d7da57266c9b48fb8f67eb55c8abc4a9"
+        },
+        {
+          "split_id": "k3:dinov3-b",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "dinov3-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "172cb4a8db99f6f0bdc4066d4e11f57f14b6afaaca8a374e3f0bb4b41b2820c6"
+        },
+        {
+          "split_id": "k3:dinov3-l",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "dinov3-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "c63838cd239ab1b69d82ba25d5dde1d7170ac5caba1b6f0014c3eded7873d847"
+        },
+        {
+          "split_id": "k3:dinov3-s",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "dinov3-s",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "61261fc97c7b1b3fe3c0a06681af80c7c2b11c567c70d6518e8bc067243a5978"
+        },
+        {
+          "split_id": "k3:genbio-pathfm",
+          "n_held_out": 22,
+          "k": 3,
+          "model": "genbio-pathfm",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.skcm.gene_expression",
+            "thunder.bracs.linear_probing",
+            "thunder.mhist.linear_probing"
+          ],
+          "held_cell_signature_sha256": "a3e04a8491dd45f3969ef819e6aaa29f33649327c7d95e89eb6ee83629c14c27"
+        },
+        {
+          "split_id": "k3:gpfm",
+          "n_held_out": 6,
+          "k": 3,
+          "model": "gpfm",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.lung.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.read.gene_expression"
+          ],
+          "held_cell_signature_sha256": "b0aa7d2310379827f7056951f67c3415c5f348f756c9d9f950449dd30f6667df"
+        },
+        {
+          "split_id": "k3:h-optimus-0",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "h-optimus-0",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.lung.gene_expression",
+            "thunder.bracs.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "ae604243f9bf6311160f95592efe97e5ea5ddf1622c011985929cf72d9f301b1"
+        },
+        {
+          "split_id": "k3:h-optimus-1",
+          "n_held_out": 22,
+          "k": 3,
+          "model": "h-optimus-1",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.lymph_idc.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression"
+          ],
+          "held_cell_signature_sha256": "579249e3a4ffa149b395084fd6a5164ea64941090fa364f362e9e906a0d5e6b0"
+        },
+        {
+          "split_id": "k3:h0-mini",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "h0-mini",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "held_cell_signature_sha256": "039bc8fbc7254742600188d86821d17a4d0a1e1452a8486d14102948d60a21f0"
+        },
+        {
+          "split_id": "k3:hibou-b",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "hibou-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "be58ad5ef6969daa57b421acceafa9d332c4af50b9a2e72b2b0fe1b3aaaa6629"
+        },
+        {
+          "split_id": "k3:hibou-l",
+          "n_held_out": 22,
+          "k": 3,
+          "model": "hibou-l",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "402541701d3852ce1358a5a7a6cdeb4f49b0f1383fccf39b86f33ff74a203aaf"
+        },
+        {
+          "split_id": "k3:kaiko-vit-b-16",
+          "n_held_out": 6,
+          "k": 3,
+          "model": "kaiko-vit-b-16",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.coad.gene_expression",
+            "hest.lung.gene_expression"
+          ],
+          "held_cell_signature_sha256": "e6e1f8caed553c2d56e26088c448e78311119081d3875d2997c296efefa8499f"
+        },
+        {
+          "split_id": "k3:kaiko-vit-b-8",
+          "n_held_out": 9,
+          "k": 3,
+          "model": "kaiko-vit-b-8",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "hest.idc.gene_expression",
+            "hest.lung.gene_expression",
+            "pathorob.tcga_2x2.robustness_index"
+          ],
+          "held_cell_signature_sha256": "95d4cf95abc5d4ff1b5c468113ba76029087c97ebfa09d3726629a95db70bc0a"
+        },
+        {
+          "split_id": "k3:kaiko-vit-b-unspecified-patch",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "kaiko-vit-b-unspecified-patch",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "held_cell_signature_sha256": "ad9aa245a54a118aacac0a92919664f27ae4949938f6eefad7f4d805f31b35ea"
+        },
+        {
+          "split_id": "k3:kaiko-vit-l-14",
+          "n_held_out": 6,
+          "k": 3,
+          "model": "kaiko-vit-l-14",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.read.gene_expression"
+          ],
+          "held_cell_signature_sha256": "0c1c1afa628685442b2dfcfd8d0a1c65da6f620b978edf026454b2f867942b8a"
+        },
+        {
+          "split_id": "k3:kaiko-vit-s-16",
+          "n_held_out": 6,
+          "k": 3,
+          "model": "kaiko-vit-s-16",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.skcm.gene_expression"
+          ],
+          "held_cell_signature_sha256": "f8d9e8e8b7d1c42947197b37f57bb97858305c81d308f77bc75a1bb6b3ddf93d"
+        },
+        {
+          "split_id": "k3:kaiko-vit-s-8",
+          "n_held_out": 6,
+          "k": 3,
+          "model": "kaiko-vit-s-8",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.skcm.gene_expression"
+          ],
+          "held_cell_signature_sha256": "ad1a072646f5758c449fc6cf53aedfc3d5f1331ec4d7d05bb64dddb4e702744e"
+        },
+        {
+          "split_id": "k3:kaiko-vit-s-unspecified-patch",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "kaiko-vit-s-unspecified-patch",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "held_cell_signature_sha256": "11376cc70b7d9f5036afbff59a5194b80b4cf7b33cc2636b9751639e11df2454"
+        },
+        {
+          "split_id": "k3:keep",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "keep",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "11e36e6a686aefef5389848042a3f5e7c094ba45f2098bfe012baab0e85777a9"
+        },
+        {
+          "split_id": "k3:lunit-vit-s-8",
+          "n_held_out": 6,
+          "k": 3,
+          "model": "lunit-vit-s-8",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.lung.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression"
+          ],
+          "held_cell_signature_sha256": "1b077129a893e60e9fbc6616d023aa500e1e9523675895b584a3f9edcf37df36"
+        },
+        {
+          "split_id": "k3:midnight",
+          "n_held_out": 22,
+          "k": 3,
+          "model": "midnight",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing"
+          ],
+          "held_cell_signature_sha256": "d6d7ad0f12e1889185e99d61ee8a4ca097b43d3fd7c25a6cf5dc71d8e1ee4576"
+        },
+        {
+          "split_id": "k3:musk",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "musk",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "held_cell_signature_sha256": "be6239e63f20b2c75a392c8177a0af0dda92ffda28c1dcded32caf9694a96f42"
+        },
+        {
+          "split_id": "k3:openmidnight",
+          "n_held_out": 22,
+          "k": 3,
+          "model": "openmidnight",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "held_cell_signature_sha256": "ff7595e14844943702ce0b8ab5c278f7eddf22c5314f267d15ea9db52f599b59"
+        },
+        {
+          "split_id": "k3:phikon",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "phikon",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "pathorob.camelyon.robustness_index",
+            "thunder.esca.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "held_cell_signature_sha256": "c3b11efae8a8a2de0a9c3f3fbffec59450866a8fd653772a40bb597b5a3da3d9"
+        },
+        {
+          "split_id": "k3:phikon-v2",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "phikon-v2",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.lymph_idc.gene_expression",
+            "hest.skcm.gene_expression",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "held_cell_signature_sha256": "afb6d102e97d0bcff9528423179f30ca9c985e57d5278129f25f2ef8c89ad113"
+        },
+        {
+          "split_id": "k3:plip",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "plip",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "2807165c6ca9fa7ec8f39c6a248c362e4f47d5d8d406168a2f358f432c774b59"
+        },
+        {
+          "split_id": "k3:prov-gigapath",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "prov-gigapath",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "pathorob.tcga_2x2.robustness_index",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "held_cell_signature_sha256": "09d7c8a2c24e342662d1a258113affa3410cfbb96eacec5d08d7b5225fc16e84"
+        },
+        {
+          "split_id": "k3:quiltnet",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "quiltnet",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "51e568ecd48f5f14ae53260e7d80bd8f3a282eec2a9fe8cd70efe4659a5c7e87"
+        },
+        {
+          "split_id": "k3:resnet50",
+          "n_held_out": 6,
+          "k": 3,
+          "model": "resnet50",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.read.gene_expression"
+          ],
+          "held_cell_signature_sha256": "9a5b688d34e17dfe4641fe911247a42fd595558d6ac269c7ad038c8f8e185efb"
+        },
+        {
+          "split_id": "k3:uni",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "uni",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing"
+          ],
+          "held_cell_signature_sha256": "883e09d48fa22273d7d6fd36a396adb50f17e75ff1eee8e237edfaa5c08b59a1"
+        },
+        {
+          "split_id": "k3:uni2-h",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "uni2-h",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.skcm.gene_expression",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "484c3d478be5d3263a42373e8fda7e42f417fb417cbef9caae899fa4e7cb8407"
+        },
+        {
+          "split_id": "k3:virchow",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "virchow",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.lung.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "thunder.break_his.linear_probing"
+          ],
+          "held_cell_signature_sha256": "a6883a58ba5e057d9bee26f020df64e2dd76ebdd0755697cd9a0f875ebeb6094"
+        },
+        {
+          "split_id": "k3:virchow-2",
+          "n_held_out": 25,
+          "k": 3,
+          "model": "virchow-2",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.lung.gene_expression",
+            "hest.prad.gene_expression",
+            "thunder.mhist.linear_probing"
+          ],
+          "held_cell_signature_sha256": "06eafdd042e1b916efa8ecf00691e8dc1b354f44430326948ae3faf86056ae15"
+        },
+        {
+          "split_id": "k3:vit-b",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "vit-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "held_cell_signature_sha256": "c94261043a914ff9fc89916ab0d5003ff80a65660a4c967ba6ff9a0aa5373803"
+        },
+        {
+          "split_id": "k3:vit-l",
+          "n_held_out": 13,
+          "k": 3,
+          "model": "vit-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "held_cell_signature_sha256": "8317f53c0628a311bcf9b2f9d29c77b28b4ff21537242eb5e4ebec499eb18b1a"
+        },
+        {
+          "split_id": "k5:clip-b",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "clip-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.crc.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "3bd8c18196d645191d7cd961ddc66c2bc074d0ed0b092c3b6a1207a75a78a06c"
+        },
+        {
+          "split_id": "k5:clip-l",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "clip-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "f6dee2de16a84375c2edc41b7ec8e62d6a5f29ae5ab2031b21e3de85c3db12c6"
+        },
+        {
+          "split_id": "k5:conch",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "conch",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.lung.gene_expression",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "held_cell_signature_sha256": "54f110762399192096cbe706cc02ba8e4b2e7efd7a06fbd72d47704940664cbd"
+        },
+        {
+          "split_id": "k5:conch-1.5",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "conch-1.5",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.paad.gene_expression",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "held_cell_signature_sha256": "b550d4910da67ebe3a04c1fb6f6fd4294de50eef78d72f9ae5eb584dae2ef458"
+        },
+        {
+          "split_id": "k5:ctranspath",
+          "n_held_out": 7,
+          "k": 5,
+          "model": "ctranspath",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "pathorob.tcga_2x2.robustness_index"
+          ],
+          "held_cell_signature_sha256": "82752cba3adeb34f84d54c5d4f268320d22ffb45f517ffb66fd1cf2336b012a5"
+        },
+        {
+          "split_id": "k5:dinov2-b",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "dinov2-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "held_cell_signature_sha256": "d28398cca386e6f5078514d576860d681cc5e058a7f6f5f84ecca8da79466ee4"
+        },
+        {
+          "split_id": "k5:dinov2-l",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "dinov2-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "9238c66c09d1fac3583af63bb5fef1db738d671774fe50d943cdbe1487136edb"
+        },
+        {
+          "split_id": "k5:dinov3-b",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "dinov3-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "held_cell_signature_sha256": "b7f6bf8d4659ed6f7025dccb7fd408031fa381e92088c5585b9cefd83accf2c6"
+        },
+        {
+          "split_id": "k5:dinov3-l",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "dinov3-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "held_cell_signature_sha256": "aebfc953aae60f99aa281c8288d9f12b7cf3e7c9fe9ee234728449722f783bce"
+        },
+        {
+          "split_id": "k5:dinov3-s",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "dinov3-s",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "a1e453956689fb92e03da9d6a98a1da91030d222c31c7b5d09d30a4a41ba5878"
+        },
+        {
+          "split_id": "k5:genbio-pathfm",
+          "n_held_out": 20,
+          "k": 5,
+          "model": "genbio-pathfm",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "thunder.ccrcc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "9289cd8df6447c7d659226056d9a4c5bcc5a2900c4df176bd43c89504eddfa6a"
+        },
+        {
+          "split_id": "k5:gpfm",
+          "n_held_out": 4,
+          "k": 5,
+          "model": "gpfm",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression"
+          ],
+          "held_cell_signature_sha256": "97a4b23317d3d3e46df2df9b204689fd8101035fd5aa01ddc4321016b18d5782"
+        },
+        {
+          "split_id": "k5:h-optimus-0",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "h-optimus-0",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.idc.gene_expression",
+            "hest.prad.gene_expression",
+            "pathorob.camelyon.robustness_index",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "71f359fedb8e8783ca5b212efcb42d9c807fac6051a5b0abcfad9baff4a226c1"
+        },
+        {
+          "split_id": "k5:h-optimus-1",
+          "n_held_out": 20,
+          "k": 5,
+          "model": "h-optimus-1",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.idc.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing"
+          ],
+          "held_cell_signature_sha256": "9568bf23e86bf8b35a4d81b12c27e751f82ff9d05c22079458708f2757b5320a"
+        },
+        {
+          "split_id": "k5:h0-mini",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "h0-mini",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.lymph_idc.gene_expression",
+            "thunder.bracs.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "f5c949c395b2e28603b48e4ae4f132e0202350894a9af033ff2765551c64feed"
+        },
+        {
+          "split_id": "k5:hibou-b",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "hibou-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "3e072b429c7eecc11e77dc7f291d8fa5cf4984b4ffe137c61e1fd79a10de4d3d"
+        },
+        {
+          "split_id": "k5:hibou-l",
+          "n_held_out": 20,
+          "k": 5,
+          "model": "hibou-l",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_colorectal.linear_probing"
+          ],
+          "held_cell_signature_sha256": "bbd92cedcae08d9e7e5ae5d2c893d1ff3475531f3fed71ec00db4c06180db3f3"
+        },
+        {
+          "split_id": "k5:kaiko-vit-b-16",
+          "n_held_out": 4,
+          "k": 5,
+          "model": "kaiko-vit-b-16",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.skcm.gene_expression"
+          ],
+          "held_cell_signature_sha256": "7309f6a399e2038ee5df6d9ec71a776cc839c4a6587cf0c63ac2237c61f0f570"
+        },
+        {
+          "split_id": "k5:kaiko-vit-b-8",
+          "n_held_out": 7,
+          "k": 5,
+          "model": "kaiko-vit-b-8",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.skcm.gene_expression",
+            "pathorob.tcga_2x2.robustness_index"
+          ],
+          "held_cell_signature_sha256": "b283ee470472f24ce14837131d5d899d2226660e9fe77bc365a74452bc81cfc9"
+        },
+        {
+          "split_id": "k5:kaiko-vit-b-unspecified-patch",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "kaiko-vit-b-unspecified-patch",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.break_his.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "5258bfa7239b1fc3ce16a27a6bd590331a8c312591d835eaeed3725de60ae776"
+        },
+        {
+          "split_id": "k5:kaiko-vit-l-14",
+          "n_held_out": 4,
+          "k": 5,
+          "model": "kaiko-vit-l-14",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.prad.gene_expression"
+          ],
+          "held_cell_signature_sha256": "458f3c3dc1512d23a7ed1acc8db7ca64268c447bd7c7c55e1b69abfff7d33d16"
+        },
+        {
+          "split_id": "k5:kaiko-vit-s-16",
+          "n_held_out": 4,
+          "k": 5,
+          "model": "kaiko-vit-s-16",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression"
+          ],
+          "held_cell_signature_sha256": "bb25f9c9764caeb9ed15f680e0dd2d8bb4fdf0ff4552b579be5e0f3f0badd4d4"
+        },
+        {
+          "split_id": "k5:kaiko-vit-s-8",
+          "n_held_out": 4,
+          "k": 5,
+          "model": "kaiko-vit-s-8",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.lung.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression"
+          ],
+          "held_cell_signature_sha256": "345adb27e22ab6f848a6a3ba659e39aaefc95f48db67c2fea74023f769d7f2b2"
+        },
+        {
+          "split_id": "k5:kaiko-vit-s-unspecified-patch",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "kaiko-vit-s-unspecified-patch",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "25489733fac4e72f2b043d825b6b07e04c47afa528f3e7f6f522cf9e9d227b2b"
+        },
+        {
+          "split_id": "k5:keep",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "keep",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "7e4c7ba8a7b0d91f944473791241328dce6044e163eab6679e2c47dbce74fa6c"
+        },
+        {
+          "split_id": "k5:lunit-vit-s-8",
+          "n_held_out": 4,
+          "k": 5,
+          "model": "lunit-vit-s-8",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.skcm.gene_expression"
+          ],
+          "held_cell_signature_sha256": "dc9c0aa2bed5625634483e583697a33c846484b9f14937b6a42337a4f82d7885"
+        },
+        {
+          "split_id": "k5:midnight",
+          "n_held_out": 20,
+          "k": 5,
+          "model": "midnight",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.idc.gene_expression",
+            "thunder.bracs.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing"
+          ],
+          "held_cell_signature_sha256": "857f06d32f053033e5937762468cb031702b3582c5d132292494c3b8b17b73d9"
+        },
+        {
+          "split_id": "k5:musk",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "musk",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "pathorob.camelyon.robustness_index",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "b560c24a79edbe006a23793c6c0c871a739005c73b6ab33acb8aa48f187d14f5"
+        },
+        {
+          "split_id": "k5:openmidnight",
+          "n_held_out": 20,
+          "k": 5,
+          "model": "openmidnight",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.paad.gene_expression",
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.spider_colorectal.linear_probing"
+          ],
+          "held_cell_signature_sha256": "7bbd56849ac9659afa6cdf10276c8eccbc83476d44fc27e0d3fecdbb7e7f47e2"
+        },
+        {
+          "split_id": "k5:phikon",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "phikon",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "pathorob.tcga_2x2.robustness_index",
+            "thunder.bracs.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "held_cell_signature_sha256": "f91c8fa9c15fc690535cdf3c0f7ec08457030bc4b1d44229436b6b7b851fbafd"
+        },
+        {
+          "split_id": "k5:phikon-v2",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "phikon-v2",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "thunder.bach.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "held_cell_signature_sha256": "1941b6b2bb0b5bb472e4538b81e97164de28304eb2ca18d79303c1609c06d5e8"
+        },
+        {
+          "split_id": "k5:plip",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "plip",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "38bb57d66eaad9e087665958db3193a5a72fe352f2167cbbf16acbe71c6706d4"
+        },
+        {
+          "split_id": "k5:prov-gigapath",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "prov-gigapath",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "d23544fb16cbdb393506e273fd0aecb440080933c6040931acae47dc96058e55"
+        },
+        {
+          "split_id": "k5:quiltnet",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "quiltnet",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "c87d84d5046f859a79695e620f2513c75bc8e2a070969f106f03edf9f2637558"
+        },
+        {
+          "split_id": "k5:resnet50",
+          "n_held_out": 4,
+          "k": 5,
+          "model": "resnet50",
+          "n_observed_model_cells": 9,
+          "probe_evaluations": [
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression"
+          ],
+          "held_cell_signature_sha256": "599b6d8657342333eb41616121796c8b63d5f04e2d5d4851daa7a59273ac6275"
+        },
+        {
+          "split_id": "k5:uni",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "uni",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "held_cell_signature_sha256": "49979de59d74ecfa2a1997286268b33733221fcca896e02b684af611075719c8"
+        },
+        {
+          "split_id": "k5:uni2-h",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "uni2-h",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "pathorob.tcga_2x2.robustness_index",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.ccrcc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing"
+          ],
+          "held_cell_signature_sha256": "f35012bd931a03bbfc15a96c1a2ef2458187e286aacf41054b7aa2a9fdcc6656"
+        },
+        {
+          "split_id": "k5:virchow",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "virchow",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.skcm.gene_expression",
+            "thunder.crc.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "2f6898bfefe92545cd8ba750dea220c72de01b9c7a93f1b142aaa432b1c027cb"
+        },
+        {
+          "split_id": "k5:virchow-2",
+          "n_held_out": 23,
+          "k": 5,
+          "model": "virchow-2",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.lymph_idc.gene_expression",
+            "pathorob.tcga_2x2.robustness_index",
+            "thunder.bach.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing"
+          ],
+          "held_cell_signature_sha256": "3b80f10b0dfb77736ee24917dcec5e87bb971758d7f1a3e6ce64e493531691e3"
+        },
+        {
+          "split_id": "k5:vit-b",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "vit-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "05a9114269bd0bac5fa7a381498ed12148c7d13f98e3070043ffba1b92397af3"
+        },
+        {
+          "split_id": "k5:vit-l",
+          "n_held_out": 11,
+          "k": 5,
+          "model": "vit-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "dd461c4efadb7e6ad93b9337b380859f3ec7a9fc9d9e5618548145e07464e8ca"
+        },
+        {
+          "split_id": "k10:clip-b",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "clip-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "fb20dd4a08314e928c82c8fe2a7ed2f1db56f68ea01ecb4beeda873c3e59f63c"
+        },
+        {
+          "split_id": "k10:clip-l",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "clip-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "c376b95120506f25dd4d53944ed5f2d75ed2d7273b023a9f45d4b5666bd42a36"
+        },
+        {
+          "split_id": "k10:conch",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "conch",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "pathorob.camelyon.robustness_index",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.bach.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "0f87631e9956e5a7e4c6b59dcee3f0d96580da742b8287a8b9c076824f22a1b1"
+        },
+        {
+          "split_id": "k10:conch-1.5",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "conch-1.5",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression",
+            "pathorob.tcga_2x2.robustness_index",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "239b85783770ae2707ce5aa25c75eeb769848340ad18ce13cf61527ae09fdac9"
+        },
+        {
+          "split_id": "k10:ctranspath",
+          "n_held_out": 2,
+          "k": 10,
+          "model": "ctranspath",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression",
+            "pathorob.camelyon.robustness_index",
+            "pathorob.tcga_2x2.robustness_index",
+            "pathorob.tolkach_esca.robustness_index"
+          ],
+          "held_cell_signature_sha256": "4687542502bc78580b0a51509aa06e2507241d0a5b695e3fc616bf282a29a2ad"
+        },
+        {
+          "split_id": "k10:dinov2-b",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "dinov2-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "4f15629bba4549c0d9482ae2d8e7cfed08b34084efc54942e3a16304ca32723d"
+        },
+        {
+          "split_id": "k10:dinov2-l",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "dinov2-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "1a6ce114172ffd37b17b0634e5a8d2152a29b8d602ad0dac76e7a33bd2b82af3"
+        },
+        {
+          "split_id": "k10:dinov3-b",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "dinov3-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "791b81b98fb44fa4f22b67557729966bb0ad0f4ecf1ecc0c4c5936c13af811f7"
+        },
+        {
+          "split_id": "k10:dinov3-l",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "dinov3-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.ccrcc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "f7a6a5d04848e42e04ffd1defd8859a83ce8f6ebf006a08683e3c97ec04e0ccf"
+        },
+        {
+          "split_id": "k10:dinov3-s",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "dinov3-s",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "18657e63f5cd390d1690c40361699ae95d2d69561c107a79ae7b02ad98d4d35e"
+        },
+        {
+          "split_id": "k10:genbio-pathfm",
+          "n_held_out": 15,
+          "k": 10,
+          "model": "genbio-pathfm",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "76c5241c30f0a36b55d5eaf6c099a21f66698b529627703d3b9093a8883a9d27"
+        },
+        {
+          "split_id": "k10:h-optimus-0",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "h-optimus-0",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "pathorob.camelyon.robustness_index",
+            "thunder.bach.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "87aa3603f7b937735d8b383ec973e1707d4e118bcb8b9a4c5dfc3cbd45757e05"
+        },
+        {
+          "split_id": "k10:h-optimus-1",
+          "n_held_out": 15,
+          "k": 10,
+          "model": "h-optimus-1",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "9276f0c779ea0370f83dc2d52705fb89aafb5247068a93e9b99799281b1bae2e"
+        },
+        {
+          "split_id": "k10:h0-mini",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "h0-mini",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.coad.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression",
+            "pathorob.tcga_2x2.robustness_index",
+            "thunder.bach.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "held_cell_signature_sha256": "f56ab1c3734b2b79f525ab8c2a09cf63c53d26e16229bc3eff1cc1eb7f819a63"
+        },
+        {
+          "split_id": "k10:hibou-b",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "hibou-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "3c9ad5b5c18612bc87f4018b418fcfb44ae84c927aa69192a931f2507d5138cb"
+        },
+        {
+          "split_id": "k10:hibou-l",
+          "n_held_out": 15,
+          "k": 10,
+          "model": "hibou-l",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "09619a998119627efc52fdee92673f74312220e1ebc8e6e63a5c2f30638d43f6"
+        },
+        {
+          "split_id": "k10:kaiko-vit-b-8",
+          "n_held_out": 2,
+          "k": 10,
+          "model": "kaiko-vit-b-8",
+          "n_observed_model_cells": 12,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "pathorob.camelyon.robustness_index",
+            "pathorob.tcga_2x2.robustness_index"
+          ],
+          "held_cell_signature_sha256": "109a51445aa87d11a72c32eed82c6d5dcdd2e675933e043e4a1bf9a2ea552657"
+        },
+        {
+          "split_id": "k10:kaiko-vit-b-unspecified-patch",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "kaiko-vit-b-unspecified-patch",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "d1a9b2d2db1b57b88c467b0950a154b33a13faf862e4ed569549cfb7bcfed623"
+        },
+        {
+          "split_id": "k10:kaiko-vit-s-unspecified-patch",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "kaiko-vit-s-unspecified-patch",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "903441f7f1feaf7cca7bc7e564d55f065553ac374652c437d2ef75b1d63c4fd2"
+        },
+        {
+          "split_id": "k10:keep",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "keep",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "d8f89097bb234d322ada45250687e143b50b5ca0824e70f45e297cecb0dd65f6"
+        },
+        {
+          "split_id": "k10:midnight",
+          "n_held_out": 15,
+          "k": 10,
+          "model": "midnight",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.idc.gene_expression",
+            "hest.paad.gene_expression",
+            "thunder.bach.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "a4ffa09146fa94bf89641f93ca41a8f7ea504ea8560128ddb75369e4eb4e6ce3"
+        },
+        {
+          "split_id": "k10:musk",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "musk",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "d8dafadb449960c534d9317f2c23c537a8071b640d458e385c8859ed6892f767"
+        },
+        {
+          "split_id": "k10:openmidnight",
+          "n_held_out": 15,
+          "k": 10,
+          "model": "openmidnight",
+          "n_observed_model_cells": 25,
+          "probe_evaluations": [
+            "hest.lymph_idc.gene_expression",
+            "hest.skcm.gene_expression",
+            "thunder.bach.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "c9b0cffdd10b9ab9ce592135aad19c901684f686f3a84ebec2b488fbbce36f27"
+        },
+        {
+          "split_id": "k10:phikon",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "phikon",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.idc.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.read.gene_expression",
+            "hest.skcm.gene_expression",
+            "pathorob.camelyon.robustness_index",
+            "pathorob.tcga_2x2.robustness_index",
+            "thunder.bach.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "c80ec133acdb4511fde31daa3976ee5a5aa8437768eb49089cb27f584685c552"
+        },
+        {
+          "split_id": "k10:phikon-v2",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "phikon-v2",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "pathorob.camelyon.robustness_index",
+            "pathorob.tcga_2x2.robustness_index",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "b44b384f3a2491cb992072c121c8ade7781a228f962e7de71017e136ad2c7119"
+        },
+        {
+          "split_id": "k10:plip",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "plip",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "c00f6280323fcc8b98b49a44e53468f94b903f25f1a924a09fef646943a0da1d"
+        },
+        {
+          "split_id": "k10:prov-gigapath",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "prov-gigapath",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.idc.gene_expression",
+            "hest.lung.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.bach.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_tils.linear_probing"
+          ],
+          "held_cell_signature_sha256": "2a2889ab8e523c7cc2b5a9abc5dc42d6379fe07f30db8793a275233529a5b248"
+        },
+        {
+          "split_id": "k10:quiltnet",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "quiltnet",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "896cd4870b73b7271524b682d29bcb6594fa41a686018f094383941f6e9718b7"
+        },
+        {
+          "split_id": "k10:uni",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "uni",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.lung.gene_expression",
+            "hest.prad.gene_expression",
+            "pathorob.camelyon.robustness_index",
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "cb0b57b4052063b142c23c07f58db56e1b03d01149ea972517410d6f8c0cd36f"
+        },
+        {
+          "split_id": "k10:uni2-h",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "uni2-h",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.coad.gene_expression",
+            "hest.prad.gene_expression",
+            "hest.read.gene_expression",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "c3bd2812a28c2b2de2ffa21cbee06766a5e9e76c77194a2bd48ffc13fdd80c4e"
+        },
+        {
+          "split_id": "k10:virchow",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "virchow",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.ccrcc.gene_expression",
+            "hest.idc.gene_expression",
+            "pathorob.tcga_2x2.robustness_index",
+            "thunder.ccrcc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "76a10101a470d2acbdaaee016cc5a2cd6ff744eb4dff77795d2d1c30a96473d3"
+        },
+        {
+          "split_id": "k10:virchow-2",
+          "n_held_out": 18,
+          "k": 10,
+          "model": "virchow-2",
+          "n_observed_model_cells": 28,
+          "probe_evaluations": [
+            "hest.lung.gene_expression",
+            "hest.lymph_idc.gene_expression",
+            "hest.paad.gene_expression",
+            "pathorob.camelyon.robustness_index",
+            "pathorob.tolkach_esca.robustness_index",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "38fd8a7f4a9a2611867b9039b9e889e5bbc9bb29d7f2b0d6c457da590ca4c425"
+        },
+        {
+          "split_id": "k10:vit-b",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "vit-b",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_tils.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "held_cell_signature_sha256": "1e38881c869539140fa8505a851c54680c21832ed180d31229edd37ba3aee8e5"
+        },
+        {
+          "split_id": "k10:vit-l",
+          "n_held_out": 6,
+          "k": 10,
+          "model": "vit-l",
+          "n_observed_model_cells": 16,
+          "probe_evaluations": [
+            "thunder.bach.linear_probing",
+            "thunder.bracs.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.crc.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "held_cell_signature_sha256": "4649f2d4d4a87e24f42d1ce09c0911f8ce604b2428783dbaa6528f2f2084195a"
+        }
+      ],
+      "overall_by_rank": {
+        "1": {
+          "n_predictions": 1633,
+          "mae": 2.397996,
+          "medae": 1.11317,
+          "n_splits": 116,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "2": {
+          "n_predictions": 1633,
+          "mae": 2.580677,
+          "medae": 1.141739,
+          "n_splits": 116,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "3": {
+          "n_predictions": 1633,
+          "mae": 2.543676,
+          "medae": 1.106293,
+          "n_splits": 116,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "4": {
+          "n_predictions": 1633,
+          "mae": 2.489841,
+          "medae": 1.167476,
+          "n_splits": 116,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "5": {
+          "n_predictions": 1633,
+          "mae": 2.631124,
+          "medae": 1.171127,
+          "n_splits": 116,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        },
+        "6": {
+          "n_predictions": 1633,
+          "mae": 2.619833,
+          "medae": 1.179984,
+          "n_splits": 116,
+          "n_unsupported_row": 0,
+          "n_unsupported_column": 0
+        }
+      },
+      "by_probe_count": {
+        "10": {
+          "1": {
+            "n_predictions": 385,
+            "mae": 2.171395,
+            "medae": 1.142613,
+            "n_splits": 34,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "2": {
+            "n_predictions": 385,
+            "mae": 2.397172,
+            "medae": 1.140672,
+            "n_splits": 34,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "3": {
+            "n_predictions": 385,
+            "mae": 2.427343,
+            "medae": 1.107919,
+            "n_splits": 34,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "4": {
+            "n_predictions": 385,
+            "mae": 2.460415,
+            "medae": 1.206382,
+            "n_splits": 34,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "5": {
+            "n_predictions": 385,
+            "mae": 2.672554,
+            "medae": 1.277835,
+            "n_splits": 34,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "6": {
+            "n_predictions": 385,
+            "mae": 2.705267,
+            "medae": 1.227474,
+            "n_splits": 34,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          }
+        },
+        "3": {
+          "1": {
+            "n_predictions": 665,
+            "mae": 2.400349,
+            "medae": 1.111937,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "2": {
+            "n_predictions": 665,
+            "mae": 2.771616,
+            "medae": 1.114557,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "3": {
+            "n_predictions": 665,
+            "mae": 2.715255,
+            "medae": 1.12756,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "4": {
+            "n_predictions": 665,
+            "mae": 2.565195,
+            "medae": 1.125449,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "5": {
+            "n_predictions": 665,
+            "mae": 2.604051,
+            "medae": 1.13323,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "6": {
+            "n_predictions": 665,
+            "mae": 2.57998,
+            "medae": 1.129992,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          }
+        },
+        "5": {
+          "1": {
+            "n_predictions": 583,
+            "mae": 2.544956,
+            "medae": 1.09946,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "2": {
+            "n_predictions": 583,
+            "mae": 2.484064,
+            "medae": 1.188988,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "3": {
+            "n_predictions": 583,
+            "mae": 2.424788,
+            "medae": 1.093283,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "4": {
+            "n_predictions": 583,
+            "mae": 2.423322,
+            "medae": 1.166218,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "5": {
+            "n_predictions": 583,
+            "mae": 2.634646,
+            "medae": 1.132306,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          },
+          "6": {
+            "n_predictions": 583,
+            "mae": 2.608873,
+            "medae": 1.207166,
+            "n_splits": 41,
+            "n_unsupported_row": 0,
+            "n_unsupported_column": 0
+          }
+        }
+      }
+    }
+  },
+  "caveats": [
+    "Random-cell holdout leaks model- and suite-level context: nearby tasks from the same suite often remain observed.",
+    "Suite-block holdout is harder but still learns each target column from other models and each target model from other suites; it is not a new-institution, temporal, or model-family holdout.",
+    "Sparse-probe simulations evaluate one existing model at a time and leave all other models observed, so related-model and publication-selection leakage can remain.",
+    "normalized_score maps heterogeneous, differently scaled metrics into 0-100 with direction corrected. An error point is a normalized-score point, not one percentage point of accuracy and not a shared clinical utility unit.",
+    "Only published primary-source-parsed cells are evaluated; they have not received dual human review, missingness is not random, and retrospective error can be optimistic for genuinely novel models or tasks.",
+    "Reported n values are pooled prediction instances. Random repeats can hold out the same source cell more than once, and sparse k settings can target the same cell in separate simulations."
+  ]
+}

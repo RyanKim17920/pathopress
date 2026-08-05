@@ -1,0 +1,82 @@
+alias,model_id,suite_id,reference_url,audit_notes
+Atlas,atlas,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+Atlas 2,atlas-2,pathorob,https://arxiv.org/pdf/2601.05148,External-publication value is unvalidated by PathoROB authors.
+Ciga,ciga,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+CLIP-B,clip-b,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VLM; alias parsed from current per-dataset linear-probe table.
+CLIP-L,clip-l,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VLM; alias parsed from current per-dataset linear-probe table.
+CONCH v1,conch,hest,https://huggingface.co/MahmoodLab/conch,Alias and optional checkpoint URL parsed from the current HEST results table.
+Conch,conch,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+CONCH,conch,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VLM; alias parsed from current per-dataset linear-probe table.
+CONCH v1.5,conch-1.5,hest,https://huggingface.co/MahmoodLab/conchv1_5,Alias and optional checkpoint URL parsed from the current HEST results table.
+CONCHv1.5,conch-1.5,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+CONCH 1.5,conch-1.5,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VLM; alias parsed from current per-dataset linear-probe table.
+CTransPath,ctranspath,hest,https://huggingface.co/datasets/MahmoodLab/hest-bench/tree/main/fm_v1/ctranspath,Alias and optional checkpoint URL parsed from the current HEST results table.
+CTransPath,ctranspath,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+DINOv2-B,dinov2-b,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
+DINOv2-L,dinov2-l,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
+DINOv3-B,dinov3-b,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
+DINOv3-L,dinov3-l,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
+DINOv3-S,dinov3-s,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
+GenBio-PathFM,genbio-pathfm,hest,https://huggingface.co/genbio-ai/genbio-pathfm,Alias and optional checkpoint URL parsed from the current HEST results table.
+GenBio-PathFM,genbio-pathfm,pathorob,https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1.full.pdf,External-publication value is unvalidated by PathoROB authors.
+GenBio-PFM,genbio-pathfm,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+GPFM,gpfm,hest,https://huggingface.co/majiabo/GPFM,Alias and optional checkpoint URL parsed from the current HEST results table.
+H-Optimus-0,h-optimus-0,hest,https://huggingface.co/bioptimus/H-optimus-0,Alias and optional checkpoint URL parsed from the current HEST results table.
+H-optimus-0,h-optimus-0,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+H-OPT-0,h-optimus-0,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+H-Optimus-1,h-optimus-1,hest,https://huggingface.co/bioptimus/H-optimus-1,Alias and optional checkpoint URL parsed from the current HEST results table.
+H-optimus-1,h-optimus-1,pathorob,https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1.full.pdf,External-publication value is unvalidated by PathoROB authors.
+H-OPT-1,h-optimus-1,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+H0-mini,h0-mini,hest,https://huggingface.co/bioptimus/H0-mini,Alias and optional checkpoint URL parsed from the current HEST results table.
+H0-mini,h0-mini,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+H0-mini,h0-mini,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+HIBOU-B,hibou-b,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Hibou-L,hibou-l,hest,https://huggingface.co/histai/hibou-L,Alias and optional checkpoint URL parsed from the current HEST results table.
+HIBOU-L,hibou-l,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+HIPT,hipt,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+Kaiko ViT-B/16,kaiko-vit-b-16,hest,https://huggingface.co/1aurent/vit_base_patch16_224.kaiko_ai_towards_large_pathology_fms,Alias and optional checkpoint URL parsed from the current HEST results table.
+Kaiko ViT-B/8,kaiko-vit-b-8,hest,https://huggingface.co/1aurent/vit_base_patch8_224.kaiko_ai_towards_large_pathology_fms,Alias and optional checkpoint URL parsed from the current HEST results table.
+Kaiko ViT-B/8,kaiko-vit-b-8,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+KAIKO-B,kaiko-vit-b-unspecified-patch,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Kaiko ViT-L/14,kaiko-vit-l-14,hest,https://huggingface.co/1aurent/vit_large_patch14_reg4_dinov2.kaiko_ai_towards_large_pathology_fms,Alias and optional checkpoint URL parsed from the current HEST results table.
+Kaiko ViT-S/16,kaiko-vit-s-16,hest,https://huggingface.co/1aurent/vit_small_patch16_224.kaiko_ai_towards_large_pathology_fms,Alias and optional checkpoint URL parsed from the current HEST results table.
+Kaiko ViT-S/8,kaiko-vit-s-8,hest,https://huggingface.co/1aurent/vit_small_patch8_224.kaiko_ai_towards_large_pathology_fms,Alias and optional checkpoint URL parsed from the current HEST results table.
+KAIKO-S,kaiko-vit-s-unspecified-patch,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Kang-DINO,kang-dino,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+KEEP,keep,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VLM; alias parsed from current per-dataset linear-probe table.
+Lunit ViT-S/8,lunit-vit-s-8,hest,https://huggingface.co/1aurent/vit_small_patch8_224.lunit_dino,Alias and optional checkpoint URL parsed from the current HEST results table.
+Midnight-12k,midnight,hest,https://huggingface.co/kaiko-ai/midnight,Alias and optional checkpoint URL parsed from the current HEST results table.
+MIDNIGHT,midnight,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+MUSK,musk,hest,https://huggingface.co/xiangjx/musk,Alias and optional checkpoint URL parsed from the current HEST results table.
+MUSK,musk,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+MUSK,musk,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VLM; alias parsed from current per-dataset linear-probe table.
+OpenMidnight,openmidnight,hest,https://huggingface.co/SophontAI/OpenMidnight,Alias and optional checkpoint URL parsed from the current HEST results table.
+O-Midnight,openmidnight,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Phikon,phikon,hest,https://huggingface.co/owkin/phikon,Alias and optional checkpoint URL parsed from the current HEST results table.
+Phikon,phikon,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+PHIKON,phikon,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Phikon-v2,phikon-v2,hest,https://huggingface.co/owkin/phikon-v2,Alias and optional checkpoint URL parsed from the current HEST results table.
+Phikon-v2,phikon-v2,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+PHIKON2,phikon-v2,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+PLIP,plip,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VLM; alias parsed from current per-dataset linear-probe table.
+GigaPath,prov-gigapath,hest,https://huggingface.co/prov-gigapath/prov-gigapath,Alias and optional checkpoint URL parsed from the current HEST results table.
+Prov-GigaPath,prov-gigapath,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+GIGAPATH,prov-gigapath,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+QUILTNET,quiltnet,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VLM; alias parsed from current per-dataset linear-probe table.
+ResNet50,resnet50,hest,https://huggingface.co/timm/resnet50.tv_in1k,Alias and optional checkpoint URL parsed from the current HEST results table.
+RETCCL,retccl,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+RudolfV,rudolfv,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+UNI,uni,hest,https://huggingface.co/MahmoodLab/UNI,Alias and optional checkpoint URL parsed from the current HEST results table.
+UNI,uni,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+UNI,uni,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+UNI2-h,uni2-h,hest,https://huggingface.co/MahmoodLab/UNI2-h,Alias and optional checkpoint URL parsed from the current HEST results table.
+UNI2-h,uni2-h,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+UNI2-H,uni2-h,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Virchow,virchow,hest,https://huggingface.co/paige-ai/Virchow,Alias and optional checkpoint URL parsed from the current HEST results table.
+Virchow,virchow,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+VIRCHOW,virchow,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Virchow2,virchow-2,hest,https://huggingface.co/paige-ai/Virchow2,Alias and optional checkpoint URL parsed from the current HEST results table.
+Virchow2,virchow-2,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
+VIRCHOW2,virchow-2,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+ViT-B,vit-b,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
+ViT-L,vit-l,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
