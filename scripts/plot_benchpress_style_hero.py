@@ -39,9 +39,38 @@ def _cell_job(job: tuple[np.ndarray, int, int, tuple[int, ...]]) -> float:
     return float(complete(training, rank=1, regularization=.1, allow_empty_rows=True)[row, column])
 
 
-def _short(identifier: str, width: int = 24) -> str:
-    text = identifier.split(".")[-1].replace("_", " ")
-    return text if len(text) <= width else text[: width - 1] + "…"
+def _display_evaluation(identifier: str, width: int = 28) -> str:
+    """Return a compact suite-aware label without collapsing protocol identities."""
+
+    parts = identifier.split(".")
+    suite = parts[0].upper()
+    if identifier.startswith("thunder.") and len(parts) >= 3:
+        label = f"THU {parts[1].replace('_', ' ').upper()}"
+    elif identifier.startswith("hest.") and len(parts) >= 3:
+        label = f"HEST {parts[1].upper()}"
+    elif identifier.startswith("eva.leaderboard.") and len(parts) >= 4:
+        dataset = parts[2].replace("patch_camelyon", "PCam")
+        dataset = dataset.replace("camelyon16_small", "CAM16-S")
+        split = {"validation": "val"}.get(parts[-1], parts[-1])
+        label = f"EVA {dataset.replace('_', ' ')} {split}"
+    elif identifier.startswith("pathobench.") and len(parts) >= 4:
+        source = {"threads2025": "THR", "exaone2025": "EXA"}.get(
+            parts[1], parts[1].upper()
+        )
+        dataset = parts[2].replace("cptac_", "").replace("_", " ").upper()
+        task = parts[-1].replace("slidelevel-", "").replace("-mutation", "")
+        task = task.replace("-", " ").upper()
+        label = f"{source} {dataset} {task}"
+    else:
+        label = f"{suite} {identifier.replace('.', ' ').replace('_', ' ')}"
+    return label if len(label) <= width else label[: width - 1].rstrip() + "…"
+
+
+def _trajectory_labels(rows: list[dict[str, object]], width: int = 28) -> list[str]:
+    labels = [_display_evaluation(str(row["added_evaluation_id"]), width) for row in rows]
+    if len(set(labels)) != len(labels):
+        raise ValueError(f"suite-aware hero labels collide: {labels}")
+    return labels
 
 
 def _random_band(rows: list[dict[str, object]], field: str):
@@ -82,6 +111,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--scores", type=Path, default=ROOT / "data/scores.csv")
     parser.add_argument("--compression", type=Path, default=ROOT / "experiments/probe_compression_rank1.json")
     parser.add_argument("--exhaustive", type=Path, default=ROOT / "experiments/probe_exhaustive_rank1.json")
+    parser.add_argument(
+        "--omit-stale-exhaustive",
+        action="store_true",
+        help=(
+            "Render current greedy/random panels without exact-search stars. "
+            "Use only when no scalar-certified exhaustive result exists for the current scores."
+        ),
+    )
     parser.add_argument("--hero-output", type=Path, default=ROOT / "figures/pathopress_benchpress_hero_rank1")
     parser.add_argument("--ranking-output", type=Path, default=ROOT / "figures/pathopress_benchpress_ranking_rank1")
     parser.add_argument("--summary-output", type=Path, default=ROOT / "experiments/benchpress_style_hero_summary.json")
@@ -95,22 +132,33 @@ def main() -> int:
     matrix, models, evaluations = dataset.matrix, dataset.models, dataset.evaluations
     suites = {score.evaluation_id: score.suite_id for score in dataset.scores}
     payload = json.loads(args.compression.read_text(encoding="utf-8"))
-    exhaustive = json.loads(args.exhaustive.read_text(encoding="utf-8"))
     config = payload["configuration"]
     scores_hash = hashlib.sha256(args.scores.read_bytes()).hexdigest()
-    if (
-        exhaustive.get("status") != "executed_complete_scalar_certified"
-        or exhaustive.get("scores_sha256") != scores_hash
-    ):
-        raise ValueError("hero requires scalar-certified exact searches on current scores")
-    exact_cheap = exhaustive["spaces"]["pre_error_proxy_25_choose_5"]["best"]
-    exact_pruned = exhaustive["spaces"]["error_informed_pruned_30_choose_5"]["best"]
+    exact_cheap = None
+    exact_pruned = None
+    exhaustive_hash = None
+    if not args.omit_stale_exhaustive:
+        exhaustive = json.loads(args.exhaustive.read_text(encoding="utf-8"))
+        if (
+            exhaustive.get("status") != "executed_complete_scalar_certified"
+            or exhaustive.get("scores_sha256") != scores_hash
+        ):
+            raise ValueError("hero requires scalar-certified exact searches on current scores")
+        exact_cheap = exhaustive["spaces"]["pre_error_proxy_25_choose_5"]["best"]
+        exact_pruned = exhaustive["spaces"]["error_informed_pruned_30_choose_5"]["best"]
+        exhaustive_hash = hashlib.sha256(args.exhaustive.read_bytes()).hexdigest()
     if float(config.get("ranking_margin", -1)) != 5:
         raise ValueError("hero requires the regenerated margin-5 compression artifact")
-    for mode, expected in (("any_candidate", 168), ("pre_error_low_friction_allowlist", 25)):
+    if config.get("scores_sha256") != scores_hash:
+        raise ValueError("hero requires a compression artifact generated from current scores")
+    expected_candidate_ids = {
+        "any_candidate": evaluations,
+        "pre_error_low_friction_allowlist": payload["allowlist"]["evaluation_ids"],
+    }
+    for mode, expected_ids in expected_candidate_ids.items():
         rank = payload["ranking_aware"].get(mode, {})
-        if len(payload["curves"][mode]["candidate_ids"]) != expected:
-            raise ValueError(f"hero requires {expected} candidates for {mode}")
+        if payload["curves"][mode]["candidate_ids"] != expected_ids:
+            raise ValueError(f"hero candidate identities do not match current inputs for {mode}")
         if len(rank.get("all_known_greedy", [])) != 10 or len(rank.get("all_known_random", [])) != 100:
             raise ValueError(f"hero requires complete k<=10 margin-5 ranking curves for {mode}")
 
@@ -162,7 +210,11 @@ def main() -> int:
         ax.axhline(2, color=GRAY, ls=":", lw=1.2)
         ax.set(xlim=(-.4, 10.4), ylim=(0, ymax), xticks=range(0, 11))
         ax.grid(axis="y", alpha=.18)
-        ax.set_title(f"{item['model_id']}\n{_short(item['evaluation_id'], 30)}", fontsize=10, fontweight="bold")
+        ax.set_title(
+            f"{item['model_id']}\n{_display_evaluation(item['evaluation_id'], 34)}",
+            fontsize=10,
+            fontweight="bold",
+        )
         if index in (0, 2): ax.set_ylabel("Absolute error")
         if index in (2, 3): ax.set_xlabel("# Known pathology evaluations")
 
@@ -177,29 +229,55 @@ def main() -> int:
     )
     for mode, color, label, marker in tracks:
         rows = payload["curves"][mode]["all_known_greedy_medae"]
+        display_labels = _trajectory_labels(rows)
         xs = np.r_[0, [int(row["k"]) for row in rows]]
         ys = np.r_[baseline, [float(row["selection_metrics"]["medae"]) for row in rows]]
         ax.plot(xs, ys, marker=marker, color=color, lw=2.5, label=label)
-        for position, row in enumerate(rows, 1):
-            ax.annotate(_short(row["added_evaluation_id"], 18), (position, ys[position]), xytext=((3, 8) if mode == "pre_error_low_friction_allowlist" else (-3, -10)), textcoords="offset points", rotation=29, ha="left" if mode == "pre_error_low_friction_allowlist" else "right", fontsize=7.4, color=color)
-    ax.plot(
-        [5], [float(exact_cheap["medae"])], marker="*", ms=14,
-        color=BLUE, mec=CHARCOAL, mew=.6, linestyle="none",
-        label=f"Exact 25-task: {float(exact_cheap['medae']):.3f} (53,130 sets)", zorder=8,
-    )
-    ax.plot(
-        [5], [float(exact_pruned["medae"])], marker="*", ms=14,
-        color="#2aa198", mec=CHARCOAL, mew=.6, linestyle="none",
-        label=f"Exact pruned-30: {float(exact_pruned['medae']):.3f} (142,506 sets)", zorder=8,
-    )
+        for position, display_label in enumerate(display_labels, 1):
+            above = mode == "pre_error_low_friction_allowlist"
+            offset = (3, 8 + 5 * (position % 2)) if above else (-3, -10 - 5 * (position % 2))
+            ax.annotate(
+                display_label,
+                (position, ys[position]),
+                xytext=offset,
+                textcoords="offset points",
+                rotation=29,
+                ha="left" if above else "right",
+                va="bottom" if above else "top",
+                fontsize=7.0,
+                color=color,
+            )
+    if exact_cheap is not None and exact_pruned is not None:
+        ax.plot(
+            [5], [float(exact_cheap["medae"])], marker="*", ms=14,
+            color=BLUE, mec=CHARCOAL, mew=.6, linestyle="none",
+            label=f"Exact 25-task: {float(exact_cheap['medae']):.3f} (53,130 sets)", zorder=8,
+        )
+        ax.plot(
+            [5], [float(exact_pruned["medae"])], marker="*", ms=14,
+            color="#2aa198", mec=CHARCOAL, mew=.6, linestyle="none",
+            label=f"Exact pruned-30: {float(exact_pruned['medae']):.3f} (142,506 sets)", zorder=8,
+        )
     ax.plot([0], [baseline], marker="D", mfc="white", mec=CHARCOAL, ms=7, zorder=6)
     ax.annotate("Evaluation-column median", (0, baseline), xytext=(8, 2), textcoords="offset points", fontsize=9)
-    ax.set(xlim=(-.4, 10.45), xticks=range(0, 11), xlabel="# Top pathology evaluations", ylabel="Median absolute error (normalized points)")
+    ax.set(
+        xlim=(-.4, 10.45),
+        ylim=(1.05, None),
+        xticks=range(0, 11),
+        xlabel="# Top pathology evaluations",
+        ylabel="Median absolute error (normalized points)",
+    )
     ax.set_title("Overall score prediction", fontweight="bold")
     ax.grid(axis="y", alpha=.18)
     ax.legend(frameon=False, loc="upper right")
     fig.suptitle("PathoPress reconstruction of the BenchPress hero", fontsize=16, fontweight="bold", y=.985)
-    fig.text(.5, .01, "Exact masking · Pathology-adapted selected rank 1 · Stars: complete scalar-certified MedAE searches over C(25,5)=53,130 and error-informed C(30,5)=142,506 · 25-task track is a feasibility proxy, not measured cost", ha="center", fontsize=8.2)
+    exhaustive_note = (
+        "Stars: complete scalar-certified MedAE searches over C(25,5)=53,130 "
+        "and error-informed C(30,5)=142,506"
+        if exact_cheap is not None
+        else "Current-matrix exhaustive MedAE searches are not shown or claimed"
+    )
+    fig.text(.5, .01, f"Exact masking · Pathology-adapted selected rank 1 · {exhaustive_note} · 25-task track is a feasibility proxy, not measured cost", ha="center", fontsize=8.2)
     # Reserve a real title band: the two-line example labels otherwise collide
     # with the figure title on compact renderers.
     fig.subplots_adjust(bottom=.09, top=.84)
@@ -221,7 +299,7 @@ def main() -> int:
     ax.grid(axis="y", alpha=.18)
     ax.legend(frameon=False)
     ax.set_title("Ranking preservation — exact margin-5 greedy trajectories", fontweight="bold")
-    fig.text(.5, .015, "Greedy ranking trajectories are complete through k=10. Exact C(25,5)/C(30,5) searches were executed for MedAE, not for the ranking objective. Feasibility proxy ≠ measured cost.", ha="center", fontsize=8)
+    fig.text(.5, .015, "Greedy ranking trajectories are complete through k=10. Exhaustive subset search is a separate MedAE objective and is not shown here. Feasibility proxy ≠ measured cost.", ha="center", fontsize=8)
     fig.subplots_adjust(bottom=.16)
     for suffix in ("png", "pdf"):
         fig.savefig(args.ranking_output.with_suffix(f".{suffix}"), dpi=220, bbox_inches="tight")
@@ -230,13 +308,34 @@ def main() -> int:
     summary = {
         "schema_version": 1,
         "source_shape": list(matrix.shape),
-        "inputs": {"scores_sha256": scores_hash, "compression_sha256": hashlib.sha256(args.compression.read_bytes()).hexdigest(), "exhaustive_sha256": hashlib.sha256(args.exhaustive.read_bytes()).hexdigest()},
+        "inputs": {"scores_sha256": scores_hash, "compression_sha256": hashlib.sha256(args.compression.read_bytes()).hexdigest(), "exhaustive_sha256": exhaustive_hash},
         "example_selection": "largest evaluation-column-median absolute error within EVA, HEST, PathoBench, and THUNDER; distinct models with at least ten retained scores",
         "examples": example_summaries,
-        "overall_tracks": ["random_any_candidate", "greedy_any_candidate", "greedy_25_task_feasibility_proxy", "exact_25_task_k5_medae", "exact_error_informed_30_task_k5_medae"],
+        "overall_tracks": [
+            "random_any_candidate",
+            "greedy_any_candidate",
+            "greedy_25_task_feasibility_proxy",
+            *(
+                ["exact_25_task_k5_medae", "exact_error_informed_30_task_k5_medae"]
+                if exact_cheap is not None
+                else []
+            ),
+        ],
         "ranking_tracks": ["random_any_candidate_margin5", "greedy_any_candidate_margin5", "greedy_25_task_feasibility_proxy_margin5"],
-        "exact_results": {"pre_error_proxy_25_choose_5": exact_cheap, "error_informed_pruned_30_choose_5": exact_pruned},
-        "contract_status": {"masking_and_k_budget": "exact", "rank_and_domain": "pathology_adapted", "exhaustive_25C5_30C5": "executed_complete_scalar_certified"},
+        "exact_results": (
+            {"pre_error_proxy_25_choose_5": exact_cheap, "error_informed_pruned_30_choose_5": exact_pruned}
+            if exact_cheap is not None
+            else {}
+        ),
+        "contract_status": {
+            "masking_and_k_budget": "exact",
+            "rank_and_domain": "pathology_adapted",
+            "exhaustive_25C5_30C5": (
+                "executed_complete_scalar_certified"
+                if exact_cheap is not None
+                else "not_run_for_current_scores"
+            ),
+        },
     }
     args.summary_output.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     print(f"wrote {args.hero_output}.{{png,pdf}}, {args.ranking_output}.{{png,pdf}}, and {args.summary_output}")

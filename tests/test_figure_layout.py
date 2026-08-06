@@ -24,9 +24,26 @@ def load_script(name: str):
 
 MATRIX_PLOT = load_script("plot_benchpress_style.py")
 PROBE_PLOT = load_script("plot_probe_selection.py")
+HERO_PLOT = load_script("plot_benchpress_style_hero.py")
 
 
 class PublicationFigureLayoutTests(unittest.TestCase):
+    def test_hero_probe_labels_are_suite_aware_and_collision_free(self) -> None:
+        rows = [
+            {"added_evaluation_id": "thunder.spider_skin.linear_probing"},
+            {"added_evaluation_id": "thunder.esca.linear_probing"},
+            {"added_evaluation_id": "eva.leaderboard.patch_camelyon.test"},
+            {"added_evaluation_id": "eva.leaderboard.breakhis.validation"},
+            {"added_evaluation_id": "hest.read.gene_expression"},
+            {"added_evaluation_id": "pathobench.threads2025.cptac_hnsc.casp8-mutation"},
+        ]
+        labels = HERO_PLOT._trajectory_labels(rows)
+        self.assertEqual(len(labels), len(set(labels)))
+        self.assertTrue(labels[0].startswith("THU SPIDER SKIN"))
+        self.assertTrue(labels[2].startswith("EVA PCam test"))
+        self.assertTrue(labels[4].startswith("HEST READ"))
+        self.assertTrue(labels[5].startswith("THR HNSC CASP8"))
+
     def test_matrix_suite_names_use_legend_instead_of_colliding_ticks(self) -> None:
         widths = {
             "pathobench": 122,
@@ -49,7 +66,10 @@ class PublicationFigureLayoutTests(unittest.TestCase):
         self.assertEqual([group[2] - group[1] for group in groups], list(widths.values()))
         self.assertEqual(len(ax.get_xticks()), 0)
         handles = MATRIX_PLOT.suite_legend_handles(groups)
-        self.assertEqual([handle.get_label() for handle in handles], [name.upper() for name in widths])
+        self.assertEqual(
+            [handle.get_label() for handle in handles],
+            [MATRIX_PLOT.SUITE_LABELS.get(name, name.upper()) for name in widths],
+        )
         plt.close(fig)
 
     def test_informativeness_coverage_is_in_a_separate_noncolliding_axis(self) -> None:

@@ -8,6 +8,8 @@ import shlex
 from pathlib import Path
 from typing import Any, Iterable
 
+from pathopress.matrix import filter_matrix, load_scores, make_matrix
+
 
 def file_sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -196,10 +198,18 @@ def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
             return [{"path": str(path.relative_to(root)), "status": "missing"}]
     try:
         payload = json.loads(artifact_path.read_text(encoding="utf-8"))
+        allowlist = json.loads(allowlist_path.read_text(encoding="utf-8"))
         config = payload["configuration"]
         pruning = payload["pruning"]
         curves = payload["curves"]
         ranking = payload["ranking_aware"]
+        current_matrix, _, current_evaluations = filter_matrix(
+            *make_matrix(load_scores(scores_path))
+        )
+        expected_candidates = {
+            "any_candidate": current_evaluations,
+            "pre_error_low_friction_allowlist": allowlist["evaluation_ids"],
+        }
     except (KeyError, TypeError, json.JSONDecodeError) as exc:
         return [{"path": str(artifact_path.relative_to(root)), "status": f"invalid_schema:{exc}"}]
     failures: list[dict[str, str]] = []
@@ -210,6 +220,7 @@ def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
 
     require(config.get("scores_sha256") == file_sha256(scores_path), "score_hash_semantic_mismatch")
     require(config.get("allowlist_sha256") == file_sha256(allowlist_path), "allowlist_hash_semantic_mismatch")
+    require(config.get("matrix_shape") == list(current_matrix.shape), "matrix_shape_semantic_mismatch")
     require(config.get("prediction_rank") == 1, "expected_pathology_rank1")
     require(float(config.get("ranking_margin", -1)) == 5.0, "expected_margin5")
     require(
@@ -237,11 +248,14 @@ def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
             for repeat in range(10)
         )
 
-    expected_candidates = {"any_candidate": 168, "pre_error_low_friction_allowlist": 25}
-    for mode, expected in expected_candidates.items():
+    for mode, expected_ids in expected_candidates.items():
         curve = curves.get(mode, {})
         rank = ranking.get(mode, {})
-        require(len(curve.get("candidate_ids", [])) == expected, f"{mode}_candidate_count_{expected}")
+        require(
+            curve.get("candidate_ids") == expected_ids,
+            f"{mode}_candidate_ids_mismatch_current_inputs",
+        )
+        expected = len(expected_ids)
         for key in (
             "all_known_greedy_medae", "heldout_greedy_medae",
             "all_known_greedy_medape", "heldout_greedy_medape",

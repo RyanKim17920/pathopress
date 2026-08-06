@@ -30,12 +30,12 @@ class PublicationDataTests(unittest.TestCase):
         target = select_hero_target(raw)
         self.assertEqual(target, "h-optimus-0")
         cells = hero_target_cells(raw, target)
-        self.assertEqual({k: len(rows) for k, rows in cells.items()}, {1: 126, 3: 126, 10: 126})
+        self.assertEqual({k: len(rows) for k, rows in cells.items()}, {1: 145, 3: 145, 10: 145})
         identities = [{row["evaluation_id"] for row in rows} for rows in cells.values()]
         self.assertTrue(all(value == identities[0] for value in identities[1:]))
         self.assertEqual(
             {k: sum(row["is_revealed_probe_cell"] == "True" for row in rows) for k, rows in cells.items()},
-            {1: 1, 3: 3, 10: 7},
+            {1: 1, 3: 2, 10: 9},
         )
 
     def test_metadata_panel_denominators_match_retained_matrix(self) -> None:
@@ -88,9 +88,12 @@ class PublicationDataTests(unittest.TestCase):
             {
                 "masking_and_k_budget": "exact",
                 "rank_and_domain": "pathology_adapted",
-                "exhaustive_25C5_30C5": "executed_complete_scalar_certified",
+                "exhaustive_25C5_30C5": "not_run_for_current_scores",
             },
         )
+        self.assertEqual(benchpress_hero["source_shape"], [59, 187])
+        self.assertIsNone(benchpress_hero["inputs"]["exhaustive_sha256"])
+        self.assertEqual(benchpress_hero["exact_results"], {})
         self.assertEqual(len(benchpress_hero["examples"]), 4)
         with (ROOT / "outputs/probe_dual_objective_rank1.csv").open(
             newline="", encoding="utf-8"

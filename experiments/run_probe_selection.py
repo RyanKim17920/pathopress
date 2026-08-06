@@ -60,6 +60,42 @@ def _summary(result: ProbeEvaluation) -> dict[str, object]:
     }
 
 
+def _suite_coverage_summary(
+    matrix: np.ndarray,
+    models: list[str],
+    evaluations: list[str],
+    suite_by_evaluation: dict[str, str],
+) -> dict[str, object]:
+    """Summarize suite support from the filtered matrix actually being analyzed."""
+
+    if matrix.shape != (len(models), len(evaluations)):
+        raise ValueError("matrix shape must match model and evaluation labels")
+    missing = [evaluation for evaluation in evaluations if evaluation not in suite_by_evaluation]
+    if missing:
+        raise ValueError(f"missing suite metadata for evaluations: {missing}")
+
+    represented_suites = sorted({suite_by_evaluation[value] for value in evaluations})
+    columns_by_suite = {
+        suite: np.asarray(
+            [suite_by_evaluation[evaluation] == suite for evaluation in evaluations],
+            dtype=bool,
+        )
+        for suite in represented_suites
+    }
+    fully_represented_models = [
+        model
+        for row, model in enumerate(models)
+        if represented_suites
+        and all(np.isfinite(matrix[row, columns]).any() for columns in columns_by_suite.values())
+    ]
+    return {
+        "represented_suites": represented_suites,
+        "n_represented_suites": len(represented_suites),
+        "models_with_all_represented_suites": fully_represented_models,
+        "n_models_with_all_represented_suites": len(fully_represented_models),
+    }
+
+
 def _eval_task(matrix: np.ndarray, probes: tuple[int, ...], rank: int) -> ProbeEvaluation:
     return evaluate_global_probes(matrix, probes, rank=rank)
 
@@ -217,6 +253,12 @@ def main() -> None:
     for score in scores:
         if score.evaluation_id in evaluations:
             metadata[score.evaluation_id] = (score.suite_id, score.metric)
+    suite_coverage = _suite_coverage_summary(
+        matrix,
+        models,
+        evaluations,
+        {evaluation: suite for evaluation, (suite, _) in metadata.items()},
+    )
 
     baseline = evaluate_column_median_baseline(matrix)
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
@@ -321,6 +363,7 @@ def main() -> None:
             "n_evaluations": len(evaluations),
             "n_observed": int(np.sum(np.isfinite(matrix))),
             "density": float(np.mean(np.isfinite(matrix))),
+            "suite_coverage": suite_coverage,
         },
         "configuration": {
             "rank": args.rank,
@@ -358,7 +401,12 @@ def main() -> None:
         "caveats": [
             "The hero-parity curve is transductive and includes revealed probes as zero-error targets.",
             "The held-out-model primary curve excludes revealed probes and isolates each validation row.",
-            "The current matrix is suite-blocked and only 11 models have scores in all three represented suites.",
+            (
+                "The current matrix is suite-blocked across "
+                f"{suite_coverage['n_represented_suites']} represented suites; "
+                f"{suite_coverage['n_models_with_all_represented_suites']} of {len(models)} "
+                "supported models have at least one observed score in every represented suite."
+            ),
             "Normalized F1, Pearson r, and robustness index are not a validated common clinical utility scale.",
             "No low-cost curve is claimed because pathology acquisition/runtime costs have not been audited.",
         ],

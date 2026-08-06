@@ -57,6 +57,54 @@ def _write_json_atomic(path: Path, payload: Any) -> None:
         temporary.unlink(missing_ok=True)
 
 
+def _sha256_json(payload: Any) -> str:
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def _checkpoint_identity(args: argparse.Namespace, scores_sha256: str) -> dict[str, Any]:
+    return {
+        "scores_sha256": scores_sha256,
+        "allowlist_sha256": hashlib.sha256(args.allowlist.read_bytes()).hexdigest(),
+        "previous_probes_sha256": hashlib.sha256(args.previous_probes.read_bytes()).hexdigest(),
+        "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "prediction_rank": args.rank,
+        "max_any_k": args.max_any_k,
+        "max_random_k": args.max_random_k,
+        "max_heldout_random_k": args.max_heldout_random_k,
+        "max_ranking_random_k": args.max_ranking_random_k,
+        "random_repeats": args.random_repeats,
+        "pruned_keep": args.pruned_keep,
+        "ranking_margin": args.ranking_margin,
+        "seed": args.seed,
+    }
+
+
+def _load_phase_checkpoint(
+    path: Path, identity: dict[str, Any]
+) -> dict[str, Any]:
+    try:
+        checkpoint = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError, OSError):
+        return {"identity": identity, "curve_greedy": {}, "ranking": {}, "raw": []}
+    if (
+        checkpoint.get("schema_version") != 1
+        or checkpoint.get("identity") != identity
+        or checkpoint.get("identity_sha256") != _sha256_json(identity)
+    ):
+        return {"identity": identity, "curve_greedy": {}, "ranking": {}, "raw": []}
+    if not all(key in checkpoint for key in ("curve_greedy", "ranking", "raw")):
+        return {"identity": identity, "curve_greedy": {}, "ranking": {}, "raw": []}
+    return checkpoint
+
+
+def _save_phase_checkpoint(path: Path, checkpoint: dict[str, Any]) -> None:
+    checkpoint["schema_version"] = 1
+    checkpoint["identity_sha256"] = _sha256_json(checkpoint["identity"])
+    _write_json_atomic(path, checkpoint)
+
+
 def _write_csv_atomic(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = _temporary_sibling(path)
@@ -366,6 +414,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--workers", type=int, default=max(1, min(28, (os.cpu_count() or 2) - 1)))
     parser.add_argument(
+        "--checkpoint-dir",
+        type=Path,
+        default=ROOT / "experiments/probe_compression_checkpoints",
+        help="Hash-addressed durable checkpoints for completed greedy/ranking phases",
+    )
+    parser.add_argument(
         "--reuse-any-score-curves",
         action=argparse.BooleanOptionalAction,
         default=True,
@@ -384,6 +438,9 @@ def main() -> None:
     scores = load_scores(args.scores)
     matrix, models, evaluations = filter_matrix(*make_matrix(scores))
     scores_sha256 = hashlib.sha256(args.scores.read_bytes()).hexdigest()
+    checkpoint_identity = _checkpoint_identity(args, scores_sha256)
+    checkpoint_path = args.checkpoint_dir / f"{_sha256_json(checkpoint_identity)}.json"
+    phase_checkpoint = _load_phase_checkpoint(checkpoint_path, checkpoint_identity)
     reusable_any = None
     reusable_any_raw: list[dict[str, Any]] = []
     if args.reuse_any_score_curves and args.output.exists() and args.raw_output.exists():
@@ -496,7 +553,7 @@ def main() -> None:
         "curves": {},
         "ranking_aware": {},
     }
-    raw: list[dict[str, Any]] = []
+    raw: list[dict[str, Any]] = copy.deepcopy(phase_checkpoint["raw"])
     random_raw_fields = [
         "protocol", "candidate_mode", "method", "selection_objective",
         "repeat", "k", "model_id", "evaluation_id",
@@ -548,6 +605,21 @@ def main() -> None:
                     "candidate_ids": [evaluations[i] for i in candidates],
                 }
                 for objective in ("medae", "medape"):
+                    cached_mode = phase_checkpoint["curve_greedy"].get(
+                        candidate_mode, {}
+                    )
+                    all_key = f"all_known_greedy_{objective}"
+                    heldout_key = f"heldout_greedy_{objective}"
+                    if all_key in cached_mode and heldout_key in cached_mode:
+                        mode_result[all_key] = copy.deepcopy(cached_mode[all_key])
+                        mode_result[heldout_key] = copy.deepcopy(
+                            cached_mode[heldout_key]
+                        )
+                        print(
+                            f"resumed current-hash {candidate_mode} {objective} greedy phase",
+                            flush=True,
+                        )
+                        continue
                     if candidate_mode == "any_candidate" and objective == "medae":
                         prior = json.loads(args.previous_probes.read_text(encoding="utf-8"))
                         prior_all = prior["all_known_greedy"][:max_k]
@@ -619,6 +691,14 @@ def main() -> None:
                                 "protocol": protocol, "candidate_mode": candidate_mode,
                                 "method": "greedy", "selection_objective": objective, "k": step["k"],
                             }))
+                    phase_checkpoint["curve_greedy"].setdefault(
+                        candidate_mode, {}
+                    )[all_key] = copy.deepcopy(all_greedy)
+                    phase_checkpoint["curve_greedy"][candidate_mode][heldout_key] = copy.deepcopy(
+                        heldout_greedy
+                    )
+                    phase_checkpoint["raw"] = copy.deepcopy(raw)
+                    _save_phase_checkpoint(checkpoint_path, phase_checkpoint)
                 mode_result["all_known_random"] = _random_curves(
                     executor, matrix, candidates, max_k=min(args.max_random_k, len(candidates)),
                     repeats=args.random_repeats, seed=args.seed, rank=args.rank, evaluations=evaluations,
@@ -635,6 +715,16 @@ def main() -> None:
                 ("any_candidate", any_indices),
                 ("pre_error_low_friction_allowlist", allow_indices),
             ):
+                cached_ranking = phase_checkpoint["ranking"].get(candidate_mode)
+                if cached_ranking is not None:
+                    payload["ranking_aware"][candidate_mode] = copy.deepcopy(
+                        cached_ranking
+                    )
+                    print(
+                        f"resumed current-hash {candidate_mode} ranking phase",
+                        flush=True,
+                    )
+                    continue
                 all_known = _greedy(
                     executor,
                     matrix,
@@ -715,6 +805,11 @@ def main() -> None:
                         ranking_scope="all_target",
                     ),
                 }
+                phase_checkpoint["ranking"][candidate_mode] = copy.deepcopy(
+                    payload["ranking_aware"][candidate_mode]
+                )
+                phase_checkpoint["raw"] = copy.deepcopy(raw)
+                _save_phase_checkpoint(checkpoint_path, phase_checkpoint)
         os.replace(random_raw_temporary, args.random_raw_output)
     finally:
         random_raw_temporary.unlink(missing_ok=True)

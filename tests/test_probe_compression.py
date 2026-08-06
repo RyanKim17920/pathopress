@@ -5,6 +5,7 @@ import csv
 import importlib.util
 import io
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -45,6 +46,26 @@ MATRIX = np.array(
 
 
 class ProbeCompressionTests(unittest.TestCase):
+    def test_phase_checkpoint_roundtrip_and_identity_fail_closed(self) -> None:
+        identity = {"scores_sha256": "current", "prediction_rank": 1}
+        checkpoint = {
+            "identity": identity,
+            "curve_greedy": {"any_candidate": {"all_known_greedy_medae": [1]}},
+            "ranking": {},
+            "raw": [{"k": 1}],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "checkpoint.json"
+            RUNNER._save_phase_checkpoint(path, checkpoint)
+            self.assertEqual(RUNNER._load_phase_checkpoint(path, identity), checkpoint)
+
+            rejected = RUNNER._load_phase_checkpoint(
+                path, {"scores_sha256": "different", "prediction_rank": 1}
+            )
+            self.assertEqual(rejected["curve_greedy"], {})
+            self.assertEqual(rejected["ranking"], {})
+            self.assertEqual(rejected["raw"], [])
+
     def test_runner_separates_k30_all_known_from_k10_controls(self) -> None:
         with patch.object(sys, "argv", [str(RUNNER_PATH)]):
             args = RUNNER.parse_args()

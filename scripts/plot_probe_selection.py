@@ -99,8 +99,9 @@ def render_curves(payload: dict[str, object], output_base: Path) -> None:
         ),
         (
             axes[1],
-            "model_average", "mae", "model_average", "mae",
-            "Literal model-average prediction", "Mean absolute row-average error",
+            "model_average", "medae", "model_average", "medae",
+            "Model-average prediction (all-known vs held-out)",
+            "Median absolute row-average error",
         ),
     ]
     for ax, all_key, all_metric, held_key, held_metric, title, ylabel in specifications:
@@ -123,9 +124,9 @@ def render_curves(payload: dict[str, object], output_base: Path) -> None:
         )
 
         ax.fill_between(random_x, random_q1, random_q3, color=GRAY, alpha=0.14, lw=0)
-        ax.plot(random_x, random_y, "o--", color=GRAY, lw=2.0, ms=4.5, label="Random probe set")
+        ax.plot(random_x, random_y, "o--", color=GRAY, lw=2.0, ms=4.5, label="Random, all-known")
         ax.plot(greedy_x, greedy_y, "o-", color=MAGENTA, lw=2.2, ms=4.7, label="Greedy, all-known")
-        ax.plot(heldout_x, heldout_y, "s-", color=BLUE, lw=2.2, ms=4.5, label="70/30 held-out models")
+        ax.plot(heldout_x, heldout_y, "s-", color=BLUE, lw=2.2, ms=4.5, label="Greedy, 70/30 held-out models")
         ax.plot([0], [base], marker="D", color="white", markeredgecolor=CHARCOAL, ms=5.3, zorder=5)
         if ax is axes[0]:
             for row in greedy:  # type: ignore[union-attr]
@@ -154,7 +155,7 @@ def render_curves(payload: dict[str, object], output_base: Path) -> None:
     fig.text(
         0.5,
         -0.005,
-        "All-known matches BenchPress and counts measured probes as zero error; held-out models exclude probe cells.",
+        "All-known matches BenchPress and counts measured probes as zero error; held-out-model curves exclude probe cells. Model-average curves report MedAE across model rows.",
         ha="center", fontsize=8.5, color=CHARCOAL,
     )
     fig.tight_layout()

@@ -19,6 +19,7 @@ experiments/fast_rank1
 experiments/method_comparison/predictions/*.npz
 experiments/method_comparison_m*/predictions/*.npz
 experiments/prediction_error_factor_shards/
+experiments/probe_compression_checkpoints/
 experiments/soft_impute_rank_sweep_checkpoints/
 experiments/probe_exhaustive_runs/*/shards/
 outputs/prediction_error_factor_predictions_rank1.csv
