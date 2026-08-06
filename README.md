@@ -151,8 +151,8 @@ No build or download command performs deployment or upload.
 | Point estimates and rank | [imputations](outputs/imputations_rank1.csv), [bias-ALS CV](experiments/benchpress_style_results.json), [Soft-Impute sweep](experiments/soft_impute_rank_sweep_results.json) |
 | Full classical grid | [manifest](experiments/method_comparison/manifest.json), [results](experiments/method_comparison/results.json), [top table](experiments/method_comparison/top_methods.md), [grid figure](figures/method_comparison_grid.png) |
 | Structure | [structure manifest](experiments/structure_analysis/manifest.json), [stable rank](experiments/structure_analysis/stable_rank_results.json), [MDS coordinates](experiments/structure_analysis/mds_coordinates.csv) |
-| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [historical exact-search status](experiments/probe_exhaustive_execution_status.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [ranking curve](figures/pathopress_benchpress_ranking_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
-| Cost and feasibility evidence | [source-backed registry](data/evaluation_cost_evidence.json), [flat audit](data/evaluation_cost_evidence.csv), [audit note](docs/evaluation-cost-evidence.md), [coverage figure](figures/evaluation_cost_evidence_coverage.png) |
+| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [historical exact-search status](experiments/probe_exhaustive_execution_status.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [current ranking preservation](figures/ranking_preservation_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
+| Cost and feasibility evidence | [source-backed registry](data/evaluation_cost_evidence.json), [measured-burden contract](docs/budgeted-probe-selection.md), [current fail-closed preflight](experiments/budgeted_probe_selection_rank1.json), [coverage figure](figures/evaluation_cost_evidence_coverage.png) |
 | Ranking and time | [ranking](experiments/ranking_preservation_rank1.json), [temporal](experiments/temporal_deployment_rank1.json) |
 | Trust and error factors | [confidence](experiments/confidence_calibration_rank1.json), [existing-row intervals](experiments/deployment_confidence_rank1.json), [unseen-model intervals](experiments/new_model_confidence_rank1.json), [new-model method](docs/new-model-confidence.md), [predictability](experiments/predictability_results_rank1.json), [factor analysis](experiments/prediction_error_factors_rank1.json) |
 | Publication outputs | [table manifest](outputs/tables/manifest.json), [metadata summary](experiments/publication_metadata_summary.json), [figure gallery](figures/README.md) |
@@ -212,7 +212,7 @@ python3 scripts/plot_probe_dual_objective.py
 Some commands are intentionally expensive or sharded; consult the experiment
 README before rerunning.
 
-The final `59×168` public tables can be rebuilt and locally validated in the
+The final `59×187` public tables can be rebuilt and locally validated in the
 pinned BenchPress Hugging Face maintenance layout without uploading anything:
 
 ```bash
@@ -234,9 +234,12 @@ THUNDER's reported 0–100 F1 is unchanged. See
 [docs/imputation.md](docs/imputation.md).
 
 The cost-evidence audit finds no directly reported observed runtime, hardware
-make/model, annotation hours, or dollar cost for any of the 168 retained
+make/model, annotation hours, or dollar cost for any of the 187 retained
 protocols. Its pre-error feasibility strata are auditable metadata proxies,
-not a numeric cost curve; see [the evidence note](docs/evaluation-cost-evidence.md).
+not a numeric cost curve. The measured-budget runner therefore reports
+`insufficient_cost_coverage` instead of recommending a fake cheapest set; see
+[the evidence note](docs/evaluation-cost-evidence.md) and
+[budgeted-selection contract](docs/budgeted-probe-selection.md).
 
 Random-cell and within-model folds share model/suite context. Suite-block,
 held-out-row, and temporal experiments are stronger stress tests but still use

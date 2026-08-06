@@ -120,7 +120,6 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument("--hero-output", type=Path, default=ROOT / "figures/pathopress_benchpress_hero_rank1")
-    parser.add_argument("--ranking-output", type=Path, default=ROOT / "figures/pathopress_benchpress_ranking_rank1")
     parser.add_argument("--summary-output", type=Path, default=ROOT / "experiments/benchpress_style_hero_summary.json")
     parser.add_argument("--workers", type=int, default=max(1, min(31, (os.cpu_count() or 2) - 1)))
     return parser.parse_args()
@@ -287,24 +286,6 @@ def main() -> int:
         fig.savefig(args.hero_output.with_suffix(f".{suffix}"), dpi=220, bbox_inches="tight")
     plt.close(fig)
 
-    fig, ax = plt.subplots(figsize=(7.0, 5.2))
-    ranking_random = payload["ranking_aware"]["any_candidate"]["all_known_random"]
-    k, med, q1, q3 = _random_band(ranking_random, "pairwise_median_accuracy")
-    ax.fill_between(np.r_[0, k], 100 * np.r_[0, q1], 100 * np.r_[0, q3], color=GRAY, alpha=.15, lw=0)
-    ax.plot(np.r_[0, k], 100 * np.r_[0, med], "o--", color=GRAY, lw=2.4, label="Random")
-    for mode, color, label, marker in tracks:
-        rows = payload["ranking_aware"][mode]["all_known_greedy"]
-        ax.plot(np.r_[0, [row["k"] for row in rows]], 100 * np.r_[0, [row["selection_metrics"]["pairwise_median_accuracy"] for row in rows]], marker=marker, color=color, lw=2.5, label=label.replace(" evaluations", ""))
-    ax.set(xlim=(-.35, 10.4), ylim=(0, 100), xticks=range(0, 11), xlabel="# Top pathology evaluations", ylabel="Pairwise accuracy at true gap ≥5 (%)")
-    ax.grid(axis="y", alpha=.18)
-    ax.legend(frameon=False)
-    ax.set_title("Ranking preservation — exact margin-5 greedy trajectories", fontweight="bold")
-    fig.text(.5, .015, "Greedy ranking trajectories are complete through k=10. Exhaustive subset search is a separate MedAE objective and is not shown here. Feasibility proxy ≠ measured cost.", ha="center", fontsize=8)
-    fig.subplots_adjust(bottom=.16)
-    for suffix in ("png", "pdf"):
-        fig.savefig(args.ranking_output.with_suffix(f".{suffix}"), dpi=220, bbox_inches="tight")
-    plt.close(fig)
-
     summary = {
         "schema_version": 1,
         "source_shape": list(matrix.shape),
@@ -338,7 +319,7 @@ def main() -> int:
         },
     }
     args.summary_output.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
-    print(f"wrote {args.hero_output}.{{png,pdf}}, {args.ranking_output}.{{png,pdf}}, and {args.summary_output}")
+    print(f"wrote {args.hero_output}.{{png,pdf}} and {args.summary_output}")
     return 0
 
 

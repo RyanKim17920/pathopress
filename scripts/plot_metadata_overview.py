@@ -23,22 +23,6 @@ from pathopress.publication import metadata_panel_counts, read_csv, top_with_oth
 
 COLORS = ["#1368CE", "#D1495B", "#D89C1D", "#2A9D8F", "#7251B5", "#607D8B", "#ED6A5A", "#669BBC"]
 
-PANEL_NAMES = (
-    "pathopress_releases",
-    "pathopress_coverage",
-    "pathopress_evaluation_mix",
-    "pathopress_observed_cells_by_family",
-    "pathopress_source_provenance",
-)
-
-
-def _save_pair(fig, base: Path) -> None:
-    base.parent.mkdir(parents=True, exist_ok=True)
-    for suffix in ("png", "pdf"):
-        fig.savefig(base.with_suffix(f".{suffix}"), dpi=220, bbox_inches="tight")
-    plt.close(fig)
-
-
 def _barh(ax, counts: dict[str, int], keep: int, title: str, xlabel: str) -> None:
     labels, values = top_with_other(counts, keep)
     labels, values = labels[::-1], values[::-1]
@@ -58,10 +42,6 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--releases", type=Path, default=ROOT / "data/model_release_dates.csv")
     parser.add_argument("--summary-output", type=Path, default=ROOT / "experiments/publication_metadata_summary.json")
     parser.add_argument("--output", type=Path, default=ROOT / "figures/pathopress_metadata_overview")
-    parser.add_argument(
-        "--panel-output-dir", type=Path, default=ROOT / "figures",
-        help="Directory for five separately named BenchPress-analogue panels",
-    )
     return parser.parse_args()
 
 
@@ -131,57 +111,7 @@ def main() -> None:
         fig.savefig(args.output.with_suffix(f".{suffix}"), dpi=220, bbox_inches="tight")
     plt.close(fig)
 
-    # Five separately named panels mirror the upstream score-matrix figure
-    # inventory while retaining pathology-native task/source categories.
-    quarters = list(counts["release_quarters"])
-    fig, ax = plt.subplots(figsize=(5.1, 3.7))
-    ax.bar(range(len(quarters)), [counts["release_quarters"][q] for q in quarters], color="#D1495B")
-    ax.set_xticks(range(len(quarters)), quarters, rotation=45, ha="right")
-    ax.set_ylabel("Verified model releases")
-    ax.grid(axis="y", alpha=.2)
-    fig.tight_layout()
-    _save_pair(fig, args.panel_output_dir / PANEL_NAMES[0])
-
-    coverage = counts["coverage_by_release_quarter"]
-    coverage_quarters = list(coverage)
-    fig, ax = plt.subplots(figsize=(5.1, 3.7))
-    ax.plot(range(len(coverage_quarters)), [coverage[q]["median"] for q in coverage_quarters], "o-", color="#D1495B", linewidth=2.3, label="median")
-    ax.plot(range(len(coverage_quarters)), [coverage[q]["mean"] for q in coverage_quarters], "s--", color="#1368CE", linewidth=1.8, label="mean")
-    ax.set_xticks(range(len(coverage_quarters)), coverage_quarters, rotation=45, ha="right")
-    ax.set_ylabel("Observed evaluations per model")
-    ax.grid(axis="y", alpha=.2)
-    ax.legend(frameon=False)
-    fig.tight_layout()
-    _save_pair(fig, args.panel_output_dir / PANEL_NAMES[1])
-
-    fig, ax = plt.subplots(figsize=(6.2, 3.8))
-    _barh(ax, counts["task_family"], 7, "Retained pathology evaluation mix", "Evaluation identities")
-    fig.tight_layout()
-    _save_pair(fig, args.panel_output_dir / PANEL_NAMES[2])
-
-    fig, ax = plt.subplots(figsize=(6.2, 3.8))
-    _barh(ax, counts["observed_family"], 7, "Observed cells by pathology task family", "Observed model-evaluation cells")
-    fig.tight_layout()
-    _save_pair(fig, args.panel_output_dir / PANEL_NAMES[3])
-
-    source_labels = list(counts["source_provenance"])
-    source_values = [counts["source_provenance"][label] for label in source_labels]
-    fig, ax = plt.subplots(figsize=(5.2, 3.8))
-    wedges, _, _ = ax.pie(
-        source_values, colors=COLORS[:len(source_values)], startangle=90,
-        autopct="%1.1f%%", textprops={"fontsize": 8},
-    )
-    ax.legend(
-        wedges, [f"{label} ({value:,})" for label, value in zip(source_labels, source_values)],
-        loc="upper center", bbox_to_anchor=(.5, -.02), frameon=False,
-    )
-    ax.set_title("Reported-cell source provenance")
-    ax.set_aspect("equal")
-    fig.tight_layout()
-    _save_pair(fig, args.panel_output_dir / PANEL_NAMES[4])
-
-    names = ", ".join(PANEL_NAMES)
-    print(f"wrote {args.summary_output}, {args.output}.png/.pdf, and panels: {names}")
+    print(f"wrote {args.summary_output} and {args.output}.png/.pdf")
 
 
 if __name__ == "__main__":

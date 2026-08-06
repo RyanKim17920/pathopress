@@ -27,7 +27,7 @@
       "name": "benchpress_style_validation",
       "command": "python3 experiments/run_benchpress_style.py && python3 scripts/plot_benchpress_style.py",
       "inputs": ["data/scores.csv", "experiments/folds_s10_f3_bs42.json", "experiments/soft_impute_rank_sweep_results.json", "experiments/run_benchpress_style.py", "scripts/plot_benchpress_style.py", "src/pathopress"],
-      "artifacts": ["experiments/benchpress_style_results.json", "experiments/benchpress_style_predictions_rank1.csv", "figures/benchpress_style_validation_rank1.png", "figures/benchpress_style_validation_rank1.pdf", "figures/matrix_completed_rank1.png", "figures/matrix_completed_rank1.pdf", "figures/matrix_observation_pattern.png", "figures/matrix_observation_pattern.pdf"],
+      "artifacts": ["experiments/benchpress_style_results.json", "experiments/benchpress_style_predictions_rank1.csv", "figures/benchpress_style_validation_rank1.png", "figures/benchpress_style_validation_rank1.pdf", "figures/matrix_completed_rank1.png", "figures/matrix_completed_rank1.pdf"],
       "external_calls": false
     },
     {
@@ -42,7 +42,7 @@
       "name": "structure_analysis",
       "command": "python3 experiments/run_structure_analysis.py && python3 scripts/plot_structure_analysis.py",
       "inputs": ["data/scores.csv", "experiments/probe_compression_rank1.json", "experiments/run_structure_analysis.py", "scripts/plot_structure_analysis.py", "src/pathopress"],
-      "artifacts": ["experiments/structure_analysis", "figures/benchmark_best_neighbor_correlations.png", "figures/benchmark_best_neighbor_correlations.pdf", "figures/benchmark_correlation_mds.png", "figures/benchmark_correlation_mds.pdf", "figures/benchmark_correlation_mds_probes.png", "figures/benchmark_correlation_mds_probes.pdf"],
+      "artifacts": ["experiments/structure_analysis", "figures/benchmark_best_neighbor_correlations.png", "figures/benchmark_best_neighbor_correlations.pdf", "figures/benchmark_correlation_mds_probes.png", "figures/benchmark_correlation_mds_probes.pdf"],
       "external_calls": false
     },
     {
@@ -118,6 +118,14 @@
       "external_calls": false
     },
     {
+      "name": "budgeted_probe_selection_preflight",
+      "command": "python3 experiments/run_budgeted_probe_selection.py --workers 4",
+      "release_status": "insufficient_cost_coverage_no_recommendation",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/evaluation_burden_measurements.schema.json", "data/evaluation_burden_measurements_v1.example.json", "data/probe_budget_v1.example.json", "experiments/run_budgeted_probe_selection.py", "src/pathopress/budgeted_probes.py"],
+      "artifacts": ["experiments/budgeted_probe_selection_rank1.json"],
+      "external_calls": false
+    },
+    {
       "name": "evaluation_cost_evidence",
       "command": "python3 scripts/build_evaluation_cost_evidence.py && python3 scripts/plot_evaluation_cost_evidence.py",
       "inputs": ["data/scores.csv", "data/tasks.csv", "scripts/build_evaluation_cost_evidence.py", "scripts/plot_evaluation_cost_evidence.py"],
@@ -135,14 +143,14 @@
       "name": "publication_hero",
       "command": "python3 scripts/plot_publication_hero.py && python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive && python3 scripts/plot_probe_dual_objective.py",
       "inputs": ["data/scores.csv", "experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "scripts/plot_publication_hero.py", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py", "src/pathopress"],
-      "artifacts": ["experiments/publication_hero_summary.json", "experiments/benchpress_style_hero_summary.json", "outputs/probe_dual_objective_rank1.csv", "figures/pathopress_hero_rank1.png", "figures/pathopress_hero_rank1.pdf", "figures/pathopress_benchpress_hero_rank1.png", "figures/pathopress_benchpress_hero_rank1.pdf", "figures/pathopress_benchpress_ranking_rank1.png", "figures/pathopress_benchpress_ranking_rank1.pdf", "figures/probe_dual_objective_rank1.png", "figures/probe_dual_objective_rank1.pdf"],
+      "artifacts": ["experiments/publication_hero_summary.json", "experiments/benchpress_style_hero_summary.json", "outputs/probe_dual_objective_rank1.csv", "figures/pathopress_hero_rank1.png", "figures/pathopress_hero_rank1.pdf", "figures/pathopress_benchpress_hero_rank1.png", "figures/pathopress_benchpress_hero_rank1.pdf", "figures/probe_dual_objective_rank1.png", "figures/probe_dual_objective_rank1.pdf"],
       "external_calls": false
     },
     {
       "name": "publication_metadata_overview",
       "command": "python3 scripts/plot_metadata_overview.py",
       "inputs": ["data/scores.csv", "data/tasks.csv", "data/model_metadata.csv", "data/model_release_dates.csv", "scripts/plot_metadata_overview.py", "src/pathopress"],
-      "artifacts": ["experiments/publication_metadata_summary.json", "figures/pathopress_metadata_overview.png", "figures/pathopress_metadata_overview.pdf", "figures/pathopress_releases.png", "figures/pathopress_releases.pdf", "figures/pathopress_coverage.png", "figures/pathopress_coverage.pdf", "figures/pathopress_evaluation_mix.png", "figures/pathopress_evaluation_mix.pdf", "figures/pathopress_observed_cells_by_family.png", "figures/pathopress_observed_cells_by_family.pdf", "figures/pathopress_source_provenance.png", "figures/pathopress_source_provenance.pdf"],
+      "artifacts": ["experiments/publication_metadata_summary.json", "figures/pathopress_metadata_overview.png", "figures/pathopress_metadata_overview.pdf"],
       "external_calls": false
     },
     {

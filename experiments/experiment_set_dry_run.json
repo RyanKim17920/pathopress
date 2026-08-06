@@ -3,10 +3,10 @@
   "status": "ready",
   "execution": "none_dry_run_only",
   "summary": {
-    "components": 20,
-    "declared_inputs": 123,
+    "components": 21,
+    "declared_inputs": 130,
     "declared_dependencies": 5,
-    "declared_artifacts": 124,
+    "declared_artifacts": 109,
     "external_call_components": 0
   },
   "experiments": [
@@ -58,7 +58,7 @@
       "missing_artifacts": [],
       "declared_inputs": 6,
       "declared_dependencies": 0,
-      "declared_artifacts": 8,
+      "declared_artifacts": 6,
       "external_calls": false,
       "dry_run_only": true
     },
@@ -84,7 +84,7 @@
       "missing_artifacts": [],
       "declared_inputs": 5,
       "declared_dependencies": 0,
-      "declared_artifacts": 7,
+      "declared_artifacts": 5,
       "external_calls": false,
       "dry_run_only": true
     },
@@ -206,6 +206,19 @@
       "dry_run_only": true
     },
     {
+      "name": "budgeted_probe_selection_preflight",
+      "status": "ready",
+      "scripts_present": true,
+      "missing_inputs": [],
+      "missing_dependencies": [],
+      "missing_artifacts": [],
+      "declared_inputs": 7,
+      "declared_dependencies": 0,
+      "declared_artifacts": 1,
+      "external_calls": false,
+      "dry_run_only": true
+    },
+    {
       "name": "evaluation_cost_evidence",
       "status": "ready",
       "scripts_present": true,
@@ -240,7 +253,7 @@
       "missing_artifacts": [],
       "declared_inputs": 7,
       "declared_dependencies": 0,
-      "declared_artifacts": 11,
+      "declared_artifacts": 9,
       "external_calls": false,
       "dry_run_only": true
     },
@@ -253,7 +266,7 @@
       "missing_artifacts": [],
       "declared_inputs": 6,
       "declared_dependencies": 0,
-      "declared_artifacts": 13,
+      "declared_artifacts": 3,
       "external_calls": false,
       "dry_run_only": true
     },

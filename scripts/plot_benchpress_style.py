@@ -15,7 +15,6 @@ os.environ.setdefault("MPLCONFIGDIR", "/tmp/pathopress-matplotlib")
 import matplotlib
 
 matplotlib.use("Agg")
-import matplotlib.colors as colors
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Patch
@@ -148,36 +147,6 @@ def add_suite_axis(ax, ordered_evaluations, metadata) -> list[tuple[str, int, in
         if end < len(ordered_evaluations):
             ax.axvline(end - 0.5, color="white", lw=1.5)
     return groups
-
-
-def plot_observation_pattern(matrix, models, evaluations, metadata, output_dir):
-    row_order, col_order = matrix_order(matrix, models, evaluations, metadata)
-    observed = np.isfinite(matrix[np.ix_(row_order, col_order)])
-    ordered_evaluations = [evaluations[j] for j in col_order]
-    fig, ax = plt.subplots(figsize=(8.0, 5.0))
-    cmap = colors.ListedColormap(["white", BLUE])
-    ax.imshow(observed, cmap=cmap, interpolation="nearest", aspect="auto")
-    groups = add_suite_axis(ax, ordered_evaluations, metadata)
-    ax.set_yticks([])
-    ax.set_ylabel(f"{len(models)} models")
-    ax.set_xlabel(f"{len(evaluations)} scored evaluations")
-    ax.set_title(
-        f"Published score coverage: {int(observed.sum())}/{observed.size} cells ({observed.mean():.1%})"
-    )
-    fig.legend(
-        handles=suite_legend_handles(groups),
-        loc="lower center",
-        bbox_to_anchor=(0.5, -0.015),
-        ncol=len(groups),
-        frameon=False,
-        fontsize=7.5,
-        handlelength=1.4,
-        columnspacing=1.0,
-    )
-    fig.subplots_adjust(bottom=0.17)
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    save(fig, output_dir, "matrix_observation_pattern")
 
 
 def plot_completed_matrix(matrix, models, evaluations, metadata, output_dir, rank):
@@ -370,7 +339,6 @@ def main() -> None:
     args = parse_args()
     apply_style()
     matrix, models, evaluations, metadata = load_matrix(args.scores)
-    plot_observation_pattern(matrix, models, evaluations, metadata, args.output_dir)
     plot_completed_matrix(matrix, models, evaluations, metadata, args.output_dir, args.rank)
     plot_validation(args.results, args.predictions, args.output_dir)
     plot_soft_impute_rank_sweep(args.soft_impute_results, args.output_dir)

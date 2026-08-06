@@ -83,7 +83,7 @@ points. The artifact records both margins and this distinction explicitly.
 
 The upstream-shaped [pathology hero](../figures/pathopress_benchpress_hero_rank1.png)
 reconstructs the four target examples and overall score-prediction panel; the
-[ranking panel](../figures/pathopress_benchpress_ranking_rank1.png) shows the
+[ranking-preservation figure](../figures/ranking_preservation_rank1.png) shows the
 random and greedy margin-5 trajectories. At `k=10`, unrestricted all-known
 pairwise accuracy is 0.8780, versus 0.4000 for the 25-task feasibility proxy.
 The [dual-objective table](../outputs/probe_dual_objective_rank1.csv) also asks

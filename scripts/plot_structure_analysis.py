@@ -67,11 +67,6 @@ def plot_mds(stats: dict) -> None:
         evaluation_ids = data["evaluation_ids"].astype(str).tolist()
     suite_by_evaluation = {evaluation: row["suite_id"] for evaluation, row in stats.items()}
 
-    figure, axis = plt.subplots(figsize=(8.6, 6.2), constrained_layout=True)
-    _base_mds(axis, coordinates, evaluation_ids, suite_by_evaluation, show_centroids=False)
-    axis.set_title("Evaluation similarity from pairwise absolute correlations", fontweight="bold")
-    _save(figure, "benchmark_correlation_mds")
-
     probe_path = ROOT / "experiments" / "probe_selection_results_rank1.json"
     probes = json.loads(probe_path.read_text(encoding="utf-8"))["all_known_greedy"][:10]
     id_to_index = {evaluation: index for index, evaluation in enumerate(evaluation_ids)}
