@@ -13,14 +13,19 @@ import argparse
 import csv
 import hashlib
 import json
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
+
+
 UPSTREAM_COMMIT = "0a684b63ee0e4a401cb907a3827a82ea997d74c4"
-RETAINED_STATUSES = {"verified", "parsed_primary_source"}
 
 COMMITS = {
     "eva": "e43e74a99b75660b0014f790f25a33dd9f11e121",
@@ -415,6 +420,11 @@ def access_fact(task: dict[str, str]) -> dict[str, Any]:
             locator="README.md:36-40",
             scope="benchmark_family",
         )
+    if suite == "hoptimus1_report":
+        return missing(
+            "No protocol-specific dataset access mechanism was established in the audited report.",
+            [f"task_source:{task['evaluation_id']}"],
+        )
     return evidence(
         "official Hugging Face collection download",
         source_id="pathorob_readme_6583cf0",
@@ -471,6 +481,11 @@ def compute_configuration(task: dict[str, str]) -> dict[str, Any]:
             locator="extract_features.py:35-45",
             evidence_type="declared_budget_not_observed_usage",
             scope="benchmark_default",
+        )
+    if suite == "hoptimus1_report":
+        return missing(
+            "No executable compute configuration was reported for this protocol.",
+            [f"task_source:{task['evaluation_id']}"],
         )
     return evidence(
         {
@@ -617,9 +632,24 @@ def feasibility_tier(task: dict[str, str], count_fact: dict[str, Any]) -> dict[s
 
 
 def build_record(task: dict[str, str]) -> dict[str, Any]:
-    sources = suite_source_ids(task["suite_id"])
+    sources = suite_source_ids(task["suite_id"]) or [f"task_source:{task['evaluation_id']}"]
     count = sample_count(task)
-    software_value, software_source = SOFTWARE_LICENSE[task["suite_id"]]
+    software = SOFTWARE_LICENSE.get(task["suite_id"])
+    if software is None:
+        software_fact = missing(
+            "No benchmark software license was established in the audited report.",
+            sources,
+        )
+    else:
+        software_value, software_source = software
+        software_fact = evidence(
+            software_value,
+            source_id=software_source,
+            source_url=next(s["source_url"] for s in SUITE_SOURCES if s["source_id"] == software_source),
+            locator="repository license",
+            scope="benchmark_software",
+            notes="Not a substitute for the underlying dataset license.",
+        )
     facts = {
         "sample_count": count,
         "sample_unit": task_value(task, "sample_unit", task["sample_unit"]),
@@ -632,14 +662,7 @@ def build_record(task: dict[str, str]) -> dict[str, Any]:
         "hardware_model": missing("No evaluation-specific hardware make/model was reported.", sources),
         "observed_runtime": missing("No observed per-evaluation elapsed time was reported.", sources, unit="seconds"),
         "dollar_cost": missing("No numeric evaluation dollar cost was reported.", sources, unit="USD"),
-        "software_license": evidence(
-            software_value,
-            source_id=software_source,
-            source_url=next(s["source_url"] for s in SUITE_SOURCES if s["source_id"] == software_source),
-            locator="repository license",
-            scope="benchmark_software",
-            notes="Not a substitute for the underlying dataset license.",
-        ),
+        "software_license": software_fact,
         "dataset_license": dataset_license(task),
     }
     missing_fields = sorted(name for name, fact in facts.items() if fact["status"] != "reported")
@@ -761,11 +784,9 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     tasks = {row["evaluation_id"]: row for row in read_csv(args.tasks)}
-    retained_ids = sorted({
-        row["evaluation_id"]
-        for row in read_csv(args.scores)
-        if row["audit_status"] in RETAINED_STATUSES
-    })
+    matrix, models, evaluation_ids = make_matrix(load_scores(args.scores))
+    _, _, retained_ids = filter_matrix(matrix, models, evaluation_ids)
+    retained_ids = sorted(retained_ids)
     missing_tasks = [evaluation_id for evaluation_id in retained_ids if evaluation_id not in tasks]
     if missing_tasks:
         raise ValueError(f"Retained evaluations without task metadata: {missing_tasks}")

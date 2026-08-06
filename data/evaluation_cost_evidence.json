@@ -16,9 +16,9 @@
   },
   "inputs": {
     "tasks_path": "data/tasks.csv",
-    "tasks_sha256": "21f51e78071dbd453eb2afb48ae866718d4c9f3c790e6da2f6fb39e4065be431",
+    "tasks_sha256": "0c9f711767a51fee2563c7617b15a15a0244dac19207f33317580bc67ce21209",
     "scores_path": "data/scores.csv",
-    "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c"
+    "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448"
   },
   "sources": [
     {
@@ -578,6 +578,186 @@
       "scope_note": "One endpoint per HEST-Benchmark organ/cancer task; macro-average is not treated as an independent task."
     },
     {
+      "source_id": "task_source:hest.hoptimus1report2025.ccrcc.gene_expression",
+      "source_name": "Retained protocol source for hest.hoptimus1report2025.ccrcc.gene_expression",
+      "suite_id": "hest",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hest.hoptimus1report2025.ccrcc.gene_expression",
+        "dataset_id": "ccrcc",
+        "num_samples": "not_reported",
+        "sample_unit": "spatial_transcriptomics_spot",
+        "task_type": "regression",
+        "target": "expression of 50 highly variable genes",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public HEST leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hest.hoptimus1report2025.coad.gene_expression",
+      "source_name": "Retained protocol source for hest.hoptimus1report2025.coad.gene_expression",
+      "suite_id": "hest",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hest.hoptimus1report2025.coad.gene_expression",
+        "dataset_id": "coad",
+        "num_samples": "not_reported",
+        "sample_unit": "spatial_transcriptomics_spot",
+        "task_type": "regression",
+        "target": "expression of 50 highly variable genes",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public HEST leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hest.hoptimus1report2025.idc.gene_expression",
+      "source_name": "Retained protocol source for hest.hoptimus1report2025.idc.gene_expression",
+      "suite_id": "hest",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hest.hoptimus1report2025.idc.gene_expression",
+        "dataset_id": "idc",
+        "num_samples": "not_reported",
+        "sample_unit": "spatial_transcriptomics_spot",
+        "task_type": "regression",
+        "target": "expression of 50 highly variable genes",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public HEST leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hest.hoptimus1report2025.lung.gene_expression",
+      "source_name": "Retained protocol source for hest.hoptimus1report2025.lung.gene_expression",
+      "suite_id": "hest",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hest.hoptimus1report2025.lung.gene_expression",
+        "dataset_id": "lung",
+        "num_samples": "not_reported",
+        "sample_unit": "spatial_transcriptomics_spot",
+        "task_type": "regression",
+        "target": "expression of 50 highly variable genes",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public HEST leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hest.hoptimus1report2025.lymph_idc.gene_expression",
+      "source_name": "Retained protocol source for hest.hoptimus1report2025.lymph_idc.gene_expression",
+      "suite_id": "hest",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hest.hoptimus1report2025.lymph_idc.gene_expression",
+        "dataset_id": "lymph_idc",
+        "num_samples": "not_reported",
+        "sample_unit": "spatial_transcriptomics_spot",
+        "task_type": "regression",
+        "target": "expression of 50 highly variable genes",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public HEST leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hest.hoptimus1report2025.paad.gene_expression",
+      "source_name": "Retained protocol source for hest.hoptimus1report2025.paad.gene_expression",
+      "suite_id": "hest",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hest.hoptimus1report2025.paad.gene_expression",
+        "dataset_id": "paad",
+        "num_samples": "not_reported",
+        "sample_unit": "spatial_transcriptomics_spot",
+        "task_type": "regression",
+        "target": "expression of 50 highly variable genes",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public HEST leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hest.hoptimus1report2025.prad.gene_expression",
+      "source_name": "Retained protocol source for hest.hoptimus1report2025.prad.gene_expression",
+      "suite_id": "hest",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hest.hoptimus1report2025.prad.gene_expression",
+        "dataset_id": "prad",
+        "num_samples": "not_reported",
+        "sample_unit": "spatial_transcriptomics_spot",
+        "task_type": "regression",
+        "target": "expression of 50 highly variable genes",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public HEST leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hest.hoptimus1report2025.read.gene_expression",
+      "source_name": "Retained protocol source for hest.hoptimus1report2025.read.gene_expression",
+      "suite_id": "hest",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hest.hoptimus1report2025.read.gene_expression",
+        "dataset_id": "read",
+        "num_samples": "not_reported",
+        "sample_unit": "spatial_transcriptomics_spot",
+        "task_type": "regression",
+        "target": "expression of 50 highly variable genes",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public HEST leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hest.hoptimus1report2025.skcm.gene_expression",
+      "source_name": "Retained protocol source for hest.hoptimus1report2025.skcm.gene_expression",
+      "suite_id": "hest",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hest.hoptimus1report2025.skcm.gene_expression",
+        "dataset_id": "skcm",
+        "num_samples": "not_reported",
+        "sample_unit": "spatial_transcriptomics_spot",
+        "task_type": "regression",
+        "target": "expression of 50 highly variable genes",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public HEST leaf cell under the report-version protocol."
+    },
+    {
       "source_id": "task_source:hest.idc.gene_expression",
       "source_name": "Retained protocol source for hest.idc.gene_expression",
       "suite_id": "hest",
@@ -716,6 +896,206 @@
         "audit_status": "parsed_primary_source"
       },
       "scope_note": "One endpoint per HEST-Benchmark organ/cancer task; macro-average is not treated as an independent task."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+      "source_name": "Retained protocol source for hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+        "dataset_id": "cptac_coad",
+        "num_samples": "not_reported",
+        "sample_unit": "slide",
+        "task_type": "classification",
+        "target": "slide_biomarker_or_classification",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1",
+      "source_name": "Retained protocol source for hoptimus1report2025.cam17_wilds.linear_probe_top1",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+        "dataset_id": "wilds",
+        "num_samples": "422394",
+        "sample_unit": "image",
+        "task_type": "classification",
+        "target": "wilds class label",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public tile benchmark leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1",
+      "source_name": "Retained protocol source for hoptimus1report2025.crc_no_norm.linear_probe_top1",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+        "dataset_id": "crc",
+        "num_samples": "107180",
+        "sample_unit": "image",
+        "task_type": "classification",
+        "target": "CRC-100K nine-class tissue label",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public tile benchmark leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc",
+      "source_name": "Retained protocol source for hoptimus1report2025.kras_crc.cptac_coad.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.kras_crc.cptac_coad.abmil_auc",
+        "dataset_id": "cptac_coad",
+        "num_samples": "not_reported",
+        "sample_unit": "slide",
+        "task_type": "classification",
+        "target": "slide_biomarker_or_classification",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc",
+      "source_name": "Retained protocol source for hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc",
+        "dataset_id": "camelyon16_test",
+        "num_samples": "not_reported",
+        "sample_unit": "slide",
+        "task_type": "classification",
+        "target": "slide_biomarker_or_classification",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.mhist.linear_probe_top1",
+      "source_name": "Retained protocol source for hoptimus1report2025.mhist.linear_probe_top1",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.mhist.linear_probe_top1",
+        "dataset_id": "mhist",
+        "num_samples": "3152",
+        "sample_unit": "image",
+        "task_type": "classification",
+        "target": "MHIST hyperplastic-polyp versus sessile-serrated-adenoma label",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public tile benchmark leaf cell under the report-version protocol."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc",
+      "source_name": "Retained protocol source for hoptimus1report2025.msi_crc.cptac_coad.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.msi_crc.cptac_coad.abmil_auc",
+        "dataset_id": "cptac_coad",
+        "num_samples": "not_reported",
+        "sample_unit": "slide",
+        "task_type": "classification",
+        "target": "slide_biomarker_or_classification",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc",
+      "source_name": "Retained protocol source for hoptimus1report2025.msi_crc.paip2020.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.msi_crc.paip2020.abmil_auc",
+        "dataset_id": "paip2020",
+        "num_samples": "not_reported",
+        "sample_unit": "slide",
+        "task_type": "classification",
+        "target": "slide_biomarker_or_classification",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc",
+      "source_name": "Retained protocol source for hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc",
+        "dataset_id": "tcga_stad_test",
+        "num_samples": "not_reported",
+        "sample_unit": "slide",
+        "task_type": "classification",
+        "target": "slide_biomarker_or_classification",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+    },
+    {
+      "source_id": "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1",
+      "source_name": "Retained protocol source for hoptimus1report2025.tcga_uniform.linear_probe_top1",
+      "suite_id": "hoptimus1_report",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+        "dataset_id": "tcga_uniform",
+        "num_samples": "271710",
+        "sample_unit": "image",
+        "task_type": "classification",
+        "target": "tcga_uniform class label",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Public tile benchmark leaf cell under the report-version protocol."
     },
     {
       "source_id": "task_source:pathobench.exaone2025.bc_therapy.er-status",
@@ -3599,43 +3979,43 @@
     }
   ],
   "summary": {
-    "n_evaluations": 168,
+    "n_evaluations": 187,
     "coverage_definition": "field_coverage_count includes sourced benchmark-family/default context; field_direct_evaluation_coverage_count requires scope=evaluation",
     "field_coverage_count": {
-      "sample_count": 143,
-      "sample_unit": 168,
-      "access": 168,
-      "label_artifact": 168,
+      "sample_count": 147,
+      "sample_unit": 187,
+      "access": 177,
+      "label_artifact": 187,
       "annotation_hours": 0,
       "acquisition_scale": 16,
-      "stain": 9,
-      "compute_configuration": 168,
+      "stain": 18,
+      "compute_configuration": 177,
       "hardware_model": 0,
       "observed_runtime": 0,
       "dollar_cost": 0,
-      "software_license": 168,
-      "dataset_license": 19
+      "software_license": 177,
+      "dataset_license": 28
     },
     "field_coverage_fraction": {
-      "sample_count": 0.8511904761904762,
+      "sample_count": 0.786096256684492,
       "sample_unit": 1.0,
-      "access": 1.0,
+      "access": 0.946524064171123,
       "label_artifact": 1.0,
       "annotation_hours": 0.0,
-      "acquisition_scale": 0.09523809523809523,
-      "stain": 0.05357142857142857,
-      "compute_configuration": 1.0,
+      "acquisition_scale": 0.0855614973262032,
+      "stain": 0.0962566844919786,
+      "compute_configuration": 0.946524064171123,
       "hardware_model": 0.0,
       "observed_runtime": 0.0,
       "dollar_cost": 0.0,
-      "software_license": 1.0,
-      "dataset_license": 0.1130952380952381
+      "software_license": 0.946524064171123,
+      "dataset_license": 0.1497326203208556
     },
     "field_direct_evaluation_coverage_count": {
-      "sample_count": 143,
-      "sample_unit": 168,
+      "sample_count": 147,
+      "sample_unit": 187,
       "access": 31,
-      "label_artifact": 168,
+      "label_artifact": 187,
       "annotation_hours": 0,
       "acquisition_scale": 16,
       "stain": 0,
@@ -3644,22 +4024,22 @@
       "observed_runtime": 0,
       "dollar_cost": 0,
       "software_license": 0,
-      "dataset_license": 19
+      "dataset_license": 28
     },
     "field_direct_evaluation_coverage_fraction": {
-      "sample_count": 0.8511904761904762,
+      "sample_count": 0.786096256684492,
       "sample_unit": 1.0,
-      "access": 0.18452380952380953,
+      "access": 0.1657754010695187,
       "label_artifact": 1.0,
       "annotation_hours": 0.0,
-      "acquisition_scale": 0.09523809523809523,
+      "acquisition_scale": 0.0855614973262032,
       "stain": 0.0,
-      "compute_configuration": 0.08928571428571429,
+      "compute_configuration": 0.08021390374331551,
       "hardware_model": 0.0,
       "observed_runtime": 0.0,
       "dollar_cost": 0.0,
       "software_license": 0.0,
-      "dataset_license": 0.1130952380952381
+      "dataset_license": 0.1497326203208556
     },
     "field_coverage_by_suite": {
       "eva": {
@@ -3680,19 +4060,35 @@
       },
       "hest": {
         "sample_count": 0,
-        "sample_unit": 9,
-        "access": 9,
-        "label_artifact": 9,
+        "sample_unit": 18,
+        "access": 18,
+        "label_artifact": 18,
         "annotation_hours": 0,
         "acquisition_scale": 0,
-        "stain": 9,
-        "compute_configuration": 9,
+        "stain": 18,
+        "compute_configuration": 18,
         "hardware_model": 0,
         "observed_runtime": 0,
         "dollar_cost": 0,
-        "software_license": 9,
-        "dataset_license": 9,
-        "n_evaluations": 9
+        "software_license": 18,
+        "dataset_license": 18,
+        "n_evaluations": 18
+      },
+      "hoptimus1_report": {
+        "sample_count": 4,
+        "sample_unit": 10,
+        "access": 0,
+        "label_artifact": 10,
+        "annotation_hours": 0,
+        "acquisition_scale": 0,
+        "stain": 0,
+        "compute_configuration": 0,
+        "hardware_model": 0,
+        "observed_runtime": 0,
+        "dollar_cost": 0,
+        "software_license": 0,
+        "dataset_license": 0,
+        "n_evaluations": 10
       },
       "pathobench": {
         "sample_count": 122,
@@ -3744,10 +4140,10 @@
       }
     },
     "pre_error_feasibility_tier_counts": {
-      "tier_1_direct_small_labeled": 4,
-      "tier_2_direct_labeled": 21,
-      "tier_3_aggregated_or_wsi": 126,
-      "tier_4_specialized_protocol": 17
+      "tier_1_direct_small_labeled": 5,
+      "tier_2_direct_labeled": 24,
+      "tier_3_aggregated_or_wsi": 132,
+      "tier_4_specialized_protocol": 26
     },
     "numeric_cost_curve": {
       "supported": false,
@@ -6655,6 +7051,1527 @@
       "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
     },
     {
+      "evaluation_id": "hest.hoptimus1report2025.ccrcc.gene_expression",
+      "suite_id": "hest",
+      "dataset_id": "ccrcc",
+      "protocol_id": "hest.hoptimus1report2025.ccrcc.gene_expression",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.ccrcc.gene_expression"
+          ],
+          "unit": "spatial_transcriptomics_spot"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "spatial_transcriptomics_spot",
+          "source_id": "task_source:hest.hoptimus1report2025.ccrcc.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public HEST leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "reported",
+          "value": "free Hugging Face access with subset querying",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:36-40",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing continuous target measurement",
+          "source_id": "task_source:hest.hoptimus1report2025.ccrcc.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.ccrcc.gene_expression"
+          ]
+        },
+        "stain": {
+          "status": "reported",
+          "value": "H&E",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:14",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "embedding_batch_size": 128,
+            "workers": 1,
+            "execution": "CUDA autocast"
+          },
+          "source_id": "hest_benchmark_config_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/bench_config/bench_config.yaml",
+          "locator": "bench_config.yaml:1-13; benchmark.py:196-207",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hest.hoptimus1report2025.coad.gene_expression",
+      "suite_id": "hest",
+      "dataset_id": "coad",
+      "protocol_id": "hest.hoptimus1report2025.coad.gene_expression",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.coad.gene_expression"
+          ],
+          "unit": "spatial_transcriptomics_spot"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "spatial_transcriptomics_spot",
+          "source_id": "task_source:hest.hoptimus1report2025.coad.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public HEST leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "reported",
+          "value": "free Hugging Face access with subset querying",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:36-40",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing continuous target measurement",
+          "source_id": "task_source:hest.hoptimus1report2025.coad.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.coad.gene_expression"
+          ]
+        },
+        "stain": {
+          "status": "reported",
+          "value": "H&E",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:14",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "embedding_batch_size": 128,
+            "workers": 1,
+            "execution": "CUDA autocast"
+          },
+          "source_id": "hest_benchmark_config_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/bench_config/bench_config.yaml",
+          "locator": "bench_config.yaml:1-13; benchmark.py:196-207",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hest.hoptimus1report2025.idc.gene_expression",
+      "suite_id": "hest",
+      "dataset_id": "idc",
+      "protocol_id": "hest.hoptimus1report2025.idc.gene_expression",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.idc.gene_expression"
+          ],
+          "unit": "spatial_transcriptomics_spot"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "spatial_transcriptomics_spot",
+          "source_id": "task_source:hest.hoptimus1report2025.idc.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public HEST leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "reported",
+          "value": "free Hugging Face access with subset querying",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:36-40",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing continuous target measurement",
+          "source_id": "task_source:hest.hoptimus1report2025.idc.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.idc.gene_expression"
+          ]
+        },
+        "stain": {
+          "status": "reported",
+          "value": "H&E",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:14",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "embedding_batch_size": 128,
+            "workers": 1,
+            "execution": "CUDA autocast"
+          },
+          "source_id": "hest_benchmark_config_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/bench_config/bench_config.yaml",
+          "locator": "bench_config.yaml:1-13; benchmark.py:196-207",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hest.hoptimus1report2025.lung.gene_expression",
+      "suite_id": "hest",
+      "dataset_id": "lung",
+      "protocol_id": "hest.hoptimus1report2025.lung.gene_expression",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.lung.gene_expression"
+          ],
+          "unit": "spatial_transcriptomics_spot"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "spatial_transcriptomics_spot",
+          "source_id": "task_source:hest.hoptimus1report2025.lung.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public HEST leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "reported",
+          "value": "free Hugging Face access with subset querying",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:36-40",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing continuous target measurement",
+          "source_id": "task_source:hest.hoptimus1report2025.lung.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.lung.gene_expression"
+          ]
+        },
+        "stain": {
+          "status": "reported",
+          "value": "H&E",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:14",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "embedding_batch_size": 128,
+            "workers": 1,
+            "execution": "CUDA autocast"
+          },
+          "source_id": "hest_benchmark_config_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/bench_config/bench_config.yaml",
+          "locator": "bench_config.yaml:1-13; benchmark.py:196-207",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hest.hoptimus1report2025.lymph_idc.gene_expression",
+      "suite_id": "hest",
+      "dataset_id": "lymph_idc",
+      "protocol_id": "hest.hoptimus1report2025.lymph_idc.gene_expression",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.lymph_idc.gene_expression"
+          ],
+          "unit": "spatial_transcriptomics_spot"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "spatial_transcriptomics_spot",
+          "source_id": "task_source:hest.hoptimus1report2025.lymph_idc.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public HEST leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "reported",
+          "value": "free Hugging Face access with subset querying",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:36-40",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing continuous target measurement",
+          "source_id": "task_source:hest.hoptimus1report2025.lymph_idc.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.lymph_idc.gene_expression"
+          ]
+        },
+        "stain": {
+          "status": "reported",
+          "value": "H&E",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:14",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "embedding_batch_size": 128,
+            "workers": 1,
+            "execution": "CUDA autocast"
+          },
+          "source_id": "hest_benchmark_config_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/bench_config/bench_config.yaml",
+          "locator": "bench_config.yaml:1-13; benchmark.py:196-207",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hest.hoptimus1report2025.paad.gene_expression",
+      "suite_id": "hest",
+      "dataset_id": "paad",
+      "protocol_id": "hest.hoptimus1report2025.paad.gene_expression",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.paad.gene_expression"
+          ],
+          "unit": "spatial_transcriptomics_spot"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "spatial_transcriptomics_spot",
+          "source_id": "task_source:hest.hoptimus1report2025.paad.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public HEST leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "reported",
+          "value": "free Hugging Face access with subset querying",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:36-40",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing continuous target measurement",
+          "source_id": "task_source:hest.hoptimus1report2025.paad.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.paad.gene_expression"
+          ]
+        },
+        "stain": {
+          "status": "reported",
+          "value": "H&E",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:14",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "embedding_batch_size": 128,
+            "workers": 1,
+            "execution": "CUDA autocast"
+          },
+          "source_id": "hest_benchmark_config_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/bench_config/bench_config.yaml",
+          "locator": "bench_config.yaml:1-13; benchmark.py:196-207",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hest.hoptimus1report2025.prad.gene_expression",
+      "suite_id": "hest",
+      "dataset_id": "prad",
+      "protocol_id": "hest.hoptimus1report2025.prad.gene_expression",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.prad.gene_expression"
+          ],
+          "unit": "spatial_transcriptomics_spot"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "spatial_transcriptomics_spot",
+          "source_id": "task_source:hest.hoptimus1report2025.prad.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public HEST leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "reported",
+          "value": "free Hugging Face access with subset querying",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:36-40",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing continuous target measurement",
+          "source_id": "task_source:hest.hoptimus1report2025.prad.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.prad.gene_expression"
+          ]
+        },
+        "stain": {
+          "status": "reported",
+          "value": "H&E",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:14",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "embedding_batch_size": 128,
+            "workers": 1,
+            "execution": "CUDA autocast"
+          },
+          "source_id": "hest_benchmark_config_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/bench_config/bench_config.yaml",
+          "locator": "bench_config.yaml:1-13; benchmark.py:196-207",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hest.hoptimus1report2025.read.gene_expression",
+      "suite_id": "hest",
+      "dataset_id": "read",
+      "protocol_id": "hest.hoptimus1report2025.read.gene_expression",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.read.gene_expression"
+          ],
+          "unit": "spatial_transcriptomics_spot"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "spatial_transcriptomics_spot",
+          "source_id": "task_source:hest.hoptimus1report2025.read.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public HEST leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "reported",
+          "value": "free Hugging Face access with subset querying",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:36-40",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing continuous target measurement",
+          "source_id": "task_source:hest.hoptimus1report2025.read.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.read.gene_expression"
+          ]
+        },
+        "stain": {
+          "status": "reported",
+          "value": "H&E",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:14",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "embedding_batch_size": 128,
+            "workers": 1,
+            "execution": "CUDA autocast"
+          },
+          "source_id": "hest_benchmark_config_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/bench_config/bench_config.yaml",
+          "locator": "bench_config.yaml:1-13; benchmark.py:196-207",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hest.hoptimus1report2025.skcm.gene_expression",
+      "suite_id": "hest",
+      "dataset_id": "skcm",
+      "protocol_id": "hest.hoptimus1report2025.skcm.gene_expression",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.skcm.gene_expression"
+          ],
+          "unit": "spatial_transcriptomics_spot"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "spatial_transcriptomics_spot",
+          "source_id": "task_source:hest.hoptimus1report2025.skcm.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public HEST leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "reported",
+          "value": "free Hugging Face access with subset querying",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:36-40",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing continuous target measurement",
+          "source_id": "task_source:hest.hoptimus1report2025.skcm.gene_expression",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea",
+            "task_source:hest.hoptimus1report2025.skcm.gene_expression"
+          ]
+        },
+        "stain": {
+          "status": "reported",
+          "value": "H&E",
+          "source_id": "hest_readme_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "README.md:14",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "embedding_batch_size": 128,
+            "workers": 1,
+            "execution": "CUDA autocast"
+          },
+          "source_id": "hest_benchmark_config_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/bench_config/bench_config.yaml",
+          "locator": "bench_config.yaml:1-13; benchmark.py:196-207",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "hest_readme_3ddb5ea",
+            "hest_benchmark_config_3ddb5ea",
+            "hest_license_3ddb5ea"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-NC-SA-4.0",
+          "source_id": "hest_license_3ddb5ea",
+          "source_url": "https://github.com/mahmoodlab/HEST/blob/3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
       "evaluation_id": "hest.idc.gene_expression",
       "suite_id": "hest",
       "dataset_id": "idc",
@@ -7833,6 +9750,1464 @@
         "hardware_model",
         "observed_runtime",
         "sample_count"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "cptac_coad",
+      "protocol_id": "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "slide"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "slide",
+          "source_id": "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_3_aggregated_or_wsi",
+        "basis": "slide_or_case aggregation with supplied labels/outcomes",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count",
+        "software_license",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "wilds",
+      "protocol_id": "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "reported",
+          "value": 422394,
+          "source_id": "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "num_samples",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "unit": "image",
+          "notes": "Public tile benchmark leaf cell under the report-version protocol."
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "image",
+          "source_id": "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public tile benchmark leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_2_direct_labeled",
+        "basis": "image_or_patch + classification",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "software_license",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "crc",
+      "protocol_id": "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "reported",
+          "value": 107180,
+          "source_id": "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "num_samples",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "unit": "image",
+          "notes": "Public tile benchmark leaf cell under the report-version protocol."
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "image",
+          "source_id": "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public tile benchmark leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_2_direct_labeled",
+        "basis": "image_or_patch + classification",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "software_license",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.kras_crc.cptac_coad.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "cptac_coad",
+      "protocol_id": "hoptimus1report2025.kras_crc.cptac_coad.abmil_auc",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "slide"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "slide",
+          "source_id": "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.kras_crc.cptac_coad.abmil_auc"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_3_aggregated_or_wsi",
+        "basis": "slide_or_case aggregation with supplied labels/outcomes",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count",
+        "software_license",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "camelyon16_test",
+      "protocol_id": "hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ],
+          "unit": "slide"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "slide",
+          "source_id": "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_3_aggregated_or_wsi",
+        "basis": "slide_or_case aggregation with supplied labels/outcomes",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count",
+        "software_license",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.mhist.linear_probe_top1",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "mhist",
+      "protocol_id": "hoptimus1report2025.mhist.linear_probe_top1",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "reported",
+          "value": 3152,
+          "source_id": "task_source:hoptimus1report2025.mhist.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "num_samples",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "unit": "image",
+          "notes": "Public tile benchmark leaf cell under the report-version protocol."
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "image",
+          "source_id": "task_source:hoptimus1report2025.mhist.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public tile benchmark leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.mhist.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.mhist.linear_probe_top1"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_1_direct_small_labeled",
+        "basis": "image_or_patch + classification + directly reported total <= 10000",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "software_license",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.msi_crc.cptac_coad.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "cptac_coad",
+      "protocol_id": "hoptimus1report2025.msi_crc.cptac_coad.abmil_auc",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "slide"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "slide",
+          "source_id": "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.cptac_coad.abmil_auc"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_3_aggregated_or_wsi",
+        "basis": "slide_or_case aggregation with supplied labels/outcomes",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count",
+        "software_license",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.msi_crc.paip2020.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "paip2020",
+      "protocol_id": "hoptimus1report2025.msi_crc.paip2020.abmil_auc",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ],
+          "unit": "slide"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "slide",
+          "source_id": "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_crc.paip2020.abmil_auc"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_3_aggregated_or_wsi",
+        "basis": "slide_or_case aggregation with supplied labels/outcomes",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count",
+        "software_license",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "tcga_stad_test",
+      "protocol_id": "hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific count was reported in the retained task source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ],
+          "unit": "slide"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "slide",
+          "source_id": "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Dataset access is not established as a versioned downloadable public benchmark in the official report; retained audit-only."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_3_aggregated_or_wsi",
+        "basis": "slide_or_case aggregation with supplied labels/outcomes",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count",
+        "software_license",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+      "suite_id": "hoptimus1_report",
+      "dataset_id": "tcga_uniform",
+      "protocol_id": "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+      "task_source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "reported",
+          "value": 271710,
+          "source_id": "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "num_samples",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "unit": "image",
+          "notes": "Public tile benchmark leaf cell under the report-version protocol."
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "image",
+          "source_id": "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Public tile benchmark leaf cell under the report-version protocol."
+        },
+        "access": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No protocol-specific dataset access mechanism was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ]
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing categorical or ordinal target label",
+          "source_id": "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1",
+          "source_url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ]
+        },
+        "compute_configuration": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No executable compute configuration was reported for this protocol.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ]
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No benchmark software license was established in the audited report.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ]
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "task_source:hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_2_direct_labeled",
+        "basis": "image_or_patch + classification",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "access",
+        "acquisition_scale",
+        "annotation_hours",
+        "compute_configuration",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "software_license",
+        "stain"
       ],
       "numeric_cost_curve_eligible": false,
       "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"

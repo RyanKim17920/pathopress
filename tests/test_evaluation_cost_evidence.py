@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-import csv
 import importlib.util
 import json
 import subprocess
 import tempfile
 import unittest
 from pathlib import Path
+
+from pathopress.matrix import filter_matrix, load_scores, make_matrix
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,15 +31,12 @@ class EvaluationCostEvidenceTests(unittest.TestCase):
         cls.records = cls.payload["evaluations"]
 
     def test_registry_exactly_covers_retained_score_protocols(self) -> None:
-        with (ROOT / "data/scores.csv").open(newline="", encoding="utf-8") as handle:
-            expected = sorted({
-                row["evaluation_id"]
-                for row in csv.DictReader(handle)
-                if row["audit_status"] in {"verified", "parsed_primary_source"}
-            })
+        matrix, models, evaluation_ids = make_matrix(load_scores(ROOT / "data/scores.csv"))
+        _, _, expected = filter_matrix(matrix, models, evaluation_ids)
+        expected = sorted(expected)
         actual = [record["evaluation_id"] for record in self.records]
         self.assertEqual(actual, expected)
-        self.assertEqual(len(actual), 168)
+        self.assertEqual(len(actual), 187)
 
     def test_registry_and_figure_denominators_are_consistent(self) -> None:
         total = len(self.records)
@@ -116,8 +114,8 @@ class EvaluationCostEvidenceTests(unittest.TestCase):
 
     def test_pre_error_tiers_are_explicitly_not_cost_claims(self) -> None:
         tiers = self.payload["summary"]["pre_error_feasibility_tier_counts"]
-        self.assertEqual(sum(tiers.values()), 168)
-        self.assertEqual(tiers["tier_1_direct_small_labeled"], 4)
+        self.assertEqual(sum(tiers.values()), 187)
+        self.assertEqual(tiers["tier_1_direct_small_labeled"], 5)
         for record in self.records:
             definition = record["pre_error_feasibility"]
             self.assertIn("protocol metadata only", definition["derivation_timing"])

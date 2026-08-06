@@ -1,11 +1,11 @@
 # Evaluation cost evidence
 
-PathoPress now has a source-backed cost-evidence registry for all 168 retained
+PathoPress now has a source-backed cost-evidence registry for all 187 retained
 evaluation protocols. Its main conclusion is negative but important: a true
 numeric cost curve is **not currently supportable**. None of the retained
 protocol sources reports both observed evaluation runtime and dollar cost; in
 fact, observed runtime, hardware make/model, annotation hours, and dollar cost
-are each available for **0 of 168** protocols.
+are each available for **0 of 187** protocols.
 
 The machine-readable records are in
 [`data/evaluation_cost_evidence.json`](../data/evaluation_cost_evidence.json),
@@ -36,22 +36,23 @@ runtime, compute, or annotation labor.
 
 | Evidence field | Any sourced context | Evaluation-specific | Interpretation |
 |---|---:|---:|---|
-| Sample count | 143/168 | 143/168 | Exact task counts, split counts, or evaluated metadata rows |
-| Sample unit | 168/168 | 168/168 | Image, patch, slide, case, or spatial spot |
-| Access evidence | 168/168 | 31/168 | Family-level access notes are not blanket dataset-access claims |
-| Supplied label artifact | 168/168 | 168/168 | Label type only; not annotation labor |
-| Acquisition scale | 16/168 | 16/168 | THUNDER mpp and image dimensions; no magnification conversion |
-| Stain | 9/168 | 0/168 | HEST family explicitly states H&E |
-| Compute configuration | 168/168 | 15/168 | Mostly family/default context; EVA has task-specific configs |
-| Dataset license | 19/168 | 19/168 | Only when the benchmark source explicitly states it |
-| Hardware make/model | 0/168 | 0/168 | Missing |
-| Observed runtime | 0/168 | 0/168 | Missing |
-| Annotation hours | 0/168 | 0/168 | Missing |
-| Dollar cost | 0/168 | 0/168 | Missing |
+| Sample count | 147/187 | 147/187 | Exact task counts, split counts, or evaluated metadata rows |
+| Sample unit | 187/187 | 187/187 | Image, patch, slide, case, or spatial spot |
+| Access evidence | 177/187 | 31/187 | Family-level access notes are not blanket dataset-access claims |
+| Supplied label artifact | 187/187 | 187/187 | Label type only; not annotation labor |
+| Acquisition scale | 16/187 | 16/187 | THUNDER mpp and image dimensions; no magnification conversion |
+| Stain | 18/187 | 0/187 | HEST family explicitly states H&E |
+| Compute configuration | 177/187 | 15/187 | Mostly family/default context; EVA has task-specific configs |
+| Dataset license | 28/187 | 28/187 | Only when the benchmark source explicitly states it |
+| Hardware make/model | 0/187 | 0/187 | Missing |
+| Observed runtime | 0/187 | 0/187 | Missing |
+| Annotation hours | 0/187 | 0/187 | Missing |
+| Dollar cost | 0/187 | 0/187 | Missing |
 
 The exact sample-count coverage comprises all 122 retained Patho-Bench rows,
-all 16 THUNDER rows, and five of the six PathoROB rows. The remaining 25
-protocols (15 EVA, nine HEST, and one PathoROB protocol) do not have an
+all 16 THUNDER rows, five of the six PathoROB rows, and four of the ten
+H-Optimus-1 report rows. The remaining 40 protocols (15 EVA, 18 HEST, one
+PathoROB protocol, and six H-Optimus-1 report protocols) do not have an
 evaluation-specific count in the audited source. HEST's source does report
 1,276 paired samples and a corpus larger than
 2 TB, but those corpus-level values are not substituted for per-organ spatial
@@ -88,6 +89,11 @@ already attached to every retained protocol:
   metadata CSVs and OOD-exclusion code, while its
   [feature-extraction defaults](https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/pathorob/features/extract_features.py)
   remain configuration evidence.
+- The [H-Optimus-1 launch report](https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1)
+  is the primary source attached to ten retained report-table protocols. The
+  registry preserves its reported task counts where available but does not
+  infer a benchmark software license, access mechanism, or executable compute
+  configuration from the report.
 
 ## Pre-error feasibility strata
 
@@ -96,10 +102,10 @@ prediction error:
 
 | Stratum | Rule | Protocols |
 |---|---|---:|
-| 1: direct, small, labeled | Image/patch classification with a directly reported total ≤10,000 | 4 |
-| 2: direct, labeled | Other image/patch classification | 21 |
-| 3: aggregated or WSI | Case/slide classification, survival, or retrieval | 126 |
-| 4: specialized | Segmentation, spatial regression, robustness, or another specialized protocol | 17 |
+| 1: direct, small, labeled | Image/patch classification with a directly reported total ≤10,000 | 5 |
+| 2: direct, labeled | Other image/patch classification | 24 |
+| 3: aggregated or WSI | Case/slide classification, survival, or retrieval | 132 |
+| 4: specialized | Segmentation, spatial regression, robustness, or another specialized protocol | 26 |
 
 These are feasibility strata, not measured cost tiers. In particular, they do
 not silently turn sample count into a price or ignore access and licensing
@@ -134,7 +140,7 @@ python3 scripts/plot_evaluation_cost_evidence.py
 PYTHONPATH=src python3 -m unittest tests.test_evaluation_cost_evidence -v
 ```
 
-The tests verify exact 168-protocol coverage, source resolution for every
+The tests verify exact 187-protocol coverage, source resolution for every
 non-null fact, explicit missingness, raw THUNDER/PathoROB numbers, separation
 of software and dataset licenses, zero invented numeric costs, and byte-stable
 CSV plus semantically stable JSON regeneration.
