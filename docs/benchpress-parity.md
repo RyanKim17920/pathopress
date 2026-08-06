@@ -60,11 +60,11 @@ except the selected probes, the matrix is completed, and revealed probe cells
 remain exact in the denominator. PathoPress additionally reports hidden-only
 error, which excludes those zero-error revealed cells.
 
-On the current matrix, the zero-probe scorecard baseline is 1.935 MedAE.
-Greedy all-known rank-1 completion reaches 1.474879 at five probes and 1.270529
-at ten; hidden-only values are 1.637639 and 1.538607. The held-out-row protocol
+On the current matrix, the zero-probe scorecard baseline is 1.900 MedAE.
+Greedy all-known rank-1 completion reaches 1.397334 at five probes and 1.213706
+at ten; hidden-only values are 1.548536 and 1.493709. The held-out-row protocol
 selects probes on training models and evaluates each validation model in
-isolation; its hidden-cell MedAE is 2.126261 and 2.142613 at five and ten.
+isolation; its hidden-cell MedAE is 1.885364 and 2.008051 at five and ten.
 
 The compression runner now implements:
 
@@ -85,7 +85,7 @@ The upstream-shaped [pathology hero](../figures/pathopress_benchpress_hero_rank1
 reconstructs the four target examples and overall score-prediction panel; the
 [ranking panel](../figures/pathopress_benchpress_ranking_rank1.png) shows the
 random and greedy margin-5 trajectories. At `k=10`, unrestricted all-known
-pairwise accuracy is 0.8889, versus 0.3333 for the 25-task feasibility proxy.
+pairwise accuracy is 0.8780, versus 0.4000 for the 25-task feasibility proxy.
 The [dual-objective table](../outputs/probe_dual_objective_rank1.csv) also asks
 how well those scorecard-selected probes predict each model's average observed
 score. It reports that quantity separately and does not imply it was optimized.
@@ -97,15 +97,14 @@ pipeline proxy; several datasets are large, and it does not measure runtime,
 compute, tissue access, annotation labor, or licensing cost.
 
 The [exhaustive execution status](../experiments/probe_exhaustive_execution_status.json)
-binds the upstream-equivalent plans: `C(25,5)=53,130` for the pre-error proxy and
-`C(30,5)=142,506` after error-informed pruning. The operational runner matches
-the wave/shard residue, gzip chunk, raw-prediction, validated-resume, and strict
-merge contracts. Both searches are complete and scalar-certified: the five-probe
-MedAE optima are 1.485944 in the 25-task proxy and 1.427339 in the error-informed
-30-task universe. These are exact within those candidate sets, not globally over
-all 168 evaluations, and they optimize MedAE rather than the separate ranking
-objective. Legacy-v1 chunk configs did not bind the generator binary; the audit
-therefore establishes numerical backend compatibility, not generator attribution.
+is a historical audit bound to score hash `f581973b…` and the earlier 59×168
+matrix. On that snapshot, the upstream-equivalent `C(25,5)=53,130` and
+`C(30,5)=142,506` searches were complete and scalar-certified, with five-probe
+MedAE optima 1.485944 and 1.427339. They are candidate-bounded historical
+results, not results for the current 59×187 matrix; current-score exhaustive
+status is explicitly `not_run_for_current_scores`. Legacy-v1 chunk configs did
+not bind the generator binary, so the audit establishes numerical backend
+compatibility rather than generator attribution.
 
 ## Other parity layers
 
@@ -115,7 +114,7 @@ therefore establishes numerical backend compatibility, not generator attribution
 | Classical method grid | [343-shard manifest](../experiments/method_comparison/manifest.json), [results](../experiments/method_comparison/results.json) | Exact core algorithms; expanded pathology grid |
 | Complete-submatrix rank, thresholds, correlations, MDS | [structure manifest](../experiments/structure_analysis/manifest.json) | Adapted to protocol columns |
 | Score-probe search | [compression results](../experiments/probe_compression_rank1.json) | Adapted objectives and bounded search |
-| Ranking preservation | [ranking results](../experiments/ranking_preservation_rank1.json) | Matched margins/fractions; normalized-score interpretation |
+| Ranking preservation | [ranking results](../experiments/ranking_preservation_rank1.json) | Current compression-derived margin-5 all-known/random and held-out trajectories through `k=10` |
 | Confidence calibration | [OOF calibration](../experiments/confidence_calibration_rank1.json), [method](confidence-trust.md) | Exact upstream experiment contract; pathology rank/data adaptation |
 | Temporal deployment | [temporal results](../experiments/temporal_deployment_rank1.json) | Adapted, retrospective seven-model cohort |
 | Error factors | [factor results](../experiments/prediction_error_factors_rank1.json) | Adapted pathology metadata and intervention groups |

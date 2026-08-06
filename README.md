@@ -42,23 +42,24 @@ and retrospective interpolation is not prospective clinical validation.
   components. Structure artifacts must be regenerated before those statistics
   are applied to the current 187-column matrix.
 - With the all-known BenchPress denominator, greedy rank-1 scorecard MedAE is
-  1.474879 at five probes and 1.270529 at ten. Hidden-only values are 1.637639
-  and 1.538607. These are transductive reconstruction results, not estimates of
+  1.397334 at five probes and 1.213706 at ten. Hidden-only values are 1.548536
+  and 1.493709. These are transductive reconstruction results, not estimates of
   a new model's clinical utility.
-- The margin-5 ranking-aware greedy trajectory reaches 0.7308 pairwise accuracy
-  at five unrestricted probes and 0.8889 at ten. The 25-task pipeline-feasibility
-  proxy plateaus at 0.3333 all-known accuracy; it is not a measured cost set.
-  The exact MedAE searches are complete: the 25-task proxy optimum is 1.485944
-  and the error-informed 30-task optimum is 1.427339 at five probes. These are
-  exact only within their declared candidate universes and predate the current
-  187-column refresh.
+- The margin-5 ranking-aware greedy trajectory reaches 0.7321 pairwise accuracy
+  at five unrestricted probes and 0.8780 at ten. The 25-task pipeline-feasibility
+  proxy reaches 0.4000 at ten; it is not a measured cost set. The checked-in
+  exact MedAE searches (25-task optimum 1.485944; historical error-informed
+  30-task optimum 1.427339) are complete only for their bound 59×168 snapshot.
+  No exhaustive choose-five search has been run for the current 59×187 scores.
 - For the same scorecard-selected probes, median error in each model's average
   observed score falls from 1.7065 at one probe to 0.8471 at ten unrestricted
   probes and 0.7120 for the 25-task proxy. This is a separately evaluated
   usefulness measure, not the greedy selection objective.
-- OOF ranking preservation has median pairwise accuracy 0.7542/0.7939/0.8326/
-  0.9031 at normalized-score margins 0/1/2/5, and median top-set recovery
-  0.6944/0.7845/0.8098 at top fractions 10/20/30%.
+- The standalone ranking-preservation release is now derived from the current
+  compression artifact: at `k=10`, unrestricted all-known margin-5 pairwise
+  accuracy is 0.8780 versus a 0.6029 random-prefix median, and hidden-only
+  held-out-model accuracy is 0.7750. It supersedes the earlier-snapshot OOF
+  margin-sensitivity release.
 - The pinned BenchPress 3+12 confidence generator contract is reproduced with
   pathology rank 1, eight structural features, nested ridge/MLP risk selection,
   conformal intervals, and cross-fitted P(|error| <= 10 normalized points).
@@ -150,7 +151,7 @@ No build or download command performs deployment or upload.
 | Point estimates and rank | [imputations](outputs/imputations_rank1.csv), [bias-ALS CV](experiments/benchpress_style_results.json), [Soft-Impute sweep](experiments/soft_impute_rank_sweep_results.json) |
 | Full classical grid | [manifest](experiments/method_comparison/manifest.json), [results](experiments/method_comparison/results.json), [top table](experiments/method_comparison/top_methods.md), [grid figure](figures/method_comparison_grid.png) |
 | Structure | [structure manifest](experiments/structure_analysis/manifest.json), [stable rank](experiments/structure_analysis/stable_rank_results.json), [MDS coordinates](experiments/structure_analysis/mds_coordinates.csv) |
-| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [exact-search status](experiments/probe_exhaustive_execution_status.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [ranking curve](figures/pathopress_benchpress_ranking_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
+| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [historical exact-search status](experiments/probe_exhaustive_execution_status.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [ranking curve](figures/pathopress_benchpress_ranking_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
 | Cost and feasibility evidence | [source-backed registry](data/evaluation_cost_evidence.json), [flat audit](data/evaluation_cost_evidence.csv), [audit note](docs/evaluation-cost-evidence.md), [coverage figure](figures/evaluation_cost_evidence_coverage.png) |
 | Ranking and time | [ranking](experiments/ranking_preservation_rank1.json), [temporal](experiments/temporal_deployment_rank1.json) |
 | Trust and error factors | [confidence](experiments/confidence_calibration_rank1.json), [existing-row intervals](experiments/deployment_confidence_rank1.json), [unseen-model intervals](experiments/new_model_confidence_rank1.json), [new-model method](docs/new-model-confidence.md), [predictability](experiments/predictability_results_rank1.json), [factor analysis](experiments/prediction_error_factors_rank1.json) |
@@ -204,7 +205,7 @@ PYTHONPATH=src python3 experiments/run_temporal_deployment.py
 PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --workers 8
 python3 scripts/build_evaluation_cost_evidence.py
 python3 scripts/plot_evaluation_cost_evidence.py
-python3 scripts/plot_benchpress_style_hero.py
+python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive
 python3 scripts/plot_probe_dual_objective.py
 ```
 

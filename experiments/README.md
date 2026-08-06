@@ -141,7 +141,7 @@ PYTHONPATH=src:experiments python3 experiments/build_probe_exhaustive_summary.py
 PYTHONPATH=src python3 experiments/run_ranking_preservation.py
 python3 scripts/plot_probe_compression.py
 python3 scripts/plot_ranking_preservation.py
-python3 scripts/plot_benchpress_style_hero.py
+python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive
 python3 scripts/plot_probe_dual_objective.py
 ```
 
@@ -154,20 +154,20 @@ python3 scripts/plot_probe_dual_objective.py
   through the full `k=25` feasibility-proxy universe; held-out and ranking
   random controls remain at the upstream-comparable `k=10`. Per-cell all-known
   random predictions stream to a deterministic gzip CSV. The canonical artifact
-  contains all expanded curves, 10×10 random ranking baselines, 107,360 selected
-  prediction rows, and 1,114,850 random-prefix prediction rows.
+  contains all expanded curves, 10×10 random ranking baselines, 111,920 selected
+  prediction rows, and 1,167,100 random-prefix prediction rows.
   Its `curves.*.pairwise_margin=2` values are ancillary score-reconstruction
   diagnostics; only `ranking_aware` is the dedicated margin-5 ranking objective.
 - [Top-30 pruning](probe_pruning_rank1_top30.json) uses all ten source MedAE
   greedy contexts and exact normalized-rank aggregation.
-- [Exhaustive status](probe_exhaustive_execution_status.json) records completed
-  `C(25,5)=53,130` and `C(30,5)=142,506` MedAE searches. All 195,636 candidates
-  across 800 chunks were checked record-by-record, the merged top order was
-  reconstructed from raw chunks, and the leading candidates were recomputed
-  with the scalar reference implementation. The [compact result](probe_exhaustive_rank1.json)
-  contains the certified top lists. Exactness is limited to each declared
-  candidate universe; the 25-task universe remains a pre-error pipeline proxy,
-  not a measured-cost set.
+- [Exhaustive status](probe_exhaustive_execution_status.json) records historical
+  `C(25,5)=53,130` and `C(30,5)=142,506` MedAE searches bound to the earlier
+  59×168 score matrix. All 195,636 candidates across 800 chunks were validated
+  on that snapshot, and the [compact result](probe_exhaustive_rank1.json) retains
+  the certified historical top lists. No exhaustive choose-five search has been
+  run for the current 59×187 scores; the metadata says
+  `not_run_for_current_scores`. The 25-task universe remains a pre-error
+  pipeline proxy, not a measured-cost set.
 - The frozen legacy-v1 audit continues to bind
   `run_probe_exhaustive.py`, `fast_rank1.cpp`, and
   `probe_exhaustive_fast_equivalence.json` byte-for-byte. New native searches
@@ -200,15 +200,17 @@ python3 scripts/plot_probe_dual_objective.py
     --equivalence experiments/probe_exhaustive_fast_equivalence.json \
     "$LEGACY_CHEAP" "$LEGACY_PRUNED"
   ```
-- [Ranking](ranking_preservation_rank1.json) reports pairwise accuracy at
-  margins 0/1/2/5 and top-set recovery at 10/20/30% from OOF predictions.
+- [Ranking](ranking_preservation_rank1.json) is rebuilt directly from the current
+  compression artifact's dedicated margin-5 tracks. It reports unrestricted and
+  25-task all-known/random trajectories plus held-out-model validation through
+  `k=10`; unrestricted all-known k10 accuracy is 0.877976.
 
-All-known greedy MedAE is 1.474879/1.270529 at five/ten probes; hidden-only is
-1.637639/1.538607. The 25-task feasibility allowlist is an input/label pipeline
+All-known greedy MedAE is 1.397334/1.213706 at five/ten probes; hidden-only is
+1.548536/1.493709. The 25-task feasibility allowlist is an input/label pipeline
 proxy, not measured compute, access, or licensing cost. The faithful
-[BenchPress-style summary](benchpress_style_hero_summary.json) separates exact
-masking/search budgets, the pathology rank-1 adaptation, and the two completed
-candidate-bounded exact searches. The [dual-objective table](../outputs/probe_dual_objective_rank1.csv)
+[BenchPress-style summary](benchpress_style_hero_summary.json) records exact
+masking/search budgets, the pathology rank-1 adaptation, and that current-score
+exhaustive searches were not run. The [dual-objective table](../outputs/probe_dual_objective_rank1.csv)
 reports model-average prediction error without pretending it was optimized.
 
 ## Confidence, time, and error factors

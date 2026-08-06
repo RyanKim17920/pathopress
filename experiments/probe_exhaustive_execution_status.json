@@ -1,6 +1,7 @@
 {
   "schema_version": 3,
-  "status": "executed_complete_scalar_certified",
+  "status": "historical_complete_scalar_certified_not_current_scores",
+  "release_scope": "historical_59x168_snapshot_audit_only",
   "completed_utc": "2026-08-06",
   "upstream_reference_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
   "scientific_protocol": "all_known_probe_bruteforce_v1",
@@ -9,13 +10,22 @@
     "n_observed": 2027,
     "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c"
   },
+  "current_matrix": {
+    "shape": [
+      59,
+      187
+    ],
+    "n_observed": 2122,
+    "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
+    "exhaustive_status": "not_run_for_current_scores"
+  },
   "pathology_adaptation": "The pinned BenchPress masking, k=5, candidate counts, combination budgets, residue assignment, chunk/resume, all-observed denominator, and strict merge contracts are preserved. Pathology evaluation IDs and the independently selected rank-1 completion model replace the upstream source-domain matrix and rank-2 predictor.",
-  "globality_caveat": "Each result is exhaustive only inside its declared 25- or 30-task candidate universe; neither is a global exhaustive search over all 168 retained pathology evaluations.",
+  "globality_caveat": "These historical results are exhaustive only inside their declared 25- or 30-task candidate universes on the bound 59x168 snapshot; neither is global over that snapshot, and neither was rerun for the current 59x187 score matrix.",
   "legacy_backend_attribution_limitation": "Legacy-v1 chunk configs do not contain backend, library, or equivalence hashes; the posthoc audit cannot prove which binary generated them. Separately preserved shared-object bytes are hash-bound to hard-capped numerical equivalence evidence, establishing compatibility rather than generator attribution. Recorded compile/compiler fields are expected/current-host metadata, not recovered build provenance.",
   "evidence": {
     "compact_summary": {
       "path": "experiments/probe_exhaustive_rank1.json",
-      "sha256": "4b7d5a15d26d1bdc887eaaeaa2fd260193e0fdf797fe6d6e55dda61d9ff56972"
+      "sha256": "0a71a334c05ee15a4b68fdbd22cc6bcee51081faa810416895e0a1f455497a94"
     },
     "runner_parity": {
       "path": "experiments/probe_exhaustive_runner_parity.json",

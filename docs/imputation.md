@@ -118,16 +118,17 @@ clinical or future-domain coverage guarantee.
 
 ## Probe and ranking validation
 
-All-known greedy reconstruction gives MedAE 1.474879 with five probes and
-1.270529 with ten; hidden-only values are 1.637639 and 1.538607. Held-out-model
-hidden-cell MedAE is 2.126261 and 2.142613. Revealed probes contribute exact
+All-known greedy reconstruction gives MedAE 1.397334 with five probes and
+1.213706 with ten; hidden-only values are 1.548536 and 1.493709. Held-out-model
+hidden-cell MedAE is 1.885364 and 2.008051. Revealed probes contribute exact
 zero-error cells only to the all-known denominator, so these quantities must
 not be merged.
 
-OOF pairwise ordering accuracy increases from median 0.754237 at zero margin to
-0.903077 at a five-point margin. Median top-set recovery is 0.694444,
-0.784524, and 0.809762 for the top 10%, 20%, and 30%. A five-point difference
-still has different native meaning across endpoint types.
+The current standalone ranking release is derived from the dedicated margin-5
+probe-compression objective. At `k=10`, unrestricted all-known median pairwise
+accuracy is 0.877976 (random-prefix median 0.602858), and hidden-only held-out
+model accuracy is 0.775000. A five-point normalized difference still has
+different native meaning across endpoint types.
 
 Primary artifacts:
 

@@ -60,8 +60,8 @@ density. Its immutable contract is:
 | Correlation and MDS | [pairwise stats](../experiments/structure_analysis/pairwise_ols_stats.json), [coordinates](../experiments/structure_analysis/mds_coordinates.csv) | Pathology-adapted | Existing structure artifact predates the 187-column refresh and must be regenerated before reuse |
 | All-known and held-out score probes | [selection](../experiments/probe_selection_results_rank1.json), [compression](../experiments/probe_compression_rank1.json), [faithful hero](../figures/pathopress_benchpress_hero_rank1.png) | Pathology-adapted, **bounded** | Any/proxy-feasible, MedAE/MedAPE, random, held-out, and ranking tracks; current curves complete through `k=10` |
 | Feasibility-proxy probes | [feasibility data](../data/evaluation_feasibility.csv), [25-task allowlist](../data/low_friction_allowlist_v2_top25.json) | Pathology-adapted proxy; upstream candidate-count match | Exactly 25 image/patch classification protocols selected before errors; this describes pipeline shape, not measured cost |
-| Exhaustive subsets | [execution status](../experiments/probe_exhaustive_execution_status.json), [compact result](../experiments/probe_exhaustive_rank1.json), [integrity audit](../experiments/probe_exhaustive_integrity_manifest.json) | **Exact within declared candidate universes, complete** | All `C(25,5)=53,130` pre-error-proxy and `C(30,5)=142,506` error-informed combinations executed; 800 chunks and 195,636 records validated, merged ordering reconstructed, winners scalar-certified |
-| Ranking preservation | [JSON](../experiments/ranking_preservation_rank1.json), [CSVs](../outputs/ranking_preservation_pairwise_rank1.csv) | Pathology-adapted | Same 0/1/2/5 margins and 10/20/30% fractions; normalized margins have endpoint-specific native meanings |
+| Exhaustive subsets | [execution status](../experiments/probe_exhaustive_execution_status.json), [compact result](../experiments/probe_exhaustive_rank1.json), [integrity audit](../experiments/probe_exhaustive_integrity_manifest.json) | **Historical 59×168 snapshot only** | The bound `C(25,5)=53,130` and `C(30,5)=142,506` searches were complete and scalar-certified on score hash `f581973b…`; no exhaustive search has been run for the current 59×187 scores |
+| Ranking preservation | [JSON](../experiments/ranking_preservation_rank1.json), [CSVs](../outputs/ranking_preservation_pairwise_rank1.csv) | Pathology-adapted, current scores | Compact current compression-derived margin-5 all-known/random and held-out-model trajectories through `k=10`; unrestricted all-known k10 accuracy is 0.8780 |
 | Ranking-aware probes | [result](../experiments/probe_compression_rank1.json), [runner](../experiments/run_probe_compression.py), [figure](../figures/pathopress_benchpress_ranking_rank1.png) | Exact objective/budget contract; pathology rank adaptation | Completed margin-5 pairwise objective for any/25-task candidates through `k=10`, all-known plus 70/30 holdout and 10×10 random baseline |
 | Model-average probe usefulness | [table](../outputs/probe_dual_objective_rank1.csv), [figure](../figures/probe_dual_objective_rank1.png) | Pathology-adapted diagnostic | Reports median error in model-average observed score for scorecard-MedAE-selected sets; evaluation-only, not a second greedy objective |
 | Confidence calibration | [JSON](../experiments/confidence_calibration_rank1.json), [cells](../experiments/confidence_cells_rank1.csv), [method](confidence-trust.md) | Exact upstream experiment contract; pathology rank/data adaptation | Hash-aligned 3+12 generators, eight structural features, cross-fitted disagreement/support/hybrid risks, nested ridge/MLP selection, conformal diagnostics, and cross-fitted P(abs error <= 10) |
@@ -94,19 +94,21 @@ for product predictions rather than selecting a partial method on error alone.
 ## Tractability and cache boundaries
 
 Some upstream-style experiments are computationally combinatorial. PathoPress
-now preserves the upstream candidate-count and `k=5` contracts instead of
-silently narrowing them:
+preserves the upstream candidate-count and `k=5` runner contracts, but the
+checked-in exhaustive execution is historical rather than a current-score
+release result:
 
 - unrestricted and 25-candidate greedy selection stop at the upstream ten probes;
 - all ten MedAE greedy contexts generate the error-informed top-30 allowlist;
 - exact plans contain `C(25,5)=53,130` and `C(30,5)=142,506` combinations;
 - the runner has independently schedulable residues, gzip raw-prediction chunks,
   validated resume, and complete-by-default merge;
-- both searches completed: all 195,636 combinations were deep-validated and the
-  winners were recomputed with the scalar reference implementation. Their
-  exactness is candidate-bounded, not global over all 168 evaluations. The
-  25-task set is still a pipeline-feasibility proxy rather than measured cost,
-  and the exact objective is MedAE rather than ranking preservation.
+- on the bound 59×168 snapshot, all 195,636 combinations were deep-validated and
+  the winners were recomputed with the scalar reference implementation;
+- those exact results are candidate-bounded historical evidence, not global
+  over the old matrix and not rerun for the current 59×187 matrix. The 25-task
+  set is still a pipeline-feasibility proxy rather than measured cost, and the
+  exact objective is MedAE rather than ranking preservation.
 
 Large prediction-first caches are reproducibility intermediates, not compact
 release assets. `experiments/method_comparison/predictions/` contains 343 NPZ

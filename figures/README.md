@@ -21,7 +21,7 @@ The fixed research matrix is 59 models × 187 protocol-level evaluations with
 | [Soft-Impute rank sweep](soft_impute_rank_sweep.png) | raw/logit MedAE and MedAPE rank sensitivity | [`soft_impute_rank_sweep_results.json`](../experiments/soft_impute_rank_sweep_results.json) |
 | [Method grid](method_comparison_grid.png) | seven transforms × 12 classical method families | [`method_comparison/results.json`](../experiments/method_comparison/results.json) |
 | [Probe compression](probe_compression_curves_rank1.png) | any/proxy-feasible/random/held-out/pruned/ranking tracks | [`probe_compression_rank1.json`](../experiments/probe_compression_rank1.json) |
-| [Ranking preservation](ranking_preservation_rank1.png) | pairwise margins and top-fraction recovery | [`ranking_preservation_rank1.json`](../experiments/ranking_preservation_rank1.json) |
+| [Ranking preservation](ranking_preservation_rank1.png) | current margin-5 all-known/random and held-out probe trajectories | [`ranking_preservation_rank1.json`](../experiments/ranking_preservation_rank1.json) |
 | [Confidence calibration](confidence_calibration_rank1.png) | risk correlation, retention, strata, conformal intervals | [`confidence_calibration_rank1.json`](../experiments/confidence_calibration_rank1.json) |
 | [Unseen-model confidence](new_model_confidence_rank1.png) | empirical risk–coverage, coverage–width, suite coverage, abstention support | [`new_model_confidence_rank1.json`](../experiments/new_model_confidence_rank1.json) |
 | [Temporal deployment](temporal_deployment_rank1.png) | seven 2025 target releases with prior-only training | [`temporal_deployment_rank1.json`](../experiments/temporal_deployment_rank1.json) |
@@ -37,8 +37,8 @@ upstream denominators; provenance uses pathology-native primary-paper/report
 and official-repository categories.
 
 Matched rank-1 error is 3.134532 MAE / 1.609006 MedAE. All-known greedy
-scorecard MedAE is 1.474879 and 1.270529 at five and ten probes; hidden-only is
-1.637639 and 1.538607. These are normalized-score retrospective quantities,
+scorecard MedAE is 1.397334 and 1.213706 at five and ten probes; hidden-only is
+1.548536 and 1.493709. These are normalized-score retrospective quantities,
 not clinical accuracy or confidence intervals.
 
 ## Structure and probe diagnostics

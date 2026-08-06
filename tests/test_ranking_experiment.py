@@ -1,4 +1,8 @@
+from __future__ import annotations
+
+import copy
 import importlib.util
+import json
 import unittest
 from pathlib import Path
 
@@ -12,40 +16,58 @@ assert SPEC.loader is not None
 SPEC.loader.exec_module(EXPERIMENT)
 
 
-class RankingExperimentAggregationTests(unittest.TestCase):
-    def test_pairwise_pools_folds_per_evaluation_before_median(self) -> None:
-        common = {"margin": 0.0, "suite_id": "suite", "metric": "auc", "n_predicted_ties": 0}
-        rows = [
-            {**common, "evaluation_id": "a", "n_pairs": 2, "n_correct": 1},
-            {**common, "evaluation_id": "a", "n_pairs": 3, "n_correct": 3},
-            {**common, "evaluation_id": "b", "n_pairs": 4, "n_correct": 1},
-            {**common, "evaluation_id": "ignored", "n_pairs": 0, "n_correct": 0},
-        ]
+class RankingExperimentReleaseTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls) -> None:
+        cls.compression = json.loads(
+            (ROOT / "experiments/probe_compression_rank1.json").read_text()
+        )
 
-        summary, evaluations = EXPERIMENT.summarize_pairwise(rows)
+    def test_release_payload_uses_current_margin5_probe_trajectories(self) -> None:
+        payload, pairwise, top = EXPERIMENT.build_release_payload(
+            self.compression,
+            scores_sha256=self.compression["configuration"]["scores_sha256"],
+            compression_sha256="compression-hash",
+        )
 
-        by_id = {row["evaluation_id"]: row for row in evaluations}
-        self.assertAlmostEqual(by_id["a"]["accuracy"], 4 / 5)
-        self.assertAlmostEqual(by_id["b"]["accuracy"], 1 / 4)
-        self.assertEqual(summary["0.0"]["median_accuracy"], 0.525)
-        self.assertEqual(summary["0.0"]["pooled_accuracy"], 0.555556)
-        self.assertEqual(summary["0.0"]["n_groups"], 3)
+        self.assertEqual(payload["schema_version"], 2)
+        self.assertEqual(payload["metadata"]["ranking_margin"], 5.0)
+        self.assertIn("former 0/1/2/5-margin OOF", payload["metadata"]["historical_oof_artifact"])
+        self.assertAlmostEqual(
+            payload["summary"]["current_k10"]["any_candidate"]
+            ["all_known_greedy"]["pairwise_median_accuracy"],
+            0.8779761904761905,
+        )
+        self.assertEqual(len(pairwise), 260)
+        self.assertEqual(len(top), 260)
+        self.assertEqual(
+            {row["protocol"] for row in pairwise},
+            {"all_known", "heldout_non_probe", "heldout_with_probe_zero"},
+        )
+        self.assertEqual({float(row["margin"]) for row in pairwise}, {5.0})
+        self.assertEqual({float(row["top_fraction"]) for row in top}, {0.2})
 
-    def test_top_recovery_pools_overlap_and_k_per_evaluation(self) -> None:
-        common = {"top_fraction": 0.1, "suite_id": "suite", "metric": "auc"}
-        rows = [
-            {**common, "evaluation_id": "a", "k": 1, "overlap": 1},
-            {**common, "evaluation_id": "a", "k": 2, "overlap": 1},
-            {**common, "evaluation_id": "b", "k": 4, "overlap": 1},
-        ]
+    def test_current_compression_validation_fails_closed_on_score_drift(self) -> None:
+        payload = copy.deepcopy(self.compression)
+        configuration = payload["configuration"]
+        evaluations = payload["curves"]["any_candidate"]["candidate_ids"]
+        with self.assertRaisesRegex(ValueError, "score hash"):
+            EXPERIMENT._validate_current_compression(
+                payload,
+                "different",
+                configuration["matrix_shape"],
+                evaluations,
+            )
 
-        summary, evaluations = EXPERIMENT.summarize_top(rows)
-
-        by_id = {row["evaluation_id"]: row for row in evaluations}
-        self.assertAlmostEqual(by_id["a"]["recovery"], 2 / 3)
-        self.assertAlmostEqual(by_id["b"]["recovery"], 1 / 4)
-        self.assertEqual(summary["0.1"]["median_recovery"], 0.458333)
-        self.assertEqual(summary["0.1"]["pooled_recovery"], 0.428571)
+    def test_current_compression_validation_accepts_complete_current_contract(self) -> None:
+        configuration = self.compression["configuration"]
+        evaluations = self.compression["curves"]["any_candidate"]["candidate_ids"]
+        EXPERIMENT._validate_current_compression(
+            self.compression,
+            configuration["scores_sha256"],
+            configuration["matrix_shape"],
+            evaluations,
+        )
 
 
 if __name__ == "__main__":

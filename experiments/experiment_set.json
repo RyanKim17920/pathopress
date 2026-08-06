@@ -61,8 +61,12 @@
     },
     {
       "name": "probe_exhaustive",
-      "command": "python3 experiments/validate_probe_exhaustive_chunks.py && python3 experiments/validate_probe_exhaustive_merged.py && python3 experiments/validate_probe_exhaustive_top.py && python3 experiments/build_probe_exhaustive_summary.py",
-      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v2_top25.json", "data/error_informed_probe_allowlist_rank1_top30.json", "experiments/probe_pruning_rank1_top30.json", "experiments/run_probe_exhaustive.py", "experiments/fast_rank1.cpp", "experiments/run_probe_exhaustive_v2.py", "experiments/fast_rank1_v2.cpp", "experiments/verify_fast_rank1.py", "experiments/validate_probe_exhaustive_chunks.py", "experiments/validate_probe_exhaustive_merged.py", "experiments/validate_probe_exhaustive_top.py", "experiments/build_probe_exhaustive_summary.py", "src/pathopress"],
+      "command": "python3 experiments/validate_probe_exhaustive_chunks.py --runner-version legacy && python3 experiments/validate_probe_exhaustive_merged.py --runner-version legacy && python3 experiments/validate_probe_exhaustive_top.py --runner-version legacy",
+      "release_status": "historical_59x168_snapshot_audit_only",
+      "current_scores_exhaustive_status": "not_run_for_current_scores",
+      "historical_scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
+      "current_scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
+      "inputs": ["experiments/run_probe_exhaustive.py", "experiments/fast_rank1.cpp", "experiments/probe_exhaustive_fast_equivalence.json", "experiments/validate_probe_exhaustive_chunks.py", "experiments/validate_probe_exhaustive_merged.py", "experiments/validate_probe_exhaustive_top.py", "src/pathopress"],
       "dependencies": [
         {"path": "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/shards", "role": "ignored_raw_cache", "config": {"expected_chunks": 240, "expected_records": 53130, "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c", "config_sha256": "42974b7b5d21f7beb51fdaba491fb4d5f34d85762271935d5bcf84e31efa75d8"}},
         {"path": "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/shards", "role": "ignored_raw_cache", "config": {"expected_chunks": 560, "expected_records": 142506, "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c", "config_sha256": "fd40559e91ee1b060c2d27ac1067818f127ba1ebd20fa580d09185366a879c3b"}}
@@ -73,7 +77,7 @@
     {
       "name": "ranking_preservation",
       "command": "python3 experiments/run_ranking_preservation.py && python3 scripts/plot_ranking_preservation.py",
-      "inputs": ["data/scores.csv", "experiments/benchpress_style_predictions_rank1.csv", "experiments/benchpress_style_results.json", "experiments/run_ranking_preservation.py", "scripts/plot_ranking_preservation.py", "src/pathopress"],
+      "inputs": ["data/scores.csv", "experiments/probe_compression_rank1.json", "experiments/run_ranking_preservation.py", "scripts/plot_ranking_preservation.py", "src/pathopress"],
       "artifacts": ["experiments/ranking_preservation_rank1.json", "outputs/ranking_preservation_pairwise_rank1.csv", "outputs/ranking_preservation_top_fraction_rank1.csv", "figures/ranking_preservation_rank1.png", "figures/ranking_preservation_rank1.pdf"],
       "external_calls": false
     },
@@ -129,8 +133,8 @@
     },
     {
       "name": "publication_hero",
-      "command": "python3 scripts/plot_publication_hero.py && python3 scripts/plot_benchpress_style_hero.py && python3 scripts/plot_probe_dual_objective.py",
-      "inputs": ["data/scores.csv", "experiments/probe_compression_rank1.json", "experiments/probe_exhaustive_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "scripts/plot_publication_hero.py", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py", "src/pathopress"],
+      "command": "python3 scripts/plot_publication_hero.py && python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive && python3 scripts/plot_probe_dual_objective.py",
+      "inputs": ["data/scores.csv", "experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "scripts/plot_publication_hero.py", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py", "src/pathopress"],
       "artifacts": ["experiments/publication_hero_summary.json", "experiments/benchpress_style_hero_summary.json", "outputs/probe_dual_objective_rank1.csv", "figures/pathopress_hero_rank1.png", "figures/pathopress_hero_rank1.pdf", "figures/pathopress_benchpress_hero_rank1.png", "figures/pathopress_benchpress_hero_rank1.pdf", "figures/pathopress_benchpress_ranking_rank1.png", "figures/pathopress_benchpress_ranking_rank1.pdf", "figures/probe_dual_objective_rank1.png", "figures/probe_dual_objective_rank1.pdf"],
       "external_calls": false
     },
