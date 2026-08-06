@@ -1,0 +1,289 @@
+{
+  "adaptations": [
+    "mutable gpt-5.5 alias replaced by an explicit immutable snapshot"
+  ],
+  "additional_acknowledgement_required": null,
+  "api_calls_made": 0,
+  "credential_persisted": false,
+  "eligible_after_all_gates": true,
+  "exact_upstream_request_body_contract": false,
+  "execution_settings_sha256": "3c712d3f6319f9cce4b2b83121becb7c2a3ac849399cdc6ac522c5efd20b4d1a",
+  "kind": "pathopress_openai_batch_preflight",
+  "manifest_sha256": "c915ab7f76c23836ba1b014af7b3d7d0e817e353f8724b2613fe483041a6afdc",
+  "materialized_transport_plan_sha256": "8adaa43829a607e87609a197c112c4163c812d151e357321085af48066e3dca2",
+  "official_docs": {
+    "batch": "https://platform.openai.com/docs/api-reference/batch",
+    "chat": "https://platform.openai.com/docs/api-reference/chat/create",
+    "files": "https://platform.openai.com/docs/api-reference/files"
+  },
+  "pack": {
+    "canonical_uncompressed_sha256": "e431cfc0fc0a14610fd26c0818ae1cadb6849c2c339db2996d01a7988488c574",
+    "config_sha256": "ac7a7cb84dfe961fb50996ea6ae641b1829423aa8a02881b707688537d5e3e4d",
+    "pack_sha256": "186bac8c081d63e08f1d713dd6c5a4083c6bd2888bff592b1c16f7b5fed236c5",
+    "request_count": 1990,
+    "request_ids_sha256": "298225fa860dbdf97fd74a9d9edfcb0e04463f3502484eb1696cbd78d7018318",
+    "shard_count": 20
+  },
+  "profile": "chat_snapshot",
+  "schema_version": 1,
+  "settings_receipt": {
+    "api_body_settings_sha256": "08fc8ecd6499b1f305843e58097c7314aa193c91fb8a100ce2508944b426a2d0",
+    "completion_window": "24h",
+    "endpoint": "/v1/chat/completions",
+    "execution_settings_sha256": "3c712d3f6319f9cce4b2b83121becb7c2a3ac849399cdc6ac522c5efd20b4d1a",
+    "model_sha256": "6ccb244fb82416a042c92a68e12f3d936ca2dde6230638d31b4110d81eceaf44",
+    "profile": "chat_snapshot"
+  },
+  "settings_receipt_sha256": "68f3db69f1c277170d4886f95df6b0496f54e22bd9492affed9bacfd206864c8",
+  "shards": [
+    {
+      "bytes": 4644777,
+      "first_custom_id": "92257c826727678a2e4ba155",
+      "input_path": "batch-0000.jsonl",
+      "input_sha256": "982c53d35fb018422fc06d8ffa4e767c32f2f97e0351a0abc43e3cbe269e1d91",
+      "last_custom_id": "0ed19c45e81cfd21fda188de",
+      "request_count": 100,
+      "shard_index": 0,
+      "source_shard": "requests-0000.jsonl.gz",
+      "source_shard_sha256": "e853755b69046448431c92947655a0777890bf3a9f88011403ef4de2660314ed"
+    },
+    {
+      "bytes": 3157677,
+      "first_custom_id": "ea87469dd42e668b8cdc8a20",
+      "input_path": "batch-0001.jsonl",
+      "input_sha256": "2abdc2550da6d8c41fb4d10ff0dfa5e95a3f07a0669f0296c410796ae7d944bc",
+      "last_custom_id": "4cc2ff67d6ff05cd99836924",
+      "request_count": 100,
+      "shard_index": 1,
+      "source_shard": "requests-0001.jsonl.gz",
+      "source_shard_sha256": "f1652c5d171739da0c21beffc2940dce6d074e0746ed03328fbc577bbe2622ee"
+    },
+    {
+      "bytes": 4593424,
+      "first_custom_id": "e87ebe38ee78b50e4aacd7c4",
+      "input_path": "batch-0002.jsonl",
+      "input_sha256": "e41d6932a3161027dbccfdda487402294a861af387e42560345e3e630066cad6",
+      "last_custom_id": "853c538244eab36529fc80af",
+      "request_count": 100,
+      "shard_index": 2,
+      "source_shard": "requests-0002.jsonl.gz",
+      "source_shard_sha256": "f8bc68bf18eab78074f61fc47b0d3a918971e20cbe01ce247f19d82800191d75"
+    },
+    {
+      "bytes": 3240110,
+      "first_custom_id": "586c22962faa1957cdf5fda9",
+      "input_path": "batch-0003.jsonl",
+      "input_sha256": "8f66fe882c366809e912b8b60166daffc3b10e733a1e2e7e6fd4e232191be30b",
+      "last_custom_id": "eef9d83c18ad00651a59cd52",
+      "request_count": 100,
+      "shard_index": 3,
+      "source_shard": "requests-0003.jsonl.gz",
+      "source_shard_sha256": "9f9c47f30a6bb91abfd414fad633691edb753dcc8237bd0286886cd6e5187078"
+    },
+    {
+      "bytes": 4555421,
+      "first_custom_id": "83a534e5f2d5db3389a4872d",
+      "input_path": "batch-0004.jsonl",
+      "input_sha256": "95610a6364649e4c3784a12aa6b5b3104b7d5c4316ed24b4f6771dd57f8a7378",
+      "last_custom_id": "1a2b85e2b9d6d1a7c8d1232f",
+      "request_count": 100,
+      "shard_index": 4,
+      "source_shard": "requests-0004.jsonl.gz",
+      "source_shard_sha256": "ba54d7af79ba7a2ee11fc027600881784397e835fa5bb2e629a06e5523c5290a"
+    },
+    {
+      "bytes": 3274333,
+      "first_custom_id": "2e030b0539f26f31b37b906e",
+      "input_path": "batch-0005.jsonl",
+      "input_sha256": "494d6f009ed48625887d01a365fb7153beda554f1dd9cb2bef11192814eeff92",
+      "last_custom_id": "8da57268b99c267557c12f4b",
+      "request_count": 100,
+      "shard_index": 5,
+      "source_shard": "requests-0005.jsonl.gz",
+      "source_shard_sha256": "0e5250d2166e887778f51ae980f66347b298191d4ead5a6cba4040f402fde5fd"
+    },
+    {
+      "bytes": 4540956,
+      "first_custom_id": "9c10f314a05ab699076a7beb",
+      "input_path": "batch-0006.jsonl",
+      "input_sha256": "dccf6c84888c86fcb4ecef95ce7334a7fa1ad0a3c7e6fb6dd076880f5a0ef4eb",
+      "last_custom_id": "01d218ca446dc8d1464f955a",
+      "request_count": 100,
+      "shard_index": 6,
+      "source_shard": "requests-0006.jsonl.gz",
+      "source_shard_sha256": "03ff842df173803b51de0cfc2e45a640fa1917b2edc934bb894da840291985c7"
+    },
+    {
+      "bytes": 3312882,
+      "first_custom_id": "2db17521c8e6be6ddce6348a",
+      "input_path": "batch-0007.jsonl",
+      "input_sha256": "303c51118f3fbb9b64c37d8e6c900065339bdddf4869d66e08c4f1c9214253ed",
+      "last_custom_id": "2ca61bb65f5d287477261248",
+      "request_count": 100,
+      "shard_index": 7,
+      "source_shard": "requests-0007.jsonl.gz",
+      "source_shard_sha256": "f4045e2612e1a27302efcd7e79297281bd9bf8d10225b98b973df3bf49eb8813"
+    },
+    {
+      "bytes": 4485574,
+      "first_custom_id": "b106d72bfa0766ba7be34183",
+      "input_path": "batch-0008.jsonl",
+      "input_sha256": "4f7b4c7589e77468b99644ee01d0183bf96c63a78375870aca409e4a37770c26",
+      "last_custom_id": "bc96a6eade69339e1b51b55e",
+      "request_count": 100,
+      "shard_index": 8,
+      "source_shard": "requests-0008.jsonl.gz",
+      "source_shard_sha256": "2a0245ad3505c15895666bab9fda014b094153e72361d0cf59fbe4b7ad1ed1fc"
+    },
+    {
+      "bytes": 3373798,
+      "first_custom_id": "e9b567f05a92eea8ed5ecf0f",
+      "input_path": "batch-0009.jsonl",
+      "input_sha256": "ecce2aadd959520a397971153451e303fc321342e0bb5ef009225669b57fe3a8",
+      "last_custom_id": "72b99477d7e34da4611d93cf",
+      "request_count": 100,
+      "shard_index": 9,
+      "source_shard": "requests-0009.jsonl.gz",
+      "source_shard_sha256": "f827f0d7e5f469de4d901870864fbe0a011b86537b072d3ef45e44e0d03fa17d"
+    },
+    {
+      "bytes": 4409433,
+      "first_custom_id": "2540bd64041f1fd90a25920c",
+      "input_path": "batch-0010.jsonl",
+      "input_sha256": "63f4aaedb5d2432d98dc4f531f9a27da790c713b9660d2746d89d28474fab4de",
+      "last_custom_id": "c28b6a38c04c66d4f78de097",
+      "request_count": 100,
+      "shard_index": 10,
+      "source_shard": "requests-0010.jsonl.gz",
+      "source_shard_sha256": "233d3117dd78b8708aeff173687d12b04565e109c585fb1c0814284ad21c8632"
+    },
+    {
+      "bytes": 3433905,
+      "first_custom_id": "7490ad28899f01b7dc52f122",
+      "input_path": "batch-0011.jsonl",
+      "input_sha256": "f39b9c4543869c3d7a563d57070d05078713e972eced5e353366885037bdc377",
+      "last_custom_id": "2b18fa472803fc984cdb2d92",
+      "request_count": 100,
+      "shard_index": 11,
+      "source_shard": "requests-0011.jsonl.gz",
+      "source_shard_sha256": "7d9e89f37f8d361bcc8575ec9754109be4fb4bed8454cec4a3e5a3db44170d67"
+    },
+    {
+      "bytes": 4368020,
+      "first_custom_id": "e88edb4c5209ec4b206c8ff6",
+      "input_path": "batch-0012.jsonl",
+      "input_sha256": "7aca021cb6a667255174f763fd7c92693e4ee18afe8ab13fc018244cf5e2a133",
+      "last_custom_id": "165134ed01e3f536bcd5dada",
+      "request_count": 100,
+      "shard_index": 12,
+      "source_shard": "requests-0012.jsonl.gz",
+      "source_shard_sha256": "b19405c9bcbf8ff99c8d3973e163f1d12c0564aa87dc8fd7049788ab157ffb69"
+    },
+    {
+      "bytes": 3444890,
+      "first_custom_id": "1bb5695a4374e0334b5c6b6c",
+      "input_path": "batch-0013.jsonl",
+      "input_sha256": "9fd7d772d258dd30e13c79e368813e5c1af5c97e9f34e687a12b206ee219617a",
+      "last_custom_id": "0e3bfc4ff2e5ace2d83db00b",
+      "request_count": 100,
+      "shard_index": 13,
+      "source_shard": "requests-0013.jsonl.gz",
+      "source_shard_sha256": "7f32322812ea191b0ba2442f2b0147145eb23307aec19fd3ad2dd2a3acfd2b93"
+    },
+    {
+      "bytes": 4351183,
+      "first_custom_id": "474a3ba39f13d2bbbb68d29c",
+      "input_path": "batch-0014.jsonl",
+      "input_sha256": "8a36f8f8be02b5c1a8a8e60f3d1b33b9df1c8003d22cb1573ae54c8b2d0f82a0",
+      "last_custom_id": "b3f42c76bc5fb6aca677e82e",
+      "request_count": 100,
+      "shard_index": 14,
+      "source_shard": "requests-0014.jsonl.gz",
+      "source_shard_sha256": "421fff21b872be431ca24f5f330a16490f5185236839535bfcb1ac0ad0a3777c"
+    },
+    {
+      "bytes": 3415538,
+      "first_custom_id": "4cd306ee3522b463d2a72d17",
+      "input_path": "batch-0015.jsonl",
+      "input_sha256": "cbad13f2622d7ae7ef610ad39d01837401a28b210790a79d6f42e3672a5ba4cd",
+      "last_custom_id": "3e8acde9e71a7a711a4bbd22",
+      "request_count": 100,
+      "shard_index": 15,
+      "source_shard": "requests-0015.jsonl.gz",
+      "source_shard_sha256": "bc67375ea38719e1eafebccc81e225f8851a5c586edf0404398f8e827c83c69d"
+    },
+    {
+      "bytes": 4339972,
+      "first_custom_id": "f1c14603e69bac5af7f5f514",
+      "input_path": "batch-0016.jsonl",
+      "input_sha256": "3169e16c9396f7fa80d00cd1eb4c05e2000ad05c59c45f6f4c96ffac88f26daa",
+      "last_custom_id": "a01cc5f3273654b505927709",
+      "request_count": 100,
+      "shard_index": 16,
+      "source_shard": "requests-0016.jsonl.gz",
+      "source_shard_sha256": "f6748500d1b6641f0a413b4e4ac21de60f9b9ee01cecd8f2497f00d14866702b"
+    },
+    {
+      "bytes": 3456438,
+      "first_custom_id": "08472ca18ff9f021ba14e520",
+      "input_path": "batch-0017.jsonl",
+      "input_sha256": "50bae9875ea635140f28498f9b40e9ac3ffcbf6568da5c42973d12bdced33f82",
+      "last_custom_id": "8d8db0893c4c849a72bf9ae2",
+      "request_count": 100,
+      "shard_index": 17,
+      "source_shard": "requests-0017.jsonl.gz",
+      "source_shard_sha256": "f53c2e76d6e20bde7ce7ae278d72c89a93591216cd663d5751fc3f9dc1e16950"
+    },
+    {
+      "bytes": 4321983,
+      "first_custom_id": "011616d270b78eb64d7ab2e9",
+      "input_path": "batch-0018.jsonl",
+      "input_sha256": "5a07e2e4f59ed31d2cf809969ce49121d61c436993514985c2bb19e4c1063d27",
+      "last_custom_id": "62e4191d7e791838e32caf8e",
+      "request_count": 100,
+      "shard_index": 18,
+      "source_shard": "requests-0018.jsonl.gz",
+      "source_shard_sha256": "fab9155519f69ffc2adc644a544822406f40b95e5e1febd2f07e36b61c9c8083"
+    },
+    {
+      "bytes": 2943084,
+      "first_custom_id": "2d77a81806e32f776c75140b",
+      "input_path": "batch-0019.jsonl",
+      "input_sha256": "a377e71516d9a836458884a99822a35927176084551e4cd33cfbbf8b28319047",
+      "last_custom_id": "141640ef397bd8624163f82f",
+      "request_count": 90,
+      "shard_index": 19,
+      "source_shard": "requests-0019.jsonl.gz",
+      "source_shard_sha256": "53fa88edfb6960d356c8c28b9055194756a48e067173720011a23528b7f86033"
+    }
+  ],
+  "status": "materialized_no_api_call",
+  "submission_gates": [
+    "--submit",
+    "--authorize-paid-run",
+    "OPENAI_API_KEY",
+    "--acknowledge-estimated-cost-uncertainty"
+  ],
+  "transport_adaptations": [
+    "asynchronous 24-hour OpenAI Batch transport replaces upstream online Chat Completions"
+  ],
+  "transport_profile": {
+    "completion_window": "24h",
+    "expected_input_file_count": 20,
+    "limits": {
+      "max_batch_file_bytes": 200000000,
+      "max_requests_per_batch_file": 50000
+    },
+    "pricing_rate_key": "batch",
+    "protocol_compatibility": "batch_transport_adaptation_not_upstream_exact",
+    "schema_version": 1,
+    "source": {
+      "limits_note": "Request-count and file-byte limits are transport limits; enqueued-token capacity is model-specific and intentionally unset.",
+      "retrieved_at": "2026-08-06",
+      "title": "OpenAI Batch API reference",
+      "url": "https://platform.openai.com/docs/api-reference/batch"
+    },
+    "transport_kind": "openai_batch"
+  },
+  "transport_profile_sha256": "71f6bbeb94d7faa223f4f22325c584287a00c6fae561e77085698b38670f3ee1"
+}

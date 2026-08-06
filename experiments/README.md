@@ -190,6 +190,7 @@ tables, and figures remain tracked.
 
 ```bash
 PYTHONPATH=src python3 experiments/run_llm_baseline.py prepare --scope full
+PYTHONPATH=src python3 experiments/run_llm_baseline.py preflight --scope full
 PYTHONPATH=src python3 experiments/run_llm_baseline.py all-mock --scope smoke
 # After an authorized external provider creates raw provider-neutral JSONL:
 PYTHONPATH=src python3 experiments/run_llm_baseline.py import-real --scope full \
@@ -200,8 +201,17 @@ The full pack contains 1,990 requests and 81,080 target predictions across all
 30 folds: named/blind full-matrix zero-shot and named/blind five-shot. It is
 stored as 20 deterministic gzip JSONL shards with compressed and canonical
 uncompressed hashes. The separate four-request [smoke fixture](llm_baseline_smoke/)
-is explicitly `headline_eligible=false`. The runner implements no provider
-client and reads no credentials; external cost remains unknown. See the
+is explicitly `headline_eligible=false`. The provider-neutral runner implements
+no provider client and reads no credentials. The separate dry-run-first
+[`run_openai_batch.py`](run_openai_batch.py) adapter can materialize the fixed
+20-file Chat Batch payload locally; API writes require an approved capacity/cost
+contract plus `--submit`, `--authorize-paid-run`,
+`--acknowledge-estimated-cost-uncertainty`, and `OPENAI_API_KEY`, which is never
+persisted. The cost limit is an estimated planning ceiling, not a
+provider-enforced billing cap. The hash-bound offline preflight reports
+best/base/worst token envelopes, exact transport sizes, explicit-limit checks,
+and a human approval gate; no cost is computed without an exactly matching
+explicit pricing profile. External billed cost remains unknown. See the
 [protocol and import contract](../docs/llm-baseline.md).
 
 ## Publication and product artifacts

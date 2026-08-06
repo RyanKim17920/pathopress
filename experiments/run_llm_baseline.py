@@ -23,6 +23,7 @@ sys.path.insert(0, str(ROOT / "src"))
 from pathopress.artifacts import load_fold_artifact, sha256_file  # noqa: E402
 from pathopress.llm_baseline import (  # noqa: E402
     CONDITIONS,
+    authorize_external_responses,
     build_request,
     deterministic_mock_response,
     evaluate_cached_responses,
@@ -32,6 +33,14 @@ from pathopress.llm_baseline import (  # noqa: E402
     validate_config,
     validate_request,
     validate_response,
+)
+from pathopress.llm_preflight import (  # noqa: E402
+    approve_execution_manifest,
+    build_approved_execution_contract,
+    build_preflight,
+    load_request_pack,
+    verify_pack_index,
+    write_request_estimates,
 )
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
 from pathopress.publication import read_csv  # noqa: E402
@@ -216,17 +225,33 @@ def _prepare(args: argparse.Namespace) -> tuple[dict[str, Any], list[dict[str, A
             "schema_version": {"const": 2}, "request_id": {"type": "string"},
             "backend_kind": {"enum": ["deterministic_mock", "openai_compatible", "anthropic_compatible", "local_model"]},
             "provider": {"type": "string"}, "model": {"type": "string"},
+            "status": {"type": "string"},
             "headline_eligible": {"type": "boolean"}, "response_text": {"type": "string"},
             "response_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
-            "execution_metadata_hashes": {"type": "object"}
-        }
+            "execution_metadata_hashes": {"type": "object"},
+            "execution_approval_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+            "execution_preflight_sha256": {"type": "string", "minLength": 64, "maxLength": 64},
+            "execution_lineage_sha256": {"type": "string", "minLength": 64, "maxLength": 64}
+        },
+        "allOf": [{
+            "if": {
+                "properties": {
+                    "status": {"const": "complete_validated_real"},
+                    "headline_eligible": {"const": True}
+                },
+                "required": ["status", "headline_eligible"]
+            },
+            "then": {
+                "required": ["execution_metadata_hashes", "execution_approval_sha256", "execution_preflight_sha256", "execution_lineage_sha256"]
+            }
+        }]
     })
     _write_json(args.raw_response_schema, {
         "$schema": "https://json-schema.org/draft/2020-12/schema",
         "title": "PathoPress raw provider-neutral response JSONL record",
         "type": "object",
         "additionalProperties": False,
-        "required": ["request_id", "backend_kind", "provider", "model", "response_text"],
+        "required": ["request_id", "backend_kind", "provider", "model", "response_text", "execution_metadata"],
         "properties": {
             "request_id": {"type": "string"},
             "backend_kind": {"enum": ["openai_compatible", "anthropic_compatible", "local_model"]},
@@ -238,6 +263,7 @@ def _prepare(args: argparse.Namespace) -> tuple[dict[str, Any], list[dict[str, A
             "execution_metadata": {
                 "type": "object",
                 "additionalProperties": False,
+                "required": ["model_version", "settings", "receipt"],
                 "properties": {
                     "model_version": {"type": "string", "minLength": 1},
                     "settings": {"type": "object"},
@@ -338,7 +364,8 @@ def _mock(args: argparse.Namespace) -> list[dict[str, Any]]:
 
 
 def _merge(
-    args: argparse.Namespace, response_path: Path, *, require_real: bool = False
+    args: argparse.Namespace, response_path: Path, *, require_real: bool = False,
+    execution_contract: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     matrix, _, _, _, _ = _load_context(args)
     config = json.loads(args.config.read_text())
@@ -351,6 +378,7 @@ def _merge(
         config,
         require_complete=require_real,
         require_real=require_real,
+        execution_contract=execution_contract,
     )
     baseline = json.loads(args.baseline_results.read_text(encoding="utf-8"))
     if (
@@ -378,6 +406,7 @@ def _import_real(args: argparse.Namespace) -> dict[str, Any]:
     if args.raw_responses is None:
         raise ValueError("--raw-responses is required for import-real")
     config = json.loads(args.config.read_text(encoding="utf-8"))
+    execution_contract = _load_approved_contract(args)
     validate_config(config)
     requests = _read_jsonl(args.requests)
     request_by_id = {row["request_id"]: row for row in requests}
@@ -392,14 +421,26 @@ def _import_real(args: argparse.Namespace) -> dict[str, Any]:
             f"raw response pack must exactly cover requests; missing={len(missing)}, extra={len(extra)}"
         )
     raw_by_id = {row["request_id"]: row for row in raw_rows}
-    sealed = [
-        seal_external_response(raw_by_id[request["request_id"]], request, config)
+    sealed_unapproved = [
+        seal_external_response(
+            raw_by_id[request["request_id"]], request, config,
+            execution_contract=execution_contract,
+        )
         for request in requests
     ]
+    sealed = authorize_external_responses(sealed_unapproved, execution_contract)
     _write_jsonl(args.sealed_real_responses, sealed)
-    result = _merge(args, args.sealed_real_responses, require_real=True)
+    result = _merge(
+        args, args.sealed_real_responses,
+        require_real=True,
+        execution_contract=execution_contract,
+    )
     providers = sorted({(row["provider"], row["model"]) for row in sealed})
-    execution = summarize_real_execution(sealed)
+    execution = summarize_real_execution(
+        sealed,
+        execution_contract=execution_contract,
+        require_complete_evidence=True,
+    )
     input_values = [row.get("usage", {}).get("input_tokens") for row in sealed]
     output_values = [row.get("usage", {}).get("output_tokens") for row in sealed]
     tokens_reported = all(isinstance(value, int) and value >= 0 for value in input_values + output_values)
@@ -425,6 +466,7 @@ def _import_real(args: argparse.Namespace) -> dict[str, Any]:
             {"provider": provider, "model": model} for provider, model in providers
         ],
         "real_execution": execution,
+        "execution_contract_sha256": execution_contract["execution_contract_sha256"],
         "token_usage": {
             "status": "reported" if tokens_reported else "not_fully_reported",
             "input_tokens": sum(input_values) if tokens_reported else None,
@@ -461,9 +503,110 @@ def _materialize(args: argparse.Namespace) -> None:
     print(f"validated and materialized {len(requests)} requests")
 
 
+def _preflight(args: argparse.Namespace) -> None:
+    """Audit execution size/capacity/cost without making a network call."""
+
+    config = json.loads(args.config.read_text(encoding="utf-8"))
+    request_index = json.loads(args.request_index.read_text(encoding="utf-8"))
+    requests, shards = load_request_pack(args.requests, config)
+    verify_pack_index(request_index, requests, shards, args.requests)
+    settings = json.loads(args.execution_settings.read_text(encoding="utf-8"))
+    transport_profile = json.loads(args.transport_profile.read_text(encoding="utf-8"))
+    model_profile = (
+        None
+        if args.model_profile is None
+        else json.loads(args.model_profile.read_text(encoding="utf-8"))
+    )
+    capacity_profile = (
+        None
+        if args.capacity_profile is None
+        else json.loads(args.capacity_profile.read_text(encoding="utf-8"))
+    )
+    pricing_profile = (
+        None
+        if args.pricing_profile is None
+        else json.loads(args.pricing_profile.read_text(encoding="utf-8"))
+    )
+    budget = (
+        None
+        if args.budget_currency is None or args.max_budget is None
+        else {"currency": args.budget_currency, "max_amount": args.max_budget}
+    )
+    adapter_manifest = (
+        None
+        if args.adapter_manifest is None
+        else json.loads(args.adapter_manifest.read_text(encoding="utf-8"))
+    )
+    preflight, estimates, approval = build_preflight(
+        requests=requests,
+        shards=shards,
+        pack_index=request_index,
+        config=config,
+        settings=settings,
+        transport_profile=transport_profile,
+        model_profile=model_profile,
+        capacity_profile=capacity_profile,
+        pricing_profile=pricing_profile,
+        budget=budget,
+        adapter_manifest=adapter_manifest,
+        acknowledge_mutable_alias=args.acknowledge_mutable_alias,
+        acknowledge_cost_estimate_uncertainty=args.acknowledge_estimated_cost_uncertainty,
+        tiktoken_encoding=args.tiktoken_encoding,
+    )
+    detail_sha256 = write_request_estimates(args.preflight_requests, estimates)
+    detail_artifact = {
+        "path": str(args.preflight_requests.relative_to(ROOT)),
+        "sha256": detail_sha256,
+        "canonical_rows_sha256": preflight["binding"]["request_estimates_canonical_sha256"],
+        "row_count": len(estimates),
+    }
+    preflight["request_estimate_artifact"] = detail_artifact
+    preflight.pop("preflight_sha256")
+    from pathopress.llm_baseline import object_sha256
+    preflight["preflight_sha256"] = object_sha256(preflight)
+    approval["request_estimate_artifact"] = detail_artifact
+    approval["preflight_sha256"] = preflight["preflight_sha256"]
+    approval.pop("approval_manifest_sha256")
+    approval["approval_manifest_sha256"] = object_sha256(approval)
+    _write_json(args.preflight_output, preflight)
+    _write_json(args.approval_manifest, approval)
+    print(
+        f"offline preflight complete: {len(requests)} requests, "
+        f"approval={approval['approval_status']}, cost={preflight['cost']['status']}"
+    )
+
+
+def _load_approved_contract(args: argparse.Namespace) -> dict[str, Any]:
+    preflight = json.loads(args.preflight_output.read_text(encoding="utf-8"))
+    approval = json.loads(args.approval_manifest.read_text(encoding="utf-8"))
+    contract = build_approved_execution_contract(preflight, approval)
+    config = json.loads(args.config.read_text(encoding="utf-8"))
+    index = json.loads(args.request_index.read_text(encoding="utf-8"))
+    if contract["config_sha256"] != config.get("config_sha256"):
+        raise ValueError("approved execution contract config does not match this request pack")
+    if contract["request_pack_sha256"] != index.get("pack_sha256"):
+        raise ValueError("approved execution contract request-pack hash mismatch")
+    return contract
+
+
+def _approve(args: argparse.Namespace) -> None:
+    preflight = json.loads(args.preflight_output.read_text(encoding="utf-8"))
+    approval = json.loads(args.approval_manifest.read_text(encoding="utf-8"))
+    approved = approve_execution_manifest(
+        preflight,
+        approval,
+        human_review_complete=args.human_review_complete,
+        acknowledge_estimated_cost_uncertainty=args.acknowledge_estimated_cost_uncertainty,
+    )
+    temporary = args.approval_manifest.with_name(args.approval_manifest.name + ".tmp")
+    _write_json(temporary, approved)
+    temporary.replace(args.approval_manifest)
+    print("offline execution manifest approved; no provider calls made")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("mode", choices=("prepare", "materialize", "mock", "merge-mock", "merge-real", "import-real", "all-mock"))
+    parser.add_argument("mode", choices=("prepare", "materialize", "preflight", "approve", "mock", "merge-mock", "merge-real", "import-real", "all-mock"))
     parser.add_argument("--scores", type=Path, default=ROOT / "data/scores.csv")
     parser.add_argument("--tasks", type=Path, default=ROOT / "data/tasks.csv")
     parser.add_argument("--folds", type=Path, default=ROOT / "experiments/folds_s10_f3_bs42.json")
@@ -475,8 +618,56 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--real-responses", type=Path)
     parser.add_argument("--raw-responses", type=Path)
     parser.add_argument("--materialized-output", type=Path)
+    parser.add_argument(
+        "--model-profile",
+        type=Path,
+        default=ROOT / "experiments/llm_baseline/profiles/reproducible_snapshot.model.json",
+        help="explicit model/endpoint profile; default is the controlled immutable snapshot adaptation",
+    )
+    parser.add_argument(
+        "--execution-settings",
+        type=Path,
+        default=ROOT / "experiments/llm_baseline/profiles/upstream_contract.settings.json",
+    )
+    parser.add_argument(
+        "--transport-profile",
+        type=Path,
+        default=ROOT / "experiments/llm_baseline/profiles/openai_batch_24h.transport.json",
+        help="explicit transport contract; default is the 20-file OpenAI Batch adaptation",
+    )
+    parser.add_argument(
+        "--pricing-profile",
+        type=Path,
+        help="optional explicit user-supplied or checked official pricing JSON; no price is assumed",
+    )
+    parser.add_argument(
+        "--capacity-profile",
+        type=Path,
+        help="explicit model/account context and queued-token limits",
+    )
+    parser.add_argument("--budget-currency", help="explicit human-authorized spend currency")
+    parser.add_argument("--max-budget", type=float, help="explicit maximum authorized spend")
+    parser.add_argument(
+        "--adapter-manifest",
+        type=Path,
+        help="offline OpenAI Batch materialization manifest to hash-bind and compare",
+    )
+    parser.add_argument("--acknowledge-mutable-alias", action="store_true")
+    parser.add_argument("--acknowledge-estimated-cost-uncertainty", action="store_true")
+    parser.add_argument("--human-review-complete", action="store_true")
+    parser.add_argument(
+        "--approval-manifest",
+        type=Path,
+        help="human-approved, self-hashed execution manifest required for real import/merge",
+    )
+    parser.add_argument(
+        "--tiktoken-encoding",
+        help="optional explicit encoding name for a content-only tokenizer cross-check",
+    )
     parser.add_argument("--force", action="store_true")
     args = parser.parse_args()
+    if (args.budget_currency is None) != (args.max_budget is None):
+        parser.error("--budget-currency and --max-budget must be supplied together")
     if args.output_dir is None:
         suffix = "llm_baseline" if args.scope == "full" else "llm_baseline_smoke"
         args.output_dir = ROOT / "experiments" / suffix
@@ -496,6 +687,10 @@ def parse_args() -> argparse.Namespace:
     args.request_schema = args.output_dir / "request.schema.json"
     args.response_schema = args.output_dir / "response.schema.json"
     args.raw_response_schema = args.output_dir / "raw_response.schema.json"
+    args.preflight_output = args.output_dir / "execution_preflight.json"
+    args.preflight_requests = args.output_dir / "execution_preflight_requests.jsonl.gz"
+    if args.approval_manifest is None:
+        args.approval_manifest = args.output_dir / "execution_approval_manifest.json"
     return args
 
 
@@ -510,11 +705,19 @@ def main() -> None:
     if args.mode == "merge-real":
         if args.real_responses is None:
             raise ValueError("--real-responses is required for merge-real")
-        _merge(args, args.real_responses, require_real=True)
+        _merge(
+            args, args.real_responses,
+            require_real=True,
+            execution_contract=_load_approved_contract(args),
+        )
     if args.mode == "import-real":
         _import_real(args)
     if args.mode == "materialize":
         _materialize(args)
+    if args.mode == "preflight":
+        _preflight(args)
+    if args.mode == "approve":
+        _approve(args)
 
 
 if __name__ == "__main__":

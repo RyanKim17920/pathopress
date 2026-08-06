@@ -26,4 +26,6 @@ experiments/llm_baseline*/provider_responses*.jsonl
 experiments/llm_baseline*/provider_receipt*.json
 experiments/llm_baseline*/provider_receipts/
 experiments/llm_baseline*/receipts/
+experiments/llm_baseline/openai_batch/*
+!experiments/llm_baseline/openai_batch/preflight.json
 outputs/prediction_error_factor_predictions_rank1.csv

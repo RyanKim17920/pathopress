@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from pathopress.llm_baseline import evaluate_cached_responses, validate_config  # noqa: E402
+from pathopress.llm_preflight import build_approved_execution_contract  # noqa: E402
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
 
 
@@ -30,6 +31,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--config", type=Path, default=ROOT / "experiments/llm_baseline/config.json")
     parser.add_argument("--requests", type=Path, default=ROOT / "experiments/llm_baseline/requests")
     parser.add_argument("--responses", nargs="+", type=Path, required=True)
+    parser.add_argument("--preflight", type=Path, default=ROOT / "experiments/llm_baseline/execution_preflight.json")
+    parser.add_argument("--approval-manifest", type=Path, default=ROOT / "experiments/llm_baseline/execution_approval_manifest.json")
     parser.add_argument("--output", type=Path, default=ROOT / "experiments/llm_baseline/merged_metrics.json")
     return parser.parse_args()
 
@@ -41,11 +44,16 @@ def main() -> None:
     validate_config(config)
     requests = _read_jsonl(args.requests)
     responses = [row for path in args.responses for row in _read_jsonl(path)]
+    execution_contract = build_approved_execution_contract(
+        json.loads(args.preflight.read_text(encoding="utf-8")),
+        json.loads(args.approval_manifest.read_text(encoding="utf-8")),
+    )
     ids = [row["request_id"] for row in responses]
     if len(ids) != len(set(ids)):
         raise ValueError("duplicate request_id across response shards")
     result = evaluate_cached_responses(
-        requests, responses, matrix, config, require_complete=True, require_real=True
+        requests, responses, matrix, config, require_complete=True, require_real=True,
+        execution_contract=execution_contract,
     )
     result["response_shards"] = [str(path.resolve().relative_to(ROOT.resolve())) for path in args.responses]
     result["publication_policy"] = (

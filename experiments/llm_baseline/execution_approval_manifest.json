@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "kind": "pathopress_llm_human_execution_approval_manifest",
+  "approval_status": "not_ready",
+  "execution_authorized": false,
+  "network_calls_performed": 0,
+  "human_must_set_execution_authorized_true_after_review": true,
+  "mutable_alias_acknowledged": false,
+  "blocking_reasons": [
+    "explicit model/account capacity profile not supplied",
+    "1992 capacity checks lack explicit model/provider limits",
+    "selected batch transport cost is not ready: unavailable_no_explicit_pricing_profile",
+    "explicit human-authorized currency/max_amount budget not supplied"
+  ],
+  "review_checklist": [
+    "Confirm the request-pack and config hashes match the intended experiment.",
+    "Confirm the fixed provider/model/model-version and tokenizer/chat-template assumptions.",
+    "Confirm worst-case per-request context, output, batch-file, and queue checks pass.",
+    "Confirm explicit dated prices and the worst-case spend are acceptable.",
+    "Acknowledge that the planning ceiling is not provider-enforced and actual billed cost may differ or exceed it.",
+    "Confirm credentials and raw provider receipts remain outside version control."
+  ],
+  "execution_evidence_completeness": {
+    "expected_response_count": 1990,
+    "single_fixed_provider_model_identity_required": true,
+    "model_alias": "gpt-5.5",
+    "model_snapshot_expected": "gpt-5.5-2026-04-23",
+    "model_version_evidence_required_responses": 1990,
+    "settings_evidence_required_responses": 1990,
+    "required_settings_sha256": "3c712d3f6319f9cce4b2b83121becb7c2a3ac849399cdc6ac522c5efd20b4d1a",
+    "required_transport_profile_sha256": "71f6bbeb94d7faa223f4f22325c584287a00c6fae561e77085698b38670f3ee1",
+    "provider_receipt_required_responses": 1990,
+    "note": "The execution importer must preserve one model-version, identical settings, and a provider receipt for every response before this self-hashed record can be human-authorized."
+  },
+  "approved_identity": {
+    "provider": "OpenAI",
+    "model_alias": "gpt-5.5",
+    "model_snapshot": "gpt-5.5-2026-04-23",
+    "snapshot_status": "explicit_snapshot",
+    "protocol_compatibility": "controlled_snapshot_substitution_not_upstream_exact"
+  },
+  "execution_settings": {
+    "schema_version": 1,
+    "profile_kind": "literal_upstream_contract",
+    "temperature": 0.0,
+    "max_output_tokens_per_request": 16384,
+    "provider_parameter_name": "max_tokens",
+    "response_format": "json_object_requested_in_prompt",
+    "endpoint_api": "chat_completions",
+    "source_repository_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4"
+  },
+  "transport_profile": {
+    "schema_version": 1,
+    "transport_kind": "openai_batch",
+    "protocol_compatibility": "batch_transport_adaptation_not_upstream_exact",
+    "pricing_rate_key": "batch",
+    "completion_window": "24h",
+    "expected_input_file_count": 20,
+    "limits": {
+      "max_requests_per_batch_file": 50000,
+      "max_batch_file_bytes": 200000000
+    },
+    "source": {
+      "url": "https://platform.openai.com/docs/api-reference/batch",
+      "title": "OpenAI Batch API reference",
+      "retrieved_at": "2026-08-06",
+      "limits_note": "Request-count and file-byte limits are transport limits; enqueued-token capacity is model-specific and intentionally unset."
+    }
+  },
+  "capacity_profile": null,
+  "cost_summary": {
+    "status": "unavailable_no_explicit_pricing_profile",
+    "currency": null,
+    "scenarios": null
+  },
+  "authorized_planning_cost_ceiling": null,
+  "cost_estimate_uncertainty_acknowledged": false,
+  "planning_ceiling_note": "This is an authorization decision over estimated scenarios, not a provider-enforced hard billing cap; actual billed cost may differ or exceed it.",
+  "capacity_status": "unknown_missing_explicit_limits",
+  "binding": {
+    "request_pack_sha256": "186bac8c081d63e08f1d713dd6c5a4083c6bd2888bff592b1c16f7b5fed236c5",
+    "request_pack_canonical_uncompressed_sha256": "e431cfc0fc0a14610fd26c0818ae1cadb6849c2c339db2996d01a7988488c574",
+    "config_sha256": "ac7a7cb84dfe961fb50996ea6ae641b1829423aa8a02881b707688537d5e3e4d",
+    "estimator_spec_sha256": "c2259d998a0f4c221be64ffe5a29c7d041826ac1da7d1f2496c7b3f19467dbf7",
+    "model_identity_sha256": "407b878dbc3cd51de23e0595155b5b871a92b26204148ee07ce55e828d1b7f61",
+    "endpoint_identity_sha256": "05c901e82265eceab84e9bcb47cbf868b190f19cb3089fbbedb50b51e431e73c",
+    "model_profile_sha256": "648cd380d956da53911fce3624548b0751b420c5794a133504c56e6f047fccb4",
+    "capacity_profile_sha256": null,
+    "execution_settings_sha256": "3c712d3f6319f9cce4b2b83121becb7c2a3ac849399cdc6ac522c5efd20b4d1a",
+    "transport_profile_sha256": "71f6bbeb94d7faa223f4f22325c584287a00c6fae561e77085698b38670f3ee1",
+    "transport_plan_sha256": "3611e192b266e43837b109886db3ad451c65a811bbddb4299a137eb8fb9fbcee",
+    "adapter_manifest_sha256": "c915ab7f76c23836ba1b014af7b3d7d0e817e353f8724b2613fe483041a6afdc",
+    "adapter_materialized_transport_plan_sha256": "8adaa43829a607e87609a197c112c4163c812d151e357321085af48066e3dca2",
+    "pricing_profile_sha256": null,
+    "tokenizer_binding_sha256": "1cd24d7f343347c460a9107133f805a15ea001f2225512edfbf42e9cd2dbdf04",
+    "request_estimates_canonical_sha256": "59fefd03cfef667f493f489b8ba8f19f2d35163579b9126f351d96bd022e2b98",
+    "estimate_binding_sha256": "20bfe692c06c94d30c9daf6dbad11efa1f2975a8853c72b2ed762f13f60501ce"
+  },
+  "preflight_sha256": "7777c4c050321cbbdab7989af268c43a7fbc534e0965c32001e6aad4e34ac965",
+  "request_estimate_artifact": {
+    "path": "experiments/llm_baseline/execution_preflight_requests.jsonl.gz",
+    "sha256": "35e30e57feb57294cd837206333d98546baa1b97c749ff0bc1eed042b845e907",
+    "canonical_rows_sha256": "59fefd03cfef667f493f489b8ba8f19f2d35163579b9126f351d96bd022e2b98",
+    "row_count": 1990
+  },
+  "approval_manifest_sha256": "e8b66034f11d639ee2b638527337e001b77c5ee0c878ea5d522cd0bc7f4d683d"
+}

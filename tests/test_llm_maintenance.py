@@ -11,10 +11,12 @@ import numpy as np
 
 from pathopress.llm_baseline import (
     CONDITIONS,
+    authorize_external_responses,
     build_request,
     deterministic_mock_response,
     evaluate_cached_responses,
     make_config,
+    object_sha256,
     seal_external_response,
     select_peer_examples,
     summarize_real_execution,
@@ -33,6 +35,46 @@ from pathopress.maintenance import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def _execution_contract(*, count: int, provider: str, model: str, version: str | None, settings: dict) -> dict:
+    from pathopress.llm_baseline import object_sha256
+    contract = {
+        "schema_version": 1,
+        "provider": provider,
+        "model_alias": model,
+        "model_snapshot": version,
+        "response_model": model,
+        "required_model_version": version,
+        "require_resolved_version_distinct_from_alias": False,
+        "required_settings_sha256": object_sha256(settings),
+        "transport_kind": "online_chat_completions",
+        "expected_response_count": count,
+        "config_sha256": "c" * 64,
+        "request_pack_sha256": "d" * 64,
+        "endpoint_identity_sha256": "e" * 64,
+        "adapter_manifest_sha256": "2" * 64,
+        "transport_profile_sha256": "3" * 64,
+        "capacity_profile_sha256": "4" * 64,
+        "approval_manifest_sha256": "f" * 64,
+        "preflight_sha256": "1" * 64,
+    }
+    contract["execution_contract_sha256"] = object_sha256(contract)
+    return contract
+
+
+def _lineage_receipt(contract: dict, **extra) -> dict:
+    return {
+        **extra,
+        "approval_manifest_sha256": contract["approval_manifest_sha256"],
+        "execution_preflight_sha256": contract["preflight_sha256"],
+        "execution_contract_sha256": contract["execution_contract_sha256"],
+        "adapter_manifest_sha256": contract.get("adapter_manifest_sha256"),
+        "transport_profile_sha256": contract.get("transport_profile_sha256"),
+        "capacity_profile_sha256": contract.get("capacity_profile_sha256"),
+        "settings_sha256": contract["required_settings_sha256"],
+        "model_sha256": object_sha256(contract["response_model"]),
+    }
 
 
 class LlmBaselineSemanticTests(unittest.TestCase):
@@ -127,26 +169,49 @@ class LlmBaselineSemanticTests(unittest.TestCase):
             batch_index=0, train=self.matrix, cells=[(0, 6)], models=self.models,
             evaluations=self.evaluations, task_metadata=self.tasks,
         )
+        settings = {"temperature": 0, "max_tokens": 100}
+        contract = _execution_contract(
+            count=1, provider="test-provider", model="test-model",
+            version="2026-08-01", settings=settings,
+        )
         raw = {
             "request_id": request["request_id"],
             "backend_kind": "openai_compatible",
             "provider": "test-provider",
             "model": "test-model",
             "response_text": '{"q0": 71.0}',
+            "execution_metadata": {
+                "model_version": "2026-08-01",
+                "settings": settings,
+                "receipt": _lineage_receipt(contract, provider_request_id="receipt-0"),
+            },
         }
-        response = seal_external_response(raw, request, self.config)
-        validate_response(response, request, self.config, require_real=True)
+        response_unapproved = seal_external_response(
+            raw, request, self.config, execution_contract=contract
+        )
+        self.assertFalse(response_unapproved["headline_eligible"])
+        response = authorize_external_responses([response_unapproved], contract)[0]
+        validate_response(
+            response, request, self.config,
+            require_real=True, execution_contract=contract,
+        )
         complete = self.matrix.copy()
         complete[0, 6] = 71.0
         metrics = evaluate_cached_responses(
             [request], [response], complete, self.config,
-            require_complete=True, require_real=True,
+            require_complete=True, require_real=True, execution_contract=contract,
         )
         self.assertTrue(metrics["headline_eligible"])
         self.assertTrue(metrics["complete"])
         bad = dict(raw, response_text='{"q0": 101.0}')
         with self.assertRaisesRegex(ValueError, "outside normalized"):
             seal_external_response(bad, request, self.config)
+        for invalid_cost in (True, float("nan"), float("inf")):
+            with self.assertRaisesRegex(ValueError, "cost amount"):
+                seal_external_response(
+                    dict(raw, cost={"currency": "USD", "amount": invalid_cost}),
+                    request, self.config,
+                )
 
     def test_real_pack_requires_one_fixed_identity_and_binds_execution_evidence(self) -> None:
         requests = [
@@ -159,6 +224,11 @@ class LlmBaselineSemanticTests(unittest.TestCase):
             for index in range(2)
         ]
         responses = []
+        settings = {"temperature": 0, "seed": 42}
+        contract = _execution_contract(
+            count=2, provider="fixed-provider", model="fixed-model",
+            version="2026-08-01", settings=settings,
+        )
         for index, request in enumerate(requests):
             responses.append(seal_external_response({
                 "request_id": request["request_id"],
@@ -168,10 +238,12 @@ class LlmBaselineSemanticTests(unittest.TestCase):
                 "response_text": '{"q0": 71.0}',
                 "execution_metadata": {
                     "model_version": "2026-08-01",
-                    "settings": {"temperature": 0, "seed": 42},
-                    "receipt": {"provider_request_id": f"receipt-{index}"},
+                    "settings": settings,
+                    "receipt": _lineage_receipt(
+                        contract, provider_request_id=f"receipt-{index}"
+                    ),
                 },
-            }, request, self.config))
+            }, request, self.config, execution_contract=contract))
         evidence = summarize_real_execution(responses)
         self.assertEqual(
             evidence["fixed_identity"],
@@ -187,7 +259,9 @@ class LlmBaselineSemanticTests(unittest.TestCase):
         self.assertEqual(evidence["receipt_reported_responses"], 2)
         self.assertRegex(evidence["receipt_pack_sha256"], r"^[0-9a-f]{64}$")
 
-        mixed = json.loads(json.dumps(responses))
+        authorized = authorize_external_responses(responses, contract)
+
+        mixed = json.loads(json.dumps(authorized))
         mixed[1]["provider"] = "different-provider"
         mixed[1].pop("response_sha256")
         from pathopress.llm_baseline import object_sha256
@@ -195,7 +269,7 @@ class LlmBaselineSemanticTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "exactly one"):
             evaluate_cached_responses(
                 requests, mixed, self.matrix, self.config,
-                require_complete=True, require_real=True,
+                require_complete=True, require_real=True, execution_contract=contract,
             )
 
         inconsistent = json.loads(json.dumps(responses))
@@ -204,6 +278,86 @@ class LlmBaselineSemanticTests(unittest.TestCase):
         inconsistent[1]["response_sha256"] = object_sha256(inconsistent[1])
         with self.assertRaisesRegex(ValueError, "inconsistent settings_sha256"):
             summarize_real_execution(inconsistent)
+
+    def test_headline_gate_rejects_partial_absent_and_wrong_consistent_evidence(self) -> None:
+        requests = [
+            build_request(
+                config=self.config, condition="zero_shot_named", fold_id=0,
+                seed=42, fold=0, batch_index=index, train=self.matrix,
+                cells=[(0, 6)], models=self.models, evaluations=self.evaluations,
+                task_metadata=self.tasks,
+            )
+            for index in range(2)
+        ]
+        approved_settings = {"temperature": 0, "max_tokens": 16384}
+        contract = _execution_contract(
+            count=2, provider="fixed-provider", model="fixed-model",
+            version="fixed-snapshot", settings=approved_settings,
+        )
+
+        def make_rows(metadata_by_index, selected_contract=contract):
+            return [
+                seal_external_response({
+                    "request_id": request["request_id"],
+                    "backend_kind": "openai_compatible",
+                    "provider": "fixed-provider",
+                    "model": "fixed-model",
+                    "response_text": '{"q0": 71.0}',
+                    "execution_metadata": metadata_by_index[index],
+                }, request, self.config, execution_contract=selected_contract)
+                for index, request in enumerate(requests)
+            ]
+
+        complete = {
+            "model_version": "fixed-snapshot",
+            "settings": approved_settings,
+            "receipt": _lineage_receipt(contract, provider_request_id="r"),
+        }
+        with self.assertRaisesRegex(ValueError, "settings do not match"):
+            make_rows([{}, {}])
+
+        with self.assertRaisesRegex(ValueError, "settings do not match"):
+            make_rows([complete, {"model_version": "fixed-snapshot", "receipt": {"id": "r2"}}])
+
+        with self.assertRaisesRegex(ValueError, "model_version"):
+            make_rows([
+                {"settings": approved_settings, "receipt": _lineage_receipt(contract, id="r1")},
+                {"settings": approved_settings, "receipt": _lineage_receipt(contract, id="r2")},
+            ])
+
+        wrong_settings = {"temperature": 0, "max_tokens": 4096}
+        with self.assertRaisesRegex(ValueError, "settings do not match"):
+            make_rows([
+                {"model_version": "fixed-snapshot", "settings": wrong_settings, "receipt": _lineage_receipt(contract, id="r1")},
+                {"model_version": "fixed-snapshot", "settings": wrong_settings, "receipt": _lineage_receipt(contract, id="r2")},
+            ])
+
+        with self.assertRaisesRegex(ValueError, "approved snapshot"):
+            make_rows([
+                {"model_version": "other-snapshot", "settings": approved_settings, "receipt": _lineage_receipt(contract, id="r1")},
+                {"model_version": "other-snapshot", "settings": approved_settings, "receipt": _lineage_receipt(contract, id="r2")},
+            ])
+
+        wrong_lineage = _lineage_receipt(contract, id="r1")
+        wrong_lineage["transport_profile_sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "transport_profile_sha256"):
+            make_rows([
+                {"model_version": "fixed-snapshot", "settings": approved_settings, "receipt": wrong_lineage},
+                complete,
+            ])
+
+        alias_contract = _execution_contract(
+            count=2, provider="fixed-provider", model="fixed-model",
+            version=None, settings=approved_settings,
+        )
+        alias_contract["require_resolved_version_distinct_from_alias"] = True
+        alias_contract.pop("execution_contract_sha256")
+        alias_contract["execution_contract_sha256"] = object_sha256(alias_contract)
+        with self.assertRaisesRegex(ValueError, "dated resolved"):
+            make_rows([
+                {"model_version": "fixed-model", "settings": approved_settings, "receipt": _lineage_receipt(alias_contract, id="r1")},
+                {"model_version": "fixed-model", "settings": approved_settings, "receipt": _lineage_receipt(alias_contract, id="r2")},
+            ], alias_contract)
 
     def test_generated_dry_run_artifacts_mark_every_real_condition_unrun(self) -> None:
         status = json.loads((ROOT / "experiments/llm_baseline/real_run_status.json").read_text())
@@ -252,6 +406,30 @@ class LlmBaselineSemanticTests(unittest.TestCase):
         metrics = json.loads((ROOT / "experiments/llm_baseline_smoke/mock_metrics.json").read_text())
         self.assertEqual(metrics["result_status"], "mock_contract_validation_only")
         self.assertFalse(metrics["headline_eligible"])
+
+    def test_response_schema_keeps_mock_valid_and_conditionally_hardens_real_rows(self) -> None:
+        schema = json.loads(
+            (ROOT / "experiments/llm_baseline/response.schema.json").read_text()
+        )
+        conditional_required = set(schema["allOf"][0]["then"]["required"])
+        self.assertEqual(
+            conditional_required,
+            {"execution_metadata_hashes", "execution_approval_sha256", "execution_preflight_sha256", "execution_lineage_sha256"},
+        )
+        self.assertTrue(conditional_required.isdisjoint(schema["required"]))
+        mock = json.loads(
+            (ROOT / "experiments/llm_baseline_smoke/mock_responses.jsonl")
+            .read_text().splitlines()[0]
+        )
+        self.assertTrue(set(schema["required"]).issubset(mock))
+        self.assertEqual(mock["status"], "complete_mock_only")
+        self.assertFalse(mock["headline_eligible"])
+        self.assertTrue(conditional_required.isdisjoint(mock))
+
+        # A headline real row triggers the conditional and cannot omit the
+        # execution evidence/authorization bindings.
+        hypothetical_real = dict(mock, status="complete_validated_real", headline_eligible=True)
+        self.assertEqual(conditional_required - set(hypothetical_real), conditional_required)
 
 
 class MaintenanceTests(unittest.TestCase):

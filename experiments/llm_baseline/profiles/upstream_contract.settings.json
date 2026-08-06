@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "profile_kind": "literal_upstream_contract",
+  "temperature": 0.0,
+  "max_output_tokens_per_request": 16384,
+  "provider_parameter_name": "max_tokens",
+  "response_format": "json_object_requested_in_prompt",
+  "endpoint_api": "chat_completions",
+  "source_repository_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4"
+}

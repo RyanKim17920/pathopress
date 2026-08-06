@@ -10,6 +10,8 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import re
+from datetime import date
 from dataclasses import dataclass
 from typing import Any, Iterable, Sequence
 
@@ -430,7 +432,8 @@ def parse_prediction_payload(
 
 
 def seal_external_response(
-    raw: dict[str, Any], request: dict[str, Any], config: dict[str, Any]
+    raw: dict[str, Any], request: dict[str, Any], config: dict[str, Any],
+    execution_contract: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Strictly validate and hash one provider-neutral external response row."""
 
@@ -468,6 +471,46 @@ def seal_external_response(
         key + "_sha256": object_sha256(value.strip() if key == "model_version" else value)
         for key, value in execution_metadata.items()
     }
+    execution_lineage_sha256 = None
+    if execution_contract is not None:
+        unsigned_contract = dict(execution_contract)
+        execution_lineage_sha256 = unsigned_contract.pop("execution_contract_sha256", None)
+        if execution_lineage_sha256 != object_sha256(unsigned_contract):
+            raise ValueError("approved execution contract self-hash mismatch")
+        expected_model = execution_contract.get("response_model")
+        if raw["provider"].strip() != execution_contract.get("provider") or raw["model"].strip() != expected_model:
+            raise ValueError("raw response identity does not match approved execution contract")
+        if metadata_hashes.get("settings_sha256") != execution_contract.get("required_settings_sha256"):
+            raise ValueError("raw response settings do not match approved execution contract")
+        version = execution_metadata.get("model_version")
+        expected_version = execution_contract.get("required_model_version")
+        if expected_version is not None and version != expected_version:
+            raise ValueError("raw response model_version does not match approved snapshot")
+        if expected_version is None:
+            match = re.fullmatch(r"gpt-5\.5-(\d{4})-(\d{2})-(\d{2})", str(version))
+            if match is None:
+                raise ValueError("mutable alias requires a dated resolved gpt-5.5 model_version")
+            try:
+                date(*(int(value) for value in match.groups()))
+            except ValueError as error:
+                raise ValueError("mutable alias resolved model_version has an invalid date") from error
+        receipt = execution_metadata.get("receipt")
+        if not isinstance(receipt, dict):
+            raise ValueError("raw response receipt must be an object")
+        lineage = {
+            "approval_manifest_sha256": execution_contract.get("approval_manifest_sha256"),
+            "execution_preflight_sha256": execution_contract.get("preflight_sha256"),
+            "execution_contract_sha256": execution_contract.get("execution_contract_sha256"),
+            "transport_profile_sha256": execution_contract.get("transport_profile_sha256"),
+            "capacity_profile_sha256": execution_contract.get("capacity_profile_sha256"),
+            "settings_sha256": execution_contract.get("required_settings_sha256"),
+            "model_sha256": object_sha256(expected_model),
+        }
+        if execution_contract.get("transport_kind") == "openai_batch":
+            lineage["adapter_manifest_sha256"] = execution_contract.get("adapter_manifest_sha256")
+        for key, expected in lineage.items():
+            if not isinstance(expected, str) or receipt.get(key) != expected:
+                raise ValueError(f"raw response receipt lineage mismatch: {key}")
     query_ids = {target["query_id"] for target in request["targets"]}
     parsed = parse_prediction_payload(raw["response_text"], query_ids, strict=True)
     usage = raw.get("usage", {"input_tokens": None, "output_tokens": None, "status": "not_reported"})
@@ -477,7 +520,10 @@ def seal_external_response(
     if not isinstance(cost, dict):
         raise ValueError("external response cost must be an object")
     if cost.get("amount") is not None and (
-        not isinstance(cost.get("amount"), (int, float)) or cost["amount"] < 0
+        not isinstance(cost.get("amount"), (int, float))
+        or isinstance(cost.get("amount"), bool)
+        or not math.isfinite(float(cost["amount"]))
+        or cost["amount"] < 0
     ):
         raise ValueError("external response cost amount must be nonnegative when reported")
     response = {
@@ -488,20 +534,26 @@ def seal_external_response(
         "backend_kind": raw["backend_kind"],
         "provider": raw["provider"].strip(),
         "model": raw["model"].strip(),
-        "status": "complete_validated_real",
-        "headline_eligible": True,
+        "status": "complete_validated_real_unapproved",
+        "headline_eligible": False,
         "response_text": raw["response_text"],
         "parsed_predictions": parsed,
         "usage": usage,
         "cost": cost,
         "execution_metadata_hashes": metadata_hashes,
+        "execution_lineage_sha256": execution_lineage_sha256,
     }
     response["response_sha256"] = object_sha256(response)
     return response
 
 
-def summarize_real_execution(responses: Sequence[dict[str, Any]]) -> dict[str, Any]:
-    """Require one fixed genuine backend/provider/model and summarize sealed evidence."""
+def summarize_real_execution(
+    responses: Sequence[dict[str, Any]],
+    *,
+    execution_contract: dict[str, Any] | None = None,
+    require_complete_evidence: bool = False,
+) -> dict[str, Any]:
+    """Require one fixed identity and optionally enforce an approved contract."""
 
     if not responses:
         raise ValueError("real response pack is empty")
@@ -540,6 +592,56 @@ def summarize_real_execution(responses: Sequence[dict[str, Any]]) -> dict[str, A
         for row, record in zip(responses, metadata)
         if "receipt_sha256" in record
     ], key=lambda row: row["request_id"])
+    if require_complete_evidence:
+        if execution_contract is None:
+            raise ValueError("headline execution requires an approved execution contract")
+        unsigned_contract = dict(execution_contract)
+        supplied_contract_hash = unsigned_contract.pop("execution_contract_sha256", None)
+        if supplied_contract_hash != object_sha256(unsigned_contract):
+            raise ValueError("approved execution contract self-hash mismatch")
+        expected_count = execution_contract.get("expected_response_count")
+        if expected_count != len(responses):
+            raise ValueError(
+                f"execution contract expects {expected_count} responses, received {len(responses)}"
+            )
+        expected_identity = {
+            "provider": execution_contract.get("provider"),
+            "model": execution_contract.get("response_model"),
+        }
+        if provider != expected_identity["provider"] or model != expected_identity["model"]:
+            raise ValueError("real response provider/model does not match the approved model profile")
+        required_settings = execution_contract.get("required_settings_sha256")
+        if not isinstance(required_settings, str) or len(required_settings) != 64:
+            raise ValueError("approved execution contract has no valid required_settings_sha256")
+        required_version = execution_contract.get("required_model_version")
+        required_version_hash = None if required_version is None else object_sha256(required_version)
+        missing_settings = [
+            response["request_id"] for response, record in zip(responses, metadata)
+            if "settings_sha256" not in record
+        ]
+        missing_versions = [
+            response["request_id"] for response, record in zip(responses, metadata)
+            if "model_version_sha256" not in record
+        ]
+        missing_receipts = [
+            response["request_id"] for response, record in zip(responses, metadata)
+            if "receipt_sha256" not in record
+        ]
+        if missing_settings:
+            raise ValueError(f"settings evidence missing for {len(missing_settings)} responses")
+        if missing_versions:
+            raise ValueError(f"model-version evidence missing for {len(missing_versions)} responses")
+        if missing_receipts:
+            raise ValueError(f"provider receipt evidence missing for {len(missing_receipts)} responses")
+        if fixed_evidence["settings_sha256"] != required_settings:
+            raise ValueError("response settings are consistent but do not match the approved settings hash")
+        if required_version_hash is not None and fixed_evidence["model_version_sha256"] != required_version_hash:
+            raise ValueError("response model-version evidence does not match the approved snapshot")
+        if (
+            execution_contract.get("require_resolved_version_distinct_from_alias")
+            and fixed_evidence["model_version_sha256"] == object_sha256(execution_contract.get("model_alias"))
+        ):
+            raise ValueError("mutable alias was repeated as model_version; resolved provider model-version evidence is required")
     return {
         "fixed_identity": identity,
         "fixed_identity_sha256": object_sha256(identity),
@@ -547,7 +649,51 @@ def summarize_real_execution(responses: Sequence[dict[str, Any]]) -> dict[str, A
         **fixed_evidence,
         "receipt_reported_responses": len(receipt_records),
         "receipt_pack_sha256": object_sha256(receipt_records) if receipt_records else None,
+        "execution_contract_sha256": (
+            object_sha256(execution_contract) if execution_contract is not None else None
+        ),
+        "complete_execution_evidence": bool(require_complete_evidence),
     }
+
+
+def authorize_external_responses(
+    responses: Sequence[dict[str, Any]], execution_contract: dict[str, Any]
+) -> list[dict[str, Any]]:
+    """Promote a complete evidence-matched pack to headline-eligible responses."""
+
+    for response in responses:
+        supplied = response.get("response_sha256")
+        unsigned = {key: value for key, value in response.items() if key != "response_sha256"}
+        if supplied != object_sha256(unsigned):
+            raise ValueError("cannot authorize a response with a mismatched seal hash")
+        if (
+            response.get("backend_kind") not in REAL_BACKEND_KINDS
+            or response.get("status") != "complete_validated_real_unapproved"
+            or response.get("headline_eligible") is not False
+        ):
+            raise ValueError("response is not a validated unapproved real response")
+        if response.get("execution_lineage_sha256") != execution_contract.get("execution_contract_sha256"):
+            raise ValueError("response lacks validated receipt lineage for this execution contract")
+    summarize_real_execution(
+        responses,
+        execution_contract=execution_contract,
+        require_complete_evidence=True,
+    )
+    approval_sha256 = execution_contract.get("approval_manifest_sha256")
+    preflight_sha256 = execution_contract.get("preflight_sha256")
+    if not all(isinstance(value, str) and len(value) == 64 for value in (approval_sha256, preflight_sha256)):
+        raise ValueError("approved execution contract is missing approval/preflight hashes")
+    authorized = []
+    for response in responses:
+        row = dict(response)
+        row["status"] = "complete_validated_real"
+        row["headline_eligible"] = True
+        row["execution_approval_sha256"] = approval_sha256
+        row["execution_preflight_sha256"] = preflight_sha256
+        row.pop("response_sha256", None)
+        row["response_sha256"] = object_sha256(row)
+        authorized.append(row)
+    return authorized
 
 
 def deterministic_mock_response(
@@ -587,7 +733,9 @@ def deterministic_mock_response(
 
 
 def validate_response(
-    response: dict[str, Any], request: dict[str, Any], config: dict[str, Any], *, require_real: bool = False
+    response: dict[str, Any], request: dict[str, Any], config: dict[str, Any], *,
+    require_real: bool = False,
+    execution_contract: dict[str, Any] | None = None,
 ) -> None:
     validate_request(request, config)
     supplied = response.get("response_sha256")
@@ -605,6 +753,12 @@ def validate_response(
             raise ValueError("real merge received a non-real backend kind")
         if response.get("headline_eligible") is not True or response.get("status") != "complete_validated_real":
             raise ValueError("real response was not sealed as a complete validated response")
+        if execution_contract is None:
+            raise ValueError("headline response validation requires an approved execution contract")
+        if response.get("execution_approval_sha256") != execution_contract.get("approval_manifest_sha256"):
+            raise ValueError("response execution approval hash mismatch")
+        if response.get("execution_preflight_sha256") != execution_contract.get("preflight_sha256"):
+            raise ValueError("response execution preflight hash mismatch")
         expected = {target["query_id"] for target in request["targets"]}
         parsed = parse_prediction_payload(response.get("response_text", ""), expected, strict=True)
         if response.get("parsed_predictions") != parsed:
@@ -619,6 +773,7 @@ def evaluate_cached_responses(
     *,
     require_complete: bool = False,
     require_real: bool = False,
+    execution_contract: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     by_request = {row["request_id"]: row for row in responses}
     if len(by_request) != len(responses):
@@ -630,14 +785,25 @@ def evaluate_cached_responses(
         raise ValueError(f"responses contain unknown request_ids: {unexpected[:5]}")
     if require_complete and missing:
         raise ValueError(f"response pack is incomplete: {len(missing)} request_ids missing")
-    execution = summarize_real_execution(responses) if require_real else None
+    execution = (
+        summarize_real_execution(
+            responses,
+            execution_contract=execution_contract,
+            require_complete_evidence=True,
+        )
+        if require_real else None
+    )
     raw = []
     backend_kinds = set()
     for request in requests:
         response = by_request.get(request["request_id"])
         if response is None:
             continue
-        validate_response(response, request, config, require_real=require_real)
+        validate_response(
+            response, request, config,
+            require_real=require_real,
+            execution_contract=execution_contract,
+        )
         backend_kinds.add(response["backend_kind"])
         parsed = parse_prediction_payload(
             response["response_text"],

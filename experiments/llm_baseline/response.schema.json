@@ -36,6 +36,9 @@
     "model": {
       "type": "string"
     },
+    "status": {
+      "type": "string"
+    },
     "headline_eligible": {
       "type": "boolean"
     },
@@ -49,6 +52,47 @@
     },
     "execution_metadata_hashes": {
       "type": "object"
+    },
+    "execution_approval_sha256": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "execution_preflight_sha256": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64
+    },
+    "execution_lineage_sha256": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "complete_validated_real"
+          },
+          "headline_eligible": {
+            "const": true
+          }
+        },
+        "required": [
+          "status",
+          "headline_eligible"
+        ]
+      },
+      "then": {
+        "required": [
+          "execution_metadata_hashes",
+          "execution_approval_sha256",
+          "execution_preflight_sha256",
+          "execution_lineage_sha256"
+        ]
+      }
+    }
+  ]
 }

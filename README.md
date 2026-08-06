@@ -193,7 +193,12 @@ README before rerunning. The [LLM protocol](docs/llm-baseline.md) now has a
 complete 30-fold provider-neutral pack: 1,990 requests and 81,080 target
 predictions across named/blind zero-shot matrix completion and five-shot
 prediction. No genuine responses exist, so cost is unknown and there is no
-headline-eligible LLM result.
+headline-eligible LLM result. A hash-bound offline preflight now inventories
+the complete pack and reports 19.5M / 26.1M / 110.1M best/base/worst total-token
+planning scenarios under its documented model-agnostic heuristic; it does not
+invent a tokenizer or price. The literal upstream `gpt-5.5` Chat Completions
+alias contract and a separately labelled controlled snapshot adaptation are
+documented in the [LLM protocol](docs/llm-baseline.md).
 
 The final `59×168` public tables can be rebuilt and locally validated in the
 pinned BenchPress Hugging Face maintenance layout without uploading anything:

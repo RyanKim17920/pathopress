@@ -8,7 +8,8 @@
     "backend_kind",
     "provider",
     "model",
-    "response_text"
+    "response_text",
+    "execution_metadata"
   ],
   "properties": {
     "request_id": {
@@ -41,6 +42,11 @@
     "execution_metadata": {
       "type": "object",
       "additionalProperties": false,
+      "required": [
+        "model_version",
+        "settings",
+        "receipt"
+      ],
       "properties": {
         "model_version": {
           "type": "string",
