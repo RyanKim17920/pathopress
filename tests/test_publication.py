@@ -11,6 +11,7 @@ from pathopress.publication import (
     metadata_panel_counts,
     read_csv,
     select_hero_target,
+    score_source_group,
     top_with_other,
 )
 
@@ -29,12 +30,12 @@ class PublicationDataTests(unittest.TestCase):
         target = select_hero_target(raw)
         self.assertEqual(target, "h-optimus-0")
         cells = hero_target_cells(raw, target)
-        self.assertEqual({k: len(rows) for k, rows in cells.items()}, {1: 123, 3: 123, 10: 123})
+        self.assertEqual({k: len(rows) for k, rows in cells.items()}, {1: 126, 3: 126, 10: 126})
         identities = [{row["evaluation_id"] for row in rows} for rows in cells.values()]
         self.assertTrue(all(value == identities[0] for value in identities[1:]))
         self.assertEqual(
             {k: sum(row["is_revealed_probe_cell"] == "True" for row in rows) for k, rows in cells.items()},
-            {1: 1, 3: 3, 10: 9},
+            {1: 1, 3: 3, 10: 7},
         )
 
     def test_metadata_panel_denominators_match_retained_matrix(self) -> None:
@@ -51,6 +52,21 @@ class PublicationDataTests(unittest.TestCase):
         self.assertEqual(sum(counts["task_family"].values()), self.matrix.shape[1])
         self.assertEqual(sum(counts["observed_family"].values()), counts["n_observed"])
         self.assertEqual(sum(counts["suite_tasks"].values()), self.matrix.shape[1])
+        self.assertEqual(sum(counts["source_provenance"].values()), counts["n_observed"])
+        self.assertEqual(
+            sum(row["n_models"] for row in counts["coverage_by_release_quarter"].values()),
+            counts["n_release_dates"],
+        )
+
+    def test_score_source_groups_are_pathology_explicit(self) -> None:
+        self.assertEqual(
+            score_source_group("https://github.com/example/benchmark"),
+            "Official benchmark repository",
+        )
+        self.assertEqual(
+            score_source_group("https://arxiv.org/pdf/1234.5678"),
+            "Primary paper or report",
+        )
 
     def test_top_with_other_preserves_exact_total(self) -> None:
         labels, values = top_with_other({"a": 5, "b": 4, "c": 3}, 2)
@@ -72,7 +88,7 @@ class PublicationDataTests(unittest.TestCase):
             {
                 "masking_and_k_budget": "exact",
                 "rank_and_domain": "pathology_adapted",
-                "exhaustive_25C5_30C5": "configured_unrun",
+                "exhaustive_25C5_30C5": "executed_complete_scalar_certified",
             },
         )
         self.assertEqual(len(benchpress_hero["examples"]), 4)
@@ -82,12 +98,12 @@ class PublicationDataTests(unittest.TestCase):
             dual = list(csv.DictReader(handle))
         self.assertEqual(len(dual), 20)
         self.assertTrue(all(row["selection_objective"] == "scorecard_medae" for row in dual))
-        self.assertEqual(metadata["matrix"], {"n_models": 59, "n_evaluations": 165, "n_observed": 1967})
+        self.assertEqual(metadata["matrix"], {"n_models": 59, "n_evaluations": 168, "n_observed": 2027})
         self.assertEqual(manifest["tables"]["model_inventory"], 59)
-        self.assertEqual(manifest["tables"]["evaluation_inventory"], 165)
+        self.assertEqual(manifest["tables"]["evaluation_inventory"], 168)
         for name, expected, identity in (
             ("model_inventory", 59, "model_id"),
-            ("evaluation_inventory", 165, "evaluation_id"),
+            ("evaluation_inventory", 168, "evaluation_id"),
         ):
             with (ROOT / f"outputs/tables/{name}.csv").open(newline="", encoding="utf-8") as handle:
                 rows = list(csv.DictReader(handle))

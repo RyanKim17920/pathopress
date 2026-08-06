@@ -8,16 +8,18 @@
     "HEST and THUNDER average columns are not independent evaluation cells and are excluded from scores.csv.",
     "Score rows are machine-parsed from one reporting source each. audit_status=parsed_primary_source is prototype evidence, not independent or dual-source verification.",
     "PathoROB external-publication rows are retained with audit_status=reported_external; PathoROB explicitly says those values were not validated by its authors.",
+    "PathoROB Nature Source Data contributes 100 canonical primary-source means across 20 models: 40 aggregate APD-ID/APD-OOD cells and 60 clustering cells over three explicit dataset protocols. The 22 pinned-repository example results are preserved only in the evidence snapshot because their two-model values differ slightly from the paper.",
+    "Canonical PathoROB clustering scores enter the factor matrix after the source-declared approximately [-1,1] affine normalization. Canonical APD values remain in the raw registry with exact signed percent values but no normalized_score; they are analysis-ineligible because neither the source nor project policy defines a non-arbitrary bounded normalization.",
     "Exact dedup groups are derived from duplicate task_identity_id values. Two broader semantic-overlap groups remain manually adjudicated and keep separate task identities.",
     "evaluation_id is retained as a compatibility alias equal to protocol_id; protocol-specific scores are never overwritten during deduplication."
   ],
   "counts": {
-    "dataset_artifacts": 82,
-    "deduplication_groups": 93,
-    "deduplication_memberships": 242,
+    "dataset_artifacts": 83,
+    "deduplication_groups": 96,
+    "deduplication_memberships": 248,
     "eva_leaderboard_protocol_variants": 15,
-    "exact_duplicate_task_identities": 91,
-    "model_aliases": 123,
+    "exact_duplicate_task_identities": 94,
+    "model_aliases": 127,
     "pathobench_exaone_protocol_variants": 80,
     "pathobench_metrics": {
       "bacc": 23,
@@ -35,36 +37,39 @@
       "survival": 25
     },
     "pathobench_threads_protocol_variants": 42,
-    "protocols": 287,
-    "scores": 1976,
+    "protocols": 292,
+    "scores": 2076,
     "scores_by_audit_status": {
-      "parsed_primary_source": 1967,
+      "parsed_primary_source": 2027,
+      "parsed_primary_source_analysis_ineligible": 40,
       "reported_external": 9
     },
     "scores_by_review_status": {
-      "machine_parsed_single_source": 1976
+      "machine_parsed_single_source": 2076
     },
     "scores_by_suite": {
       "eva": 265,
       "hest": 234,
       "pathobench": 896,
-      "pathorob": 69,
+      "pathorob": 169,
       "thunder": 512
     },
     "semantic_adjudication_groups": 2,
     "suites": 5,
-    "task_identities": 145,
-    "tasks": 287,
+    "task_identities": 147,
+    "tasks": 292,
     "tasks_by_suite": {
       "eva": 28,
       "hest": 9,
       "pathobench": 217,
-      "pathorob": 12,
+      "pathorob": 17,
       "thunder": 21
     }
   },
   "generator": "scripts/build_registry.py",
   "normalization": {
+    "average_performance_drop_percent": "No common-scale normalization. Raw signed percent is preserved exactly with normalized_score blank and audit_status=parsed_primary_source_analysis_ineligible. Zero is the no-drop reference; the paper states that increasingly negative values are worse and describes higher/closer-to-zero as better, but defines no bounded domain.",
+    "clustering_score": "PathoROB declares an approximately [-1,1] domain; canonical Nature-2026 means use (score + 1) * 50.",
     "f1": "Scores already reported on 0-100 scale; preserved.",
     "macro-ovr-auc/bacc/cindex/balanced_accuracy/dice": "Raw metrics in [0,1] multiplied by 100.",
     "pearson_r": "(r + 1) * 50; logit(normalized/100) equals 2 * atanh(r), a scaled Fisher-z.",
@@ -124,6 +129,19 @@
       "source_member": "tabs/pathobench_result.tex",
       "table": 4,
       "url": "https://arxiv.org/abs/2512.14019v1"
+    },
+    "pathorob_nature2026": {
+      "pmcid": "PMC13260997",
+      "published_apd_cells": 40,
+      "published_apd_endpoints": 2,
+      "published_clustering_cells": 60,
+      "published_clustering_protocols": 3,
+      "published_models": 20,
+      "repository_example_cells_quarantined": 22,
+      "snapshot_sha256": "472c1e581854f7b80427291770f47d7f665f563d787495ab0276b50930a2104e",
+      "source_data_sha256": "07456f3ffc5270ea1d8d48a8f82c08a5be396c88f99cc0227968dad721943047",
+      "source_data_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/13260997/bin/41467_2026_73923_MOESM4_ESM.xlsx",
+      "url": "https://www.nature.com/articles/s41467-026-73923-2"
     },
     "threads_pathobench_public": {
       "excluded_internal_cells": 96,

@@ -6,7 +6,9 @@ from __future__ import annotations
 import argparse
 import copy
 import csv
+import gzip
 import hashlib
+import io
 import json
 import os
 import sys
@@ -39,6 +41,38 @@ def _finite(value: Any) -> Any:
     return value
 
 
+def _temporary_sibling(path: Path) -> Path:
+    """Return the deterministic sibling used for an atomic artifact replace."""
+
+    return path.with_name(f".{path.name}.tmp")
+
+
+def _write_json_atomic(path: Path, payload: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = _temporary_sibling(path)
+    try:
+        temporary.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def _write_csv_atomic(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = _temporary_sibling(path)
+    try:
+        with temporary.open("w", newline="", encoding="utf-8") as handle:
+            if rows:
+                writer = csv.DictWriter(
+                    handle, fieldnames=list(rows[0]), lineterminator="\n"
+                )
+                writer.writeheader()
+                writer.writerows(rows)
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
 def _metric_dict(metrics: dict[str, Any]) -> dict[str, Any]:
     return {key: _finite(value) for key, value in metrics.items()}
 
@@ -51,6 +85,21 @@ def _eval_all_known(
         predict_all_known(matrix, probes, rank=rank),
         pairwise_margin=pairwise_margin,
         ranking_scope=ranking_scope,
+    )
+
+
+def _eval_all_known_with_predictions(
+    job: tuple[np.ndarray, tuple[int, ...], int, float, str]
+) -> tuple[dict[str, Any], ProbePredictions]:
+    matrix, probes, rank, pairwise_margin, ranking_scope = job
+    prediction = predict_all_known(matrix, probes, rank=rank)
+    return (
+        score_predictions(
+            prediction,
+            pairwise_margin=pairwise_margin,
+            ranking_scope=ranking_scope,
+        ),
+        prediction,
     )
 
 
@@ -174,6 +223,9 @@ def _random_curves(
     heldout: tuple[tuple[int, ...], tuple[int, ...]] | None = None,
     pairwise_margin: float = 2.0,
     ranking_scope: str = "at_least_one_hidden",
+    raw_writer: csv.DictWriter | None = None,
+    models: list[str] | None = None,
+    candidate_mode: str | None = None,
 ) -> list[dict[str, Any]]:
     prefixes = candidate_prefixes(
         candidates,
@@ -183,18 +235,31 @@ def _random_curves(
     )
     sets = [probes for repeat in prefixes for probes in repeat]
     if heldout is None:
-        results = _parallel_all_known(
-            executor, matrix, sets, rank,
-            pairwise_margin=pairwise_margin,
-            ranking_scope=ranking_scope,
-        )
+        jobs = [
+            (matrix, probes, rank, pairwise_margin, ranking_scope)
+            for probes in sets
+        ]
+        if raw_writer is None:
+            results = list(executor.map(_eval_all_known, jobs))
+            predictions: list[ProbePredictions | None] = [None] * len(results)
+        else:
+            if models is None or candidate_mode is None:
+                raise ValueError(
+                    "models and candidate_mode are required when writing random raw rows"
+                )
+            detailed = list(executor.map(_eval_all_known_with_predictions, jobs))
+            results = [result for result, _ in detailed]
+            predictions = [prediction for _, prediction in detailed]
     else:
+        if raw_writer is not None:
+            raise ValueError("random raw rows currently support all-known only")
         targets, context = heldout
         results = _parallel_heldout(
             executor, matrix, sets, targets, context, rank,
             pairwise_margin=pairwise_margin,
             ranking_scope=ranking_scope,
         )
+        predictions = [None] * len(results)
     rows = []
     cursor = 0
     for repeat, repeat_prefixes in enumerate(prefixes):
@@ -206,6 +271,23 @@ def _random_curves(
                 "probe_ids": [evaluations[index] for index in probes],
                 "metrics": _metric_dict(results[cursor]),
             })
+            prediction = predictions[cursor]
+            if raw_writer is not None and prediction is not None:
+                raw_writer.writerows(
+                    _raw_rows(
+                        prediction,
+                        models or [],
+                        evaluations,
+                        {
+                            "protocol": "all_known",
+                            "candidate_mode": candidate_mode,
+                            "method": "random_prefix",
+                            "selection_objective": "none_random_baseline",
+                            "repeat": repeat,
+                            "k": k,
+                        },
+                    )
+                )
             cursor += 1
     return rows
 
@@ -267,9 +349,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--previous-probes", type=Path, default=ROOT / "experiments/probe_selection_results_rank1.json")
     parser.add_argument("--output", type=Path, default=ROOT / "experiments/probe_compression_rank1.json")
     parser.add_argument("--raw-output", type=Path, default=ROOT / "outputs/probe_compression_selected_raw_rank1.csv")
+    parser.add_argument(
+        "--random-raw-output",
+        type=Path,
+        default=ROOT / "outputs/probe_compression_random_all_known_raw_rank1.csv.gz",
+        help="Gzip CSV of every all-known random-prefix target prediction",
+    )
     parser.add_argument("--rank", type=int, default=1)
     parser.add_argument("--max-any-k", type=int, default=10)
-    parser.add_argument("--max-random-k", type=int, default=10)
+    parser.add_argument("--max-random-k", type=int, default=30)
+    parser.add_argument("--max-heldout-random-k", type=int, default=10)
+    parser.add_argument("--max-ranking-random-k", type=int, default=10)
     parser.add_argument("--random-repeats", type=int, default=10)
     parser.add_argument("--pruned-keep", type=int, default=30)
     parser.add_argument("--ranking-margin", type=float, default=5.0)
@@ -358,7 +448,7 @@ def main() -> None:
         # Keep the public ranking schema limited to the two upstream-comparable
         # candidate universes.  Pruning diagnostics live in ``pruning`` above.
         existing["ranking_aware"].pop("error_informed_pruned_diagnostic", None)
-        args.output.write_text(json.dumps(existing, indent=2) + "\n", encoding="utf-8")
+        _write_json_atomic(args.output, existing)
         print(f"enriched {args.output} with exact margin-{args.ranking_margin:g} random ranking curves")
         return
 
@@ -388,6 +478,10 @@ def main() -> None:
             "score_curve_pairwise_diagnostic_semantics": "The pairwise_margin=2 fields nested under score-reconstruction curves are ancillary diagnostics only, never the ranking selection objective. Dedicated ranking_aware curves use ranking_margin=5.",
             "candidate_tie_break": "stable candidate order",
             "unrestricted_curve_limit": args.max_any_k,
+            "all_known_random_curve_limit": args.max_random_k,
+            "heldout_random_curve_limit": args.max_heldout_random_k,
+            "ranking_random_curve_limit": args.max_ranking_random_k,
+            "random_raw_output": str(args.random_raw_output.relative_to(ROOT)),
             "limit_reason": "full candidate rescoring is exact at each reported k; the reported curve is deliberately bounded because each set masks and completes every model row",
         },
         "allowlist": allow_payload,
@@ -403,200 +497,231 @@ def main() -> None:
         "ranking_aware": {},
     }
     raw: list[dict[str, Any]] = []
-    with ProcessPoolExecutor(max_workers=args.workers) as executor:
-        for candidate_mode, candidates, max_k in (
-            ("any_candidate", any_indices, args.max_any_k),
-            ("pre_error_low_friction_allowlist", allow_indices, args.max_any_k),
-        ):
-            if candidate_mode == "any_candidate" and reusable_any is not None:
-                payload["curves"][candidate_mode] = reusable_any
-                raw.extend(reusable_any_raw)
-                print(
-                    "reused hash-matched unrestricted score curves and raw rows; "
-                    "ranking trajectories will be regenerated",
-                    flush=True,
-                )
-                continue
-            mode_result: dict[str, Any] = {"candidate_indices": candidates, "candidate_ids": [evaluations[i] for i in candidates]}
-            for objective in ("medae", "medape"):
-                if candidate_mode == "any_candidate" and objective == "medae":
-                    prior = json.loads(args.previous_probes.read_text(encoding="utf-8"))
-                    prior_all = prior["all_known_greedy"][:max_k]
-                    prior_train = prior["heldout_model"]["train_selected_trajectory"][:max_k]
-                    all_sets = [tuple(row["probe_indices"]) for row in prior_all]
-                    train_sets = [tuple(row["probe_indices"]) for row in prior_train]
-                    all_metrics = _parallel_all_known(executor, matrix, all_sets, args.rank)
-                    train_metrics = _parallel_all_known(executor, train_matrix, train_sets, args.rank)
-                    all_greedy = [
-                        {
-                            "k": int(row["step"]),
-                            "added_evaluation_index": row["added_evaluation_index"],
-                            "added_evaluation_id": row["added_evaluation_id"],
-                            "probe_indices": row["probe_indices"],
-                            "probe_ids": row["probe_ids"],
-                            "selection_objective": objective,
-                            "selection_metrics": _metric_dict(metrics),
-                            "candidate_results": row["candidate_results"],
-                            "reused_exact_search": str(args.previous_probes.relative_to(ROOT)),
-                        }
-                        for row, metrics in zip(prior_all, all_metrics)
-                    ]
-                    train_greedy = [
-                        {
-                            "k": int(row["step"]),
-                            "added_evaluation_index": row["added_evaluation_index"],
-                            "added_evaluation_id": row["added_evaluation_id"],
-                            "probe_indices": row["probe_indices"],
-                            "probe_ids": row["probe_ids"],
-                            "selection_objective": objective,
-                            "selection_metrics": _metric_dict(metrics),
-                            "candidate_results": row["candidate_results"],
-                            "reused_exact_search": str(args.previous_probes.relative_to(ROOT)),
-                        }
-                        for row, metrics in zip(prior_train, train_metrics)
-                    ]
-                    print("reused exact unrestricted MedAE trajectories through k=10", flush=True)
-                else:
-                    all_greedy = _greedy(
-                        executor, matrix, candidates, objective=objective, max_k=max_k,
-                        rank=args.rank, evaluations=evaluations, label=f"all-known/{candidate_mode}",
-                    )
-                    train_greedy = _greedy(
-                        executor, train_matrix, candidates, objective=objective, max_k=max_k,
-                        rank=args.rank, evaluations=evaluations, label=f"heldout-train/{candidate_mode}",
-                    )
-                validation_sets = [tuple(row["probe_indices"]) for row in train_greedy]
-                validation_results = _parallel_heldout(
-                    executor, matrix, validation_sets, validation_indices, train_indices, args.rank
-                )
-                heldout_greedy = []
-                for selection, validation in zip(train_greedy, validation_results):
-                    heldout_greedy.append({
-                        **selection,
-                        "training_selection_metrics": selection.pop("selection_metrics"),
-                        "validation_metrics": _metric_dict(validation),
-                    })
-                mode_result[f"all_known_greedy_{objective}"] = all_greedy
-                mode_result[f"heldout_greedy_{objective}"] = heldout_greedy
-                for protocol, steps in (("all_known", all_greedy), ("heldout", heldout_greedy)):
-                    for step in steps:
-                        probes = tuple(step["probe_indices"])
-                        prediction = (
-                            predict_all_known(matrix, probes, rank=args.rank)
-                            if protocol == "all_known"
-                            else predict_heldout_models(matrix, probes, validation_indices, train_indices, rank=args.rank)
-                        )
-                        raw.extend(_raw_rows(prediction, models, evaluations, {
-                            "protocol": protocol, "candidate_mode": candidate_mode,
-                            "method": "greedy", "selection_objective": objective, "k": step["k"],
-                        }))
-            mode_result["all_known_random"] = _random_curves(
-                executor, matrix, candidates, max_k=min(args.max_random_k, len(candidates)),
-                repeats=args.random_repeats, seed=args.seed, rank=args.rank, evaluations=evaluations,
+    random_raw_fields = [
+        "protocol", "candidate_mode", "method", "selection_objective",
+        "repeat", "k", "model_id", "evaluation_id",
+        "actual_normalized_score", "predicted_normalized_score",
+        "is_revealed_probe_cell", "is_hidden_prediction",
+    ]
+    args.random_raw_output.parent.mkdir(parents=True, exist_ok=True)
+    random_raw_temporary = _temporary_sibling(args.random_raw_output)
+    try:
+        with random_raw_temporary.open("wb") as random_raw_binary, gzip.GzipFile(
+            filename="", fileobj=random_raw_binary, mode="wb", mtime=0
+        ) as random_raw_gzip, io.TextIOWrapper(
+            random_raw_gzip, newline="", encoding="utf-8"
+        ) as random_raw_handle, ProcessPoolExecutor(max_workers=args.workers) as executor:
+            random_raw_writer = csv.DictWriter(
+                random_raw_handle, fieldnames=random_raw_fields, lineterminator="\n"
             )
-            mode_result["heldout_random"] = _random_curves(
-                executor, matrix, candidates, max_k=min(args.max_random_k, len(candidates)),
-                repeats=args.random_repeats, seed=args.seed, rank=args.rank, evaluations=evaluations,
-                heldout=(validation_indices, train_indices),
-            )
-            payload["curves"][candidate_mode] = mode_result
-
-        for candidate_mode, candidates in (
-            ("any_candidate", any_indices),
-            ("pre_error_low_friction_allowlist", allow_indices),
-        ):
-            all_known = _greedy(
-                executor,
-                matrix,
-                candidates,
-                objective="pairwise_margin_error",
-                max_k=min(args.max_any_k, len(candidates)),
-                rank=args.rank,
-                evaluations=evaluations,
-                label=f"ranking-all-known/{candidate_mode}",
-                pairwise_margin=args.ranking_margin,
-                ranking_scope="all_target",
-            )
-            train_selected = _greedy(
-                executor,
-                train_matrix,
-                candidates,
-                objective="pairwise_margin_error",
-                max_k=min(args.max_any_k, len(candidates)),
-                rank=args.rank,
-                evaluations=evaluations,
-                label=f"ranking-heldout-train/{candidate_mode}",
-                pairwise_margin=args.ranking_margin,
-                ranking_scope="all_target",
-            )
-            validation_sets = [tuple(row["probe_indices"]) for row in train_selected]
-            validation_non_probe = _parallel_heldout(
-                executor,
-                matrix,
-                validation_sets,
-                validation_indices,
-                train_indices,
-                args.rank,
-                pairwise_margin=args.ranking_margin,
-                ranking_scope="hidden_only",
-            )
-            validation_with_probe_zero = _parallel_heldout(
-                executor,
-                matrix,
-                validation_sets,
-                validation_indices,
-                train_indices,
-                args.rank,
-                pairwise_margin=args.ranking_margin,
-                ranking_scope="all_target",
-            )
-            heldout = []
-            for selected, non_probe, with_probe in zip(
-                train_selected, validation_non_probe, validation_with_probe_zero
+            random_raw_writer.writeheader()
+            for candidate_mode, candidates, max_k in (
+                ("any_candidate", any_indices, args.max_any_k),
+                ("pre_error_low_friction_allowlist", allow_indices, args.max_any_k),
             ):
-                selection_without_metrics = {
-                    key: value
-                    for key, value in selected.items()
-                    if key != "selection_metrics"
+                if candidate_mode == "any_candidate" and reusable_any is not None:
+                    mode_result = copy.deepcopy(reusable_any)
+                    raw.extend(reusable_any_raw)
+                    print(
+                        "reused hash-matched unrestricted greedy curves and selected raw rows; "
+                        "random and ranking trajectories will be regenerated",
+                        flush=True,
+                    )
+                    mode_result["all_known_random"] = _random_curves(
+                        executor, matrix, candidates,
+                        max_k=min(args.max_random_k, len(candidates)),
+                        repeats=args.random_repeats, seed=args.seed, rank=args.rank,
+                        evaluations=evaluations, raw_writer=random_raw_writer,
+                        models=models, candidate_mode=candidate_mode,
+                    )
+                    mode_result["heldout_random"] = _random_curves(
+                        executor, matrix, candidates,
+                        max_k=min(args.max_heldout_random_k, len(candidates)),
+                        repeats=args.random_repeats, seed=args.seed, rank=args.rank,
+                        evaluations=evaluations,
+                        heldout=(validation_indices, train_indices),
+                    )
+                    payload["curves"][candidate_mode] = mode_result
+                    continue
+                mode_result: dict[str, Any] = {
+                    "candidate_indices": candidates,
+                    "candidate_ids": [evaluations[i] for i in candidates],
                 }
-                heldout.append({
-                    **selection_without_metrics,
-                    "training_selection_metrics": selected["selection_metrics"],
-                    "validation_non_probe": _metric_dict(non_probe),
-                    "validation_with_probe_zero": _metric_dict(with_probe),
-                })
-            payload["ranking_aware"][candidate_mode] = {
-                "eval_protocol_all_known": "all_known_probe_cells_zero_error_v1",
-                "eval_protocol_holdout": "model_split_ranking_probe_validation_v1",
-                "objective": f"margin{args.ranking_margin:g}_pairwise_ranking_accuracy",
-                "margin": args.ranking_margin,
-                "all_known_greedy": all_known,
-                "heldout_greedy": heldout,
-                "all_known_random": _random_curves(
+                for objective in ("medae", "medape"):
+                    if candidate_mode == "any_candidate" and objective == "medae":
+                        prior = json.loads(args.previous_probes.read_text(encoding="utf-8"))
+                        prior_all = prior["all_known_greedy"][:max_k]
+                        prior_train = prior["heldout_model"]["train_selected_trajectory"][:max_k]
+                        all_sets = [tuple(row["probe_indices"]) for row in prior_all]
+                        train_sets = [tuple(row["probe_indices"]) for row in prior_train]
+                        all_metrics = _parallel_all_known(executor, matrix, all_sets, args.rank)
+                        train_metrics = _parallel_all_known(executor, train_matrix, train_sets, args.rank)
+                        all_greedy = [
+                            {
+                                "k": int(row["step"]),
+                                "added_evaluation_index": row["added_evaluation_index"],
+                                "added_evaluation_id": row["added_evaluation_id"],
+                                "probe_indices": row["probe_indices"],
+                                "probe_ids": row["probe_ids"],
+                                "selection_objective": objective,
+                                "selection_metrics": _metric_dict(metrics),
+                                "candidate_results": row["candidate_results"],
+                                "reused_exact_search": str(args.previous_probes.relative_to(ROOT)),
+                            }
+                            for row, metrics in zip(prior_all, all_metrics)
+                        ]
+                        train_greedy = [
+                            {
+                                "k": int(row["step"]),
+                                "added_evaluation_index": row["added_evaluation_index"],
+                                "added_evaluation_id": row["added_evaluation_id"],
+                                "probe_indices": row["probe_indices"],
+                                "probe_ids": row["probe_ids"],
+                                "selection_objective": objective,
+                                "selection_metrics": _metric_dict(metrics),
+                                "candidate_results": row["candidate_results"],
+                                "reused_exact_search": str(args.previous_probes.relative_to(ROOT)),
+                            }
+                            for row, metrics in zip(prior_train, train_metrics)
+                        ]
+                        print("reused exact unrestricted MedAE trajectories through k=10", flush=True)
+                    else:
+                        all_greedy = _greedy(
+                            executor, matrix, candidates, objective=objective, max_k=max_k,
+                            rank=args.rank, evaluations=evaluations, label=f"all-known/{candidate_mode}",
+                        )
+                        train_greedy = _greedy(
+                            executor, train_matrix, candidates, objective=objective, max_k=max_k,
+                            rank=args.rank, evaluations=evaluations, label=f"heldout-train/{candidate_mode}",
+                        )
+                    validation_sets = [tuple(row["probe_indices"]) for row in train_greedy]
+                    validation_results = _parallel_heldout(
+                        executor, matrix, validation_sets, validation_indices, train_indices, args.rank
+                    )
+                    heldout_greedy = []
+                    for selection, validation in zip(train_greedy, validation_results):
+                        heldout_greedy.append({
+                            **selection,
+                            "training_selection_metrics": selection.pop("selection_metrics"),
+                            "validation_metrics": _metric_dict(validation),
+                        })
+                    mode_result[f"all_known_greedy_{objective}"] = all_greedy
+                    mode_result[f"heldout_greedy_{objective}"] = heldout_greedy
+                    for protocol, steps in (("all_known", all_greedy), ("heldout", heldout_greedy)):
+                        for step in steps:
+                            probes = tuple(step["probe_indices"])
+                            prediction = (
+                                predict_all_known(matrix, probes, rank=args.rank)
+                                if protocol == "all_known"
+                                else predict_heldout_models(matrix, probes, validation_indices, train_indices, rank=args.rank)
+                            )
+                            raw.extend(_raw_rows(prediction, models, evaluations, {
+                                "protocol": protocol, "candidate_mode": candidate_mode,
+                                "method": "greedy", "selection_objective": objective, "k": step["k"],
+                            }))
+                mode_result["all_known_random"] = _random_curves(
+                    executor, matrix, candidates, max_k=min(args.max_random_k, len(candidates)),
+                    repeats=args.random_repeats, seed=args.seed, rank=args.rank, evaluations=evaluations,
+                    raw_writer=random_raw_writer, models=models, candidate_mode=candidate_mode,
+                )
+                mode_result["heldout_random"] = _random_curves(
+                    executor, matrix, candidates, max_k=min(args.max_heldout_random_k, len(candidates)),
+                    repeats=args.random_repeats, seed=args.seed, rank=args.rank, evaluations=evaluations,
+                    heldout=(validation_indices, train_indices),
+                )
+                payload["curves"][candidate_mode] = mode_result
+
+            for candidate_mode, candidates in (
+                ("any_candidate", any_indices),
+                ("pre_error_low_friction_allowlist", allow_indices),
+            ):
+                all_known = _greedy(
                     executor,
                     matrix,
                     candidates,
-                    max_k=min(args.max_random_k, len(candidates)),
-                    repeats=args.random_repeats,
-                    seed=args.seed,
+                    objective="pairwise_margin_error",
+                    max_k=min(args.max_any_k, len(candidates)),
                     rank=args.rank,
                     evaluations=evaluations,
+                    label=f"ranking-all-known/{candidate_mode}",
                     pairwise_margin=args.ranking_margin,
                     ranking_scope="all_target",
-                ),
-            }
+                )
+                train_selected = _greedy(
+                    executor,
+                    train_matrix,
+                    candidates,
+                    objective="pairwise_margin_error",
+                    max_k=min(args.max_any_k, len(candidates)),
+                    rank=args.rank,
+                    evaluations=evaluations,
+                    label=f"ranking-heldout-train/{candidate_mode}",
+                    pairwise_margin=args.ranking_margin,
+                    ranking_scope="all_target",
+                )
+                validation_sets = [tuple(row["probe_indices"]) for row in train_selected]
+                validation_non_probe = _parallel_heldout(
+                    executor,
+                    matrix,
+                    validation_sets,
+                    validation_indices,
+                    train_indices,
+                    args.rank,
+                    pairwise_margin=args.ranking_margin,
+                    ranking_scope="hidden_only",
+                )
+                validation_with_probe_zero = _parallel_heldout(
+                    executor,
+                    matrix,
+                    validation_sets,
+                    validation_indices,
+                    train_indices,
+                    args.rank,
+                    pairwise_margin=args.ranking_margin,
+                    ranking_scope="all_target",
+                )
+                heldout = []
+                for selected, non_probe, with_probe in zip(
+                    train_selected, validation_non_probe, validation_with_probe_zero
+                ):
+                    selection_without_metrics = {
+                        key: value
+                        for key, value in selected.items()
+                        if key != "selection_metrics"
+                    }
+                    heldout.append({
+                        **selection_without_metrics,
+                        "training_selection_metrics": selected["selection_metrics"],
+                        "validation_non_probe": _metric_dict(non_probe),
+                        "validation_with_probe_zero": _metric_dict(with_probe),
+                    })
+                payload["ranking_aware"][candidate_mode] = {
+                    "eval_protocol_all_known": "all_known_probe_cells_zero_error_v1",
+                    "eval_protocol_holdout": "model_split_ranking_probe_validation_v1",
+                    "objective": f"margin{args.ranking_margin:g}_pairwise_ranking_accuracy",
+                    "margin": args.ranking_margin,
+                    "all_known_greedy": all_known,
+                    "heldout_greedy": heldout,
+                    "all_known_random": _random_curves(
+                        executor,
+                        matrix,
+                        candidates,
+                        max_k=min(args.max_ranking_random_k, len(candidates)),
+                        repeats=args.random_repeats,
+                        seed=args.seed,
+                        rank=args.rank,
+                        evaluations=evaluations,
+                        pairwise_margin=args.ranking_margin,
+                        ranking_scope="all_target",
+                    ),
+                }
+        os.replace(random_raw_temporary, args.random_raw_output)
+    finally:
+        random_raw_temporary.unlink(missing_ok=True)
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    args.raw_output.parent.mkdir(parents=True, exist_ok=True)
-    if raw:
-        with args.raw_output.open("w", newline="", encoding="utf-8") as handle:
-            writer = csv.DictWriter(
-                handle, fieldnames=list(raw[0]), lineterminator="\n"
-            )
-            writer.writeheader()
-            writer.writerows(raw)
-    print(f"wrote {args.output} and {args.raw_output}")
+    _write_json_atomic(args.output, payload)
+    _write_csv_atomic(args.raw_output, raw)
+    print(f"wrote {args.output}, {args.raw_output}, and {args.random_raw_output}")
 
 
 if __name__ == "__main__":

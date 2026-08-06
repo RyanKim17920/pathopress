@@ -2,8 +2,8 @@
   "schema_version": 1,
   "matrix": {
     "n_models": 59,
-    "n_evaluations": 165,
-    "n_observed": 1967
+    "n_evaluations": 168,
+    "n_observed": 2027
   },
   "counts": {
     "release_quarters": {
@@ -29,24 +29,121 @@
     },
     "observed_score_quarters": {
       "2015-Q4": 9,
-      "2020-Q4": 35,
+      "2020-Q4": 38,
       "2021-Q1": 32,
-      "2021-Q2": 12,
-      "2022-Q2": 3,
-      "2022-Q4": 30,
+      "2021-Q2": 15,
+      "2022-Q2": 6,
+      "2022-Q4": 36,
       "2023-Q1": 16,
       "2023-Q2": 72,
-      "2023-Q3": 184,
-      "2023-Q4": 28,
-      "2024-Q1": 150,
-      "2024-Q2": 385,
-      "2024-Q3": 382,
-      "2024-Q4": 166,
-      "2025-Q1": 221,
+      "2023-Q3": 196,
+      "2023-Q4": 31,
+      "2024-Q1": 156,
+      "2024-Q2": 388,
+      "2024-Q3": 391,
+      "2024-Q4": 169,
+      "2025-Q1": 230,
       "2025-Q2": 64,
       "2025-Q3": 48,
       "2025-Q4": 105,
       "2026-Q1": 25
+    },
+    "coverage_by_release_quarter": {
+      "2015-Q4": {
+        "median": 9.0,
+        "mean": 9.0,
+        "n_models": 1
+      },
+      "2020-Q4": {
+        "median": 16.0,
+        "mean": 12.666666666666666,
+        "n_models": 3
+      },
+      "2021-Q1": {
+        "median": 16.0,
+        "mean": 16.0,
+        "n_models": 2
+      },
+      "2021-Q2": {
+        "median": 15.0,
+        "mean": 15.0,
+        "n_models": 1
+      },
+      "2022-Q2": {
+        "median": 6.0,
+        "mean": 6.0,
+        "n_models": 1
+      },
+      "2022-Q4": {
+        "median": 7.5,
+        "mean": 9.0,
+        "n_models": 4
+      },
+      "2023-Q1": {
+        "median": 16.0,
+        "mean": 16.0,
+        "n_models": 1
+      },
+      "2023-Q2": {
+        "median": 16.0,
+        "mean": 14.4,
+        "n_models": 5
+      },
+      "2023-Q3": {
+        "median": 46.0,
+        "mean": 49.0,
+        "n_models": 4
+      },
+      "2023-Q4": {
+        "median": 31.0,
+        "mean": 31.0,
+        "n_models": 1
+      },
+      "2024-Q1": {
+        "median": 22.0,
+        "mean": 19.5,
+        "n_models": 8
+      },
+      "2024-Q2": {
+        "median": 88.0,
+        "mean": 77.6,
+        "n_models": 5
+      },
+      "2024-Q3": {
+        "median": 46.0,
+        "mean": 65.16666666666667,
+        "n_models": 6
+      },
+      "2024-Q4": {
+        "median": 73.0,
+        "mean": 56.333333333333336,
+        "n_models": 3
+      },
+      "2025-Q1": {
+        "median": 31.0,
+        "mean": 46.0,
+        "n_models": 5
+      },
+      "2025-Q2": {
+        "median": 12.0,
+        "mean": 21.333333333333332,
+        "n_models": 3
+      },
+      "2025-Q3": {
+        "median": 16.0,
+        "mean": 16.0,
+        "n_models": 3
+      },
+      "2025-Q4": {
+        "median": 52.5,
+        "mean": 52.5,
+        "n_models": 2
+      },
+      "2026-Q1": {
+        "median": 25.0,
+        "mean": 25.0,
+        "n_models": 1
+      }
     },
     "task_family": {
       "mutation_prediction": 49,
@@ -58,6 +155,7 @@
       "spatial_transcriptomics": 9,
       "tumor_grading": 9,
       "treatment_response": 8,
+      "clustering_robustness": 3,
       "representation_robustness": 3,
       "segmentation": 2
     },
@@ -70,6 +168,7 @@
       "molecular_subtyping": 81,
       "morphological_subtyping": 74,
       "tumor_grading": 65,
+      "clustering_robustness": 60,
       "representation_robustness": 60,
       "treatment_response": 59,
       "segmentation": 38
@@ -79,23 +178,29 @@
       "thunder": 16,
       "eva": 15,
       "hest": 9,
-      "pathorob": 3
+      "pathorob": 6
     },
     "score_audit_status": {
-      "parsed_primary_source": 1967
+      "parsed_primary_source": 2027
+    },
+    "source_provenance": {
+      "Official benchmark repository": 1071,
+      "Primary paper or report": 956
     },
     "task_source_domains": {
       "arxiv.org": 122,
-      "github.com": 43
+      "github.com": 43,
+      "www.nature.com": 3
     },
     "n_models": 59,
-    "n_evaluations": 165,
-    "n_observed": 1967,
+    "n_evaluations": 168,
+    "n_observed": 2027,
     "n_release_dates": 59
   },
   "semantics": {
     "release_timeline": "verified exact-model primary-source dates only",
     "quarterly_score_coverage": "retained observed score cells grouped by verified model release quarter; not publication-quarter benchmarking volume",
+    "coverage_by_release_quarter": "median and mean retained evaluations per verified model, matching the upstream panel denominator",
     "task_mix": "retained evaluation identities, not raw source columns",
     "observed_by_category": "retained observed model-evaluation cells"
   }

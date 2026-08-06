@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import gzip
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
@@ -13,7 +15,9 @@ from pathopress.llm_baseline import (
     deterministic_mock_response,
     evaluate_cached_responses,
     make_config,
+    seal_external_response,
     select_peer_examples,
+    summarize_real_execution,
     validate_config,
     validate_request,
     validate_response,
@@ -104,7 +108,7 @@ class LlmBaselineSemanticTests(unittest.TestCase):
 
     def test_mock_response_is_hash_bound_and_never_headline_eligible(self) -> None:
         request = build_request(
-            config=self.config, condition="matrix_named", fold_id=0, seed=42, fold=0,
+            config=self.config, condition="zero_shot_named", fold_id=0, seed=42, fold=0,
             batch_index=0, train=self.matrix, cells=[(0, 6)], models=self.models,
             evaluations=self.evaluations, task_metadata=self.tasks,
         )
@@ -117,12 +121,135 @@ class LlmBaselineSemanticTests(unittest.TestCase):
         self.assertEqual(metrics["result_status"], "mock_contract_validation_only")
         self.assertFalse(metrics["headline_eligible"])
 
+    def test_real_response_import_is_exact_complete_and_range_checked(self) -> None:
+        request = build_request(
+            config=self.config, condition="zero_shot_named", fold_id=0, seed=42, fold=0,
+            batch_index=0, train=self.matrix, cells=[(0, 6)], models=self.models,
+            evaluations=self.evaluations, task_metadata=self.tasks,
+        )
+        raw = {
+            "request_id": request["request_id"],
+            "backend_kind": "openai_compatible",
+            "provider": "test-provider",
+            "model": "test-model",
+            "response_text": '{"q0": 71.0}',
+        }
+        response = seal_external_response(raw, request, self.config)
+        validate_response(response, request, self.config, require_real=True)
+        complete = self.matrix.copy()
+        complete[0, 6] = 71.0
+        metrics = evaluate_cached_responses(
+            [request], [response], complete, self.config,
+            require_complete=True, require_real=True,
+        )
+        self.assertTrue(metrics["headline_eligible"])
+        self.assertTrue(metrics["complete"])
+        bad = dict(raw, response_text='{"q0": 101.0}')
+        with self.assertRaisesRegex(ValueError, "outside normalized"):
+            seal_external_response(bad, request, self.config)
+
+    def test_real_pack_requires_one_fixed_identity_and_binds_execution_evidence(self) -> None:
+        requests = [
+            build_request(
+                config=self.config, condition="zero_shot_named", fold_id=0,
+                seed=42, fold=0, batch_index=index, train=self.matrix,
+                cells=[(0, 6)], models=self.models, evaluations=self.evaluations,
+                task_metadata=self.tasks,
+            )
+            for index in range(2)
+        ]
+        responses = []
+        for index, request in enumerate(requests):
+            responses.append(seal_external_response({
+                "request_id": request["request_id"],
+                "backend_kind": "openai_compatible",
+                "provider": "fixed-provider",
+                "model": "fixed-model",
+                "response_text": '{"q0": 71.0}',
+                "execution_metadata": {
+                    "model_version": "2026-08-01",
+                    "settings": {"temperature": 0, "seed": 42},
+                    "receipt": {"provider_request_id": f"receipt-{index}"},
+                },
+            }, request, self.config))
+        evidence = summarize_real_execution(responses)
+        self.assertEqual(
+            evidence["fixed_identity"],
+            {
+                "backend_kind": "openai_compatible",
+                "provider": "fixed-provider",
+                "model": "fixed-model",
+            },
+        )
+        self.assertRegex(evidence["fixed_identity_sha256"], r"^[0-9a-f]{64}$")
+        self.assertEqual(evidence["model_version_reported_responses"], 2)
+        self.assertEqual(evidence["settings_reported_responses"], 2)
+        self.assertEqual(evidence["receipt_reported_responses"], 2)
+        self.assertRegex(evidence["receipt_pack_sha256"], r"^[0-9a-f]{64}$")
+
+        mixed = json.loads(json.dumps(responses))
+        mixed[1]["provider"] = "different-provider"
+        mixed[1].pop("response_sha256")
+        from pathopress.llm_baseline import object_sha256
+        mixed[1]["response_sha256"] = object_sha256(mixed[1])
+        with self.assertRaisesRegex(ValueError, "exactly one"):
+            evaluate_cached_responses(
+                requests, mixed, self.matrix, self.config,
+                require_complete=True, require_real=True,
+            )
+
+        inconsistent = json.loads(json.dumps(responses))
+        inconsistent[1]["execution_metadata_hashes"]["settings_sha256"] = "f" * 64
+        inconsistent[1].pop("response_sha256")
+        inconsistent[1]["response_sha256"] = object_sha256(inconsistent[1])
+        with self.assertRaisesRegex(ValueError, "inconsistent settings_sha256"):
+            summarize_real_execution(inconsistent)
+
     def test_generated_dry_run_artifacts_mark_every_real_condition_unrun(self) -> None:
         status = json.loads((ROOT / "experiments/llm_baseline/real_run_status.json").read_text())
         self.assertEqual(status["status"], "unrun")
         self.assertFalse(status["headline_eligible"])
         self.assertEqual(status["conditions"], {condition: "unrun" for condition in CONDITIONS})
-        metrics = json.loads((ROOT / "experiments/llm_baseline/mock_metrics.json").read_text())
+        self.assertEqual(status["request_count"], 1990)
+        self.assertEqual(status["target_prediction_count"], 81080)
+        self.assertEqual(status["cost"]["status"], "unknown_until_external_execution")
+        index = json.loads((ROOT / "experiments/llm_baseline/requests.jsonl").read_text())
+        self.assertEqual(index["request_count"], 1990)
+        self.assertEqual(index["shard_count"], 20)
+        digest = hashlib.sha256()
+        request_ids = set()
+        request_counts = {condition: 0 for condition in CONDITIONS}
+        target_counts = {condition: 0 for condition in CONDITIONS}
+        for row in index["shards"]:
+            shard = ROOT / "experiments/llm_baseline/requests" / row["path"]
+            self.assertEqual(hashlib.sha256(shard.read_bytes()).hexdigest(), row["sha256"])
+            payload = gzip.decompress(shard.read_bytes())
+            digest.update(payload)
+            for line in payload.decode("utf-8").splitlines():
+                request = json.loads(line)
+                self.assertNotIn(request["request_id"], request_ids)
+                request_ids.add(request["request_id"])
+                condition = request["condition"]
+                request_counts[condition] += 1
+                target_counts[condition] += len(request["targets"])
+                if condition.startswith("zero_shot"):
+                    self.assertLessEqual(len({target["model_index"] for target in request["targets"]}), 10)
+                elif condition == "five_shot_named":
+                    self.assertLessEqual(len(request["targets"]), 64)
+                else:
+                    self.assertLessEqual(len(request["targets"]), 16)
+        self.assertEqual(digest.hexdigest(), index["canonical_uncompressed_sha256"])
+        self.assertEqual(
+            request_counts,
+            {
+                "zero_shot_named": 180,
+                "zero_shot_blind": 180,
+                "five_shot_named": 340,
+                "five_shot_blind": 1290,
+            },
+        )
+        self.assertEqual(target_counts, {condition: 20270 for condition in CONDITIONS})
+        metrics = json.loads((ROOT / "experiments/llm_baseline_smoke/mock_metrics.json").read_text())
         self.assertEqual(metrics["result_status"], "mock_contract_validation_only")
         self.assertFalse(metrics["headline_eligible"])
 
@@ -276,7 +403,7 @@ class MaintenanceTests(unittest.TestCase):
             if isinstance(dependency, dict) and dependency.get("role", "").startswith("ignored")
         ]
         self.assertIn("content-digested", payload["description"])
-        self.assertEqual(len(ignored), 3)
+        self.assertEqual(len(ignored), 5)
         self.assertTrue(all(dependency.get("config") for dependency in ignored))
 
         manifest = json.loads(

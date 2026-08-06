@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import importlib.util
+from importlib import metadata as importlib_metadata
 import json
 import os
 import shutil
@@ -20,6 +22,7 @@ from .prediction import (
     DEFAULT_RANK,
     DEFAULT_REGULARIZATION,
     calibrated_interval,
+    calibrated_trust_probability,
     complete_dataset,
     load_confidence_artifact,
     load_prediction_dataset,
@@ -30,6 +33,11 @@ from .new_model_confidence import load_new_model_confidence_artifact
 
 PUBLIC_SCHEMA_VERSION = "pathopress-public-tables-v1"
 WEBSITE_SCHEMA_VERSION = "pathopress-static-predictor-v1"
+HF_DATASET_SCHEMA_VERSION = "pathopress-hf-table-schema-v1"
+DEFAULT_HF_DATASET_ID = "pathopress/pathopress-score-matrix"
+PINNED_BENCHPRESS_COMMIT = "0a684b63ee0e4a401cb907a3827a82ea997d74c4"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+UV_LOCK_PATH = PROJECT_ROOT / "uv.lock"
 
 
 def _read_csv(path: Path) -> list[dict[str, str]]:
@@ -44,6 +52,93 @@ def _write_csv(path: Path, rows: Iterable[Mapping[str, object]], fields: list[st
         writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
         writer.writeheader()
         writer.writerows(materialized)
+    return len(materialized)
+
+
+def parquet_available() -> bool:
+    """Return whether the declared deterministic Parquet backend is available."""
+
+    return importlib.util.find_spec("pyarrow") is not None
+
+
+def _distribution_version(name: str) -> str | None:
+    try:
+        return importlib_metadata.version(name)
+    except importlib_metadata.PackageNotFoundError:
+        return None
+
+
+def _exporter_identity(*, write_parquet: bool) -> dict[str, object]:
+    """Return the lock/code/backend identity needed for byte-level rebuilds."""
+
+    if not UV_LOCK_PATH.is_file():
+        raise FileNotFoundError(
+            f"Reproducible public export requires the repository lockfile: {UV_LOCK_PATH}"
+        )
+    pyarrow_version = _distribution_version("pyarrow") if write_parquet else None
+    if write_parquet and pyarrow_version is None:
+        raise RuntimeError("Parquet export selected but the PyArrow version is unavailable")
+    return {
+        "implementation": "pathopress.public_data.build_public_export",
+        "implementation_sha256": sha256_file(Path(__file__)),
+        "uv_lock_sha256": sha256_file(UV_LOCK_PATH),
+        "parquet_backend": "pyarrow" if write_parquet else None,
+        "pyarrow_version": pyarrow_version,
+        "pandas_used": False,
+        "pandas_version": _distribution_version("pandas"),
+    }
+
+
+def _parquet_scalar(value: object, logical_type: str) -> object:
+    if value in (None, ""):
+        return None
+    if logical_type == "float64":
+        return float(value)
+    if logical_type == "int64":
+        return int(value)
+    if logical_type == "boolean":
+        if isinstance(value, bool):
+            return value
+        return str(value).strip().lower() == "true"
+    return str(value)
+
+
+def _write_parquet(
+    path: Path,
+    rows: Iterable[Mapping[str, object]],
+    fields: list[str],
+    logical_types: Mapping[str, str],
+) -> int:
+    """Write byte-stable PyArrow Parquet with an explicit field order/schema."""
+
+    try:
+        import pyarrow as pa
+        import pyarrow.parquet as pq
+    except ImportError as exc:  # pragma: no cover - guarded by parquet_available
+        raise RuntimeError(
+            "Parquet export requires pyarrow; install `pathopress[hf]`."
+        ) from exc
+    arrow_types = {
+        "string": pa.string(), "float64": pa.float64(),
+        "int64": pa.int64(), "boolean": pa.bool_(),
+    }
+    schema = pa.schema([
+        pa.field(field, arrow_types[logical_types.get(field, "string")])
+        for field in fields
+    ])
+    materialized = [
+        {
+            field: _parquet_scalar(row.get(field), logical_types.get(field, "string"))
+            for field in fields
+        }
+        for row in rows
+    ]
+    table = pa.Table.from_pylist(materialized, schema=schema)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    pq.write_table(
+        table, path, compression="zstd", version="2.6", use_dictionary=False,
+        write_statistics=True, data_page_version="1.0",
+    )
     return len(materialized)
 
 
@@ -221,26 +316,58 @@ matrix. Machine-parsed primary-source evidence is not dual human verification.
 """
 
 
-def _export_readme_text() -> str:
-    return """# PathoPress public score-matrix export
+def _export_readme_text(
+    *, dataset_id: str, all_models: int, all_evaluations: int, all_scores: int,
+    paper_models: int, paper_evaluations: int, paper_scores: int,
+    parquet_written: bool,
+) -> str:
+    parquet_note = (
+        "CSV and deterministic Parquet mirrors are included."
+        if parquet_written else
+        "CSV tables are included; install `pathopress[hf]` and rebuild with `--parquet yes` for Parquet."
+    )
+    table_extension = "parquet" if parquet_written else "csv"
+    return f"""---
+pretty_name: PathoPress Pathology Foundation-Model Score Matrix
+license: other
+license_name: mixed-upstream-terms
+task_categories:
+- tabular-classification
+configs:
+- config_name: scores_paper
+  data_files: data/scores_paper.{table_extension}
+- config_name: scores_all
+  data_files: data/scores_all.{table_extension}
+- config_name: models
+  data_files: data/models.{table_extension}
+- config_name: benchmarks
+  data_files: data/benchmarks.{table_extension}
+---
+
+# PathoPress public score-matrix export
+
+Intended dataset repository: `{dataset_id}`. This is a local publication build;
+building it does not upload or create a remote repository.
 
 The `data/` directory contains model, evaluation, and long score tables for the
 full source registry (`*_all.csv`) and the supported publication matrix
 (`*_paper.csv`). `score_matrix_paper_wide.csv` is the same accepted paper cells
-in model-by-evaluation form. Current row counts are:
+in model-by-evaluation form. {parquet_note} Current row counts are:
 
 | Table layer | Models | Evaluations | Score rows |
 |---|---:|---:|---:|
-| Full registry | 60 | 287 | 1,976 |
-| Fixed paper matrix | 59 | 165 | 1,967 |
+| Full registry | {all_models} | {all_evaluations} | {all_scores} |
+| Fixed paper matrix | {paper_models} | {paper_evaluations} | {paper_scores} |
 
 The paper filter accepts `verified` and `parsed_primary_source` evidence and
 iteratively requires at least three scores per model and five models per
-evaluation. It excludes nine external-report rows. Machine-parsed primary
-evidence has not necessarily received two independent human reviews.
+evaluation. Machine-parsed primary evidence has not necessarily received two
+independent human reviews.
 
-Every file is byte-counted and SHA-256-bound by `manifest.json`. Load and verify
-a local copy with:
+Every distributed file is byte-counted and SHA-256-bound by `manifest.json`.
+`schema.json` defines ordered columns and logical types; `metadata.json` records
+the pinned BenchPress maintenance mapping and matrix counts. Load and verify a
+local copy with:
 
 ```python
 from pathopress.public_data import load_public_export
@@ -253,15 +380,19 @@ Download an HTTP/file mirror reproducibly with:
 PYTHONPATH=src python3 scripts/download_public_release.py BASE_URL DESTINATION
 ```
 
-Use `--force` to refresh an existing local manifest. The downloader performs no
-upload and rejects unsafe paths, unsupported schemas, missing files, and hash
-mismatches. Local source paths are removed from the public provenance payload.
+The downloader performs no upload and rejects unsafe paths, unsupported schemas,
+missing files, and hash mismatches. Local source paths are removed from the
+public provenance payload.
 
 This package contains reported facts and protocol metadata, not benchmark
 images, labels, model weights, or a license grant for upstream data. Read
 `LICENSES.md` and `provenance.json` before redistribution. Building or
 downloading this export does not upload or deploy it.
 """
+
+
+def _logical_types(fields: Iterable[str], numeric: Mapping[str, str]) -> dict[str, str]:
+    return {field: numeric.get(field, "string") for field in fields}
 
 
 def build_public_export(
@@ -274,8 +405,10 @@ def build_public_export(
     out_dir: str | Path,
     min_scores_per_model: int = 3,
     min_models_per_evaluation: int = 5,
+    parquet_mode: str = "auto",
+    dataset_id: str = DEFAULT_HF_DATASET_ID,
 ) -> dict[str, object]:
-    """Build deterministic all/paper/wide CSVs and a hash manifest."""
+    """Build deterministic CSV/Parquet publication tables and hash manifest."""
     scores_path = Path(scores_path)
     tasks_path = Path(tasks_path)
     suites_path = Path(suites_path)
@@ -284,6 +417,20 @@ def build_public_export(
     out_dir = Path(out_dir)
     data_dir = out_dir / "data"
     out_dir.mkdir(parents=True, exist_ok=True)
+    if parquet_mode not in {"auto", "yes", "no"}:
+        raise ValueError("parquet_mode must be one of: auto, yes, no")
+    write_parquet = parquet_mode == "yes" or (
+        parquet_mode == "auto" and parquet_available()
+    )
+    if parquet_mode == "yes" and not parquet_available():
+        raise RuntimeError(
+            "Parquet export requested but pyarrow is unavailable; install `pathopress[hf]`."
+        )
+    exporter = _exporter_identity(write_parquet=write_parquet)
+    # Never let Parquet produced by an older build leak into a CSV-only upload.
+    if data_dir.exists():
+        for stale_parquet in data_dir.glob("*.parquet"):
+            stale_parquet.unlink()
 
     raw_scores = _read_csv(scores_path)
     tasks = _read_csv(tasks_path)
@@ -312,6 +459,14 @@ def build_public_export(
     )
 
     row_counts: dict[str, int] = {}
+    # Pinned BenchPress maintenance compatibility aliases. In pathology,
+    # `benchmarks` are protocol-level evaluation identities.
+    row_counts["data/models.csv"] = _write_csv(
+        data_dir / "models.csv", all_models, MODEL_FIELDS
+    )
+    row_counts["data/benchmarks.csv"] = _write_csv(
+        data_dir / "benchmarks.csv", all_evaluations, EVALUATION_FIELDS
+    )
     row_counts["data/models_all.csv"] = _write_csv(
         data_dir / "models_all.csv", all_models, MODEL_FIELDS
     )
@@ -343,16 +498,95 @@ def build_public_export(
         data_dir / "score_matrix_paper_wide.csv", wide_rows, wide_fields
     )
 
+    table_definitions: dict[str, tuple[list[dict[str, object]], list[str], dict[str, str]]] = {
+        "models": (all_models, MODEL_FIELDS, _logical_types(MODEL_FIELDS, {"observed_scores": "int64"})),
+        "benchmarks": (all_evaluations, EVALUATION_FIELDS, _logical_types(EVALUATION_FIELDS, {"observed_models": "int64"})),
+        "models_all": (all_models, MODEL_FIELDS, _logical_types(MODEL_FIELDS, {"observed_scores": "int64"})),
+        "models_paper": (paper_models, MODEL_FIELDS, _logical_types(MODEL_FIELDS, {"observed_scores": "int64"})),
+        "evaluations_all": (all_evaluations, EVALUATION_FIELDS, _logical_types(EVALUATION_FIELDS, {"observed_models": "int64"})),
+        "evaluations_paper": (paper_evaluations, EVALUATION_FIELDS, _logical_types(EVALUATION_FIELDS, {"observed_models": "int64"})),
+        "scores_all": (all_scores, SCORE_FIELDS, _logical_types(SCORE_FIELDS, {"value": "float64", "normalized_score": "float64"})),
+        "scores_paper": (paper_scores, SCORE_FIELDS, _logical_types(SCORE_FIELDS, {"value": "float64", "normalized_score": "float64"})),
+        "score_matrix_paper_wide": (wide_rows, wide_fields, _logical_types(wide_fields, {field: "float64" for field in wide_fields if field != "model_id"})),
+    }
+    if write_parquet:
+        for name, (rows, fields, logical_types) in table_definitions.items():
+            relative = f"data/{name}.parquet"
+            row_counts[relative] = _write_parquet(
+                out_dir / relative, rows, fields, logical_types
+            )
+
     provenance = _clean_provenance(
         json.loads(provenance_path.read_text(encoding="utf-8"))
     )
     _json_write(out_dir / "provenance.json", provenance)
     (out_dir / "LICENSES.md").write_text(_licenses_text(suites), encoding="utf-8")
-    (out_dir / "README.md").write_text(_export_readme_text(), encoding="utf-8")
+    (out_dir / "README.md").write_text(
+        _export_readme_text(
+            dataset_id=dataset_id,
+            all_models=len(all_models), all_evaluations=len(all_evaluations),
+            all_scores=len(all_scores), paper_models=len(paper_models),
+            paper_evaluations=len(paper_evaluations), paper_scores=len(paper_scores),
+            parquet_written=write_parquet,
+        ),
+        encoding="utf-8",
+    )
+
+    schema_tables = {}
+    for name, (_rows, fields, logical_types) in table_definitions.items():
+        schema_tables[name] = {
+            "csv": f"data/{name}.csv",
+            "parquet": f"data/{name}.parquet" if write_parquet else None,
+            "fields": [
+                {"name": field, "logical_type": logical_types[field], "nullable": True}
+                for field in fields
+            ],
+        }
+    schema_tables["models"]["upstream_name"] = "models"
+    schema_tables["benchmarks"]["upstream_name"] = "benchmarks"
+    _json_write(out_dir / "schema.json", {
+        "schema_version": HF_DATASET_SCHEMA_VERSION,
+        "pathology_adaptation": "BenchPress benchmark_id maps to PathoPress evaluation_id; normalized_score preserves direction on a 0-100 fit scale.",
+        "exporter": exporter,
+        "tables": schema_tables,
+    })
+    metadata = {
+        "schema_version": "public-table-export-v1",
+        "pathopress_manifest_schema": PUBLIC_SCHEMA_VERSION,
+        "dataset_id": dataset_id,
+        "parquet_written": write_parquet,
+        "exporter": exporter,
+        "upstream": {
+            "repository": "https://github.com/microsoft/benchpress",
+            "commit": PINNED_BENCHPRESS_COMMIT,
+            "maintenance_export": "maintenance/export_hf_dataset.py",
+        },
+        "rows": {
+            "models": len(all_models), "benchmarks": len(all_evaluations),
+            "scores_all": len(all_scores), "scores_paper": len(paper_scores),
+        },
+        "paper_matrix": {
+            "models": len(dataset.models), "benchmarks": len(dataset.evaluations),
+            "observations": int(np.isfinite(dataset.matrix).sum()),
+            "fill_rate": float(np.isfinite(dataset.matrix).mean()),
+            "m_threshold": min_scores_per_model,
+            "b_threshold": min_models_per_evaluation,
+        },
+        "files": sorted(row_counts),
+        "notes": [
+            "scores_all is the public pre-filter score table.",
+            "scores_paper is the paper-filtered pathology long table.",
+            "models.csv and benchmarks.csv reproduce pinned upstream maintenance names.",
+            "Rich private audit traces are not implied by this public export.",
+        ],
+    }
+    _json_write(out_dir / "metadata.json", metadata)
 
     tracked = [
         *sorted(row_counts),
         "provenance.json",
+        "schema.json",
+        "metadata.json",
         "LICENSES.md",
         "README.md",
     ]
@@ -368,6 +602,11 @@ def build_public_export(
     manifest: dict[str, object] = {
         "schema_version": PUBLIC_SCHEMA_VERSION,
         "description": "Public PathoPress pathology benchmark score-matrix tables.",
+        "dataset_id": dataset_id,
+        "parquet_written": write_parquet,
+        "hf_table_schema_version": HF_DATASET_SCHEMA_VERSION,
+        "pinned_benchpress_commit": PINNED_BENCHPRESS_COMMIT,
+        "exporter": exporter,
         "inputs": {
             "scores_sha256": sha256_file(scores_path),
             "tasks_sha256": sha256_file(tasks_path),
@@ -376,6 +615,8 @@ def build_public_export(
             "model_metadata_sha256": (
                 sha256_file(model_metadata_path) if model_metadata_path.exists() else None
             ),
+            "uv_lock_sha256": exporter["uv_lock_sha256"],
+            "exporter_implementation_sha256": exporter["implementation_sha256"],
         },
         "paper_filter": {
             "accepted_audit_statuses": ["verified", "parsed_primary_source"],
@@ -420,11 +661,44 @@ def load_public_export(root: str | Path, *, verify: bool = True) -> PublicExport
     manifest = json.loads((root / "manifest.json").read_text(encoding="utf-8"))
     if manifest.get("schema_version") != PUBLIC_SCHEMA_VERSION:
         raise ValueError("unsupported public export schema")
+    file_paths = [item["path"] for item in manifest.get("files", [])]
+    if len(file_paths) != len(set(file_paths)):
+        raise ValueError("public export manifest contains duplicate paths")
     if verify:
         for item in manifest["files"]:
             path = root / _safe_relative_path(item["path"])
             if not path.is_file() or sha256_file(path) != item["sha256"]:
                 raise ValueError(f"public export hash mismatch: {item['path']}")
+    schema = json.loads((root / "schema.json").read_text(encoding="utf-8"))
+    metadata = json.loads((root / "metadata.json").read_text(encoding="utf-8"))
+    if schema.get("schema_version") != HF_DATASET_SCHEMA_VERSION:
+        raise ValueError("unsupported Hugging Face table schema")
+    if metadata.get("schema_version") != "public-table-export-v1":
+        raise ValueError("unsupported upstream-compatible metadata schema")
+    if metadata.get("dataset_id") != manifest.get("dataset_id"):
+        raise ValueError("dataset ID disagrees between metadata and manifest")
+    if bool(metadata.get("parquet_written")) != bool(manifest.get("parquet_written")):
+        raise ValueError("Parquet status disagrees between metadata and manifest")
+    exporter = manifest.get("exporter")
+    if not isinstance(exporter, dict) or not exporter:
+        raise ValueError("public export is missing exporter provenance")
+    if metadata.get("exporter") != exporter or schema.get("exporter") != exporter:
+        raise ValueError("exporter provenance disagrees across public metadata")
+    if manifest.get("inputs", {}).get("uv_lock_sha256") != exporter.get("uv_lock_sha256"):
+        raise ValueError("lockfile provenance disagrees with exporter identity")
+    if (
+        manifest.get("inputs", {}).get("exporter_implementation_sha256")
+        != exporter.get("implementation_sha256")
+    ):
+        raise ValueError("exporter code provenance disagrees with manifest inputs")
+    for required in ("models", "benchmarks", "scores_all", "scores_paper"):
+        table = schema.get("tables", {}).get(required, {})
+        if not table.get("csv") or not isinstance(table.get("fields"), list):
+            raise ValueError(f"missing public table schema: {required}")
+        if manifest.get("parquet_written") and not table.get("parquet"):
+            raise ValueError(f"missing Parquet schema path: {required}")
+    if not (root / "README.md").read_text(encoding="utf-8").startswith("---\n"):
+        raise ValueError("Hugging Face dataset card metadata is missing")
     models = _read_csv(root / "data" / "models_paper.csv")
     evaluations = _read_csv(root / "data" / "evaluations_paper.csv")
     scores = _read_csv(root / "data" / "scores_paper.csv")
@@ -435,6 +709,8 @@ def load_public_export(root: str | Path, *, verify: bool = True) -> PublicExport
         expected["observations"],
     ):
         raise ValueError("public export row counts disagree with manifest")
+    if metadata["rows"]["scores_paper"] != len(scores):
+        raise ValueError("upstream-compatible metadata row count disagrees with export")
     return PublicExport(root, manifest, models, evaluations, scores)
 
 
@@ -519,11 +795,15 @@ def build_website_data(
     predictions: list[list[float]] = []
     sources: list[list[dict[str, str] | None]] = []
     intervals: list[list[list[float] | None]] = []
+    trust_probabilities: list[list[float | None]] = []
+    trust_statuses: list[list[str | None]] = []
     for row_index, model in enumerate(dataset.models):
         observed_row: list[float | None] = []
         predicted_row: list[float] = []
         source_row: list[dict[str, str] | None] = []
         interval_row: list[list[float] | None] = []
+        trust_row: list[float | None] = []
+        trust_status_row: list[str | None] = []
         for column, evaluation in enumerate(dataset.evaluations):
             value = dataset.matrix[row_index, column]
             predicted = float(completed[row_index, column])
@@ -540,14 +820,30 @@ def build_website_data(
             )
             if confidence is not None and not np.isfinite(value):
                 suite = evaluations[column]["suite_id"]
-                lower, upper, _ = calibrated_interval(predicted, suite, confidence)
+                lower, upper, _ = calibrated_interval(
+                    predicted, suite, confidence,
+                    model_id=model, evaluation_id=evaluation,
+                )
                 interval_row.append([round(lower, 6), round(upper, 6)])
+                trust = calibrated_trust_probability(model, evaluation, confidence)
+                probability = trust.get("trust_probability")
+                trust_row.append(
+                    round(float(probability), 6)
+                    if isinstance(probability, (int, float)) else None
+                )
+                trust_status_row.append(str(trust["trust_probability_status"]))
             else:
                 interval_row.append(None)
+                trust_row.append(None)
+                trust_status_row.append(
+                    "not_applicable_observed" if np.isfinite(value) else None
+                )
         observed.append(observed_row)
         predictions.append(predicted_row)
         sources.append(source_row)
         intervals.append(interval_row)
+        trust_probabilities.append(trust_row)
+        trust_statuses.append(trust_status_row)
     payload: dict[str, object] = {
         "schema_version": WEBSITE_SCHEMA_VERSION,
         "models": models,
@@ -556,6 +852,8 @@ def build_website_data(
         "predictions": predictions,
         "sources": sources,
         "prediction_intervals": intervals,
+        "trust_probabilities": trust_probabilities,
+        "trust_probability_status": trust_statuses,
         "new_model_confidence": new_model_confidence,
         "meta": {
             "point_method": "logit + evaluation z-score + bias ALS rank=1 lambda=0.1",
@@ -564,7 +862,7 @@ def build_website_data(
             "observations": int(np.isfinite(dataset.matrix).sum()),
             "scores_sha256": sha256_file(scores_path),
             "confidence": (
-                "90% suite-conditional held-out-cell absolute-residual intervals"
+                "90% hybrid-risk conformal intervals plus calibrated P(abs error <= 10 normalized points); unsupported cells abstain"
                 if confidence is not None
                 else None
             ),

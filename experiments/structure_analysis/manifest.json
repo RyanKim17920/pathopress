@@ -1,17 +1,17 @@
 {
   "correlation": {
-    "median_best_abs_r": 0.918881,
+    "median_best_abs_r": 0.9163619999999999,
     "min_shared": 5,
     "n_best_abs_r_at_least_0_85": 131,
-    "n_evaluations_with_neighbor": 165
+    "n_evaluations_with_neighbor": 168
   },
   "input": {
-    "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9"
+    "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c"
   },
   "matrix": {
-    "n_evaluations": 165,
+    "n_evaluations": 168,
     "n_models": 59,
-    "n_observed": 1967
+    "n_observed": 2027
   },
   "outputs": [
     "threshold_sweep.json",

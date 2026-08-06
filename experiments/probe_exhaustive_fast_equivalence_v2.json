@@ -1,0 +1,494 @@
+{
+  "schema_version": 2,
+  "status": "passed",
+  "scientific_engine": {
+    "rank": 1,
+    "regularization": 0.1,
+    "iterations": 40,
+    "ensembles": 10,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ]
+  },
+  "inputs": {
+    "scores_path": "data/scores.csv",
+    "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
+    "source_path": "experiments/fast_rank1_v2.cpp",
+    "source_sha256": "db9b043e81a48083a1540275558ae8d74fa77a95e745064f5231220f068b6e98",
+    "library_path": "/tmp/.libpathopress_fast_rank1-db9b043e81a48083/libfast_rank1-0ed02c1710cde4e9762317466fb08f2b9ba57ad895e341e9bba2627db14140eb.so",
+    "library_sha256": "0ed02c1710cde4e9762317466fb08f2b9ba57ad895e341e9bba2627db14140eb",
+    "runner_path": "experiments/run_probe_exhaustive_v2.py",
+    "runner_sha256": "045dec92c9eb6eb37d2f586fd0a16efbbd2f8409071cb3c10ea6420b09c95991",
+    "execution_function_sha256": {
+      "_init_worker": "48f561cf2f978ca3419bd19668fbd7a6ac232c7bce3123e264af13f15636e411",
+      "_predict_all_known_fast": "e1e1070d1ab77a6de03bcc74d1eb2484920072fc7fab0006bc39b56c2f614e2c",
+      "_evaluate_combo": "2442fd653292bb87961fb71eb7157d9c360f79af5bdb76076c7364e370e6f050"
+    },
+    "compiler": {
+      "path": "/usr/bin/x86_64-linux-gnu-g++-13",
+      "sha256": "1353e9bdd29a7295c7226bf6c63abccce056d8cac31f112e5cdbecc3f28c2769",
+      "version": "x86_64-linux-gnu-g++-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0"
+    },
+    "compile_flags": [
+      "-O3",
+      "-std=c++17",
+      "-fPIC",
+      "-shared",
+      "-ffp-contract=off"
+    ],
+    "platform": {
+      "system": "Linux",
+      "release": "6.11.0-1016-nvidia",
+      "machine": "x86_64",
+      "python_version": "3.13.13",
+      "python_implementation": "CPython",
+      "python_abi": "cpython-313",
+      "libc": [
+        "glibc",
+        "2.39"
+      ]
+    }
+  },
+  "hard_caps": {
+    "max_absolute_cell_delta": 1e-10,
+    "max_absolute_metric_delta": 1e-11,
+    "minimum_comparisons": 32
+  },
+  "requested_tolerances": {
+    "max_absolute_cell_delta": 1e-10,
+    "max_absolute_metric_delta": 1e-11
+  },
+  "observed": {
+    "sample_combinations": 32,
+    "max_absolute_cell_delta": 1.1795009413617663e-12,
+    "max_absolute_metric_delta": 4.263256414560601e-14,
+    "elapsed_seconds": 102.73553776741028
+  },
+  "comparisons": [
+    {
+      "combo_index": 0,
+      "probe_set": [
+        "eva.leaderboard.bach.validation",
+        "eva.leaderboard.bracs.validation",
+        "eva.leaderboard.breakhis.validation",
+        "eva.leaderboard.camelyon16_small.test",
+        "eva.leaderboard.camelyon16_small.validation"
+      ],
+      "max_absolute_cell_delta": 1.5987211554602254e-13,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 1,
+      "probe_set": [
+        "thunder.spider_thorax.linear_probing",
+        "thunder.tcga_crc_msi.linear_probing",
+        "thunder.tcga_tils.linear_probing",
+        "thunder.tcga_uniform.linear_probing",
+        "thunder.wilds.linear_probing"
+      ],
+      "max_absolute_cell_delta": 1.4210854715202004e-13,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 1.0658141036401503e-14
+    },
+    {
+      "combo_index": 2,
+      "probe_set": [
+        "eva.leaderboard.camelyon16_small.validation",
+        "pathobench.exaone2025.cptac_coad.pik3ca-mutation",
+        "pathobench.threads2025.bcnb.er",
+        "pathobench.threads2025.cptac_brca.pik3ca-mutation",
+        "pathorob.tolkach_esca.robustness_index"
+      ],
+      "max_absolute_cell_delta": 8.526512829121202e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 3,
+      "probe_set": [
+        "hest.lung.gene_expression",
+        "pathobench.exaone2025.sr386_.braf-mutant-binary",
+        "pathobench.exaone2025.sr386_.mmr-loss-binary",
+        "thunder.crc.linear_probing",
+        "thunder.spider_colorectal.linear_probing"
+      ],
+      "max_absolute_cell_delta": 5.684341886080802e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 1.1546319456101628e-14
+    },
+    {
+      "combo_index": 4,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_hnsc.os",
+        "pathobench.exaone2025.cptac_lscc.histologic-grade",
+        "pathobench.exaone2025.cptac_luad.os",
+        "thunder.spider_breast.linear_probing",
+        "thunder.tcga_tils.linear_probing"
+      ],
+      "max_absolute_cell_delta": 6.394884621840902e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 5,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_lscc.keap1-mutation",
+        "pathobench.exaone2025.cptac_ucec.ctnnb1-mutation",
+        "pathobench.exaone2025.ebrains.idh-status",
+        "pathobench.exaone2025.hancook.lymphovascular-invasion-l",
+        "thunder.mhist.linear_probing"
+      ],
+      "max_absolute_cell_delta": 1.5631940186722204e-13,
+      "absolute_medae_delta": 7.105427357601002e-15,
+      "absolute_medape_delta": 2.1316282072803006e-14
+    },
+    {
+      "combo_index": 6,
+      "probe_set": [
+        "eva.leaderboard.patch_camelyon.validation",
+        "pathobench.exaone2025.cptac_coad.arid1a-mutation",
+        "pathobench.exaone2025.cptac_coad.tp53-mutation",
+        "pathorob.tolkach_esca.robustness_index",
+        "thunder.break_his.linear_probing"
+      ],
+      "max_absolute_cell_delta": 8.526512829121202e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 7,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_brca.pik3ca-mutation",
+        "pathobench.exaone2025.cptac_ucec.immune-class",
+        "pathobench.exaone2025.hancook.grading-scc-conventional-keratinizing",
+        "pathobench.exaone2025.natbrca.lymphovascular-invasion",
+        "pathobench.exaone2025.sr386_.braf-mutant-binary"
+      ],
+      "max_absolute_cell_delta": 1.1368683772161603e-13,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 8,
+      "probe_set": [
+        "hest.lymph_idc.gene_expression",
+        "pathobench.exaone2025.ebrains.idh-status",
+        "pathobench.exaone2025.hancook.os-treatment-rdc",
+        "pathobench.exaone2025.ovarian.response",
+        "pathobench.threads2025.ebrains.diagnosis"
+      ],
+      "max_absolute_cell_delta": 6.821210263296962e-13,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 1.5987211554602254e-14
+    },
+    {
+      "combo_index": 9,
+      "probe_set": [
+        "pathobench.exaone2025.bc_therapy.residual-cancer-burden",
+        "pathobench.exaone2025.bracs.slidelevel-fine",
+        "pathobench.exaone2025.cptac_coad.kras-mutation",
+        "pathobench.exaone2025.cptac_ov.immune-class",
+        "pathobench.threads2025.cptac_ccrcc.bap1-mutation"
+      ],
+      "max_absolute_cell_delta": 9.947598300641403e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 1.7319479184152442e-14
+    },
+    {
+      "combo_index": 10,
+      "probe_set": [
+        "hest.coad.gene_expression",
+        "pathobench.exaone2025.imp.grade",
+        "pathorob.tcga_2x2.robustness_index",
+        "pathorob.tolkach_esca.robustness_index",
+        "thunder.bracs.linear_probing"
+      ],
+      "max_absolute_cell_delta": 4.263256414560601e-14,
+      "absolute_medae_delta": 1.4210854715202004e-14,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 11,
+      "probe_set": [
+        "eva.leaderboard.breakhis.validation",
+        "pathobench.exaone2025.cptac_ccrcc.bap1-mutation",
+        "pathobench.exaone2025.cptac_ccrcc.os",
+        "pathobench.threads2025.cptac_luad.os",
+        "thunder.bracs.linear_probing"
+      ],
+      "max_absolute_cell_delta": 1.1368683772161603e-13,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 12,
+      "probe_set": [
+        "pathobench.exaone2025.mbc_.os",
+        "pathobench.threads2025.cptac_coad.tp53-mutation",
+        "pathobench.threads2025.imp.grade",
+        "pathobench.threads2025.sr386_.ras-mutant-binary",
+        "thunder.spider_colorectal.linear_probing"
+      ],
+      "max_absolute_cell_delta": 3.623767952376511e-13,
+      "absolute_medae_delta": 7.105427357601002e-15,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 13,
+      "probe_set": [
+        "eva.leaderboard.crc.validation",
+        "eva.leaderboard.panda_small.test",
+        "pathobench.exaone2025.cptac_ccrcc.pbrm1-mutation",
+        "pathobench.threads2025.cptac_ccrcc.bap1-mutation",
+        "thunder.tcga_tils.linear_probing"
+      ],
+      "max_absolute_cell_delta": 4.263256414560601e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 14,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_gbm.tp53-mutation",
+        "pathobench.exaone2025.cptac_pda.smad4-mutation",
+        "pathobench.exaone2025.mut-het-rcc.pbrm1-mutation",
+        "pathorob.nature2026.tcga_4x4.clustering_score",
+        "thunder.tcga_uniform.linear_probing"
+      ],
+      "max_absolute_cell_delta": 2.842170943040401e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 1.199040866595169e-14
+    },
+    {
+      "combo_index": 15,
+      "probe_set": [
+        "eva.leaderboard.mhist.test",
+        "hest.idc.gene_expression",
+        "pathobench.exaone2025.cptac_coad.msi-h",
+        "pathobench.exaone2025.cptac_hnsc.os",
+        "pathobench.exaone2025.mut-het-rcc.bap1-mutation"
+      ],
+      "max_absolute_cell_delta": 1.2789769243681803e-13,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 16,
+      "probe_set": [
+        "pathobench.exaone2025.hancook.grading-scc-conventional-nonkeratinizing",
+        "pathobench.exaone2025.hancook.primary-tumor-site",
+        "pathobench.exaone2025.hancook.vascular-invasion-v",
+        "pathobench.threads2025.boehmk_.pfs",
+        "pathobench.threads2025.cptac_luad.os"
+      ],
+      "max_absolute_cell_delta": 5.684341886080802e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 17,
+      "probe_set": [
+        "eva.leaderboard.bach.validation",
+        "eva.leaderboard.patch_camelyon.test",
+        "pathobench.exaone2025.mbc_.recist",
+        "pathobench.threads2025.boehmk_.pfs",
+        "thunder.esca.linear_probing"
+      ],
+      "max_absolute_cell_delta": 9.947598300641403e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 1.865174681370263e-14
+    },
+    {
+      "combo_index": 18,
+      "probe_set": [
+        "eva.leaderboard.patch_camelyon.test",
+        "hest.paad.gene_expression",
+        "hest.read.gene_expression",
+        "pathobench.exaone2025.cptac_hnsc.casp8-mutation",
+        "pathobench.exaone2025.hancook.perineural-invasion-pn"
+      ],
+      "max_absolute_cell_delta": 6.394884621840902e-14,
+      "absolute_medae_delta": 1.4210854715202004e-14,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 19,
+      "probe_set": [
+        "eva.leaderboard.mhist.test",
+        "pathobench.exaone2025.cptac_brca.pik3ca-mutation",
+        "pathobench.threads2025.mbc_.recist",
+        "pathorob.nature2026.tcga_4x4.clustering_score",
+        "thunder.patch_camelyon.linear_probing"
+      ],
+      "max_absolute_cell_delta": 4.263256414560601e-14,
+      "absolute_medae_delta": 1.4210854715202004e-14,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 20,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_ccrcc.bap1-mutation",
+        "pathobench.exaone2025.sr386_.died-within-5-years",
+        "pathobench.exaone2025.sr386_.ras-mutant-binary",
+        "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+        "pathorob.nature2026.tcga_4x4.clustering_score"
+      ],
+      "max_absolute_cell_delta": 4.973799150320701e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 21,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_hnsc.os",
+        "pathobench.exaone2025.cptac_luad.stk11-mutation",
+        "pathobench.exaone2025.hancook.perineural-invasion-pn",
+        "pathobench.exaone2025.visiomel.relapse-noprev-melanoma",
+        "pathobench.threads2025.imp.grade"
+      ],
+      "max_absolute_cell_delta": 7.815970093361102e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 22,
+      "probe_set": [
+        "eva.leaderboard.mhist.test",
+        "hest.coad.gene_expression",
+        "pathobench.exaone2025.hancook.perineural-invasion-pn",
+        "pathobench.threads2025.sr386_.mmr-loss-binary",
+        "thunder.crc.linear_probing"
+      ],
+      "max_absolute_cell_delta": 5.329070518200751e-13,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 23,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_ccrcc.pbrm1-mutation",
+        "pathobench.exaone2025.cptac_ccrcc.vhl-mutation",
+        "pathobench.exaone2025.cptac_coad.kras-mutation",
+        "pathobench.threads2025.imp.grade",
+        "thunder.mhist.linear_probing"
+      ],
+      "max_absolute_cell_delta": 1.1795009413617663e-12,
+      "absolute_medae_delta": 4.263256414560601e-14,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 24,
+      "probe_set": [
+        "eva.leaderboard.gleason_arvaniti.validation",
+        "pathobench.exaone2025.cptac_ccrcc.bap1-mutation",
+        "pathobench.exaone2025.cptac_coad.acvr2a-mutation",
+        "pathobench.exaone2025.hancook.grading-scc-conventional-nonkeratinizing",
+        "pathobench.threads2025.ebrains.diagnosis-group"
+      ],
+      "max_absolute_cell_delta": 9.947598300641403e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 25,
+      "probe_set": [
+        "pathobench.exaone2025.hancook.primary-tumor-site",
+        "pathobench.threads2025.bcnb.her2",
+        "pathobench.threads2025.cptac_brca.tp53-mutation",
+        "pathobench.threads2025.mut-het-rcc.setd2-mutation",
+        "thunder.spider_breast.linear_probing"
+      ],
+      "max_absolute_cell_delta": 8.526512829121202e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 26,
+      "probe_set": [
+        "pathobench.exaone2025.bc_therapy.her2-status",
+        "pathobench.threads2025.bracs.slidelevel-fine",
+        "pathobench.threads2025.mbc_.os",
+        "pathobench.threads2025.sr386_.ras-mutant-binary",
+        "thunder.spider_skin.linear_probing"
+      ],
+      "max_absolute_cell_delta": 8.171241461241152e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 27,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_hnsc.os",
+        "pathobench.exaone2025.cptac_pda.os",
+        "pathobench.threads2025.cptac_brca.pik3ca-mutation",
+        "pathobench.threads2025.cptac_ccrcc.bap1-mutation",
+        "pathobench.threads2025.sr386_.mmr-loss-binary"
+      ],
+      "max_absolute_cell_delta": 2.4158453015843406e-13,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 28,
+      "probe_set": [
+        "hest.lymph_idc.gene_expression",
+        "pathobench.exaone2025.cptac_coad.tp53-mutation",
+        "pathobench.exaone2025.cptac_luad.os",
+        "pathobench.exaone2025.cptac_pda.os",
+        "thunder.spider_thorax.linear_probing"
+      ],
+      "max_absolute_cell_delta": 1.6342482922482304e-13,
+      "absolute_medae_delta": 7.105427357601002e-15,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 29,
+      "probe_set": [
+        "eva.leaderboard.gleason_arvaniti.validation",
+        "pathobench.exaone2025.boehmk_.pfs",
+        "pathobench.exaone2025.ebrains.diagnosis",
+        "pathobench.exaone2025.hancook.primarily-metastasis",
+        "pathobench.exaone2025.hancook.primary-tumor-site"
+      ],
+      "max_absolute_cell_delta": 6.394884621840902e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 30,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_ucec.immune-class",
+        "pathobench.exaone2025.sr386_.died-within-5-years",
+        "pathobench.threads2025.cptac_brca.tp53-mutation",
+        "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+        "thunder.spider_colorectal.linear_probing"
+      ],
+      "max_absolute_cell_delta": 7.105427357601002e-14,
+      "absolute_medae_delta": 0.0,
+      "absolute_medape_delta": 0.0
+    },
+    {
+      "combo_index": 31,
+      "probe_set": [
+        "pathobench.exaone2025.cptac_luad.kras-mutation",
+        "pathobench.exaone2025.ovarian.response",
+        "pathobench.exaone2025.visiomel.relapse-noprev-melanoma",
+        "pathobench.threads2025.cptac_luad.egfr-mutation",
+        "pathobench.threads2025.mbc_.os"
+      ],
+      "max_absolute_cell_delta": 5.329070518200751e-13,
+      "absolute_medae_delta": 1.4210854715202004e-14,
+      "absolute_medape_delta": 0.0
+    }
+  ]
+}

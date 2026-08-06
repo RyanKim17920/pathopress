@@ -27,6 +27,7 @@ from pathopress.artifacts import (  # noqa: E402
     write_fold_artifact,
 )
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
+from pathopress.metrics import median_absolute_percentage_error  # noqa: E402
 from pathopress.method_comparison import (  # noqa: E402
     HP_GRIDS,
     METHODS,
@@ -265,14 +266,20 @@ def _metrics(arrays: dict[str, np.ndarray]) -> dict[str, Any]:
         selected = fold_ids == fold_id
         valid = selected & np.isfinite(actual) & np.isfinite(predicted)
         absolute = np.abs(predicted[valid] - actual[valid])
-        nonzero = np.abs(actual[valid]) > 1e-12
         fold_rows.append(
             {
                 "fold_id": int(fold_id),
                 "n": int(valid.sum()),
                 "medae": float(np.median(absolute)) if len(absolute) else None,
-                "medape": float(np.median(absolute[nonzero] / np.abs(actual[valid][nonzero])) * 100.0)
-                if nonzero.any() else None,
+                "medape": (
+                    value
+                    if np.isfinite(
+                        value := median_absolute_percentage_error(
+                            actual[valid], predicted[valid]
+                        )
+                    )
+                    else None
+                ),
             }
         )
     medae = [row["medae"] for row in fold_rows if row["medae"] is not None]

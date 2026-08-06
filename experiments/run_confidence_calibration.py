@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""BenchPress-style cross-fitted confidence calibration for PathoPress.
+"""Run the pinned BenchPress confidence experiment on the pathology matrix.
 
-The target point predictor is the pathology-selected rank-1 Logit Bias ALS.
-As in BenchPress, three leave-fold-out risk models use ensemble disagreement,
-training-matrix support, or both, and predict log1p absolute held-out error.
+The experiment is deliberately prediction-cache first, matching Microsoft
+BenchPress at commit ``0a684b6``.  It consumes the exact 30-fold Section-4
+method-comparison shards only after validating score, fold, matrix, and
+row-level identities.  No held-out target is used to build its own point-risk
+features, risk estimate, interval scale, or trust probability.
 """
 
 from __future__ import annotations
@@ -15,162 +17,219 @@ import json
 import os
 import platform
 import sys
-from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
-
-# Matrix fits are parallelized across folds. Prevent each worker's BLAS from
-# starting another full thread pool and oversubscribing the host.
-for _thread_variable in (
-    "OMP_NUM_THREADS",
-    "OPENBLAS_NUM_THREADS",
-    "MKL_NUM_THREADS",
-    "VECLIB_MAXIMUM_THREADS",
-    "NUMEXPR_NUM_THREADS",
-):
-    os.environ[_thread_variable] = "1"
+from typing import Any
 
 import numpy as np
 
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-sys.path.insert(0, str(ROOT))
 
-from experiments.run_benchpress_style import make_folds  # noqa: E402
-from pathopress.completion import complete, complete_soft_impute  # noqa: E402
+from pathopress.artifacts import load_fold_artifact  # noqa: E402
 from pathopress.confidence import (  # noqa: E402
+    DEFAULT_RISK_MODEL_GRID,
+    DEFAULT_TRUST_BINS,
+    DEFAULT_TRUST_THRESHOLD,
     confidence_feature_sets,
     conformal_interval,
     crossfit_error_risk,
+    crossfit_trust_probability,
+    fit_trust_calibrator,
     stack_features,
     structural_support_features_for_cells,
     summarize_confidence_method,
+    trust_probability_summary,
 )
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
 
 
 METHODS = ("disagreement", "structural_support", "combined_risk_model")
+RAW_DISAGREEMENT_METHODS = (
+    "bias_als_hp_disagreement",
+    "strong_method_disagreement",
+)
+UPSTREAM_COMMIT = "0a684b63ee0e4a401cb907a3827a82ea997d74c4"
+FOLD_PROTOCOL = {"n_seeds": 10, "n_folds": 3, "base_seed": 42, "min_scores": 1}
+TARGET_SPEC = {"transform": "logit", "method": "Bias ALS", "hp": {"rank": 1, "lam": 0.1}}
+HP_VARIANTS = (
+    {"transform": "logit", "method": "Bias ALS", "hp": {"rank": 1, "lam": 0.01}},
+    TARGET_SPEC,
+    {"transform": "logit", "method": "Bias ALS", "hp": {"rank": 1, "lam": 1.0}},
+)
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _matrix_identity(matrix: np.ndarray, models: list[str], evaluations: list[str]) -> str:
+    digest = hashlib.sha256()
+    digest.update(json.dumps(models, separators=(",", ":")).encode())
+    digest.update(json.dumps(evaluations, separators=(",", ":")).encode())
+    digest.update(np.asarray(np.isfinite(matrix), dtype=np.uint8).tobytes())
+    digest.update(np.nan_to_num(matrix, nan=-1.23456789e300).astype("<f8").tobytes())
+    return digest.hexdigest()
 
 
 def _display_path(path: Path) -> str:
-    resolved = path.resolve()
     try:
-        return str(resolved.relative_to(ROOT))
+        return str(path.resolve().relative_to(ROOT))
     except ValueError:
-        return str(resolved)
+        return str(path.resolve())
 
 
-def _supported_completion(
-    training: np.ndarray, *, rank: int, regularization: float = 0.1
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    row_ids = np.flatnonzero(np.any(np.isfinite(training), axis=1))
-    column_ids = np.flatnonzero(np.any(np.isfinite(training), axis=0))
-    completed = complete(
-        training[np.ix_(row_ids, column_ids)],
-        rank=rank,
-        regularization=regularization,
-    )
-    return completed, row_ids, column_ids
+def _load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-def _supported_soft_impute(
-    training: np.ndarray, *, rank: int, transform: str
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    row_ids = np.flatnonzero(np.any(np.isfinite(training), axis=1))
-    column_ids = np.flatnonzero(np.any(np.isfinite(training), axis=0))
-    completed = complete_soft_impute(
-        training[np.ix_(row_ids, column_ids)], rank=rank, transform=transform
-    )
-    return completed, row_ids, column_ids
-
-
-def _take_cells(
-    result: tuple[np.ndarray, np.ndarray, np.ndarray], cells: list[tuple[int, int]]
-) -> np.ndarray:
-    completed, row_ids, column_ids = result
-    row_map = {int(old): new for new, old in enumerate(row_ids)}
-    column_map = {int(old): new for new, old in enumerate(column_ids)}
-    return np.asarray(
-        [completed[row_map[row], column_map[column]] for row, column in cells], dtype=float
-    )
-
-
-def _fold_features(
-    job: tuple[int, int, int, np.ndarray, np.ndarray, list[tuple[int, int]]]
-) -> dict[str, object]:
-    fold_id, seed, fold, full, training, held = job
-    supported_rows = np.any(np.isfinite(training), axis=1)
-    supported_columns = np.any(np.isfinite(training), axis=0)
-    cells = [
-        (int(row), int(column))
-        for row, column in held
-        if supported_rows[row] and supported_columns[column]
+def _matching_row(rows: list[dict[str, Any]], spec: dict[str, Any]) -> dict[str, Any]:
+    matches = [
+        row for row in rows
+        if row.get("status") == "completed"
+        and row.get("transform") == spec["transform"]
+        and row.get("method") == spec["method"]
+        and row.get("hp") == spec["hp"]
     ]
-    target_result = _supported_completion(training, rank=1, regularization=0.1)
-    target = _take_cells(target_result, cells)
-
-    # BenchPress uses same-family regularization variants for local sensitivity.
-    hp_stack = np.stack(
-        [
-            _take_cells(_supported_completion(training, rank=1, regularization=value), cells)
-            if value != 0.1
-            else target
-            for value in (0.01, 0.1, 1.0)
-        ]
-    )
-    # Pathology adaptation: the upstream transform/method grid is replaced by
-    # every strong full-coverage alternative already implemented locally.
-    strong_stack = np.stack(
-        [
-            _take_cells(_supported_completion(training, rank=0), cells),
-            _take_cells(_supported_completion(training, rank=2), cells),
-            _take_cells(_supported_soft_impute(training, rank=1, transform="logit"), cells),
-            _take_cells(_supported_soft_impute(training, rank=2, transform="logit"), cells),
-            _take_cells(_supported_soft_impute(training, rank=1, transform="identity"), cells),
-            _take_cells(_supported_soft_impute(training, rank=2, transform="identity"), cells),
-        ]
-    )
-    features = confidence_feature_sets(
-        stack_features(hp_stack, target),
-        stack_features(strong_stack, target),
-        structural_support_features_for_cells(training, cells),
-    )
-    return {
-        "fold_id": fold_id,
-        "seed": seed,
-        "fold": fold,
-        "rows": np.asarray([row for row, _ in cells], dtype=int),
-        "columns": np.asarray([column for _, column in cells], dtype=int),
-        "actual": np.asarray([full[row, column] for row, column in cells], dtype=float),
-        "predicted": target,
-        "features": features,
-    }
+    if len(matches) != 1:
+        raise ValueError(f"expected one completed method cache for {spec}, found {len(matches)}")
+    return matches[0]
 
 
-def _concatenate_features(
-    records: list[dict[str, object]], method: str
-) -> dict[str, np.ndarray]:
-    first = records[0]["features"][method]  # type: ignore[index]
-    return {
-        name: np.concatenate(
-            [record["features"][method][name] for record in records]  # type: ignore[index]
+def _strong_rows(results: dict[str, Any], rows_by_id: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    """Exact upstream selection: best-HP rows, sorted by MedAPE, full coverage."""
+
+    candidates: list[dict[str, Any]] = []
+    for transform, methods in results.items():
+        for method, payload in methods.items():
+            row = rows_by_id.get(str(payload.get("shard_id")))
+            if row is None:
+                raise ValueError(f"results row missing from validated manifest: {payload.get('shard_id')}")
+            if row.get("coverage", 0.0) < 0.999:
+                continue
+            if transform == TARGET_SPEC["transform"] and method == TARGET_SPEC["method"]:
+                continue
+            candidates.append(row)
+    selected = sorted(candidates, key=lambda row: float(row["medape_median"]))[:12]
+    if len(selected) != 12:
+        raise ValueError(f"need 12 full-coverage strong alternatives, found {len(selected)}")
+    return selected
+
+
+def _load_prediction_cache(
+    row: dict[str, Any], *, scores_hash: str, folds_hash: str,
+    matrix_shape: tuple[int, int], matrix_identity: str,
+) -> tuple[dict[str, np.ndarray], dict[str, Any], dict[str, Any]]:
+    path = ROOT / row["prediction_file"]
+    if not path.is_file():
+        raise FileNotFoundError(
+            f"required confidence generator cache missing: {path}; regenerate the exact "
+            "method grid with `python3 experiments/run_method_comparison.py --merge`"
         )
-        for name in sorted(first)
+    with np.load(path, allow_pickle=False) as data:
+        required = {"fold_id", "test_i", "test_j", "actual", "predicted", "metadata_json"}
+        if not required.issubset(data.files):
+            raise ValueError(f"prediction cache lacks required arrays: {path}")
+        arrays = {key: data[key] for key in data.files}
+    metadata = json.loads(str(arrays["metadata_json"]))
+    expected = {
+        "status": "completed",
+        "scores_sha256": scores_hash,
+        "folds_sha256": folds_hash,
+        "matrix_shape": list(matrix_shape),
+        "matrix_identity_sha256": matrix_identity,
+        "fold_protocol": FOLD_PROTOCOL,
+        "upstream_commit": UPSTREAM_COMMIT,
+        "shard_id": row["shard_id"],
+        "transform": row["transform"],
+        "method": row["method"],
+        "hp": row["hp"],
     }
+    actual = {key: metadata.get(key) for key in expected}
+    if actual != expected:
+        raise ValueError(f"prediction-cache identity mismatch for {path}: {actual} != {expected}")
+    audit = {
+        "path": _display_path(path),
+        "sha256": _sha256(path),
+        "shard_id": row["shard_id"],
+        "transform": row["transform"],
+        "method": row["method"],
+        "hp": row["hp"],
+        "medape_median": row["medape_median"],
+        "coverage": row["coverage"],
+        "identity_fields_verified": sorted(expected),
+    }
+    return arrays, metadata, audit
+
+
+def _assert_aligned(reference: dict[str, np.ndarray], candidate: dict[str, np.ndarray], label: str) -> None:
+    for key in ("fold_id", "test_i", "test_j", "actual"):
+        if not np.array_equal(reference[key], candidate[key]):
+            raise ValueError(f"confidence generator {label} is not row-aligned on {key}")
+
+
+def _structural_features(
+    reference: dict[str, np.ndarray], folds: list[tuple[int, int, np.ndarray, list[tuple[int, int]]]],
+) -> dict[str, np.ndarray]:
+    parts: dict[str, list[np.ndarray]] = {}
+    for fold_id, (_seed, _fold, training, held) in enumerate(folds):
+        selected = np.flatnonzero(reference["fold_id"].astype(int) == fold_id)
+        cells = [
+            (int(reference["test_i"][index]), int(reference["test_j"][index]))
+            for index in selected
+        ]
+        if cells != [(int(row), int(column)) for row, column in held]:
+            raise ValueError(f"fold-cache cell order mismatch in fold {fold_id}")
+        current = structural_support_features_for_cells(training, cells)
+        for name, values in current.items():
+            parts.setdefault(name, []).append(values)
+    return {name: np.concatenate(values) for name, values in parts.items()}
+
+
+def _generator_stacks(
+    *, matrix: np.ndarray, models: list[str], evaluations: list[str], scores: Path,
+    folds_path: Path, method_dir: Path,
+) -> tuple[dict[str, np.ndarray], dict[str, np.ndarray], dict[str, np.ndarray], list[dict[str, Any]], list[dict[str, Any]]]:
+    manifest = _load_json(method_dir / "manifest.json")
+    results = _load_json(method_dir / "results.json")
+    if manifest.get("upstream_commit") != UPSTREAM_COMMIT:
+        raise ValueError("method-grid upstream commit does not match pinned confidence contract")
+    if manifest.get("counts") != {"completed": 343, "missing": 0, "unsupported": 0}:
+        raise ValueError(f"confidence requires the complete 343-shard method grid: {manifest.get('counts')}")
+    rows = manifest["completed"]
+    rows_by_id = {str(row["shard_id"]): row for row in rows}
+    hp_rows = [_matching_row(rows, spec) for spec in HP_VARIANTS]
+    strong_rows = _strong_rows(results, rows_by_id)
+    scores_hash = _sha256(scores)
+    folds_hash = _sha256(folds_path)
+    identity = _matrix_identity(matrix, models, evaluations)
+
+    loaded: dict[str, tuple[dict[str, np.ndarray], dict[str, Any], dict[str, Any]]] = {}
+    for row in [*hp_rows, *strong_rows]:
+        loaded[row["shard_id"]] = _load_prediction_cache(
+            row, scores_hash=scores_hash, folds_hash=folds_hash,
+            matrix_shape=matrix.shape, matrix_identity=identity,
+        )
+    target_row = _matching_row(rows, TARGET_SPEC)
+    reference = loaded[target_row["shard_id"]][0]
+    for row in [*hp_rows, *strong_rows]:
+        _assert_aligned(reference, loaded[row["shard_id"]][0], row["shard_id"])
+    hp_stack = np.stack([loaded[row["shard_id"]][0]["predicted"].astype(float) for row in hp_rows])
+    strong_stack = np.stack([loaded[row["shard_id"]][0]["predicted"].astype(float) for row in strong_rows])
+    audits = {row["shard_id"]: loaded[row["shard_id"]][2] for row in [*hp_rows, *strong_rows]}
+    return reference, hp_stack, strong_stack, [audits[row["shard_id"]] for row in hp_rows], [audits[row["shard_id"]] for row in strong_rows]
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scores", type=Path, default=ROOT / "data" / "scores.csv")
-    parser.add_argument(
-        "--output", type=Path, default=ROOT / "experiments" / "confidence_calibration_rank1.json"
-    )
-    parser.add_argument(
-        "--cells", type=Path, default=ROOT / "experiments" / "confidence_cells_rank1.csv"
-    )
-    parser.add_argument("--n-seeds", type=int, default=10)
-    parser.add_argument("--n-folds", type=int, default=3)
+    parser.add_argument("--folds", type=Path, default=ROOT / "experiments" / "folds_s10_f3_bs42.json")
+    parser.add_argument("--method-dir", type=Path, default=ROOT / "experiments" / "method_comparison")
+    parser.add_argument("--output", type=Path, default=ROOT / "experiments" / "confidence_calibration_rank1.json")
+    parser.add_argument("--cells", type=Path, default=ROOT / "experiments" / "confidence_cells_rank1.csv")
     parser.add_argument("--base-seed", type=int, default=42)
+    # Retained for command compatibility; cache loading is I/O-bound and risk
+    # fits are intentionally deterministic and sequential, as upstream.
     parser.add_argument("--workers", type=int, default=max(1, min(8, (os.cpu_count() or 2) - 1)))
     return parser.parse_args()
 
@@ -180,176 +239,198 @@ def main() -> None:
     scores = load_scores(args.scores)
     matrix, models, evaluations = make_matrix(scores)
     matrix, models, evaluations = filter_matrix(matrix, models, evaluations)
-    metadata = {}
+    metadata_by_evaluation: dict[str, tuple[str, str]] = {}
     for score in scores:
         if score.evaluation_id in evaluations:
-            metadata.setdefault(score.evaluation_id, (score.suite_id, score.metric))
-
-    jobs = []
-    fold_id = 0
-    for seed_offset in range(args.n_seeds):
-        seed = args.base_seed + seed_offset
-        for fold, (training, held) in enumerate(make_folds(matrix, n_folds=args.n_folds, seed=seed)):
-            jobs.append((fold_id, seed, fold, matrix, training, held))
-            fold_id += 1
-    with ProcessPoolExecutor(max_workers=args.workers) as executor:
-        futures = {executor.submit(_fold_features, job): job[0] for job in jobs}
-        records = []
-        for completed, future in enumerate(as_completed(futures), start=1):
-            records.append(future.result())
-            print(f"fold feature stacks: {completed}/{len(jobs)} complete", flush=True)
-    records.sort(key=lambda record: int(record["fold_id"]))
-
-    fold_ids = np.concatenate(
-        [np.full(len(record["actual"]), int(record["fold_id"]), dtype=int) for record in records]
+            metadata_by_evaluation.setdefault(score.evaluation_id, (score.suite_id, score.metric))
+    folds = load_fold_artifact(args.folds, matrix, models, evaluations)
+    reference, hp_stack, strong_stack, hp_audit, strong_audit = _generator_stacks(
+        matrix=matrix, models=models, evaluations=evaluations, scores=args.scores,
+        folds_path=args.folds, method_dir=args.method_dir,
     )
-    seeds = np.concatenate(
-        [np.full(len(record["actual"]), int(record["seed"]), dtype=int) for record in records]
-    )
-    folds = np.concatenate(
-        [np.full(len(record["actual"]), int(record["fold"]), dtype=int) for record in records]
-    )
-    rows = np.concatenate([record["rows"] for record in records])
-    columns = np.concatenate([record["columns"] for record in records])
-    actual = np.concatenate([record["actual"] for record in records])
-    predicted = np.concatenate([record["predicted"] for record in records])
+    fold_ids = reference["fold_id"].astype(int)
+    rows = reference["test_i"].astype(int)
+    columns = reference["test_j"].astype(int)
+    actual = reference["actual"].astype(float)
+    predicted = reference["predicted"].astype(float)
+    hp_features = stack_features(hp_stack, predicted)
+    strong_features = stack_features(strong_stack, predicted)
+    structural_features = _structural_features(reference, folds)
+    all_features = confidence_feature_sets(hp_features, strong_features, structural_features)
 
-    all_features = {method: _concatenate_features(records, method) for method in METHODS}
-    uncertainties = {}
-    risk_metadata = {}
-    intervals = {}
-    summaries = {}
-    for index, method in enumerate(METHODS):
+    uncertainties: dict[str, np.ndarray] = {}
+    intervals: dict[str, tuple[np.ndarray, np.ndarray, np.ndarray]] = {}
+    trust_probabilities: dict[str, np.ndarray] = {}
+    risk_metadata: dict[str, Any] = {}
+    summaries: dict[str, Any] = {}
+    trust_metadata: dict[str, Any] = {}
+    target_cell_group = rows.astype(np.int64) * len(evaluations) + columns.astype(np.int64)
+    raw_uncertainties = {
+        "bias_als_hp_disagreement": hp_features["mad"],
+        "strong_method_disagreement": strong_features["mad"],
+    }
+    for method in RAW_DISAGREEMENT_METHODS:
+        summaries[method] = summarize_confidence_method(
+            actual, predicted, fold_ids, raw_uncertainties[method]
+        )
+    for method in METHODS:
         uncertainty, feature_names, selected = crossfit_error_risk(
-            actual,
-            predicted,
-            fold_ids,
-            all_features[method],
-            seed=args.base_seed + 100 * index,
-            label=method,
-            verbose=True,
+            actual, predicted, fold_ids, all_features[method],
+            seed=args.base_seed, label=method, verbose=True,
         )
         if not np.all(np.isfinite(uncertainty)):
             raise ValueError(f"cross-fit uncertainty is incomplete for {method}")
         lower, upper, scale = conformal_interval(actual, predicted, uncertainty, fold_ids)
+        trust, trust_by_fold = crossfit_trust_probability(
+            uncertainty, actual, predicted, fold_ids,
+            group_id=target_cell_group,
+            threshold=DEFAULT_TRUST_THRESHOLD, n_bins=DEFAULT_TRUST_BINS,
+        )
+        if not np.all(np.isfinite(trust)):
+            raise ValueError(f"cross-fit trust probability is incomplete for {method}")
+        _full_predictor, full_calibrator = fit_trust_calibrator(
+            uncertainty, actual, predicted,
+            threshold=DEFAULT_TRUST_THRESHOLD, n_bins=DEFAULT_TRUST_BINS,
+        )
         uncertainties[method] = uncertainty
         intervals[method] = (lower, upper, scale)
+        trust_probabilities[method] = trust
         risk_metadata[method] = {
             "feature_names": feature_names,
             "selected_risk_model_by_fold": selected,
         }
-        summaries[method] = summarize_confidence_method(
-            actual, predicted, fold_ids, uncertainty
+        summaries[method] = summarize_confidence_method(actual, predicted, fold_ids, uncertainty)
+        summaries[method]["trust_probability"] = trust_probability_summary(
+            actual, predicted, trust, threshold=DEFAULT_TRUST_THRESHOLD,
         )
+        trust_metadata[method] = {
+            "crossfit_calibrator_by_held_out_fold": trust_by_fold,
+            "full_heldout_calibrator_for_deployment": full_calibrator,
+        }
 
-    raw_feature_columns = {}
+    raw_feature_columns: dict[str, np.ndarray] = {}
     for method in ("disagreement", "structural_support"):
         for name, values in all_features[method].items():
             raw_feature_columns[f"{method}_{name}"] = values
     cell_fields = [
-        "seed",
-        "fold",
-        "crossfit_fold_id",
-        "model_id",
-        "evaluation_id",
-        "suite_id",
-        "metric",
-        "actual_normalized_score",
-        "predicted_normalized_score",
-        "absolute_error",
-        *sorted(raw_feature_columns),
+        "crossfit_fold_id", "seed", "fold", "model_id", "evaluation_id",
+        "suite_id", "metric", "actual_normalized_score", "predicted_normalized_score",
+        "absolute_error", *sorted(raw_feature_columns),
+        *[f"{method}_risk" for method in RAW_DISAGREEMENT_METHODS],
     ]
     for method in METHODS:
-        cell_fields.extend(
-            [f"{method}_risk", f"{method}_lower_90", f"{method}_upper_90", f"{method}_conformal_scale"]
-        )
+        cell_fields.extend([
+            f"{method}_risk", f"{method}_lower_90", f"{method}_upper_90",
+            f"{method}_conformal_scale", f"{method}_trust_probability",
+        ])
     args.cells.parent.mkdir(parents=True, exist_ok=True)
     with args.cells.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=cell_fields, lineterminator="\n")
         writer.writeheader()
-        for index in range(len(actual)):
-            evaluation = evaluations[int(columns[index])]
-            suite, metric = metadata[evaluation]
-            row = {
-                "seed": int(seeds[index]),
-                "fold": int(folds[index]),
-                "crossfit_fold_id": int(fold_ids[index]),
-                "model_id": models[int(rows[index])],
+        for cell_index in range(len(actual)):
+            evaluation = evaluations[int(columns[cell_index])]
+            suite, metric = metadata_by_evaluation[evaluation]
+            fold_id = int(fold_ids[cell_index])
+            row: dict[str, Any] = {
+                "crossfit_fold_id": fold_id,
+                "seed": 42 + fold_id // 3,
+                "fold": fold_id % 3,
+                "model_id": models[int(rows[cell_index])],
                 "evaluation_id": evaluation,
                 "suite_id": suite,
                 "metric": metric,
-                "actual_normalized_score": f"{actual[index]:.6f}",
-                "predicted_normalized_score": f"{predicted[index]:.6f}",
-                "absolute_error": f"{abs(predicted[index] - actual[index]):.6f}",
-                **{name: f"{values[index]:.6f}" for name, values in raw_feature_columns.items()},
+                "actual_normalized_score": f"{actual[cell_index]:.6f}",
+                "predicted_normalized_score": f"{predicted[cell_index]:.6f}",
+                "absolute_error": f"{abs(predicted[cell_index] - actual[cell_index]):.6f}",
+                **{name: f"{values[cell_index]:.6f}" for name, values in raw_feature_columns.items()},
+                **{
+                    f"{method}_risk": f"{raw_uncertainties[method][cell_index]:.6f}"
+                    for method in RAW_DISAGREEMENT_METHODS
+                },
             }
             for method in METHODS:
                 lower, upper, scale = intervals[method]
-                row.update(
-                    {
-                        f"{method}_risk": f"{uncertainties[method][index]:.6f}",
-                        f"{method}_lower_90": f"{lower[index]:.6f}",
-                        f"{method}_upper_90": f"{upper[index]:.6f}",
-                        f"{method}_conformal_scale": f"{scale[index]:.6f}",
-                    }
-                )
+                row.update({
+                    f"{method}_risk": f"{uncertainties[method][cell_index]:.6f}",
+                    f"{method}_lower_90": f"{lower[cell_index]:.6f}",
+                    f"{method}_upper_90": f"{upper[cell_index]:.6f}",
+                    f"{method}_conformal_scale": f"{scale[cell_index]:.6f}",
+                    f"{method}_trust_probability": f"{trust_probabilities[method][cell_index]:.8f}",
+                })
             writer.writerow(row)
 
     payload = {
-        "schema_version": 1,
-        "description": "BenchPress-style cross-fitted confidence calibration for pathology matrix completion.",
+        "schema_version": 2,
+        "description": "Pinned BenchPress confidence calibration port for pathology matrix completion.",
+        "upstream": {
+            "repository": "https://github.com/microsoft/benchpress",
+            "commit": UPSTREAM_COMMIT,
+            "source": "experiments/sec6_trust/confidence_calibration/run.py and benchpress/methods/confidence.py",
+        },
         "matrix": {
-            "n_models": len(models),
-            "n_evaluations": len(evaluations),
-            "n_observed": int(np.isfinite(matrix).sum()),
-            "density": float(np.isfinite(matrix).mean()),
+            "n_models": len(models), "n_evaluations": len(evaluations),
+            "n_observed": int(np.isfinite(matrix).sum()), "density": float(np.isfinite(matrix).mean()),
         },
         "configuration": {
             "target_predictor": "logit bias ALS rank=1 regularization=0.1",
-            "n_seeds": args.n_seeds,
-            "n_folds": args.n_folds,
-            "base_seed": args.base_seed,
+            "fold_protocol": FOLD_PROTOCOL,
             "n_prediction_instances": len(actual),
             "risk_target": "log1p(abs(predicted_normalized_score - actual_normalized_score))",
             "confidence_methods": list(METHODS),
-            "hp_disagreement_variants": [
-                "rank1_regularization_0.01",
-                "rank1_regularization_0.1",
-                "rank1_regularization_1.0",
+            "raw_disagreement_diagnostics": list(RAW_DISAGREEMENT_METHODS),
+            "risk_model_grid": [
+                {"model": model, "hidden_layers": list(hidden)}
+                for model, hidden in DEFAULT_RISK_MODEL_GRID
             ],
-            "strong_method_variants": [
-                "bias_als_rank0",
-                "bias_als_rank2",
-                "soft_impute_logit_rank1",
-                "soft_impute_logit_rank2",
-                "soft_impute_identity_rank1",
-                "soft_impute_identity_rank2",
-            ],
+            "hp_disagreement_variants": hp_audit,
+            "strong_method_variants": strong_audit,
+            "strong_method_selection": "top 12 full-coverage best-HP transform/method rows by Section-4 fold-median MedAPE, excluding the target transform/method",
+            "structural_feature_count": len(structural_features),
+            "structural_features": sorted(structural_features),
             "conformal_protocol": "leave the target point-prediction fold out when fitting the 90% scale",
+            "trust_event": "abs(predicted_normalized_score - actual_normalized_score) <= 10",
+            "trust_threshold_justification": "Ten points is one decile of the shared normalized 0-100 pathology score scale and exactly preserves BenchPress's public trust event; it is an engineering tolerance, not a clinical threshold.",
+            "trust_protocol": "leave the target point-prediction fold out and purge every repeated-seed instance of its model-evaluation targets before fitting the decreasing binned-isotonic mapping",
         },
         "risk_models": risk_metadata,
+        "trust_calibration": trust_metadata,
         "confidence_methods": summaries,
         "input": {
-            "scores_path": _display_path(args.scores),
-            "scores_sha256": hashlib.sha256(args.scores.read_bytes()).hexdigest(),
-            "cells_path": _display_path(args.cells),
+            "scores_path": _display_path(args.scores), "scores_sha256": _sha256(args.scores),
+            "folds_path": _display_path(args.folds), "folds_sha256": _sha256(args.folds),
+            "method_manifest_path": _display_path(args.method_dir / "manifest.json"),
+            "method_manifest_sha256": _sha256(args.method_dir / "manifest.json"),
+            "method_results_path": _display_path(args.method_dir / "results.json"),
+            "method_results_sha256": _sha256(args.method_dir / "results.json"),
+            "cells_path": _display_path(args.cells), "cells_sha256": _sha256(args.cells),
         },
         "runtime": {
-            "python": platform.python_version(),
-            "numpy": np.__version__,
-            "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            "python": platform.python_version(), "numpy": np.__version__,
+            "script_sha256": _sha256(Path(__file__)),
         },
         "pathology_adaptations": [
-            "The target rank is 1 because pathology cross-validation selected rank 1; BenchPress uses rank 2.",
-            "BenchPress's twelve strong transform/KNN alternatives are replaced by the six full-coverage Bias ALS and Soft-Impute alternatives implemented in PathoPress.",
-            "Errors and interval widths are normalized-score points across heterogeneous pathology endpoints, not clinical utility units.",
-            "The same observed cell appears once per seed, matching BenchPress's repeated within-model fold experiment; this is not temporal or external-institution validation.",
-            "The risk models are evaluation-only cross-fits. A deploy-time confidence artifact for genuinely new cells is intentionally not trained here.",
+            "Pathology-selected rank 1 replaces upstream rank 2 while preserving the exact target family, transform, lambda, folds, feature definitions, risk-model grid, and calibration logic.",
+            "The twelve strong generators are pathology's own top full-coverage Section-4 alternatives under the exact upstream selection rule.",
+            "Errors, interval widths, and the ten-point trust event use the shared normalized pathology 0-100 scale, not clinical utility units.",
+            "Each observed cell appears once per seed, matching BenchPress's repeated within-model fold experiment; this is not external-institution validation.",
+        ],
+        "leakage_guards": [
+            "All 15 generator shards must share exact score, fold, matrix, protocol, target coordinates, and actual-value identities before stacking.",
+            "Each point prediction is read from the same held-out fold cache used by the Section-4 comparison.",
+            "Each risk estimate is fit without its target point-prediction fold.",
+            "Each serialized evaluation trust probability is calibrated without its target point-prediction fold or any repeated-seed instance of the same model-evaluation target.",
+            "The full held-out trust mapping is serialized only for outcome-free deployment lookup.",
         ],
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"output": str(args.output), "methods": summaries}, indent=2))
+    args.output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({
+        "output": _display_path(args.output),
+        "cells": _display_path(args.cells),
+        "n_hp_generators": len(hp_audit),
+        "n_strong_generators": len(strong_audit),
+        "methods": summaries,
+    }, indent=2))
 
 
 if __name__ == "__main__":

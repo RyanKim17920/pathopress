@@ -6,6 +6,8 @@ from collections.abc import Iterable
 
 import numpy as np
 
+from pathopress.metrics import median_absolute_percentage_error
+
 
 def prediction_error(actual: Iterable[float], predicted: Iterable[float]) -> dict[str, float | int]:
     """Return BenchPress's pooled MedAPE/MedAE score-error metrics."""
@@ -18,12 +20,9 @@ def prediction_error(actual: Iterable[float], predicted: Iterable[float]) -> dic
     if not a.size:
         return {"n": 0, "medape": float("nan"), "medae": float("nan")}
     absolute = np.abs(p - a)
-    with np.errstate(divide="ignore", invalid="ignore"):
-        percentage = absolute / np.abs(a) * 100.0
-    percentage = percentage[np.isfinite(percentage)]
     return {
         "n": int(absolute.size),
-        "medape": float(np.median(percentage)) if percentage.size else float("nan"),
+        "medape": median_absolute_percentage_error(a, p),
         "medae": float(np.median(absolute)),
     }
 

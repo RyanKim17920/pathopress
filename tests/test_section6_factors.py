@@ -162,11 +162,6 @@ class Section6FactorTests(unittest.TestCase):
         )
         np.testing.assert_allclose(percentile, [10, 30, 50, 70, 90])
         self.assertEqual(observed[-1], 8.5)
-        self.assertAlmostEqual(
-            module._inverse_risk_maximum(np.asarray([0.0, np.log1p(3.0)])),
-            3.0,
-        )
-
     def test_model_factor_stat_annotation_has_one_unambiguous_p_value(self):
         spec = importlib.util.spec_from_file_location(
             "factor_plot", ROOT / "scripts" / "plot_prediction_error_factors.py"
@@ -176,6 +171,21 @@ class Section6FactorTests(unittest.TestCase):
         label = module._stat_annotation({"rho": 0.48, "p": 0.00252, "n": 53})
         self.assertEqual(label, "$\\rho$=+0.48, n=53\np=0.00252")
         self.assertEqual(label.count("p="), 1)
+
+    def test_factor_figure_explains_rank1_predictor_and_rank2_diagnostic(self):
+        spec = importlib.util.spec_from_file_location(
+            "factor_plot_rank_contract", ROOT / "scripts" / "plot_prediction_error_factors.py"
+        )
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        label = module._rank_contract_note(
+            {"protocol": {"pathology_rank": 1, "upstream_rank": 2}}
+        )
+        self.assertEqual(
+            label,
+            "Prediction errors use the selected pathology rank-1 predictor; "
+            "the low-rank-fit diagnostic intentionally retains the upstream rank-2 definition.",
+        )
 
 
 if __name__ == "__main__":

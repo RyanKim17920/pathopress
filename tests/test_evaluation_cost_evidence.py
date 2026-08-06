@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import importlib.util
 import json
 import subprocess
 import tempfile
@@ -10,6 +11,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data/evaluation_cost_evidence.json"
+
+
+def load_cost_plot_module():
+    path = ROOT / "scripts/plot_evaluation_cost_evidence.py"
+    spec = importlib.util.spec_from_file_location("plot_evaluation_cost_evidence", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"could not load {path}")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class EvaluationCostEvidenceTests(unittest.TestCase):
@@ -27,7 +38,26 @@ class EvaluationCostEvidenceTests(unittest.TestCase):
             })
         actual = [record["evaluation_id"] for record in self.records]
         self.assertEqual(actual, expected)
-        self.assertEqual(len(actual), 165)
+        self.assertEqual(len(actual), 168)
+
+    def test_registry_and_figure_denominators_are_consistent(self) -> None:
+        total = len(self.records)
+        summary = self.payload["summary"]
+        self.assertEqual(summary["n_evaluations"], total)
+        suite_total = sum(
+            row["n_evaluations"] for row in summary["field_coverage_by_suite"].values()
+        )
+        self.assertEqual(suite_total, total)
+        for suite, row in summary["field_coverage_by_suite"].items():
+            denominator = row["n_evaluations"]
+            for field, count in row.items():
+                if field != "n_evaluations":
+                    with self.subTest(suite=suite, field=field):
+                        self.assertLessEqual(count, denominator)
+
+        copy = load_cost_plot_module().denominator_copy(total)
+        self.assertEqual(copy["coverage_title"], f"A. Evidence coverage (n={total:,})")
+        self.assertIn(f"0/{total:,}", copy["missingness_footer"])
 
     def test_every_reported_fact_has_a_resolvable_source_and_locator(self) -> None:
         source_ids = {source["source_id"] for source in self.payload["sources"]}
@@ -86,7 +116,7 @@ class EvaluationCostEvidenceTests(unittest.TestCase):
 
     def test_pre_error_tiers_are_explicitly_not_cost_claims(self) -> None:
         tiers = self.payload["summary"]["pre_error_feasibility_tier_counts"]
-        self.assertEqual(sum(tiers.values()), 165)
+        self.assertEqual(sum(tiers.values()), 168)
         self.assertEqual(tiers["tier_1_direct_small_labeled"], 4)
         for record in self.records:
             definition = record["pre_error_feasibility"]

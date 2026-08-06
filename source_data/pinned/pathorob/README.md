@@ -1,0 +1,285 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18961604.svg)](https://doi.org/10.5281/zenodo.18961604)
+# PathoROB
+
+[Preprint](https://arxiv.org/abs/2507.17845) | [Hugging Face](https://huggingface.co/collections/bifold-pathomics/pathorob-6899f50a714f446d0c974f87) |  [User Guide](#user-guide) | [Licenses](#licenses) | [Cite](#how-to-cite)
+
+**PathoROB is a benchmark for the robustness of pathology foundation models (FMs) to non-biological medical center differences.**
+
+![PathoROB pipeline](docs/pathorob_pipeline.png)
+
+PathoROB contains **four datasets** covering 28 biological classes from 34 medical centers and **three metrics**:
+1. **Robustness Index**: Measures the dominance of biological over non-biological features in an FM representation space.
+2. **Average Performance Drop (APD)**: Measures the robustness of downstream models to shortcut learning of non-biological features and the effect on generalization performance.
+3. **Clustering Score**: Measures the robustness of clustering to non-biological features and the impact on the quality of k-means clusters.
+
+![PathoROB overview](docs/pathorob_overview.png)
+
+## Leaderboard: Robustness Index
+
+| Rank | Foundation Model                                                                                      |      TCGA 2x2 |  Camelyon |  Tolkach ESCA |      Average (↓) |
+|------|:------------------------------------------------------------------------------------------------------|--------------:|----------:|--------------:|-----------------:|
+| 1    | Atlas 2 <sup>[[1]](https://arxiv.org/pdf/2601.05148)</sup>                                            |         0.879 |     0.940 |         0.964 |            0.928 |
+| 2    | GenBio-PathFM <sup>[[2]](https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1.full.pdf)</sup> |         0.838 |     0.865 |         0.960 |            0.888 |
+| 3    | Virchow2                                                                                              |         0.822 |     0.806 |         0.955 |            0.861 |
+| 4    | CONCHv1.5                                                                                             |         0.832 |     0.774 |         0.951 |            0.852 |
+| 5    | Atlas                                                                                                 |         0.826 |     0.785 |         0.938 |            0.850 |
+| 6    | Virchow                                                                                               |         0.761 |     0.751 |         0.932 |            0.815 |
+| 7    | H0-mini                                                                                               |         0.794 |     0.718 |         0.932 |            0.815 |
+| 8    | H-optimus-1 <sup>[[2]](https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1.full.pdf)</sup> |         0.853 |     0.645 |         0.944 |            0.814 |
+| 9    | Conch                                                                                                 |         0.824 |     0.662 |         0.951 |            0.812 |
+| 10   | H-optimus-0                                                                                           |         0.812 |     0.705 |         0.918 |            0.812 |
+| 11   | UNI2-h                                                                                                |         0.803 |     0.544 |         0.923 |            0.757 |
+| 12   | MUSK                                                                                                  |         0.727 |     0.467 |         0.928 |            0.707 |
+| 13   | HIPT                                                                                                  |         0.614 |     0.649 |         0.726 |            0.663 |
+| 14   | Prov-GigaPath                                                                                         |         0.738 |     0.399 |         0.754 |            0.630 |
+| 15   | Kaiko ViT-B/8                                                                                         |         0.763 |     0.147 |         0.896 |            0.602 |
+| 16   | UNI                                                                                                   |         0.747 |     0.145 |         0.902 |            0.598 |
+| 17   | RETCCL                                                                                                |         0.593 |     0.318 |         0.878 |            0.596 |
+| 18   | CTransPath                                                                                            |         0.652 |     0.106 |         0.872 |            0.543 |
+| 19   | Kang-DINO                                                                                             |         0.661 |     0.043 |         0.832 |            0.512 |
+| 20   | RudolfV                                                                                               |         0.587 |     0.184 |         0.695 |            0.489 |
+| 21   | Phikon                                                                                                |         0.623 |     0.011 |         0.795 |            0.476 |
+| 22   | Phikon-v2                                                                                             |         0.619 |     0.019 |         0.768 |            0.469 |
+| 23   | Ciga                                                                                                  |         0.511 |     0.135 |         0.693 |            0.446 |
+
+Results for models with superscripts <sup>[N]</sup> were taken from the linked external publications. Note that they were not validated by the authors of this repository. All other results were computed as part of our benchmarking study. For details as well as for the APD and clustering score results, please check our [preprint](https://arxiv.org/abs/2507.17845).
+
+> [!Note]
+> If you want your model to be added, please [contact](#contact) us.
+
+
+## User guide
+
+### Installation
+
+```shell
+git clone https://github.com/bifold-pathomics/PathoROB.git
+cd PathoROB
+conda create -n "pathorob" python=3.10 -y
+conda activate pathorob
+pip install -e .
+```
+
+> [!Note]
+> To ensure that the conda environment does not contain any user-specific site packages (e.g., from `~/.local/lib`), run `export PYTHONNOUSERSITE=1` after activating your environment.
+
+
+### Feature extraction
+
+```shell
+python3 -m pathorob.features.extract_features --model uni2h_clsmean --model_args '{"hf_token": "<TOKEN>"}'
+```
+
+For feature extraction, ~100K images (~2GB) will be downloaded from [Hugging Face](https://huggingface.co/collections/bifold-pathomics/pathorob-6899f50a714f446d0c974f87).
+
+- Results: `data/features/uni2h_clsmean`
+- Datasets: Per default, features for all PathoROB datasets will be extracted (`camelyon`, `tcga`, `tolkach_esca`). To select any subset of these, use `--datasets <dataset1> ...`.
+- Further arguments: `pathorob/features/extract_features.py`
+
+### Benchmark metrics
+
+#### (1) Robustness Index
+
+```shell
+python3 -m pathorob.robustness_index.robustness_index --model uni2h_clsmean
+```
+
+- Results: `results/robustness_index` (see example results here)
+  - `{model}/{dataset}/{max_patches_per_combi}_{k_opt_param}/results_summary.json`:
+    - Summary of the results including the final robustness index and the k parameter used.
+  - `{model}/{dataset}/{max_patches_per_combi}_{k_opt_param}/fig`:
+    - Folder with additional visualizations if the `--plot_graphs` flag is set.
+  - `{model}/{dataset}/{max_patches_per_combi}_{k_opt_param}/balanced-accuracies-bio.json`:
+    - Balanced accuracy of the kNN classifier for selecting the k value if required.
+  - `{model}/{dataset}/{max_patches_per_combi}_{k_opt_param}/frequency-same-class.pkl`:
+    - Raw results for computing the robustness index.
+- Further arguments: `pathorob/robustness_index/robustness_index.py`
+  - Notice: per default, we use the `k` values per dataset as determined in our [preprint](https://arxiv.org/abs/2507.17845).
+
+After computing the robustness index for multiple models, you can create further visualizations to compare them:
+
+```shell
+python3 -m pathorob.robustness_index.robustness_index --mode compare
+```
+
+- Results: `results/robustness_index/fig`
+
+
+#### (2) Average Performance Drop (APD)
+
+```shell
+python3 -m pathorob.apd.apd --model uni2h_clsmean
+```
+
+- Results: `results/apd` (see example results here)
+  - `{model}/{dataset}_summary.json`:
+    - In-/out-of-domain APDs for the specific dataset.
+    - In-/out-of-domain accuracy means per split averaged over trails.
+  - `{model}/aggregated_summary.json`:
+    - In-/out-of-domain APDs with 95% confidence intervals over all specified datasets.
+  - `{model}/{dataset}_raw.json`:
+    - In-/out-of-domain accuracies per split and trail.
+- Further arguments: `pathorob/apd/apd.py`
+
+#### (3) Clustering Score
+
+```shell
+python3 -m pathorob.clustering_score.clustering_score --model uni2h_clsmean
+```
+
+- Results: `results/clustering_score` (see example results here)
+   - `{model}/{dataset}/results_summary.json`:
+     - Summary of the results including the final clustering score.
+   - `{model}/{dataset}/aris.csv`:
+     - Raw Adjusted Rand Index (ARI) and clustering scores for all for repetitions.
+   - `{model}/{dataset}/silhouette_scores.csv`:
+     - Raw silhouette scores to select the optimal K for clustering.
+- Further arguments: `pathorob/clustering_score/clustering_score.py`
+
+### Adding your own model
+
+1. Create a new Python file in `pathorob.models`.
+2. Import the `ModelWrapper` from `pathorob.models.utils`.
+3. Define a new model wrapper class and implement the required functions (see template below).
+   - Examples: `pathorob.models.uni` or `pathorob.models.phikon`.
+4. Add your model wrapper to the `load_model` function in `pathorob.models.__init__` and choose a `model_name`.
+5. Run the feature extraction script using your `model_name`.
+   - `python3 -m pathorob.features.extract_features --model <model_name>`
+
+```python
+from pathorob.models.utils import ModelWrapper
+
+
+class MyModelWrapper(ModelWrapper):
+
+    def __init__(self, ...):
+        """
+        Optional: Define custom arguments that can be passed to the model in the
+        extract_features entrypoint via `--model_args` as a dictionary.
+        """
+
+    def get_model(self):
+        """
+        :return: A model object (e.g., `torch.nn.Module`) that has an `eval()` and a
+        `to(device)` method.
+        """
+
+    def get_preprocess(self):
+        """
+        Preprocessing to apply to raw PIL images before passing the data to the model.
+
+        :return: A function or an executable object (e.g., `torchvision.transforms.Compose`)
+            that accepts a `PIL.Image` as input and returns what the `extract` function
+            needs for feature extraction. Note that the result will be batched by the
+            default `collate_fn` of a torch DataLoader (`torch.utils.data.DataLoader`).
+        """
+
+    def extract(self, data) -> torch.Tensor:
+        """
+        Feature extraction step for preprocessed and batched image data.
+
+        :param data: (batch_size, ...) A batch of preprocessed image data. The images were
+            preprocessed individually via `get_preprocess()` and batched via the default
+            `collate_fn` of a torch DataLoader  (`torch.utils.data.DataLoader`).
+        :return: (batch_size, feature_dim) A torch Tensor containing the extracted features.
+        """
+```
+
+## Latest updates
+
+- December 2025: PathoROB codes are available on GitHub.
+- September 2025: PathoROB data are available on Hugging Face.
+
+## Licenses
+
+The PathoROB datasets were subsampled from public sources. Therefore, we redistribute each PathoROB dataset under the license of its original data source. You can run PathoROB on any subset of datasets with licenses suitable for your application.
+
+- **Camelyon**:
+  - Source: [CAMELYON16](https://camelyon16.grand-challenge.org/) and [CAMELYON17](https://camelyon17.grand-challenge.org/Home/)
+  - License: CC0 1.0 (Public Domain)
+- **TCGA**:
+  - Source: [TCGA-UT](https://zenodo.org/records/5889558)
+  - License: CC-BY-NC-SA 4.0 (Non-Commercial Use)
+- **Tolkach ESCA**
+  - Source: https://zenodo.org/records/7548828
+  - License: CC-BY-SA 4.0
+  - Comment: This license was granted by the author specifically for PathoROB.
+
+## Acknowledgements
+
+We want to thank the authors of the original datasets for making their data publicly available.
+
+## Contact
+
+If you have questions or feedback, please contact:
+- Jonah Kömen (koemen@tu-berlin.de)
+- Edwin D. de Jong (jong.de.edwin.work@gmail.com)
+- Julius Hense (j.hense@tu-berlin.de)
+
+## How to cite
+
+If you find **PathoROB** useful, please cite our preprint:
+```
+@article{koemen2025pathorob,
+    title={Towards Robust Foundation Models for Digital Pathology},
+    author={K{\"o}men, Jonah and de Jong, Edwin D and Hense, Julius and Marienwald, Hannah and Dippel, Jonas and Naumann, Philip and Marcus, Eric and Ruff, Lukas and Alber, Maximilian and Teuwen, Jonas and others},
+    journal={arXiv preprint arXiv:2507.17845},
+    year={2025}
+}
+```
+
+Please also cite the source publications of _all_ PathoROB datasets that you use:
+
+- **Camelyon** (Source: [CAMELYON16](https://camelyon16.grand-challenge.org/) and [CAMELYON17](https://camelyon17.grand-challenge.org/Home/), License: CC0 1.0)
+```
+@article{bejnordi2017camelyon16,
+    title={Diagnostic Assessment of Deep Learning Algorithms for Detection of Lymph Node Metastases in Women With Breast Cancer},
+    author={Ehteshami Bejnordi, Babak and Veta, Mitko and Johannes van Diest, Paul and van Ginneken, Bram and Karssemeijer, Nico and Litjens, Geert and van der Laak, Jeroen A. W. M. and and the CAMELYON16 Consortium},
+    journal={JAMA},
+    year={2017},
+    volume={318},
+    number={22},
+    pages={2199-2210},
+    doi={10.1001/jama.2017.14585}
+}
+```
+```
+@article{bandi19camelyon17,
+    title={From Detection of Individual Metastases to Classification of Lymph Node Status at the Patient Level: The CAMELYON17 Challenge},
+    author={Bándi, Péter and Geessink, Oscar and Manson, Quirine and Van Dijk, Marcory and Balkenhol, Maschenka and Hermsen, Meyke and Ehteshami Bejnordi, Babak and Lee, Byungjae and Paeng, Kyunghyun and Zhong, Aoxiao and Li, Quanzheng and Zanjani, Farhad Ghazvinian and Zinger, Svitlana and Fukuta, Keisuke and Komura, Daisuke and Ovtcharov, Vlado and Cheng, Shenghua and Zeng, Shaoqun and Thagaard, Jeppe and Dahl, Anders B. and Lin, Huangjing and Chen, Hao and Jacobsson, Ludwig and Hedlund, Martin and Çetin, Melih and Halıcı, Eren and Jackson, Hunter and Chen, Richard and Both, Fabian and Franke, Jörg and Küsters-Vandevelde, Heidi and Vreuls, Willem and Bult, Peter and van Ginneken, Bram and van der Laak, Jeroen and Litjens, Geert},
+    journal={IEEE Transactions on Medical Imaging},
+    year={2019},
+    volume={38},
+    number={2},
+    pages={550-560},
+    doi={10.1109/TMI.2018.2867350}
+}
+```
+
+- **TCGA** (Source: [TCGA-UT](https://zenodo.org/records/5889558), License: CC-BY-NC-SA 4.0)
+```
+@article{komura22tcga-ut,
+    title={Universal encoding of pan-cancer histology by deep texture representations},
+    author={Daisuke Komura and Akihiro Kawabe and Keisuke Fukuta and Kyohei Sano and Toshikazu Umezaki and Hirotomo Koda and Ryohei Suzuki and Ken Tominaga and Mieko Ochi and Hiroki Konishi and Fumiya Masakado and Noriyuki Saito and Yasuyoshi Sato and Takumi Onoyama and Shu Nishida and Genta Furuya and Hiroto Katoh and Hiroharu Yamashita and Kazuhiro Kakimi and Yasuyuki Seto and Tetsuo Ushiku and Masashi Fukayama and Shumpei Ishikawa},
+    journal={Cell Reports},
+    year={2022},
+    volume={38},
+    number={9},
+    pages={110424},
+    doi={https://doi.org/10.1016/j.celrep.2022.110424}
+}
+```
+
+- **Tolkach ESCA** (Source: https://zenodo.org/records/7548828, License: CC-BY-SA 4.0)
+```
+@article{tolkach2023esca,
+    title={Artificial intelligence for tumour tissue detection and histological regression grading in oesophageal adenocarcinomas: a retrospective algorithm development and validation study},
+    author={Tolkach, Yuri and Wolgast, Lisa Marie and Damanakis, Alexander and Pryalukhin, Alexey and Schallenberg, Simon and Hulla, Wolfgang and Eich, Marie-Lisa and Schroeder, Wolfgang and Mukhopadhyay, Anirban and Fuchs, Moritz and others},
+    journal={The Lancet Digital Health},
+    year={2023},
+    volume={5},
+    number={5},
+    pages={e265--e275},
+    publisher={Elsevier}
+}
+```

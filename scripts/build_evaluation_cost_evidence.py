@@ -497,7 +497,13 @@ def sample_count(task: dict[str, str]) -> dict[str, Any]:
             unit="images",
         )
     if task["suite_id"] == "pathorob":
-        row = PATHOROB[task["dataset_id"]]
+        row = PATHOROB.get(task["dataset_id"])
+        if row is None:
+            return missing(
+                "No source-audited PathoROB metadata row count is available for this dataset or aggregate endpoint.",
+                suite_source_ids(task["suite_id"])
+                + [f"task_source:{task['evaluation_id']}"],
+            )
         url = github_url(
             "bifold-pathomics/PathoROB",
             COMMITS["pathorob"],
@@ -562,7 +568,9 @@ def dataset_license(task: dict[str, str]) -> dict[str, Any]:
     if suite == "hest":
         value, source_id = "CC-BY-NC-SA-4.0", "hest_license_3ddb5ea"
     elif suite == "pathorob":
-        value, source_id = PATHOROB[task["dataset_id"]]["dataset_license"], "pathorob_readme_6583cf0"
+        pathorob_row = PATHOROB.get(task["dataset_id"])
+        if pathorob_row is not None:
+            value, source_id = pathorob_row["dataset_license"], "pathorob_readme_6583cf0"
     elif suite == "eva":
         key = "patch_camelyon_10shot" if "10shot" in task["evaluation_id"] else task["dataset_id"]
         value, source_id = EVA_DATASET_LICENSE.get(key), "eva_config_e43e74a"

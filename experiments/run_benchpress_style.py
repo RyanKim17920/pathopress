@@ -27,6 +27,7 @@ sys.path.insert(0, str(PROJECT_ROOT / "src"))
 from pathopress.completion import complete  # noqa: E402
 from pathopress.artifacts import load_fold_artifact, sha256_file  # noqa: E402
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
+from pathopress.metrics import median_absolute_percentage_error  # noqa: E402
 
 
 def make_folds(matrix: np.ndarray, *, n_folds: int, seed: int):
@@ -63,7 +64,7 @@ def metrics(actual: list[float], predicted: list[float]) -> dict[str, float | in
         "n": int(error.size),
         "mae": round(float(np.mean(error)), 6),
         "medae": round(float(np.median(error)), 6),
-        "medape": round(float(np.median(error / np.abs(a)) * 100.0), 6),
+        "medape": round(median_absolute_percentage_error(a, p), 6),
         "within_1": round(float(np.mean(error <= 1.0)), 6),
         "within_3": round(float(np.mean(error <= 3.0)), 6),
         "within_5": round(float(np.mean(error <= 5.0)), 6),

@@ -6,6 +6,8 @@ from typing import Any
 
 import numpy as np
 
+from pathopress.metrics import median_absolute_percentage_error
+
 
 def find_largest_complete_submatrix(
     matrix: np.ndarray, *, min_evaluations: int = 5
@@ -115,14 +117,13 @@ def best_neighbor_ols(
         prediction = _inverse_logit(prediction_logit)
         actual = matrix[shared, target]
         absolute = np.abs(prediction - actual)
-        nonzero = np.abs(actual) > 1e-12
         correlation = float(correlations[target, predictor])
         output[evaluation_ids[target]] = {
             "best_neighbor": evaluation_ids[predictor],
             "max_r": round(correlation, 6),
             "max_abs_r": round(abs(correlation), 6),
             "max_r2": round(correlation**2, 6),
-            "medape": round(float(np.median(absolute[nonzero] / np.abs(actual[nonzero])) * 100.0), 6),
+            "medape": round(median_absolute_percentage_error(actual, prediction), 6),
             "medae": round(float(np.median(absolute)), 6),
             "n_shared": int(counts[target, predictor]),
             "raw_predictions": {

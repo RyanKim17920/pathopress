@@ -4,7 +4,7 @@
  */
 "use strict";
 
-const state = { data: null, modelIndex: 0, evaluationIndex: 0 };
+const state = { data: null, starterSets: null, modelIndex: 0, evaluationIndex: 0 };
 
 function escapeHtml(value) {
   return String(value).replace(/[&<>'"]/g, character => ({
@@ -22,7 +22,7 @@ async function loadData() {
     throw new Error("Unsupported generated website-data schema");
   }
   const rows = data.models.length, columns = data.evaluations.length;
-  for (const key of ["observed", "predictions", "sources", "prediction_intervals"]) {
+  for (const key of ["observed", "predictions", "sources", "prediction_intervals", "trust_probabilities", "trust_probability_status"]) {
     if (!Array.isArray(data[key]) || data[key].length !== rows || data[key].some(row => row.length !== columns)) {
       throw new Error(`Invalid ${key} matrix dimensions`);
     }
@@ -31,6 +31,31 @@ async function loadData() {
     throw new Error("Missing or unsupported new-model confidence artifact");
   }
   return data;
+}
+
+async function loadStarterSets(data) {
+  try {
+    const response = await fetch("starter_sets.json");
+    if (!response.ok) throw new Error(`starter_sets.json returned ${response.status}`);
+    const payload = await response.json();
+    if (payload.schema_version !== "pathopress-static-starter-sets-v1") {
+      throw new Error("Unsupported starter-set schema");
+    }
+    if (payload.matrix_scores_sha256 !== data.meta.scores_sha256) {
+      throw new Error("Starter sets were built for a different score matrix");
+    }
+    for (const key of ["unrestricted", "feasibility"]) {
+      if (!Array.isArray(payload.sets?.[key]?.evaluation_ids)) {
+        throw new Error(`Missing ${key} starter set`);
+      }
+      if (payload.sets[key].evaluation_ids.some(id => !data.evaluations.some(item => item.evaluation_id === id))) {
+        throw new Error(`${key} starter set contains unsupported evaluations`);
+      }
+    }
+    return payload;
+  } catch (error) {
+    return { unavailable: error.message, status: "pending_exact_probe_artifact" };
+  }
 }
 
 function setupLookup() {
@@ -72,6 +97,8 @@ function renderLookup() {
   const model = data.models[i], evaluation = data.evaluations[j];
   const observed = data.observed[i][j], prediction = data.predictions[i][j];
   const interval = data.prediction_intervals[i][j], source = data.sources[i][j];
+  const trust = data.trust_probabilities[i][j];
+  const trustStatus = data.trust_probability_status[i][j];
   const value = observed === null ? prediction : observed;
   const kind = observed === null ? "Predicted" : "Reported";
   const intervalLine = interval
@@ -82,12 +109,17 @@ function renderLookup() {
   const sourceLine = source?.url
     ? `<p><a href="${escapeHtml(source.url)}" target="_blank" rel="noopener">Open reported-score source ↗</a> · audit: ${escapeHtml(source.audit_status)}</p>`
     : "";
+  const trustLine = observed === null
+    ? Number.isFinite(trust)
+      ? `<p>Calibrated trust: <strong>${(100 * trust).toFixed(1)}%</strong> probability of absolute error ≤10 normalized points.</p>`
+      : `<p class="meta">Trust probability abstained (${escapeHtml(trustStatus ?? "unsupported cell")}).</p>`
+    : "";
   document.getElementById("lookup-result").innerHTML = `
     <span class="tag">${kind}</span>
     <div class="score">${scoreText(value)}</div>
     <h3>${escapeHtml(model.model_id)} on ${escapeHtml(evaluation.evaluation_id)}</h3>
     <p class="meta">${escapeHtml(evaluation.suite_id)} · ${escapeHtml(evaluation.metric)} · normalized 0–100</p>
-    ${intervalLine}${sourceLine}`;
+    ${intervalLine}${trustLine}${sourceLine}`;
   const ranked = data.models.map((item, index) => ({
     index, id: item.model_id,
     observed: data.observed[index][j], predicted: data.predictions[index][j]
@@ -98,6 +130,53 @@ function renderLookup() {
       <td>${scoreText(row.observed ?? row.predicted)}</td>
       <td>${row.observed === null ? "predicted" : "reported"}</td>
     </tr>`).join("");
+}
+
+function renderMatrixBrowser() {
+  const { data } = state;
+  const modelNeedle = document.getElementById("matrix-model-filter").value.trim().toLowerCase();
+  const evaluationNeedle = document.getElementById("matrix-evaluation-filter").value.trim().toLowerCase();
+  const kind = document.getElementById("matrix-kind-filter").value;
+  const modelIndexes = data.models.map((model, index) => ({ model, index })).filter(({ model }) =>
+    `${model.model_id} ${model.provider ?? ""}`.toLowerCase().includes(modelNeedle));
+  const evaluationIndexes = data.evaluations.map((evaluation, index) => ({ evaluation, index })).filter(({ evaluation }) =>
+    `${evaluation.evaluation_id} ${evaluation.suite_id} ${evaluation.task_family}`.toLowerCase().includes(evaluationNeedle));
+  document.getElementById("matrix-browser-head").innerHTML = `<tr><th scope="col">Model</th>${evaluationIndexes.map(({ evaluation }) =>
+    `<th scope="col" title="${escapeHtml(evaluation.evaluation_id)}">${escapeHtml(evaluation.evaluation_id)}</th>`).join("")}</tr>`;
+  let visibleCells = 0;
+  document.getElementById("matrix-browser-body").innerHTML = modelIndexes.map(({ model, index: i }) => {
+    const cells = evaluationIndexes.map(({ evaluation, index: j }) => {
+      const reported = data.observed[i][j] !== null;
+      const visible = kind === "all" || (kind === "reported" && reported) || (kind === "predicted" && !reported);
+      if (!visible) return "<td class=\"matrix-empty\">—</td>";
+      visibleCells += 1;
+      const value = reported ? data.observed[i][j] : data.predictions[i][j];
+      const alpha = .10 + .72 * Math.max(0, Math.min(100, value)) / 100;
+      const tone = value >= 62 ? "light-cell-text" : "dark-cell-text";
+      const label = `${model.model_id} on ${evaluation.evaluation_id}: ${scoreText(value)}, ${reported ? "reported" : "predicted"}`;
+      return `<td><button type="button" class="matrix-cell ${reported ? "reported" : "predicted"} ${tone}" data-model-index="${i}" data-evaluation-index="${j}" style="--score-alpha:${alpha.toFixed(3)}" aria-label="${escapeHtml(label)}">${scoreText(value)}</button></td>`;
+    }).join("");
+    return `<tr><th scope="row" title="${escapeHtml(model.model_id)}">${escapeHtml(model.model_id)}</th>${cells}</tr>`;
+  }).join("");
+  document.getElementById("matrix-browser-status").textContent = `${modelIndexes.length} models × ${evaluationIndexes.length} evaluations; ${visibleCells.toLocaleString()} ${kind === "all" ? "selectable" : kind} cells shown.`;
+  document.querySelectorAll(".matrix-cell").forEach(button => {
+    button.onclick = () => {
+      state.modelIndex = Number(button.dataset.modelIndex);
+      state.evaluationIndex = Number(button.dataset.evaluationIndex);
+      document.getElementById("model-input").value = data.models[state.modelIndex].model_id;
+      document.getElementById("evaluation-input").value = data.evaluations[state.evaluationIndex].evaluation_id;
+      renderLookup();
+      document.getElementById("lookup").scrollIntoView({ behavior: "smooth", block: "start" });
+    };
+  });
+}
+
+function setupMatrixBrowser() {
+  for (const id of ["matrix-model-filter", "matrix-evaluation-filter"]) {
+    document.getElementById(id).addEventListener("input", renderMatrixBrowser);
+  }
+  document.getElementById("matrix-kind-filter").addEventListener("change", renderMatrixBrowser);
+  renderMatrixBrowser();
 }
 
 function addKnownScoreRow(evaluationIndex = null) {
@@ -120,6 +199,39 @@ function addKnownScoreRow(evaluationIndex = null) {
   remove.onclick = () => row.remove();
   row.append(select, input, remove);
   document.getElementById("known-score-rows").appendChild(row);
+}
+
+function setKnownScoreRows(evaluationIds) {
+  const container = document.getElementById("known-score-rows");
+  container.innerHTML = "";
+  for (const evaluationId of evaluationIds) {
+    const index = state.data.evaluations.findIndex(item => item.evaluation_id === evaluationId);
+    if (index >= 0) addKnownScoreRow(index);
+  }
+}
+
+function setupStarterSets() {
+  const summary = document.getElementById("starter-summary");
+  const unrestrictedButton = document.getElementById("use-unrestricted-starter");
+  const feasibilityButton = document.getElementById("use-feasibility-starter");
+  if (state.starterSets?.unavailable) {
+    summary.textContent = `Starter recommendations are pending the final hash-bound probe artifact (${state.starterSets.unavailable}). Add scores manually meanwhile.`;
+    unrestrictedButton.disabled = true;
+    feasibilityButton.disabled = true;
+    unrestrictedButton.title = "Pending final probe artifact";
+    feasibilityButton.title = "Pending final probe artifact";
+    addKnownScoreRow(0); addKnownScoreRow(1); addKnownScoreRow(2);
+    return;
+  }
+  const visibleCount = state.starterSets.default_visible_count;
+  const useSet = key => {
+    const selected = state.starterSets.sets[key];
+    setKnownScoreRows(selected.evaluation_ids.slice(0, visibleCount));
+    summary.textContent = `${selected.label}: ${selected.evaluation_ids.slice(0, visibleCount).join(", ")}. ${selected.semantics}`;
+  };
+  unrestrictedButton.onclick = () => useSet("unrestricted");
+  feasibilityButton.onclick = () => useSet("feasibility");
+  useSet("unrestricted");
 }
 
 class NumpyRandomState {
@@ -299,7 +411,7 @@ async function predictNewModel() {
       <td>${known.has(index) ? "not applicable" : (() => {
         const result = newModelInterval(prediction[index], evaluation, knownIndexes);
         return result.status === "calibrated"
-          ? `${scoreText(result.lower)}–${scoreText(result.upper)} (empirical 90%; k=${result.k}; risk ${result.risk.toFixed(2)}; ${result.scope}; eval ${result.evaluationModels} groups/${result.evaluationPredictions} predictions; context ${result.contextModels} groups/${result.contextPredictions} predictions)`
+          ? `${scoreText(result.lower)}–${scoreText(result.upper)} (empirical 90%; trust probability abstained for unseen-model population; k=${result.k}; risk ${result.risk.toFixed(2)}; ${result.scope}; eval ${result.evaluationModels} groups/${result.evaluationPredictions} predictions; context ${result.contextModels} groups/${result.contextPredictions} predictions)`
           : `abstained (${escapeHtml(result.reason)})`;
       })()}</td></tr>`).join("");
     document.getElementById("new-model-results").hidden = false;
@@ -313,11 +425,13 @@ async function predictNewModel() {
 async function main() {
   try {
     state.data = await loadData();
+    state.starterSets = await loadStarterSets(state.data);
     setupLookup();
+    setupMatrixBrowser();
     document.getElementById("matrix-summary").textContent = `${state.data.meta.models} supported models × ${state.data.meta.evaluations} evaluations; ${state.data.meta.observations} reported cells.`;
     document.getElementById("add-score-row").onclick = () => addKnownScoreRow();
     document.getElementById("predict-new-model").onclick = predictNewModel;
-    addKnownScoreRow(0); addKnownScoreRow(1); addKnownScoreRow(2);
+    setupStarterSets();
   } catch (error) {
     document.getElementById("lookup-result").innerHTML = `<p>Could not load generated data: ${escapeHtml(error.message)}</p>`;
   }

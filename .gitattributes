@@ -1,0 +1,10 @@
+# Byte-exact upstream evidence snapshots. Keep their source whitespace and line
+# endings unchanged; the hashes below were re-verified before release staging.
+# eva/pathology.csv: a8e39569bca60b762652e41da4f17ef031e7bb7b29f98b6101342b8da5298ff9
+# eva_midnight/README.md: 7595d9ac11154d804a9e920abae185bd98798ebd4ba375490f1a845dc32d2001
+# hest/README.md: 3d002564045d3c493f30386df7983ee34b0f2f7ac89bf32ac63a5f780395d811
+# thunder/leaderboards.md: f174930a107fd0f72ae5b7f4251e86b734713d9335fb067b2b68a1d7f12c3022
+source_data/pinned/eva/pathology.csv binary whitespace=-trailing-space
+source_data/pinned/eva_midnight/README.md binary whitespace=-trailing-space
+source_data/pinned/hest/README.md binary whitespace=-trailing-space
+source_data/pinned/thunder/leaderboards.md binary whitespace=-trailing-space

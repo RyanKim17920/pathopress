@@ -17,7 +17,7 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--real-status", type=Path, default=ROOT / "experiments/llm_baseline/real_run_status.json")
     parser.add_argument("--real-metrics", type=Path, default=ROOT / "experiments/llm_baseline/real_metrics.json")
-    parser.add_argument("--mock-metrics", type=Path, default=ROOT / "experiments/llm_baseline/mock_metrics.json")
+    parser.add_argument("--mock-metrics", type=Path, default=ROOT / "experiments/llm_baseline_smoke/mock_metrics.json")
     parser.add_argument("--output", type=Path, default=ROOT / "figures/llm_baseline_status")
     return parser.parse_args()
 
@@ -32,6 +32,12 @@ def main() -> None:
         labels = [row["condition"].replace("_", "\n") for row in real["summary"]]
         axes[0].bar(labels, [row["medae"] for row in real["summary"]], color="#1368CE")
         axes[1].bar(labels, [row["medape"] for row in real["summary"]], color="#D1495B")
+        comparator = real.get("rank1_comparator", {})
+        if comparator:
+            axes[0].axhline(comparator["medae"], color="#222222", linestyle="--", label="rank-1 comparator")
+            axes[1].axhline(comparator["medape"], color="#222222", linestyle="--", label="rank-1 comparator")
+            axes[0].legend(frameon=False)
+            axes[1].legend(frameon=False)
         axes[0].set_ylabel("MedAE (normalized-score points)")
         axes[1].set_ylabel("MedAPE (%)")
         title = "Validated real-provider LLM baselines"
@@ -42,7 +48,13 @@ def main() -> None:
         axes[0].text(.5, .27, status["reason"], ha="center", va="center", wrap=True, fontsize=9)
         mock_n = sum(row["n"] for row in mock["summary"]) if mock else 0
         axes[1].text(.5, .58, "Artifact contract validated", ha="center", va="center", fontsize=17, fontweight="bold", color="#1368CE")
-        axes[1].text(.5, .36, f"Deterministic mock predictions: {mock_n}\nHeadline eligible: no", ha="center", va="center", fontsize=11)
+        axes[1].text(
+            .5, .36,
+            f"Full pack: {status.get('request_count', 0):,} requests / "
+            f"{status.get('target_prediction_count', 0):,} targets\n"
+            f"Smoke mock predictions: {mock_n} · headline eligible: no",
+            ha="center", va="center", fontsize=10,
+        )
         axes[1].text(.5, .16, "Mock accuracy is intentionally not plotted or compared.", ha="center", va="center", fontsize=9)
         title = "PathoPress LLM-baseline execution status"
     fig.suptitle(title, fontsize=15, fontweight="bold")

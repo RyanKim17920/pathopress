@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PathoPress automated score review ledger row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "review_id",
+    "model_id",
+    "evaluation_id",
+    "suite_id",
+    "reviewer_type",
+    "reviewed_at",
+    "evidence_kind",
+    "evidence_path",
+    "evidence_revision",
+    "evidence_sha256",
+    "source_locator",
+    "source_locator_reachable",
+    "checks_passed",
+    "duplicate_group_ids",
+    "canonical_setting_decision",
+    "audit_status_preserved",
+    "prior_review_status",
+    "review_outcome",
+    "promotion_eligible",
+    "decision_reason"
+  ],
+  "properties": {
+    "review_id": {"type": "string", "pattern": "^review\\.[0-9a-f]{20}$"},
+    "model_id": {"type": "string", "minLength": 1},
+    "evaluation_id": {"type": "string", "minLength": 1},
+    "suite_id": {"enum": ["pathobench", "eva", "thunder", "hest", "pathorob"]},
+    "reviewer_type": {"const": "automated_agent_review"},
+    "reviewed_at": {"type": "string", "format": "date-time"},
+    "evidence_kind": {"enum": ["repository", "model_card", "paper_snapshot"]},
+    "evidence_path": {"type": "string", "pattern": "^source_data/"},
+    "evidence_revision": {"type": "string", "minLength": 1},
+    "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_locator": {"type": "string", "minLength": 1},
+    "source_locator_reachable": {"const": "true"},
+    "checks_passed": {"type": "string", "minLength": 1},
+    "duplicate_group_ids": {"type": "string"},
+    "canonical_setting_decision": {
+      "enum": [
+        "retain_protocol_specific_cell",
+        "retain_analysis_ineligible_apd",
+        "retain_reported_external_only"
+      ]
+    },
+    "audit_status_preserved": {
+      "enum": [
+        "parsed_primary_source",
+        "parsed_primary_source_analysis_ineligible",
+        "reported_external"
+      ]
+    },
+    "prior_review_status": {"type": "string", "minLength": 1},
+    "review_outcome": {
+      "enum": ["source_locator_validated", "source_locator_crosschecked", "reported_external"]
+    },
+    "promotion_eligible": {"enum": ["true", "false"]},
+    "decision_reason": {"type": "string", "minLength": 1}
+  }
+}

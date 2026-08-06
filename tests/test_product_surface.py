@@ -1,4 +1,5 @@
 import csv
+import hashlib
 import io
 import json
 import mimetypes
@@ -17,6 +18,7 @@ import numpy as np
 from pathopress.cli import main as cli_main
 from pathopress.prediction import (
     build_deployment_confidence_artifact,
+    calibrated_trust_probability,
     load_confidence_artifact,
     load_prediction_dataset,
     parse_known_scores,
@@ -28,6 +30,7 @@ from pathopress.public_data import (
     download_public_export,
     load_public_export,
 )
+from pathopress.hf_publication import publish_hf_export, validate_hf_export
 
 
 SCORE_FIELDS = (
@@ -182,6 +185,56 @@ class PredictionProductTests(ProductFixture):
         with self.assertRaisesRegex(ValueError, "hash mismatch"):
             load_confidence_artifact(path, self.scores)
 
+    def test_hybrid_deployment_trust_calibrates_or_abstains(self) -> None:
+        cells = self.root / "hybrid_cells.csv"
+        with cells.open("w", newline="", encoding="utf-8") as handle:
+            writer = csv.DictWriter(
+                handle,
+                fieldnames=(
+                    "model_id", "evaluation_id", "suite_id", "absolute_error",
+                    "combined_risk_model_risk",
+                ),
+            )
+            writer.writeheader()
+            for model, evaluation, error, risk in (
+                ("m1", "e1", 1, 1), ("m1", "e2", 2, 2),
+                ("m2", "e1", 20, 8), ("m2", "e2", 25, 10),
+            ):
+                writer.writerow({
+                    "model_id": model, "evaluation_id": evaluation,
+                    "suite_id": "suite", "absolute_error": error,
+                    "combined_risk_model_risk": risk,
+                })
+        calibration = self.root / "calibration.json"
+        calibration.write_text(json.dumps({
+            "input": {
+                "cells_sha256": hashlib.sha256(cells.read_bytes()).hexdigest(),
+                "scores_sha256": hashlib.sha256(self.scores.read_bytes()).hexdigest(),
+            },
+            "upstream": {"commit": "pinned"},
+            "configuration": {"trust_threshold_justification": "fixture"},
+            "confidence_methods": {
+                "combined_risk_model": {"conformal_90_scale_median": 2.0}
+            },
+            "trust_calibration": {"combined_risk_model": {
+                "full_heldout_calibrator_for_deployment": {
+                    "threshold_normalized_points": 10.0,
+                    "bin_risk_median": [1.0, 10.0],
+                    "bin_calibrated_trust_probability": [1.0, 0.0],
+                }
+            }},
+        }), encoding="utf-8")
+        artifact = build_deployment_confidence_artifact(
+            cells, self.scores, confidence_calibration_path=calibration
+        )
+        self.assertEqual(artifact["artifact_type"], "pathopress_hybrid_confidence_v2")
+        trust = calibrated_trust_probability("m1", "e1", artifact)
+        self.assertEqual(trust["trust_probability_status"], "calibrated_existing_model")
+        self.assertGreater(trust["trust_probability"], 0.5)
+        abstained = calibrated_trust_probability("new", "e1", artifact)
+        self.assertEqual(abstained["trust_probability_status"], "abstained_unsupported_cell")
+        self.assertIsNone(abstained["trust_probability"])
+
     def _cli(self, *arguments: str) -> str:
         output = io.StringIO()
         argv = [
@@ -245,7 +298,28 @@ class PublicExportTests(ProductFixture):
         first, second = self._build("first"), self._build("second")
         one, two = load_public_export(first), load_public_export(second)
         self.assertEqual((len(one.models), len(one.evaluations), len(one.scores)), (4, 3, 11))
+        self.assertEqual(one.manifest, two.manifest)
         self.assertEqual(one.manifest["files"], two.manifest["files"])
+        self.assertTrue(one.manifest["parquet_written"])
+        exporter = one.manifest["exporter"]
+        self.assertEqual(exporter["parquet_backend"], "pyarrow")
+        self.assertTrue(exporter["pyarrow_version"])
+        self.assertFalse(exporter["pandas_used"])
+        self.assertEqual(
+            one.manifest["inputs"]["uv_lock_sha256"], exporter["uv_lock_sha256"]
+        )
+        self.assertEqual(one.manifest["pinned_benchpress_commit"], "0a684b63ee0e4a401cb907a3827a82ea997d74c4")
+        self.assertTrue((first / "data/models.csv").is_file())
+        self.assertTrue((first / "data/benchmarks.csv").is_file())
+        self.assertTrue((first / "data/scores_paper.parquet").is_file())
+        self.assertTrue((first / "README.md").read_text().startswith("---\n"))
+        schema = json.loads((first / "schema.json").read_text())
+        metadata = json.loads((first / "metadata.json").read_text())
+        self.assertEqual(schema["schema_version"], "pathopress-hf-table-schema-v1")
+        self.assertEqual(metadata["schema_version"], "public-table-export-v1")
+        self.assertEqual(schema["exporter"], exporter)
+        self.assertEqual(metadata["exporter"], exporter)
+        self.assertEqual(validate_hf_export(first)["parquet_files"], 9)
         provenance = json.loads((first / "provenance.json").read_text())
         self.assertNotIn("local_path", provenance["repositories"]["suite"])
         self.assertIn("do **not** relicense", (first / "LICENSES.md").read_text())
@@ -259,13 +333,44 @@ class PublicExportTests(ProductFixture):
         with self.assertRaisesRegex(ValueError, "hash mismatch"):
             load_public_export(destination)
 
+    def test_csv_only_and_required_parquet_modes_fail_closed(self) -> None:
+        out = self.root / "csv-only"
+        build_public_export(
+            scores_path=self.scores, tasks_path=self.tasks, suites_path=self.suites,
+            provenance_path=self.provenance, model_metadata_path=self.models,
+            out_dir=out, min_scores_per_model=2, min_models_per_evaluation=2,
+            parquet_mode="no",
+        )
+        self.assertFalse(load_public_export(out).manifest["parquet_written"])
+        self.assertFalse(list((out / "data").glob("*.parquet")))
+        with patch("pathopress.public_data.parquet_available", return_value=False):
+            with self.assertRaisesRegex(RuntimeError, "pyarrow"):
+                build_public_export(
+                    scores_path=self.scores, tasks_path=self.tasks, suites_path=self.suites,
+                    provenance_path=self.provenance, model_metadata_path=self.models,
+                    out_dir=self.root / "required", min_scores_per_model=2,
+                    min_models_per_evaluation=2, parquet_mode="yes",
+                )
+
+    def test_hf_publication_is_dry_run_and_upload_is_doubly_opt_in(self) -> None:
+        source = self._build("publish")
+        plan = publish_hf_export(source, repo_id="org/dataset")
+        self.assertEqual(plan["status"], "dry_run_no_network")
+        self.assertFalse(plan["upload_requested"])
+        with self.assertRaisesRegex(RuntimeError, "explicitly authorizes"):
+            publish_hf_export(source, repo_id="org/dataset", upload=True)
+        with self.assertRaisesRegex(RuntimeError, "HF_TOKEN"):
+            publish_hf_export(
+                source, repo_id="org/dataset", upload=True, authorized=True,
+            )
+
 
 class StaticWebsiteTests(unittest.TestCase):
     def test_generated_data_semantics_and_client_only_contract(self) -> None:
         root = Path(__file__).resolve().parents[1]
         data = json.loads((root / "website" / "data.json").read_text())
         self.assertEqual(data["schema_version"], "pathopress-static-predictor-v1")
-        self.assertEqual((len(data["models"]), len(data["evaluations"])), (59, 165))
+        self.assertEqual((len(data["models"]), len(data["evaluations"])), (59, 168))
         self.assertTrue(any(value is None for row in data["observed"] for value in row))
         for i, row in enumerate(data["observed"]):
             for j, value in enumerate(row):
@@ -274,9 +379,40 @@ class StaticWebsiteTests(unittest.TestCase):
         javascript = (root / "website" / "app.js").read_text()
         html = (root / "website" / "index.html").read_text()
         self.assertIn("function completeRank1", javascript)
+        self.assertIn("function renderMatrixBrowser", javascript)
+        self.assertIn("function setupStarterSets", javascript)
+        self.assertIn('fetch("starter_sets.json")', javascript)
+        self.assertIn("pending_exact_probe_artifact", javascript)
+        self.assertIn("Pending final probe artifact", javascript)
+        self.assertIn("trust_probabilities", javascript)
+        self.assertIn("Trust probability abstained", javascript)
         self.assertIn('fetch("data.json")', javascript)
         self.assertNotIn("pyodide", html.lower())
         self.assertNotIn("<form", html.lower())
+        self.assertIn('id="matrix-browser-table"', html)
+        self.assertIn('id="use-unrestricted-starter"', html)
+        self.assertIn('id="use-feasibility-starter"', html)
+
+        missing_cells = 0
+        calibrated_trust = 0
+        for i, row in enumerate(data["observed"]):
+            for j, value in enumerate(row):
+                if value is None:
+                    missing_cells += 1
+                    self.assertIsNotNone(data["prediction_intervals"][i][j])
+                    self.assertEqual(
+                        data["trust_probability_status"][i][j],
+                        "calibrated_existing_model",
+                    )
+                    probability = data["trust_probabilities"][i][j]
+                    self.assertIsNotNone(probability)
+                    self.assertGreaterEqual(probability, 0.0)
+                    self.assertLessEqual(probability, 1.0)
+                    calibrated_trust += 1
+                else:
+                    self.assertIsNone(data["trust_probabilities"][i][j])
+        self.assertEqual(missing_cells, 7885)
+        self.assertEqual(calibrated_trust, missing_cells)
 
     def test_site_assets_serve_over_plain_http(self) -> None:
         root = Path(__file__).resolve().parents[1]
@@ -298,7 +434,7 @@ class StaticWebsiteTests(unittest.TestCase):
         with urlopen(base + "/website/") as response:
             self.assertIn(b"PathoPress", response.read())
         with urlopen(base + "/website/data.json") as response:
-            self.assertEqual(json.load(response)["meta"]["observations"], 1967)
+            self.assertEqual(json.load(response)["meta"]["observations"], 2027)
 
 
 if __name__ == "__main__":

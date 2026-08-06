@@ -1,0 +1,41 @@
+{
+  "default_visible_count": 5,
+  "feasibility_allowlist_sha256": "64d62415fb0e5b534a4cf198a208ad7f373939b6a133bee138ede0b31fe304ce",
+  "matrix_scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
+  "probe_compression_sha256": "fc64dcecd90602469ab8010b3090d756a95d049c30d0d65ec8525904f0195616",
+  "schema_version": "pathopress-static-starter-sets-v1",
+  "sets": {
+    "feasibility": {
+      "evaluation_ids": [
+        "thunder.spider_skin.linear_probing",
+        "thunder.esca.linear_probing",
+        "eva.leaderboard.patch_camelyon.test",
+        "eva.leaderboard.breakhis.validation",
+        "eva.leaderboard.mhist.test",
+        "eva.leaderboard.bach.validation",
+        "thunder.break_his.linear_probing",
+        "thunder.spider_breast.linear_probing",
+        "thunder.tcga_uniform.linear_probing",
+        "thunder.tcga_crc_msi.linear_probing"
+      ],
+      "label": "Pre-error feasibility-proxy set",
+      "semantics": "All-known greedy MedAE trajectory restricted to the pre-error image/patch classification pipeline proxy; not measured cost."
+    },
+    "unrestricted": {
+      "evaluation_ids": [
+        "thunder.spider_skin.linear_probing",
+        "thunder.esca.linear_probing",
+        "eva.leaderboard.monusac.test",
+        "hest.read.gene_expression",
+        "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+        "pathobench.exaone2025.bracs.slidelevel-fine",
+        "pathobench.threads2025.bracs.slidelevel-coarse",
+        "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation",
+        "thunder.spider_breast.linear_probing",
+        "thunder.tcga_uniform.linear_probing"
+      ],
+      "label": "Most predictive unrestricted set",
+      "semantics": "All-known greedy MedAE trajectory; selected using prediction errors."
+    }
+  }
+}

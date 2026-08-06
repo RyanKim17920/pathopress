@@ -16,26 +16,26 @@
       "by_k": {
         "1": {
           "n_models": 19,
-          "n_predictions": 75,
-          "risk_median": 5.713550830379241,
+          "n_predictions": 74,
+          "risk_median": 4.756257612167786,
           "supported": true
         },
         "10": {
           "n_models": 16,
-          "n_predictions": 54,
-          "risk_median": 4.634096070446439,
+          "n_predictions": 55,
+          "risk_median": 4.150730923662831,
           "supported": true
         },
         "3": {
           "n_models": 19,
           "n_predictions": 54,
-          "risk_median": 3.5579739775785413,
+          "risk_median": 3.895655211193386,
           "supported": true
         },
         "5": {
           "n_models": 19,
           "n_predictions": 68,
-          "risk_median": 3.7896297037135867,
+          "risk_median": 3.8488428543467137,
           "supported": true
         }
       },
@@ -46,25 +46,25 @@
         "1": {
           "n_models": 15,
           "n_predictions": 64,
-          "risk_median": 1.5973758802444635,
+          "risk_median": 1.9327020301550064,
           "supported": true
         },
         "10": {
           "n_models": 12,
-          "n_predictions": 43,
-          "risk_median": 2.039776152317664,
+          "n_predictions": 44,
+          "risk_median": 1.920497720150081,
           "supported": true
         },
         "3": {
           "n_models": 15,
-          "n_predictions": 42,
-          "risk_median": 2.0488782059729616,
+          "n_predictions": 41,
+          "risk_median": 2.94700950315071,
           "supported": true
         },
         "5": {
           "n_models": 15,
-          "n_predictions": 56,
-          "risk_median": 2.109995416438103,
+          "n_predictions": 55,
+          "risk_median": 2.1896261329167928,
           "supported": true
         }
       },
@@ -75,25 +75,25 @@
         "1": {
           "n_models": 19,
           "n_predictions": 75,
-          "risk_median": 3.6266149915210377,
+          "risk_median": 4.1502582180253,
           "supported": true
         },
         "10": {
           "n_models": 15,
           "n_predictions": 48,
-          "risk_median": 2.401205566347741,
+          "risk_median": 2.874843273217863,
           "supported": true
         },
         "3": {
           "n_models": 19,
           "n_predictions": 50,
-          "risk_median": 3.6514233834992638,
+          "risk_median": 4.8502240058672825,
           "supported": true
         },
         "5": {
           "n_models": 19,
-          "n_predictions": 68,
-          "risk_median": 3.5044064307839307,
+          "n_predictions": 67,
+          "risk_median": 2.756919835829038,
           "supported": true
         }
       },
@@ -103,26 +103,26 @@
       "by_k": {
         "1": {
           "n_models": 19,
-          "n_predictions": 74,
-          "risk_median": 2.7742096051131995,
+          "n_predictions": 75,
+          "risk_median": 2.1731821280097705,
           "supported": true
         },
         "10": {
           "n_models": 15,
           "n_predictions": 48,
-          "risk_median": 2.443755354384919,
+          "risk_median": 1.844975553529821,
           "supported": true
         },
         "3": {
           "n_models": 19,
-          "n_predictions": 49,
-          "risk_median": 3.221933064688102,
+          "n_predictions": 48,
+          "risk_median": 3.3538148677282322,
           "supported": true
         },
         "5": {
           "n_models": 19,
-          "n_predictions": 66,
-          "risk_median": 1.8961408388810668,
+          "n_predictions": 67,
+          "risk_median": 2.2633271359716503,
           "supported": true
         }
       },
@@ -133,25 +133,25 @@
         "1": {
           "n_models": 15,
           "n_predictions": 62,
-          "risk_median": 2.187539152953221,
+          "risk_median": 2.5221095881873055,
           "supported": true
         },
         "10": {
           "n_models": 14,
-          "n_predictions": 44,
-          "risk_median": 2.409383311387195,
+          "n_predictions": 46,
+          "risk_median": 2.6127656912198276,
           "supported": true
         },
         "3": {
           "n_models": 15,
           "n_predictions": 44,
-          "risk_median": 2.687158121278685,
+          "risk_median": 3.1873603559049286,
           "supported": true
         },
         "5": {
           "n_models": 15,
-          "n_predictions": 55,
-          "risk_median": 2.2573299385083203,
+          "n_predictions": 54,
+          "risk_median": 2.5844991350285085,
           "supported": true
         }
       },
@@ -161,26 +161,26 @@
       "by_k": {
         "1": {
           "n_models": 19,
-          "n_predictions": 75,
-          "risk_median": 1.631799465248264,
+          "n_predictions": 76,
+          "risk_median": 1.512954878955206,
           "supported": true
         },
         "10": {
           "n_models": 17,
-          "n_predictions": 54,
-          "risk_median": 1.9422401637065398,
+          "n_predictions": 53,
+          "risk_median": 1.8982381590099706,
           "supported": true
         },
         "3": {
           "n_models": 18,
-          "n_predictions": 46,
-          "risk_median": 1.3220162001041427,
+          "n_predictions": 47,
+          "risk_median": 2.3114275347554916,
           "supported": true
         },
         "5": {
           "n_models": 19,
-          "n_predictions": 63,
-          "risk_median": 1.6220953671536549,
+          "n_predictions": 65,
+          "risk_median": 1.4240813588647825,
           "supported": true
         }
       },
@@ -190,26 +190,26 @@
       "by_k": {
         "1": {
           "n_models": 19,
-          "n_predictions": 72,
-          "risk_median": 1.1287168161242533,
+          "n_predictions": 71,
+          "risk_median": 1.0051680068844178,
           "supported": true
         },
         "10": {
           "n_models": 17,
-          "n_predictions": 43,
-          "risk_median": 0.9645246671437775,
+          "n_predictions": 47,
+          "risk_median": 0.8409878540233535,
           "supported": true
         },
         "3": {
           "n_models": 19,
-          "n_predictions": 47,
-          "risk_median": 0.9632564327168325,
+          "n_predictions": 48,
+          "risk_median": 1.1381649037954773,
           "supported": true
         },
         "5": {
           "n_models": 18,
-          "n_predictions": 62,
-          "risk_median": 0.8685747618148412,
+          "n_predictions": 63,
+          "risk_median": 0.9175752674964137,
           "supported": true
         }
       },
@@ -219,26 +219,26 @@
       "by_k": {
         "1": {
           "n_models": 19,
-          "n_predictions": 75,
-          "risk_median": 2.240539352466101,
+          "n_predictions": 76,
+          "risk_median": 2.7670307274075583,
           "supported": true
         },
         "10": {
           "n_models": 17,
-          "n_predictions": 57,
-          "risk_median": 2.7869958964706356,
+          "n_predictions": 59,
+          "risk_median": 2.539210960413776,
           "supported": true
         },
         "3": {
           "n_models": 19,
           "n_predictions": 53,
-          "risk_median": 2.2882080068130506,
+          "risk_median": 2.836244241675928,
           "supported": true
         },
         "5": {
           "n_models": 19,
-          "n_predictions": 63,
-          "risk_median": 1.978777973882572,
+          "n_predictions": 64,
+          "risk_median": 2.1747870982147504,
           "supported": true
         }
       },
@@ -249,25 +249,25 @@
         "1": {
           "n_models": 19,
           "n_predictions": 71,
-          "risk_median": 1.4028731805222776,
+          "risk_median": 2.3917632362669394,
           "supported": true
         },
         "10": {
           "n_models": 16,
           "n_predictions": 50,
-          "risk_median": 1.9165326523163237,
+          "risk_median": 1.1917797548097795,
           "supported": true
         },
         "3": {
           "n_models": 19,
-          "n_predictions": 50,
-          "risk_median": 2.9752550378900082,
+          "n_predictions": 51,
+          "risk_median": 3.107047558938035,
           "supported": true
         },
         "5": {
           "n_models": 17,
-          "n_predictions": 59,
-          "risk_median": 1.8772579897601247,
+          "n_predictions": 61,
+          "risk_median": 1.805648337338397,
           "supported": true
         }
       },
@@ -278,25 +278,25 @@
         "1": {
           "n_models": 19,
           "n_predictions": 75,
-          "risk_median": 2.040174592427263,
+          "risk_median": 1.400684018818211,
           "supported": true
         },
         "10": {
           "n_models": 15,
-          "n_predictions": 48,
-          "risk_median": 1.62467892589423,
+          "n_predictions": 49,
+          "risk_median": 2.147104329465229,
           "supported": true
         },
         "3": {
           "n_models": 19,
-          "n_predictions": 45,
-          "risk_median": 1.9338779697726238,
+          "n_predictions": 46,
+          "risk_median": 2.426067564518412,
           "supported": true
         },
         "5": {
           "n_models": 18,
-          "n_predictions": 62,
-          "risk_median": 1.9310208501477018,
+          "n_predictions": 63,
+          "risk_median": 2.0255525679443913,
           "supported": true
         }
       },
@@ -306,26 +306,26 @@
       "by_k": {
         "1": {
           "n_models": 19,
-          "n_predictions": 76,
-          "risk_median": 2.361909578102015,
+          "n_predictions": 75,
+          "risk_median": 1.9120310615756608,
           "supported": true
         },
         "10": {
-          "n_models": 14,
+          "n_models": 13,
           "n_predictions": 44,
-          "risk_median": 2.225273133917618,
+          "risk_median": 2.644556654511689,
           "supported": true
         },
         "3": {
           "n_models": 19,
           "n_predictions": 49,
-          "risk_median": 2.771612366782385,
+          "risk_median": 3.756228858898943,
           "supported": true
         },
         "5": {
           "n_models": 18,
-          "n_predictions": 62,
-          "risk_median": 2.6227328775962686,
+          "n_predictions": 66,
+          "risk_median": 2.5352281677132247,
           "supported": true
         }
       },
@@ -336,25 +336,25 @@
         "1": {
           "n_models": 15,
           "n_predictions": 65,
-          "risk_median": 0.9048524978500296,
+          "risk_median": 0.8850491287563784,
           "supported": true
         },
         "10": {
           "n_models": 13,
           "n_predictions": 47,
-          "risk_median": 0.868740924695345,
+          "risk_median": 0.8685322393369859,
           "supported": true
         },
         "3": {
           "n_models": 15,
           "n_predictions": 39,
-          "risk_median": 0.7678201256815953,
+          "risk_median": 0.610487188029083,
           "supported": true
         },
         "5": {
           "n_models": 15,
-          "n_predictions": 58,
-          "risk_median": 0.6775481202657829,
+          "n_predictions": 57,
+          "risk_median": 0.7460545743668803,
           "supported": true
         }
       },
@@ -364,26 +364,26 @@
       "by_k": {
         "1": {
           "n_models": 19,
-          "n_predictions": 74,
-          "risk_median": 1.30271770140169,
+          "n_predictions": 75,
+          "risk_median": 1.902510193800694,
           "supported": true
         },
         "10": {
           "n_models": 15,
-          "n_predictions": 53,
-          "risk_median": 0.9812634339312893,
+          "n_predictions": 52,
+          "risk_median": 1.0310164609843042,
           "supported": true
         },
         "3": {
           "n_models": 19,
-          "n_predictions": 51,
-          "risk_median": 1.2577922459996387,
+          "n_predictions": 50,
+          "risk_median": 1.494628880621164,
           "supported": true
         },
         "5": {
           "n_models": 17,
           "n_predictions": 68,
-          "risk_median": 1.0833772775234962,
+          "risk_median": 1.1814579481686565,
           "supported": true
         }
       },
@@ -394,25 +394,25 @@
         "1": {
           "n_models": 15,
           "n_predictions": 64,
-          "risk_median": 0.943961758146429,
+          "risk_median": 1.112962178931184,
           "supported": true
         },
         "10": {
           "n_models": 13,
-          "n_predictions": 41,
-          "risk_median": 0.71470491193881,
+          "n_predictions": 45,
+          "risk_median": 0.6409408219701191,
           "supported": true
         },
         "3": {
           "n_models": 15,
-          "n_predictions": 40,
-          "risk_median": 0.8308688885491904,
+          "n_predictions": 41,
+          "risk_median": 1.268152899075389,
           "supported": true
         },
         "5": {
           "n_models": 15,
           "n_predictions": 54,
-          "risk_median": 0.8565358585445964,
+          "risk_median": 0.8023221331851431,
           "supported": true
         }
       },
@@ -422,26 +422,26 @@
       "by_k": {
         "1": {
           "n_models": 15,
-          "n_predictions": 61,
-          "risk_median": 4.134334106311954,
+          "n_predictions": 62,
+          "risk_median": 4.241635119283984,
           "supported": true
         },
         "10": {
           "n_models": 14,
-          "n_predictions": 48,
-          "risk_median": 2.2906242437669064,
+          "n_predictions": 46,
+          "risk_median": 2.540688464747909,
           "supported": true
         },
         "3": {
           "n_models": 15,
-          "n_predictions": 42,
-          "risk_median": 3.736257647056213,
+          "n_predictions": 41,
+          "risk_median": 3.959294364985965,
           "supported": true
         },
         "5": {
           "n_models": 15,
-          "n_predictions": 55,
-          "risk_median": 2.789039136800241,
+          "n_predictions": 56,
+          "risk_median": 2.7192319390593553,
           "supported": true
         }
       },
@@ -451,26 +451,26 @@
       "by_k": {
         "1": {
           "n_models": 26,
-          "n_predictions": 124,
-          "risk_median": 0.7521149965998575,
+          "n_predictions": 123,
+          "risk_median": 0.9056874965709767,
           "supported": true
         },
         "10": {
           "n_models": 23,
-          "n_predictions": 90,
-          "risk_median": 0.6369898854368614,
+          "n_predictions": 92,
+          "risk_median": 0.5717673755406594,
           "supported": true
         },
         "3": {
           "n_models": 26,
-          "n_predictions": 70,
-          "risk_median": 0.5606805874483172,
+          "n_predictions": 69,
+          "risk_median": 0.6025476686616607,
           "supported": true
         },
         "5": {
           "n_models": 24,
-          "n_predictions": 104,
-          "risk_median": 0.6198799243713733,
+          "n_predictions": 105,
+          "risk_median": 0.7046090449903311,
           "supported": true
         }
       },
@@ -480,26 +480,26 @@
       "by_k": {
         "1": {
           "n_models": 26,
-          "n_predictions": 124,
-          "risk_median": 1.0612426395261565,
+          "n_predictions": 125,
+          "risk_median": 1.1716732954402218,
           "supported": true
         },
         "10": {
           "n_models": 23,
-          "n_predictions": 81,
-          "risk_median": 0.7619201309043007,
+          "n_predictions": 79,
+          "risk_median": 0.7586057709945067,
           "supported": true
         },
         "3": {
           "n_models": 26,
-          "n_predictions": 71,
-          "risk_median": 1.0319271756293418,
+          "n_predictions": 72,
+          "risk_median": 1.0305960900342974,
           "supported": true
         },
         "5": {
           "n_models": 24,
-          "n_predictions": 106,
-          "risk_median": 1.2606453859538291,
+          "n_predictions": 102,
+          "risk_median": 1.0022983675910808,
           "supported": true
         }
       },
@@ -509,26 +509,26 @@
       "by_k": {
         "1": {
           "n_models": 26,
-          "n_predictions": 122,
-          "risk_median": 0.8302658743537137,
+          "n_predictions": 123,
+          "risk_median": 0.861160820493545,
           "supported": true
         },
         "10": {
-          "n_models": 22,
-          "n_predictions": 85,
-          "risk_median": 0.688453025126698,
+          "n_models": 23,
+          "n_predictions": 87,
+          "risk_median": 0.7045323743722065,
           "supported": true
         },
         "3": {
           "n_models": 26,
-          "n_predictions": 71,
-          "risk_median": 0.6849348699713573,
+          "n_predictions": 69,
+          "risk_median": 0.6089690955932738,
           "supported": true
         },
         "5": {
           "n_models": 25,
           "n_predictions": 100,
-          "risk_median": 0.5750305332220194,
+          "risk_median": 0.6159347018000858,
           "supported": true
         }
       },
@@ -538,26 +538,26 @@
       "by_k": {
         "1": {
           "n_models": 26,
-          "n_predictions": 124,
-          "risk_median": 0.7044678294274647,
+          "n_predictions": 126,
+          "risk_median": 0.8371108222472543,
           "supported": true
         },
         "10": {
           "n_models": 22,
-          "n_predictions": 79,
-          "risk_median": 0.46275545092555603,
+          "n_predictions": 84,
+          "risk_median": 0.421940990138701,
           "supported": true
         },
         "3": {
           "n_models": 26,
-          "n_predictions": 67,
-          "risk_median": 0.5949100521215342,
+          "n_predictions": 68,
+          "risk_median": 0.5208113176388416,
           "supported": true
         },
         "5": {
           "n_models": 26,
-          "n_predictions": 106,
-          "risk_median": 0.688940919813227,
+          "n_predictions": 109,
+          "risk_median": 0.7219879644094931,
           "supported": true
         }
       },
@@ -567,26 +567,26 @@
       "by_k": {
         "1": {
           "n_models": 26,
-          "n_predictions": 124,
-          "risk_median": 0.48016521153533276,
+          "n_predictions": 122,
+          "risk_median": 0.46686425876568194,
           "supported": true
         },
         "10": {
-          "n_models": 22,
-          "n_predictions": 82,
-          "risk_median": 0.46876515748851233,
+          "n_models": 23,
+          "n_predictions": 83,
+          "risk_median": 0.30472733756076664,
           "supported": true
         },
         "3": {
           "n_models": 25,
           "n_predictions": 69,
-          "risk_median": 0.43575953660496225,
+          "risk_median": 0.46758755760393456,
           "supported": true
         },
         "5": {
           "n_models": 25,
-          "n_predictions": 107,
-          "risk_median": 0.34751535107547227,
+          "n_predictions": 104,
+          "risk_median": 0.359741844290852,
           "supported": true
         }
       },
@@ -597,25 +597,25 @@
         "1": {
           "n_models": 26,
           "n_predictions": 120,
-          "risk_median": 0.7847806807711137,
+          "risk_median": 0.903963756972562,
           "supported": true
         },
         "10": {
           "n_models": 23,
-          "n_predictions": 84,
-          "risk_median": 0.5744824387998833,
+          "n_predictions": 85,
+          "risk_median": 0.44041424804122187,
           "supported": true
         },
         "3": {
           "n_models": 26,
-          "n_predictions": 70,
-          "risk_median": 0.7789141984266656,
+          "n_predictions": 69,
+          "risk_median": 0.6969185570788703,
           "supported": true
         },
         "5": {
           "n_models": 26,
-          "n_predictions": 111,
-          "risk_median": 0.6342951100174545,
+          "n_predictions": 112,
+          "risk_median": 0.4245231524140678,
           "supported": true
         }
       },
@@ -625,26 +625,26 @@
       "by_k": {
         "1": {
           "n_models": 26,
-          "n_predictions": 122,
-          "risk_median": 0.7811867806560571,
+          "n_predictions": 123,
+          "risk_median": 0.7668028507337681,
           "supported": true
         },
         "10": {
           "n_models": 22,
           "n_predictions": 81,
-          "risk_median": 0.9016704088536187,
+          "risk_median": 0.8678661927594327,
           "supported": true
         },
         "3": {
           "n_models": 26,
-          "n_predictions": 66,
-          "risk_median": 0.8517838913302995,
+          "n_predictions": 65,
+          "risk_median": 0.9532385965889851,
           "supported": true
         },
         "5": {
           "n_models": 25,
-          "n_predictions": 103,
-          "risk_median": 0.8130493618614238,
+          "n_predictions": 107,
+          "risk_median": 0.6934054055634107,
           "supported": true
         }
       },
@@ -655,25 +655,25 @@
         "1": {
           "n_models": 26,
           "n_predictions": 125,
-          "risk_median": 0.7662575941639229,
+          "risk_median": 0.9093916515810818,
           "supported": true
         },
         "10": {
-          "n_models": 22,
-          "n_predictions": 82,
-          "risk_median": 0.6482295051891374,
+          "n_models": 23,
+          "n_predictions": 84,
+          "risk_median": 0.807373071460411,
           "supported": true
         },
         "3": {
           "n_models": 26,
-          "n_predictions": 68,
-          "risk_median": 0.7764684304739848,
+          "n_predictions": 70,
+          "risk_median": 0.7620103665344082,
           "supported": true
         },
         "5": {
           "n_models": 26,
-          "n_predictions": 110,
-          "risk_median": 0.7734970542709423,
+          "n_predictions": 116,
+          "risk_median": 0.7068586109952708,
           "supported": true
         }
       },
@@ -683,26 +683,26 @@
       "by_k": {
         "1": {
           "n_models": 26,
-          "n_predictions": 125,
-          "risk_median": 1.474279500421872,
+          "n_predictions": 122,
+          "risk_median": 1.5741751475322872,
           "supported": true
         },
         "10": {
           "n_models": 21,
-          "n_predictions": 81,
-          "risk_median": 1.046241984239586,
+          "n_predictions": 79,
+          "risk_median": 1.0531298742531021,
           "supported": true
         },
         "3": {
           "n_models": 25,
           "n_predictions": 67,
-          "risk_median": 1.3331321524521513,
+          "risk_median": 1.184373916232282,
           "supported": true
         },
         "5": {
           "n_models": 26,
-          "n_predictions": 102,
-          "risk_median": 0.9156946265053065,
+          "n_predictions": 107,
+          "risk_median": 1.0703341831015436,
           "supported": true
         }
       },
@@ -712,26 +712,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 2.48240084903415,
+          "n_predictions": 39,
+          "risk_median": 2.27075291048245,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 4.854843059631598,
+          "n_predictions": 39,
+          "risk_median": 4.923093582036465,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 19,
-          "risk_median": 1.401165901278162,
+          "risk_median": 3.278085195459056,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 3.5773333453501763,
+          "risk_median": 3.525996993285247,
           "supported": true
         }
       },
@@ -742,25 +742,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.891245362964412,
+          "risk_median": 3.938387659036948,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 2.0253207164322333,
+          "risk_median": 2.690684287344297,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 2.8961305752572315,
+          "risk_median": 3.4023101990692908,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 3.173085806769109,
+          "n_predictions": 39,
+          "risk_median": 3.087764625429216,
           "supported": true
         }
       },
@@ -771,25 +771,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.8248391800135835,
+          "risk_median": 2.8181049105789953,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.515381471373118,
+          "risk_median": 3.554600480809839,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 20,
-          "risk_median": 4.187851539457242,
+          "n_predictions": 19,
+          "risk_median": 4.051665199137403,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.7618672684564274,
+          "risk_median": 3.441863236177042,
           "supported": true
         }
       },
@@ -800,25 +800,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.7993399330380626,
+          "risk_median": 1.9060845214387072,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 1.71116930993999,
+          "n_predictions": 39,
+          "risk_median": 1.6544432592392724,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 1.2817670232815281,
+          "risk_median": 1.4478790149182252,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 1.8880333583096238,
+          "risk_median": 1.403134464374478,
           "supported": true
         }
       },
@@ -829,25 +829,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.0519666401499421,
+          "risk_median": 1.028580011206813,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 1.2263193974405624,
+          "risk_median": 1.6295627261631722,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 0.9371974739168678,
+          "risk_median": 0.9222554282911943,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 1.8988719616127696,
+          "n_predictions": 40,
+          "risk_median": 2.07060457944705,
           "supported": true
         }
       },
@@ -858,25 +858,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.366771105670594,
+          "risk_median": 1.284220463746621,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 34,
-          "risk_median": 0.8889992336197068,
+          "risk_median": 0.8711465915356271,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 1.410038155660203,
+          "risk_median": 1.5488365276570022,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 37,
-          "risk_median": 1.2339848084955065,
+          "risk_median": 1.24528869538765,
           "supported": true
         }
       },
@@ -887,25 +887,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 1.7119399521792644,
+          "risk_median": 1.6739935892003217,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 1.0144498080862832,
+          "risk_median": 0.9694539838603617,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 0.9917688239301725,
+          "risk_median": 1.1271864979297561,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 1.1948235205658264,
+          "n_predictions": 40,
+          "risk_median": 0.9787990264305364,
           "supported": true
         }
       },
@@ -916,25 +916,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.685137380715844,
+          "risk_median": 3.5006022996936395,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 4.345233766067459,
+          "n_predictions": 38,
+          "risk_median": 4.23930920163108,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 3.655108375778177,
+          "risk_median": 3.602939536017743,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 3.4037796764563595,
+          "risk_median": 3.414373765777526,
           "supported": true
         }
       },
@@ -944,26 +944,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 2.6571655401485827,
+          "n_predictions": 38,
+          "risk_median": 2.6252357950343566,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 33,
-          "risk_median": 1.7997643267685817,
+          "risk_median": 2.0293820918088556,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 2.7033013592158284,
+          "risk_median": 2.5685385532938767,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 2.17367470254122,
+          "risk_median": 1.7183268068061182,
           "supported": true
         }
       },
@@ -974,25 +974,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.827705467697399,
+          "risk_median": 1.7576986863509063,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 1.546532759900444,
+          "n_predictions": 36,
+          "risk_median": 1.636268581913896,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.4184190383541448,
+          "risk_median": 1.2939537926961862,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 1.4207987894561285,
+          "n_predictions": 39,
+          "risk_median": 1.148114021305176,
           "supported": true
         }
       },
@@ -1003,25 +1003,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.6785436136287046,
+          "risk_median": 3.017935362587451,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 2.064627137564024,
+          "n_predictions": 38,
+          "risk_median": 1.541300503103244,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.4209622418251513,
+          "risk_median": 1.4140221092066838,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 1.809561357670617,
+          "n_predictions": 39,
+          "risk_median": 2.1022043986084,
           "supported": true
         }
       },
@@ -1032,25 +1032,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 1.9056483391058485,
+          "risk_median": 1.879442584360259,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 37,
-          "risk_median": 3.5318802212927594,
+          "risk_median": 3.051589022796037,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 4.863327799351758,
+          "risk_median": 4.680785497735371,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 2.7149058390525482,
+          "risk_median": 3.0193292812114905,
           "supported": true
         }
       },
@@ -1060,26 +1060,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 41,
-          "risk_median": 3.785166353351329,
+          "n_predictions": 40,
+          "risk_median": 3.698100442522147,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 3.004500862568804,
+          "n_predictions": 34,
+          "risk_median": 3.481505001663322,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 21,
-          "risk_median": 2.6515840567035553,
+          "n_predictions": 19,
+          "risk_median": 4.629784425616094,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 37,
-          "risk_median": 3.243184478112312,
+          "risk_median": 2.3351648546800448,
           "supported": true
         }
       },
@@ -1089,26 +1089,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 4.327516109356878,
+          "n_predictions": 38,
+          "risk_median": 4.331472068926985,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 5.55852136794303,
+          "n_predictions": 39,
+          "risk_median": 5.567516950029329,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 3.368572897721336,
+          "risk_median": 4.711869613309631,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 4.575613615320378,
+          "n_predictions": 37,
+          "risk_median": 4.540908396955878,
           "supported": true
         }
       },
@@ -1119,25 +1119,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 0.6662647382544904,
+          "risk_median": 0.8929800589915331,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 35,
-          "risk_median": 1.863256873584234,
+          "risk_median": 1.723802230241688,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.7180428967426522,
+          "risk_median": 2.18741099331681,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 1.5569314336595355,
+          "risk_median": 1.1484279524056689,
           "supported": true
         }
       },
@@ -1148,25 +1148,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 9.585078846518385,
+          "risk_median": 9.659663759113378,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 34,
-          "risk_median": 8.034858793372777,
+          "n_predictions": 32,
+          "risk_median": 8.117493761289865,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 9.442812038611827,
+          "risk_median": 8.98851755581589,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 9.233211174493015,
+          "n_predictions": 40,
+          "risk_median": 8.854858352191044,
           "supported": true
         }
       },
@@ -1177,25 +1177,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.0948740895094886,
+          "risk_median": 3.0743758860795865,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 2.6813670028424283,
+          "risk_median": 2.711052503044101,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 2.73030923963875,
+          "risk_median": 2.996815798097302,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 3.007853954476282,
+          "risk_median": 2.5437439984828245,
           "supported": true
         }
       },
@@ -1206,25 +1206,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 4.826742035419031,
+          "risk_median": 4.624123011375261,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 5.471487993701512,
+          "n_predictions": 36,
+          "risk_median": 5.471222018073558,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 6.213688486279537,
+          "risk_median": 6.36110612949512,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 7.404185428058305,
+          "n_predictions": 38,
+          "risk_median": 7.774934084967377,
           "supported": true
         }
       },
@@ -1235,25 +1235,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 4.4096031225789005,
+          "risk_median": 4.52048845303473,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 32,
-          "risk_median": 3.6829095615429637,
+          "n_predictions": 33,
+          "risk_median": 3.7255750286363707,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 2.9452369329701042,
+          "risk_median": 3.055502324724557,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 4.353613439060091,
+          "n_predictions": 36,
+          "risk_median": 3.289139096343888,
           "supported": true
         }
       },
@@ -1264,25 +1264,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.8170007487946265,
+          "risk_median": 3.976811534651773,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 36,
-          "risk_median": 4.706860676816447,
+          "risk_median": 5.2347342609652685,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 3.9503116804032032,
+          "risk_median": 3.833770065520781,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 3.340165456567128,
+          "risk_median": 3.280374959709974,
           "supported": true
         }
       },
@@ -1293,25 +1293,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.821894950364282,
+          "risk_median": 2.834500673467616,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 35,
-          "risk_median": 2.123323220524796,
+          "n_predictions": 36,
+          "risk_median": 2.098395246410469,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 2.23911313675778,
+          "risk_median": 2.2382115113997116,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 2.6169832746975317,
+          "n_predictions": 39,
+          "risk_median": 2.4709969624988304,
           "supported": true
         }
       },
@@ -1322,25 +1322,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.340194040372701,
+          "risk_median": 2.078780424904167,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 2.8591680353332123,
+          "n_predictions": 38,
+          "risk_median": 2.6995954992575335,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 20,
-          "risk_median": 2.2695350108005954,
+          "n_predictions": 21,
+          "risk_median": 2.1209284196099745,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 2.7939560853476593,
+          "risk_median": 2.7147111521072986,
           "supported": true
         }
       },
@@ -1351,25 +1351,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.989286138548408,
+          "risk_median": 3.9727805472247226,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 4.396094436130184,
+          "n_predictions": 38,
+          "risk_median": 4.155947638190128,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 4.232640221554647,
+          "risk_median": 4.855380570467055,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 4.234128801080367,
+          "n_predictions": 37,
+          "risk_median": 4.201747984568904,
           "supported": true
         }
       },
@@ -1380,25 +1380,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.6445497851261592,
+          "risk_median": 1.6851168505292833,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 1.8244974864569343,
+          "risk_median": 1.721105759864784,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.5529540308280332,
+          "risk_median": 2.0251366263212844,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 1.2006614597350875,
+          "n_predictions": 40,
+          "risk_median": 1.1864386478278135,
           "supported": true
         }
       },
@@ -1409,25 +1409,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 6.380235039432826,
+          "risk_median": 6.445464487695169,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 41,
-          "risk_median": 3.2910020214267917,
+          "n_predictions": 40,
+          "risk_median": 3.0402091592766496,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 2.873643443305383,
+          "risk_median": 3.051777000007121,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 2.6563967969163116,
+          "risk_median": 3.580246053263039,
           "supported": true
         }
       },
@@ -1438,25 +1438,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 4.945510980492529,
+          "risk_median": 4.93885235086762,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 3.9699929493284642,
+          "n_predictions": 37,
+          "risk_median": 5.529705012672515,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 3.449456497484718,
+          "risk_median": 3.598115975225099,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 4.058631674722193,
+          "n_predictions": 38,
+          "risk_median": 3.7584978490308316,
           "supported": true
         }
       },
@@ -1467,25 +1467,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 4.503668489543031,
+          "risk_median": 4.504223569365934,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 35,
-          "risk_median": 2.953291298091372,
+          "n_predictions": 36,
+          "risk_median": 2.950947394698048,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.7457305062991537,
+          "risk_median": 1.830673378113687,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 3.9109016626234165,
+          "n_predictions": 38,
+          "risk_median": 3.0104314094429014,
           "supported": true
         }
       },
@@ -1496,25 +1496,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 8.89443415857491,
+          "risk_median": 8.909797504928193,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 6.979268484979322,
+          "n_predictions": 38,
+          "risk_median": 6.815394552283493,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 6.022018654150152,
+          "risk_median": 5.482314768276048,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 5.515438785756132,
+          "n_predictions": 39,
+          "risk_median": 5.521187430701687,
           "supported": true
         }
       },
@@ -1525,25 +1525,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 1.3560730678357515,
+          "risk_median": 1.482428982642837,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 37,
-          "risk_median": 1.7372901754680896,
+          "risk_median": 1.692618259799758,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 2.614845821794745,
+          "risk_median": 2.6314054626490986,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 1.8505921390640765,
+          "risk_median": 1.7982393273835982,
           "supported": true
         }
       },
@@ -1554,25 +1554,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.872424763275916,
+          "risk_median": 1.8829925404104557,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 2.173231451544922,
+          "n_predictions": 37,
+          "risk_median": 2.1065458867121407,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 3.9683834073828876,
+          "risk_median": 2.8616380921386764,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 36,
-          "risk_median": 2.4225409255948023,
+          "risk_median": 1.6146481589136812,
           "supported": true
         }
       },
@@ -1582,26 +1582,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 41,
-          "risk_median": 6.71638908069005,
+          "n_predictions": 40,
+          "risk_median": 8.032129505098062,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 10.382900248918439,
+          "n_predictions": 36,
+          "risk_median": 10.360720928847968,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 19,
-          "risk_median": 11.072276626778592,
+          "n_predictions": 20,
+          "risk_median": 11.29082192252826,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 10.568491397324138,
+          "n_predictions": 41,
+          "risk_median": 9.61601866933674,
           "supported": true
         }
       },
@@ -1612,25 +1612,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 3.4069129296694456,
+          "risk_median": 3.4425454563422733,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 1.9436398135162847,
+          "n_predictions": 35,
+          "risk_median": 2.0152098925743474,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.9005390680515148,
+          "risk_median": 1.967828625620129,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 2.7139022016603818,
+          "risk_median": 2.761030559485249,
           "supported": true
         }
       },
@@ -1641,25 +1641,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.026673967626735,
+          "risk_median": 2.0554357320586902,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 2.7431880657922036,
+          "risk_median": 2.9133443926498046,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 21,
-          "risk_median": 3.202675941164408,
+          "n_predictions": 20,
+          "risk_median": 3.125574285988293,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 2.2401180604523034,
+          "n_predictions": 39,
+          "risk_median": 2.869979917939311,
           "supported": true
         }
       },
@@ -1670,25 +1670,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 6.895289472310559,
+          "risk_median": 7.078083098208047,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 5.846210026816578,
+          "n_predictions": 37,
+          "risk_median": 4.280750794040792,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 8.917534616277493,
+          "risk_median": 8.814906843834528,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 4.712558413823821,
+          "risk_median": 5.101526269518061,
           "supported": true
         }
       },
@@ -1699,25 +1699,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 8.674083780812296,
+          "risk_median": 8.550722683935398,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 6.994264537344918,
+          "n_predictions": 37,
+          "risk_median": 6.89868994123416,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 6.146083171400484,
+          "risk_median": 5.818208617797993,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 4.6040266472856075,
+          "risk_median": 4.5028356338345645,
           "supported": true
         }
       },
@@ -1728,25 +1728,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.030827962261654,
+          "risk_median": 2.4966335903236754,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 3.860216943961916,
+          "risk_median": 2.2958202117780004,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 19,
-          "risk_median": 6.110665444687832,
+          "n_predictions": 20,
+          "risk_median": 5.998453682992007,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 3.107392006444222,
+          "n_predictions": 38,
+          "risk_median": 3.1995636402605854,
           "supported": true
         }
       },
@@ -1756,26 +1756,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 3.4500305631810306,
+          "n_predictions": 41,
+          "risk_median": 3.3294900249824195,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 3.385753464916604,
+          "n_predictions": 38,
+          "risk_median": 3.391827666119049,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 2.7563673385271414,
+          "risk_median": 2.0268470030584638,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 3.218999208995271,
+          "n_predictions": 40,
+          "risk_median": 3.589620793275813,
           "supported": true
         }
       },
@@ -1786,25 +1786,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.4541292980599962,
+          "risk_median": 3.248606019920075,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 37,
-          "risk_median": 3.4728088939878603,
+          "risk_median": 4.52382314246076,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 3.5550585228306275,
+          "risk_median": 2.595940898232641,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 4.0462714356038205,
+          "n_predictions": 37,
+          "risk_median": 5.131674556226827,
           "supported": true
         }
       },
@@ -1814,26 +1814,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 2.8018794713218256,
+          "n_predictions": 41,
+          "risk_median": 2.939038071745429,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 3.551203955669237,
+          "n_predictions": 35,
+          "risk_median": 3.680433283110972,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 20,
-          "risk_median": 2.607919945900875,
+          "n_predictions": 19,
+          "risk_median": 2.6519342932864873,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 3.2834999515894907,
+          "n_predictions": 40,
+          "risk_median": 3.558245385736754,
           "supported": true
         }
       },
@@ -1843,26 +1843,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 41,
-          "risk_median": 4.036374637685853,
+          "n_predictions": 40,
+          "risk_median": 3.3965201354027528,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 37,
-          "risk_median": 2.869731868583088,
+          "risk_median": 2.6308236303064234,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 3.7439016020929756,
+          "risk_median": 3.279043390108143,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 2.9524920857577825,
+          "n_predictions": 38,
+          "risk_median": 3.065241302024262,
           "supported": true
         }
       },
@@ -1873,25 +1873,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 5.260196659305265,
+          "risk_median": 5.136780565472556,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 4.384487611599511,
+          "risk_median": 3.4311915366444694,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 3.4850899130170063,
+          "risk_median": 3.0175155285580786,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 4.2813953207329405,
+          "risk_median": 4.961413979267363,
           "supported": true
         }
       },
@@ -1902,25 +1902,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 5.335167419204289,
+          "risk_median": 5.266317127230714,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 6.066837113007367,
+          "n_predictions": 38,
+          "risk_median": 6.1052943476085915,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 6.276732471836738,
+          "risk_median": 6.317240996223397,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 5.980654417291035,
+          "risk_median": 6.827749946649085,
           "supported": true
         }
       },
@@ -1931,25 +1931,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.303798480392416,
+          "risk_median": 1.302394084490146,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.2939803223551252,
+          "risk_median": 1.3747391105278126,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 19,
-          "risk_median": 1.1187074639495762,
+          "n_predictions": 20,
+          "risk_median": 1.113599952850386,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 1.156695932587553,
+          "risk_median": 1.1584255655541256,
           "supported": true
         }
       },
@@ -1960,25 +1960,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 3.397807476476771,
+          "risk_median": 3.3040350184069354,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 3.120385898280375,
+          "n_predictions": 35,
+          "risk_median": 3.3038804903664385,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 2.737247126995868,
+          "risk_median": 3.06378594965679,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 2.3292623787464066,
+          "risk_median": 2.336971891243948,
           "supported": true
         }
       },
@@ -1989,25 +1989,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.2970258378993833,
+          "risk_median": 2.272045933781378,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 2.07291552631839,
+          "risk_median": 2.113695823091952,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 21,
-          "risk_median": 2.824325205395972,
+          "n_predictions": 20,
+          "risk_median": 3.0099613989680805,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.9102619936687617,
+          "risk_median": 1.4612119240580839,
           "supported": true
         }
       },
@@ -2018,25 +2018,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.3931490517847038,
+          "risk_median": 1.4474192366055831,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.2013180824902392,
+          "risk_median": 0.9015467687641134,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 1.097085989609603,
+          "risk_median": 1.146607733904787,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 0.9691703331536488,
+          "risk_median": 0.9796084461151864,
           "supported": true
         }
       },
@@ -2047,25 +2047,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 6.378889441309735,
+          "risk_median": 5.776099587438981,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 34,
-          "risk_median": 5.657525031561661,
+          "n_predictions": 35,
+          "risk_median": 4.707357072408691,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 19,
-          "risk_median": 3.8529837151480777,
+          "n_predictions": 21,
+          "risk_median": 3.8260195482414048,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 36,
-          "risk_median": 4.015153791105028,
+          "risk_median": 3.8967526081587067,
           "supported": true
         }
       },
@@ -2076,25 +2076,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.7722650671853444,
+          "risk_median": 3.9187755748988025,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 4.374213958230293,
+          "risk_median": 4.279622686553452,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 2.603072748561175,
+          "risk_median": 2.5095129610099534,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 2.3437521476006538,
+          "n_predictions": 40,
+          "risk_median": 2.4323902945666447,
           "supported": true
         }
       },
@@ -2105,25 +2105,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.9957509473319561,
+          "risk_median": 2.0497242240642635,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 1.23883313867492,
+          "n_predictions": 37,
+          "risk_median": 1.2409798018759517,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 2.868659338089998,
+          "risk_median": 2.9477036632817146,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 1.6795433410840843,
+          "n_predictions": 40,
+          "risk_median": 1.7332698307240975,
           "supported": true
         }
       },
@@ -2134,25 +2134,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.1802959548763567,
+          "risk_median": 2.193763532802386,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 1.7008188697765192,
+          "risk_median": 2.1334276225908084,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 19,
-          "risk_median": 4.319757196538056,
+          "n_predictions": 20,
+          "risk_median": 3.7908045677986237,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 41,
-          "risk_median": 2.0490244507063693,
+          "n_predictions": 40,
+          "risk_median": 2.1251078559694676,
           "supported": true
         }
       },
@@ -2163,25 +2163,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 5.944264031623625,
+          "risk_median": 5.956216800501537,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 33,
-          "risk_median": 4.257012194449615,
+          "risk_median": 4.838159089426888,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 20,
-          "risk_median": 3.9557671360620503,
+          "n_predictions": 21,
+          "risk_median": 3.8678917973664113,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 5.322524983058408,
+          "n_predictions": 37,
+          "risk_median": 5.330828401296699,
           "supported": true
         }
       },
@@ -2192,25 +2192,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 0.26083180636521064,
+          "risk_median": 0.2699967715132132,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 0.29756722451220696,
+          "n_predictions": 37,
+          "risk_median": 0.3662965288807243,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 0.29870269345704514,
+          "risk_median": 0.19971715610951435,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 0.3116376667461793,
+          "risk_median": 0.31466131475595205,
           "supported": true
         }
       },
@@ -2220,26 +2220,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 0.299002682296603,
+          "n_predictions": 39,
+          "risk_median": 0.3109962994371642,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 32,
-          "risk_median": 0.17839245704448103,
+          "n_predictions": 30,
+          "risk_median": 0.1668147593618201,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 0.14217124799104397,
+          "risk_median": 0.11422502773153553,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 36,
-          "risk_median": 0.20394842353405807,
+          "risk_median": 0.2031208891822871,
           "supported": true
         }
       },
@@ -2250,25 +2250,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 0.4558858192231412,
+          "risk_median": 0.471053689124048,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 0.35992307295468606,
+          "n_predictions": 39,
+          "risk_median": 0.3481136759419172,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 0.29484273480026957,
+          "risk_median": 0.3129836786980178,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 0.27003321753738874,
+          "n_predictions": 38,
+          "risk_median": 0.2553264213736739,
           "supported": true
         }
       },
@@ -2279,25 +2279,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.2637682879156245,
+          "risk_median": 1.2886539242659723,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 1.836619935143375,
+          "n_predictions": 38,
+          "risk_median": 1.917917329638314,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 1.1326176102856493,
+          "risk_median": 1.6609343085987547,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 1.3359699225607073,
+          "risk_median": 1.362544963401639,
           "supported": true
         }
       },
@@ -2307,26 +2307,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 41,
-          "risk_median": 6.572731467158263,
+          "n_predictions": 40,
+          "risk_median": 7.519089726020539,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 5.2663275505966425,
+          "n_predictions": 36,
+          "risk_median": 5.240381518667434,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 3.1052104806308307,
+          "risk_median": 3.2190618132779463,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 5.66016431030495,
+          "n_predictions": 38,
+          "risk_median": 6.012849711966936,
           "supported": true
         }
       },
@@ -2336,26 +2336,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 1.9169342337102506,
+          "n_predictions": 41,
+          "risk_median": 1.921467381194958,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 34,
-          "risk_median": 1.514866607783766,
+          "n_predictions": 37,
+          "risk_median": 1.4900999699572992,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 2.029862488636695,
+          "risk_median": 1.8936728986774796,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 1.8020391291621891,
+          "n_predictions": 41,
+          "risk_median": 1.71595716499165,
           "supported": true
         }
       },
@@ -2366,25 +2366,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 5.179119479118633,
+          "risk_median": 5.151126374085607,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 36,
-          "risk_median": 6.54202375801907,
+          "risk_median": 6.180151742291258,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 4.04815767633972,
+          "risk_median": 3.44444704203336,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 5.075055551176355,
+          "n_predictions": 38,
+          "risk_median": 5.121258556314263,
           "supported": true
         }
       },
@@ -2394,26 +2394,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 0.6512171261283015,
+          "n_predictions": 41,
+          "risk_median": 0.896475116670274,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 37,
-          "risk_median": 0.7370991548790258,
+          "risk_median": 0.8178562186755158,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 0.900329634592012,
+          "risk_median": 0.549564251672038,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 0.8068422462571192,
+          "n_predictions": 41,
+          "risk_median": 0.8265468886583989,
           "supported": true
         }
       },
@@ -2424,25 +2424,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.5376501985411295,
+          "risk_median": 3.138412263812313,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 2.0695510515735265,
+          "risk_median": 1.7944440769845116,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 20,
-          "risk_median": 3.3813993537439586,
+          "n_predictions": 21,
+          "risk_median": 3.36332852163801,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 38,
-          "risk_median": 2.3383662905469222,
+          "risk_median": 2.3247579585007543,
           "supported": true
         }
       },
@@ -2453,25 +2453,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.9826893016663405,
+          "risk_median": 2.0505712211057983,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 1.5642931308638737,
+          "n_predictions": 35,
+          "risk_median": 1.4796910441810383,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.0556891067263763,
+          "risk_median": 1.0261598243451289,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 1.8209984721011097,
+          "n_predictions": 36,
+          "risk_median": 1.9085360221327363,
           "supported": true
         }
       },
@@ -2482,25 +2482,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 1.3275946031016375,
+          "risk_median": 1.2931363413470152,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 1.2733468670295878,
+          "risk_median": 1.2878070413908773,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 1.4123563770362892,
+          "risk_median": 1.3814391849578413,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 1.448851488848618,
+          "risk_median": 1.411895366511132,
           "supported": true
         }
       },
@@ -2511,25 +2511,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.9714243517796817,
+          "risk_median": 2.989856158138892,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 35,
-          "risk_median": 2.3779837320910673,
+          "n_predictions": 37,
+          "risk_median": 2.5241627365791643,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 3.1491453412587305,
+          "risk_median": 1.307254542460214,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 1.859798221151955,
+          "risk_median": 1.935427580137997,
           "supported": true
         }
       },
@@ -2540,25 +2540,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 0.5355805346024596,
+          "risk_median": 0.47480972720136094,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 0.37745872219910837,
+          "n_predictions": 37,
+          "risk_median": 0.37933794576179025,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 0.38749015192644265,
+          "risk_median": 0.35815562498214604,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 0.427469079636964,
+          "n_predictions": 38,
+          "risk_median": 0.41154794227271907,
           "supported": true
         }
       },
@@ -2569,25 +2569,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 8.796273894514819,
+          "risk_median": 8.883372662901124,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 4.622687471836656,
+          "n_predictions": 40,
+          "risk_median": 4.557892525675406,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 4.400388771542318,
+          "risk_median": 4.313588747349392,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 5.906334539480966,
+          "n_predictions": 41,
+          "risk_median": 5.997978060285426,
           "supported": true
         }
       },
@@ -2598,25 +2598,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.03559544127517,
+          "risk_median": 2.115213622296423,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 33,
-          "risk_median": 1.6035769799759905,
+          "n_predictions": 36,
+          "risk_median": 1.725984005785726,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.8825768680260282,
+          "risk_median": 1.8786400072318372,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 1.673122376108985,
+          "n_predictions": 40,
+          "risk_median": 1.4139572289581608,
           "supported": true
         }
       },
@@ -2626,26 +2626,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 2.107856132472193,
+          "n_predictions": 41,
+          "risk_median": 2.0807397755140187,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 1.187120308680207,
+          "n_predictions": 34,
+          "risk_median": 1.201114183580117,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.3171541025226219,
+          "risk_median": 1.2395877707464535,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 1.6317818743841315,
+          "n_predictions": 38,
+          "risk_median": 2.0394735529938828,
           "supported": true
         }
       },
@@ -2656,25 +2656,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.5080712282875908,
+          "risk_median": 1.742620380256355,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 0.991967738212395,
+          "n_predictions": 39,
+          "risk_median": 0.996553751703587,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 19,
-          "risk_median": 1.7507646485499038,
+          "risk_median": 1.7136864841587638,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 1.0355924179050788,
+          "risk_median": 1.2268292528394653,
           "supported": true
         }
       },
@@ -2685,25 +2685,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.838315445657301,
+          "risk_median": 1.7811766205931576,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 1.3435195151601533,
+          "n_predictions": 38,
+          "risk_median": 1.3719884744959359,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.2214413213979185,
+          "risk_median": 1.6979342456940714,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 1.8717096217256852,
+          "risk_median": 1.8217078842935877,
           "supported": true
         }
       },
@@ -2713,26 +2713,26 @@
       "by_k": {
         "1": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 2.7769622276895944,
+          "n_predictions": 40,
+          "risk_median": 2.8169201606418994,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 36,
-          "risk_median": 2.2353766263386774,
+          "risk_median": 2.228050730120742,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 2.9886491307490957,
+          "risk_median": 3.079815623367608,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 2.32699911384848,
+          "n_predictions": 39,
+          "risk_median": 2.2886733889979283,
           "supported": true
         }
       },
@@ -2743,25 +2743,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 4.501572484775103,
+          "risk_median": 4.334946878824134,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 3.644454232501438,
+          "n_predictions": 38,
+          "risk_median": 3.7102396990839352,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 20,
-          "risk_median": 4.641001182725525,
+          "n_predictions": 21,
+          "risk_median": 4.633900725075641,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 4.168073305606221,
+          "risk_median": 4.126834172337361,
           "supported": true
         }
       },
@@ -2772,25 +2772,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 9.998366472088328,
+          "risk_median": 10.096412254830419,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 11.008629209175176,
+          "n_predictions": 35,
+          "risk_median": 10.972026479775266,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 7.168652044540778,
+          "risk_median": 6.9457963633512705,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 40,
-          "risk_median": 10.945252430583736,
+          "n_predictions": 39,
+          "risk_median": 10.9672125978025,
           "supported": true
         }
       },
@@ -2801,25 +2801,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 0.9885106068298626,
+          "risk_median": 0.9643747990154026,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 0.8351409207826919,
+          "n_predictions": 36,
+          "risk_median": 0.8565981780951262,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 0.7771792775223503,
+          "risk_median": 0.7831656562799765,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 0.7508197772896921,
+          "risk_median": 0.7132246224677488,
           "supported": true
         }
       },
@@ -2830,25 +2830,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 4.389629560240266,
+          "risk_median": 4.308710368448416,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 5.601190916016236,
+          "n_predictions": 36,
+          "risk_median": 5.453589125521361,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 3.879118043371548,
+          "risk_median": 4.175199459028448,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 5.331532320201845,
+          "risk_median": 4.30861069445497,
           "supported": true
         }
       },
@@ -2859,25 +2859,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 3.23918017094897,
+          "risk_median": 3.688646686187383,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 37,
-          "risk_median": 3.1423561698722295,
+          "n_predictions": 39,
+          "risk_median": 3.286761714000363,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 2.5130132546507298,
+          "risk_median": 4.023874180695671,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 3.9647835667757505,
+          "n_predictions": 38,
+          "risk_median": 3.824599052475392,
           "supported": true
         }
       },
@@ -2888,25 +2888,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 2.582903850801543,
+          "risk_median": 2.642029461826752,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 36,
-          "risk_median": 1.4464694762666426,
+          "n_predictions": 37,
+          "risk_median": 1.4955172811559976,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.5130640927566787,
+          "risk_median": 2.211785377121501,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 2.4477151606656093,
+          "n_predictions": 40,
+          "risk_median": 2.4103456338474842,
           "supported": true
         }
       },
@@ -2917,25 +2917,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 1.4521331349480562,
+          "risk_median": 1.454419962429455,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 34,
-          "risk_median": 1.1939586379693807,
+          "n_predictions": 37,
+          "risk_median": 1.2014679990537545,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 1.2994850788357084,
+          "risk_median": 1.3302146393181147,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 38,
-          "risk_median": 1.0814311108321704,
+          "n_predictions": 39,
+          "risk_median": 1.084760186421775,
           "supported": true
         }
       },
@@ -2946,25 +2946,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 40,
-          "risk_median": 3.442472817627703,
+          "risk_median": 3.615131502169895,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 33,
-          "risk_median": 4.282492042912182,
+          "n_predictions": 34,
+          "risk_median": 4.382372276768365,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 20,
-          "risk_median": 3.0297576992985142,
+          "risk_median": 4.731339064576417,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 4.299011444858245,
+          "risk_median": 4.364437999405922,
           "supported": true
         }
       },
@@ -2975,25 +2975,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 2.159909174639253,
+          "risk_median": 3.130838868940913,
           "supported": true
         },
         "10": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 3.1903737638048,
+          "n_predictions": 38,
+          "risk_median": 3.244648051299137,
           "supported": true
         },
         "3": {
           "n_models": 7,
-          "n_predictions": 20,
-          "risk_median": 3.142305913957145,
+          "n_predictions": 21,
+          "risk_median": 2.6160776399675143,
           "supported": true
         },
         "5": {
           "n_models": 7,
           "n_predictions": 39,
-          "risk_median": 4.160160420592916,
+          "risk_median": 3.4738287887722095,
           "supported": true
         }
       },
@@ -3004,25 +3004,25 @@
         "1": {
           "n_models": 7,
           "n_predictions": 41,
-          "risk_median": 4.987173750324615,
+          "risk_median": 4.595226141088133,
           "supported": true
         },
         "10": {
           "n_models": 7,
           "n_predictions": 36,
-          "risk_median": 2.9933576546971636,
+          "risk_median": 2.6616880432036965,
           "supported": true
         },
         "3": {
           "n_models": 7,
           "n_predictions": 21,
-          "risk_median": 3.031866100580615,
+          "risk_median": 2.980818232717823,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 39,
-          "risk_median": 1.7737332724952637,
+          "n_predictions": 37,
+          "risk_median": 1.8377326311532585,
           "supported": true
         }
       },
@@ -3032,26 +3032,26 @@
       "by_k": {
         "1": {
           "n_models": 8,
-          "n_predictions": 33,
-          "risk_median": 1.034233879609463,
+          "n_predictions": 34,
+          "risk_median": 1.3761061248940933,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 28,
-          "risk_median": 0.9641492540649921,
+          "risk_median": 1.109392659670263,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 1.2937996593068064,
+          "risk_median": 1.2784639078952367,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 30,
-          "risk_median": 1.078405910215455,
+          "risk_median": 0.7256502134953315,
           "supported": true
         }
       },
@@ -3062,25 +3062,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 1.623595709506077,
+          "risk_median": 1.5958019241685548,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 28,
-          "risk_median": 1.5547840166204807,
+          "n_predictions": 29,
+          "risk_median": 1.4927813146791067,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 1.6313252320665939,
+          "risk_median": 1.3859646349762116,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 30,
-          "risk_median": 1.3947202746003242,
+          "risk_median": 1.6565952621116722,
           "supported": true
         }
       },
@@ -3091,25 +3091,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 1.045974605894358,
+          "risk_median": 0.8992173848285603,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 29,
-          "risk_median": 0.9990813757704302,
+          "risk_median": 0.9521139890345438,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 0.8906534352753681,
+          "risk_median": 0.8698518112552058,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 30,
-          "risk_median": 0.9021278883508472,
+          "risk_median": 0.7558726563907747,
           "supported": true
         }
       },
@@ -3120,25 +3120,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 2.063004237876317,
+          "risk_median": 2.3957466826375757,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 29,
-          "risk_median": 1.6820677762195437,
+          "n_predictions": 28,
+          "risk_median": 1.5535094166740429,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 1.91862670651701,
+          "risk_median": 1.936331376813044,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 31,
-          "risk_median": 1.550440923075186,
+          "risk_median": 1.9272132222153324,
           "supported": true
         }
       },
@@ -3149,25 +3149,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 5.518429389136493,
+          "risk_median": 5.250492660619589,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 31,
-          "risk_median": 2.7804951889965626,
+          "n_predictions": 30,
+          "risk_median": 2.6334810912438282,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 3.6548165646578035,
+          "risk_median": 3.281509542573467,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 30,
-          "risk_median": 2.8022001432242565,
+          "n_predictions": 31,
+          "risk_median": 2.7600779515754503,
           "supported": true
         }
       },
@@ -3178,25 +3178,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 5.055894653839614,
+          "risk_median": 4.087033261863395,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 30,
-          "risk_median": 3.2711534739464163,
+          "risk_median": 2.610524496936895,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 4.625140035883772,
+          "risk_median": 4.207970904929901,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 33,
-          "risk_median": 2.2083584833876646,
+          "n_predictions": 32,
+          "risk_median": 3.096467735461511,
           "supported": true
         }
       },
@@ -3207,25 +3207,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 4.366727177598946,
+          "risk_median": 4.0422666666970315,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 26,
-          "risk_median": 4.58788867784574,
+          "risk_median": 4.109157426287732,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 6.042163331029691,
+          "n_predictions": 22,
+          "risk_median": 5.746543374018852,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 32,
-          "risk_median": 5.349879681240875,
+          "n_predictions": 31,
+          "risk_median": 4.2052367418983,
           "supported": true
         }
       },
@@ -3236,25 +3236,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 5.297306041691066,
+          "risk_median": 4.7208759879461155,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 31,
-          "risk_median": 1.7876383310942856,
+          "risk_median": 1.7918071097639512,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 22,
-          "risk_median": 3.275796852575361,
+          "n_predictions": 23,
+          "risk_median": 3.813568406158012,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 30,
-          "risk_median": 1.7961828929262467,
+          "n_predictions": 31,
+          "risk_median": 2.7716084830058563,
           "supported": true
         }
       },
@@ -3264,26 +3264,26 @@
       "by_k": {
         "1": {
           "n_models": 8,
-          "n_predictions": 33,
-          "risk_median": 8.480496613705736,
+          "n_predictions": 34,
+          "risk_median": 7.404444142248526,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 26,
-          "risk_median": 4.616508994220329,
+          "n_predictions": 27,
+          "risk_median": 5.033811348144891,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 5.708260799775118,
+          "risk_median": 6.311125865352675,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 31,
-          "risk_median": 5.908139921639204,
+          "risk_median": 5.1684815745464014,
           "supported": true
         }
       },
@@ -3293,26 +3293,26 @@
       "by_k": {
         "1": {
           "n_models": 8,
-          "n_predictions": 34,
-          "risk_median": 6.117738600287929,
+          "n_predictions": 32,
+          "risk_median": 6.129547821775356,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 27,
-          "risk_median": 6.14553838273045,
+          "n_predictions": 28,
+          "risk_median": 5.412309353477369,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 5.99730847218137,
+          "risk_median": 5.363788670836559,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 32,
-          "risk_median": 5.948539383922958,
+          "risk_median": 5.263265601533984,
           "supported": true
         }
       },
@@ -3323,25 +3323,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 4.499713631687456,
+          "risk_median": 4.26355350111897,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 31,
-          "risk_median": 3.695645096512866,
+          "n_predictions": 30,
+          "risk_median": 3.044409119293519,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 3.612342207655761,
+          "n_predictions": 22,
+          "risk_median": 4.156749881390118,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 32,
-          "risk_median": 2.500157009196206,
+          "risk_median": 3.125705319398982,
           "supported": true
         }
       },
@@ -3352,25 +3352,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 3.457288069667978,
+          "risk_median": 3.5736955894562783,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 28,
-          "risk_median": 3.5063883801302467,
+          "n_predictions": 29,
+          "risk_median": 3.0199077820354603,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 24,
-          "risk_median": 2.4499265325565602,
+          "n_predictions": 23,
+          "risk_median": 2.3322028096242278,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 28,
-          "risk_median": 2.4422039399673174,
+          "n_predictions": 29,
+          "risk_median": 3.2721180020613403,
           "supported": true
         }
       },
@@ -3381,25 +3381,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 2.593835861936192,
+          "risk_median": 3.567234660354888,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 28,
-          "risk_median": 1.93379243767399,
+          "n_predictions": 29,
+          "risk_median": 1.4346974564408939,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 2.14016354557884,
+          "n_predictions": 24,
+          "risk_median": 2.596215053837014,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 32,
-          "risk_median": 2.2043484119405434,
+          "n_predictions": 31,
+          "risk_median": 2.5511463192942188,
           "supported": true
         }
       },
@@ -3410,25 +3410,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 11.472494829743447,
+          "risk_median": 11.311351721604062,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 30,
-          "risk_median": 6.524616113191712,
+          "n_predictions": 28,
+          "risk_median": 6.694739025487298,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 6.932553544885927,
+          "risk_median": 7.463031871695701,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 33,
-          "risk_median": 7.662537685666763,
+          "n_predictions": 34,
+          "risk_median": 7.297402674768527,
           "supported": true
         }
       },
@@ -3439,25 +3439,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 1.2393440219921672,
+          "risk_median": 1.405132168483238,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 25,
-          "risk_median": 2.140867809818481,
+          "n_predictions": 26,
+          "risk_median": 1.5395558665896232,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 21,
-          "risk_median": 3.0211273831002288,
+          "n_predictions": 23,
+          "risk_median": 3.0106991936712504,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 31,
-          "risk_median": 1.726243528824135,
+          "risk_median": 1.909253243776007,
           "supported": true
         }
       },
@@ -3468,25 +3468,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 8.694231105001304,
+          "risk_median": 9.995021679487063,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 30,
-          "risk_median": 6.395568557254219,
+          "n_predictions": 31,
+          "risk_median": 6.498680710841942,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 7.41093611931867,
+          "risk_median": 6.792520353475517,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 31,
-          "risk_median": 7.457582148053634,
+          "risk_median": 7.648219144456956,
           "supported": true
         }
       },
@@ -3497,25 +3497,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 2.2144782142837123,
+          "risk_median": 3.4442880233120476,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 29,
-          "risk_median": 2.50675332109231,
+          "n_predictions": 27,
+          "risk_median": 2.473359523520326,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 24,
-          "risk_median": 3.1108943525264756,
+          "n_predictions": 23,
+          "risk_median": 3.302975782443177,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 31,
-          "risk_median": 1.9499141798726072,
+          "risk_median": 1.4498835747250194,
           "supported": true
         }
       },
@@ -3525,26 +3525,26 @@
       "by_k": {
         "1": {
           "n_models": 8,
-          "n_predictions": 34,
-          "risk_median": 10.552909100793475,
+          "n_predictions": 33,
+          "risk_median": 10.310347915678062,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 26,
-          "risk_median": 6.991819787702227,
+          "n_predictions": 28,
+          "risk_median": 6.865479794213027,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 6.332733942713027,
+          "risk_median": 6.650855759735123,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 6.533135849941047,
+          "risk_median": 5.360574194036634,
           "supported": true
         }
       },
@@ -3555,25 +3555,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 7.993311365422294,
+          "risk_median": 8.048283532078074,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 29,
-          "risk_median": 6.75811284952152,
+          "n_predictions": 31,
+          "risk_median": 6.107588477741757,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 4.555612331034649,
+          "risk_median": 5.6926319464651876,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 30,
-          "risk_median": 6.160298065864033,
+          "risk_median": 4.784817047003628,
           "supported": true
         }
       },
@@ -3584,25 +3584,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 2.1162716688534857,
+          "risk_median": 2.626970304115517,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 29,
-          "risk_median": 1.7806577268314143,
+          "n_predictions": 27,
+          "risk_median": 1.1927719515243211,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 2.0356134840019173,
+          "risk_median": 2.249142541408368,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 31,
-          "risk_median": 1.900711665757651,
+          "n_predictions": 29,
+          "risk_median": 1.576722671438315,
           "supported": true
         }
       },
@@ -3613,25 +3613,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 9.138624768298865,
+          "risk_median": 9.231320377011063,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 29,
-          "risk_median": 6.213313294988868,
+          "risk_median": 6.135363128151477,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 6.385565795275449,
+          "n_predictions": 22,
+          "risk_median": 5.025568036622403,
           "supported": true
         },
         "5": {
           "n_models": 7,
-          "n_predictions": 27,
-          "risk_median": 8.449190005934518,
+          "n_predictions": 28,
+          "risk_median": 7.7629724627812,
           "supported": true
         }
       },
@@ -3642,25 +3642,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 1.9802920973653393,
+          "risk_median": 2.398767583629322,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 27,
-          "risk_median": 1.686805904825377,
+          "risk_median": 1.7497979392137921,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 24,
-          "risk_median": 1.6952654176638333,
+          "n_predictions": 23,
+          "risk_median": 2.8759137867352607,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 32,
-          "risk_median": 1.8183614749197758,
+          "risk_median": 1.390142398683679,
           "supported": true
         }
       },
@@ -3671,25 +3671,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 2.1087548005668637,
+          "risk_median": 3.1995992429229005,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 27,
-          "risk_median": 2.5275130666060086,
+          "n_predictions": 25,
+          "risk_median": 2.846103250802642,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 22,
-          "risk_median": 1.702845797906651,
+          "risk_median": 1.8426684825526536,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 27,
-          "risk_median": 2.082275118044759,
+          "n_predictions": 28,
+          "risk_median": 2.25606981423838,
           "supported": true
         }
       },
@@ -3699,26 +3699,26 @@
       "by_k": {
         "1": {
           "n_models": 8,
-          "n_predictions": 33,
-          "risk_median": 5.6719150386224015,
+          "n_predictions": 34,
+          "risk_median": 6.0063952020441675,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 31,
-          "risk_median": 3.0093910934025576,
+          "n_predictions": 30,
+          "risk_median": 3.0745882962892708,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 2.983771835346353,
+          "risk_median": 3.273035889575141,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 31,
-          "risk_median": 2.5608948080985314,
+          "risk_median": 2.030023716552858,
           "supported": true
         }
       },
@@ -3729,25 +3729,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 4.573390631703109,
+          "risk_median": 4.666828264808554,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 29,
-          "risk_median": 4.338237180430438,
+          "n_predictions": 28,
+          "risk_median": 4.800907331609629,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 4.893772642115618,
+          "n_predictions": 22,
+          "risk_median": 4.492486468167275,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 31,
-          "risk_median": 5.698468975651549,
+          "n_predictions": 33,
+          "risk_median": 5.573838089978603,
           "supported": true
         }
       },
@@ -3757,26 +3757,26 @@
       "by_k": {
         "1": {
           "n_models": 8,
-          "n_predictions": 34,
-          "risk_median": 2.8568010246617135,
+          "n_predictions": 33,
+          "risk_median": 3.5491812587255325,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 27,
-          "risk_median": 2.9589030159187395,
+          "n_predictions": 29,
+          "risk_median": 2.998292800843771,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 3.519376469446506,
+          "n_predictions": 24,
+          "risk_median": 3.6679488500708928,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 2.3314115873087573,
+          "risk_median": 1.9261752088392825,
           "supported": true
         }
       },
@@ -3787,25 +3787,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 32,
-          "risk_median": 2.538909770268649,
+          "risk_median": 3.4004478584945943,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 27,
-          "risk_median": 2.5093642656771245,
+          "n_predictions": 26,
+          "risk_median": 2.6229524369357478,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 3.232822078489505,
+          "risk_median": 3.1814719460556233,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 32,
-          "risk_median": 2.178091662011127,
+          "risk_median": 1.8779584102536333,
           "supported": true
         }
       },
@@ -3816,25 +3816,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 0.6667448789813406,
+          "risk_median": 0.9088007573008099,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 29,
-          "risk_median": 0.6088303930905816,
+          "n_predictions": 28,
+          "risk_median": 0.6689507653299636,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 0.6722172658247381,
+          "n_predictions": 21,
+          "risk_median": 0.7632346059426531,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 29,
-          "risk_median": 0.6509069414652942,
+          "n_predictions": 31,
+          "risk_median": 0.6350640067274398,
           "supported": true
         }
       },
@@ -3844,26 +3844,26 @@
       "by_k": {
         "1": {
           "n_models": 8,
-          "n_predictions": 33,
-          "risk_median": 2.9070530440620335,
+          "n_predictions": 32,
+          "risk_median": 3.313077145152679,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 32,
-          "risk_median": 2.5530061017740664,
+          "risk_median": 2.181119351691084,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 2.1075413679652684,
+          "risk_median": 2.6076564835408256,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 32,
-          "risk_median": 2.271355347116655,
+          "risk_median": 2.9301165519602765,
           "supported": true
         }
       },
@@ -3874,25 +3874,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 6.205548808885723,
+          "risk_median": 5.641728408885342,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 30,
-          "risk_median": 2.737363021066084,
+          "n_predictions": 32,
+          "risk_median": 2.7437242482310005,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 4.41883961280962,
+          "risk_median": 4.007836169196118,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 4.219944572261095,
+          "risk_median": 3.68987512064173,
           "supported": true
         }
       },
@@ -3903,25 +3903,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 1.0570395850655316,
+          "risk_median": 1.0631495807983455,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 26,
-          "risk_median": 1.230287970148666,
+          "n_predictions": 28,
+          "risk_median": 1.192475559892582,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 22,
-          "risk_median": 1.1663021241471867,
+          "risk_median": 1.2718533518501332,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 32,
-          "risk_median": 1.68904670801426,
+          "n_predictions": 31,
+          "risk_median": 1.6685424807121123,
           "supported": true
         }
       },
@@ -3932,25 +3932,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 1.2899869887203508,
+          "risk_median": 2.0130160378654836,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 28,
-          "risk_median": 0.9504257995884267,
+          "n_predictions": 27,
+          "risk_median": 0.8609684549472192,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 1.639908030627609,
+          "n_predictions": 24,
+          "risk_median": 1.6480198836838085,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 0.971906587457795,
+          "risk_median": 0.9035902044295554,
           "supported": true
         }
       },
@@ -3961,25 +3961,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 2.2052152763904687,
+          "risk_median": 2.025290650051467,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 28,
-          "risk_median": 0.8812280140966777,
+          "n_predictions": 26,
+          "risk_median": 0.895607234910976,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 1.441117668636899,
+          "n_predictions": 21,
+          "risk_median": 1.3452848924175314,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 31,
-          "risk_median": 0.8357405347958391,
+          "risk_median": 0.9298294493280892,
           "supported": true
         }
       },
@@ -3990,25 +3990,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 32,
-          "risk_median": 4.470472166571138,
+          "risk_median": 4.430462793841922,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 30,
-          "risk_median": 2.471994637658419,
+          "n_predictions": 31,
+          "risk_median": 2.595092008902107,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 22,
-          "risk_median": 2.4606416369286883,
+          "n_predictions": 23,
+          "risk_median": 3.508043661380931,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 1.861381050819059,
+          "risk_median": 2.6276153104359956,
           "supported": true
         }
       },
@@ -4019,25 +4019,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 3.2497495720635463,
+          "risk_median": 4.251918049919716,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 26,
-          "risk_median": 2.741697831685592,
+          "n_predictions": 25,
+          "risk_median": 3.019897940605013,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 2.8158673325853076,
+          "risk_median": 3.8500470957503605,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 30,
-          "risk_median": 3.3603964511860767,
+          "risk_median": 4.209470008041679,
           "supported": true
         }
       },
@@ -4048,25 +4048,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 12.16018155319641,
+          "risk_median": 9.281199291202668,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 23,
-          "risk_median": 12.669705222101726,
+          "n_predictions": 22,
+          "risk_median": 9.037267888130064,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 23,
-          "risk_median": 10.62111147865986,
+          "risk_median": 10.33100458086031,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 28,
-          "risk_median": 6.071563009581677,
+          "n_predictions": 29,
+          "risk_median": 8.341900378466988,
           "supported": true
         }
       },
@@ -4077,25 +4077,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 1.5456305092042726,
+          "risk_median": 1.918555415873378,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 27,
-          "risk_median": 0.8472925468933177,
+          "n_predictions": 28,
+          "risk_median": 1.1525896864374872,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 21,
-          "risk_median": 1.3459883719975636,
+          "n_predictions": 20,
+          "risk_median": 1.5055763169479661,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 32,
-          "risk_median": 1.147587158575412,
+          "n_predictions": 31,
+          "risk_median": 0.9814269541987741,
           "supported": true
         }
       },
@@ -4106,25 +4106,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 33,
-          "risk_median": 2.3102179208835167,
+          "risk_median": 2.3735982051606612,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 28,
-          "risk_median": 2.792533726153671,
+          "n_predictions": 31,
+          "risk_median": 3.1545722185021035,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 2.587570048755481,
+          "risk_median": 3.18030411002065,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 32,
-          "risk_median": 2.3515819557206683,
+          "n_predictions": 33,
+          "risk_median": 2.1726557785055327,
           "supported": true
         }
       },
@@ -4135,25 +4135,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 1.5857795917329227,
+          "risk_median": 1.7378939197623424,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 29,
-          "risk_median": 1.4441484369978355,
+          "risk_median": 1.9748237705386664,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 24,
-          "risk_median": 1.9763179239519957,
+          "risk_median": 2.8292867509372535,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 29,
-          "risk_median": 2.432604813451892,
+          "risk_median": 2.2228938943533407,
           "supported": true
         }
       },
@@ -4164,25 +4164,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 2.4996351153335468,
+          "risk_median": 3.0904079815624996,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 25,
-          "risk_median": 1.6420916561434673,
+          "n_predictions": 27,
+          "risk_median": 2.2698161680184015,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 22,
-          "risk_median": 2.5116492678908813,
+          "risk_median": 2.846539788387229,
           "supported": true
         },
         "5": {
           "n_models": 8,
-          "n_predictions": 32,
-          "risk_median": 2.7913522636493795,
+          "n_predictions": 33,
+          "risk_median": 2.0642785429819526,
           "supported": true
         }
       },
@@ -4193,25 +4193,25 @@
         "1": {
           "n_models": 8,
           "n_predictions": 34,
-          "risk_median": 1.8007363805665584,
+          "risk_median": 1.4071141613478382,
           "supported": true
         },
         "10": {
           "n_models": 8,
           "n_predictions": 26,
-          "risk_median": 1.836957675508467,
+          "risk_median": 1.5078247850605457,
           "supported": true
         },
         "3": {
           "n_models": 8,
-          "n_predictions": 24,
-          "risk_median": 1.673941360322246,
+          "n_predictions": 23,
+          "risk_median": 1.4000969879594969,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 30,
-          "risk_median": 1.2208415529491354,
+          "risk_median": 1.3893529593595488,
           "supported": true
         }
       },
@@ -4221,26 +4221,26 @@
       "by_k": {
         "1": {
           "n_models": 8,
-          "n_predictions": 32,
-          "risk_median": 3.639432339395519,
+          "n_predictions": 33,
+          "risk_median": 3.28302220230578,
           "supported": true
         },
         "10": {
           "n_models": 8,
-          "n_predictions": 29,
-          "risk_median": 1.8303566826987154,
+          "n_predictions": 30,
+          "risk_median": 1.8391783974742388,
           "supported": true
         },
         "3": {
           "n_models": 8,
           "n_predictions": 22,
-          "risk_median": 2.2434406450157134,
+          "risk_median": 2.2932011094297806,
           "supported": true
         },
         "5": {
           "n_models": 8,
           "n_predictions": 32,
-          "risk_median": 1.8374560630320786,
+          "risk_median": 2.5003304616412514,
           "supported": true
         }
       },
@@ -4249,27 +4249,114 @@
     "pathorob.camelyon.robustness_index": {
       "by_k": {
         "1": {
-          "n_models": 19,
-          "n_predictions": 74,
-          "risk_median": 20.053773853866204,
+          "n_models": 20,
+          "n_predictions": 75,
+          "risk_median": 27.669200298580698,
           "supported": true
         },
         "10": {
           "n_models": 14,
-          "n_predictions": 50,
-          "risk_median": 20.726350356687988,
+          "n_predictions": 52,
+          "risk_median": 18.90365181557908,
           "supported": true
         },
         "3": {
-          "n_models": 14,
-          "n_predictions": 41,
-          "risk_median": 18.591327067706906,
+          "n_models": 20,
+          "n_predictions": 50,
+          "risk_median": 21.126589467882127,
           "supported": true
         },
         "5": {
+          "n_models": 16,
+          "n_predictions": 58,
+          "risk_median": 21.138510240969918,
+          "supported": true
+        }
+      },
+      "suite_id": "pathorob"
+    },
+    "pathorob.nature2026.camelyon.clustering_score": {
+      "by_k": {
+        "1": {
+          "n_models": 20,
+          "n_predictions": 75,
+          "risk_median": 16.677122200706826,
+          "supported": true
+        },
+        "10": {
+          "n_models": 13,
+          "n_predictions": 51,
+          "risk_median": 14.354918039901882,
+          "supported": true
+        },
+        "3": {
+          "n_models": 18,
+          "n_predictions": 46,
+          "risk_median": 25.14844767467761,
+          "supported": true
+        },
+        "5": {
+          "n_models": 15,
+          "n_predictions": 55,
+          "risk_median": 18.746840436337887,
+          "supported": true
+        }
+      },
+      "suite_id": "pathorob"
+    },
+    "pathorob.nature2026.tcga_4x4.clustering_score": {
+      "by_k": {
+        "1": {
+          "n_models": 20,
+          "n_predictions": 74,
+          "risk_median": 8.830901495166188,
+          "supported": true
+        },
+        "10": {
+          "n_models": 13,
+          "n_predictions": 44,
+          "risk_median": 7.431602178501613,
+          "supported": true
+        },
+        "3": {
+          "n_models": 20,
+          "n_predictions": 49,
+          "risk_median": 7.972901885975812,
+          "supported": true
+        },
+        "5": {
+          "n_models": 18,
+          "n_predictions": 58,
+          "risk_median": 6.081471059927008,
+          "supported": true
+        }
+      },
+      "suite_id": "pathorob"
+    },
+    "pathorob.nature2026.tolkach_esca.clustering_score": {
+      "by_k": {
+        "1": {
+          "n_models": 20,
+          "n_predictions": 77,
+          "risk_median": 3.5144049151554952,
+          "supported": true
+        },
+        "10": {
           "n_models": 14,
+          "n_predictions": 49,
+          "risk_median": 2.354283611318813,
+          "supported": true
+        },
+        "3": {
+          "n_models": 20,
+          "n_predictions": 49,
+          "risk_median": 4.047708023446241,
+          "supported": true
+        },
+        "5": {
+          "n_models": 15,
           "n_predictions": 56,
-          "risk_median": 22.860243195169648,
+          "risk_median": 2.654242758391838,
           "supported": true
         }
       },
@@ -4280,25 +4367,25 @@
         "1": {
           "n_models": 20,
           "n_predictions": 75,
-          "risk_median": 3.883019197231583,
+          "risk_median": 7.163955587958213,
           "supported": true
         },
         "10": {
           "n_models": 13,
-          "n_predictions": 47,
-          "risk_median": 3.801620142906181,
+          "n_predictions": 46,
+          "risk_median": 3.239064003228904,
           "supported": true
         },
         "3": {
-          "n_models": 14,
-          "n_predictions": 34,
-          "risk_median": 4.024787112183482,
+          "n_models": 19,
+          "n_predictions": 49,
+          "risk_median": 5.296451386528219,
           "supported": true
         },
         "5": {
-          "n_models": 14,
-          "n_predictions": 54,
-          "risk_median": 3.151780108427694,
+          "n_models": 19,
+          "n_predictions": 59,
+          "risk_median": 4.234249488263217,
           "supported": true
         }
       },
@@ -4307,27 +4394,27 @@
     "pathorob.tolkach_esca.robustness_index": {
       "by_k": {
         "1": {
-          "n_models": 18,
-          "n_predictions": 69,
-          "risk_median": 4.097892115084804,
+          "n_models": 20,
+          "n_predictions": 77,
+          "risk_median": 4.008177398861399,
           "supported": true
         },
         "10": {
-          "n_models": 12,
+          "n_models": 14,
           "n_predictions": 47,
-          "risk_median": 2.0462031676298267,
+          "risk_median": 2.5954338978388556,
           "supported": true
         },
         "3": {
-          "n_models": 14,
-          "n_predictions": 38,
-          "risk_median": 2.0167142173427877,
+          "n_models": 18,
+          "n_predictions": 44,
+          "risk_median": 4.236053197247912,
           "supported": true
         },
         "5": {
-          "n_models": 14,
-          "n_predictions": 57,
-          "risk_median": 3.025396524345389,
+          "n_models": 18,
+          "n_predictions": 55,
+          "risk_median": 3.106552676466599,
           "supported": true
         }
       },
@@ -4338,25 +4425,25 @@
         "1": {
           "n_models": 32,
           "n_predictions": 139,
-          "risk_median": 4.407135566029805,
+          "risk_median": 3.7514345392967776,
           "supported": true
         },
         "10": {
           "n_models": 30,
-          "n_predictions": 92,
-          "risk_median": 4.5805251806854415,
+          "n_predictions": 91,
+          "risk_median": 3.7364862142899433,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 82,
-          "risk_median": 4.907173727998906,
+          "n_predictions": 84,
+          "risk_median": 5.478429110009669,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 118,
-          "risk_median": 4.274593893460295,
+          "n_predictions": 116,
+          "risk_median": 4.392213934195915,
           "supported": true
         }
       },
@@ -4366,26 +4453,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 141,
-          "risk_median": 2.0071761618946127,
+          "n_predictions": 143,
+          "risk_median": 1.8626303794940107,
           "supported": true
         },
         "10": {
-          "n_models": 27,
-          "n_predictions": 90,
-          "risk_median": 1.7565867204516685,
+          "n_models": 28,
+          "n_predictions": 86,
+          "risk_median": 1.6307154219761983,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 86,
-          "risk_median": 1.687501674509079,
+          "n_predictions": 84,
+          "risk_median": 1.6652706754609774,
           "supported": true
         },
         "5": {
           "n_models": 30,
-          "n_predictions": 116,
-          "risk_median": 1.4197253923947883,
+          "n_predictions": 113,
+          "risk_median": 1.315669500462569,
           "supported": true
         }
       },
@@ -4395,26 +4482,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 138,
-          "risk_median": 6.004438139878193,
+          "n_predictions": 139,
+          "risk_median": 5.445465207249605,
           "supported": true
         },
         "10": {
           "n_models": 26,
           "n_predictions": 96,
-          "risk_median": 6.026765436067787,
+          "risk_median": 5.905923514245256,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 85,
-          "risk_median": 6.192553927321059,
+          "n_predictions": 86,
+          "risk_median": 6.417446112128729,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 124,
-          "risk_median": 6.095357392096396,
+          "n_predictions": 123,
+          "risk_median": 5.757287260574708,
           "supported": true
         }
       },
@@ -4424,26 +4511,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 141,
-          "risk_median": 2.079538253651645,
+          "n_predictions": 143,
+          "risk_median": 2.9181459149589557,
           "supported": true
         },
         "10": {
           "n_models": 29,
           "n_predictions": 95,
-          "risk_median": 1.2907442347776907,
+          "risk_median": 1.4916522787571296,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 83,
-          "risk_median": 1.8956352619811128,
+          "n_predictions": 85,
+          "risk_median": 2.109661921010499,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 120,
-          "risk_median": 1.6335178786777647,
+          "n_predictions": 117,
+          "risk_median": 1.7644981846121723,
           "supported": true
         }
       },
@@ -4453,26 +4540,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 142,
-          "risk_median": 0.8834953671452936,
+          "n_predictions": 141,
+          "risk_median": 1.0145993130447692,
           "supported": true
         },
         "10": {
-          "n_models": 25,
-          "n_predictions": 87,
-          "risk_median": 0.8187167689675476,
+          "n_models": 26,
+          "n_predictions": 91,
+          "risk_median": 0.7484241288516529,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 81,
-          "risk_median": 1.0952505879777163,
+          "n_predictions": 84,
+          "risk_median": 1.0719844359466855,
           "supported": true
         },
         "5": {
           "n_models": 31,
-          "n_predictions": 121,
-          "risk_median": 0.8821702097466755,
+          "n_predictions": 115,
+          "risk_median": 0.8492552890006095,
           "supported": true
         }
       },
@@ -4482,26 +4569,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 142,
-          "risk_median": 2.79358952908202,
+          "n_predictions": 143,
+          "risk_median": 3.4016314998453154,
           "supported": true
         },
         "10": {
-          "n_models": 26,
-          "n_predictions": 91,
-          "risk_median": 2.2547774944671524,
+          "n_models": 27,
+          "n_predictions": 92,
+          "risk_median": 1.8773814361742183,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 84,
-          "risk_median": 2.475907912409948,
+          "n_predictions": 82,
+          "risk_median": 2.6885321273916034,
           "supported": true
         },
         "5": {
           "n_models": 32,
           "n_predictions": 117,
-          "risk_median": 2.003797589448091,
+          "risk_median": 2.103965691783479,
           "supported": true
         }
       },
@@ -4511,26 +4598,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 139,
-          "risk_median": 1.512148303233964,
+          "n_predictions": 141,
+          "risk_median": 1.6701540839221707,
           "supported": true
         },
         "10": {
           "n_models": 30,
-          "n_predictions": 91,
-          "risk_median": 1.0929657129413641,
+          "n_predictions": 101,
+          "risk_median": 1.1898891381120897,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 84,
-          "risk_median": 1.6489124305050709,
+          "n_predictions": 83,
+          "risk_median": 1.8683796133511095,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 118,
-          "risk_median": 1.4923927605651102,
+          "n_predictions": 126,
+          "risk_median": 1.4675782182668975,
           "supported": true
         }
       },
@@ -4540,26 +4627,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 139,
-          "risk_median": 1.116757275285977,
+          "n_predictions": 141,
+          "risk_median": 1.2379150207787717,
           "supported": true
         },
         "10": {
           "n_models": 27,
-          "n_predictions": 88,
-          "risk_median": 0.9085787565445571,
+          "n_predictions": 91,
+          "risk_median": 0.8479846970071634,
           "supported": true
         },
         "3": {
           "n_models": 32,
           "n_predictions": 85,
-          "risk_median": 1.0275466749843076,
+          "risk_median": 1.0445213666366229,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 117,
-          "risk_median": 0.8570931840084377,
+          "n_predictions": 120,
+          "risk_median": 0.8006882795675807,
           "supported": true
         }
       },
@@ -4569,26 +4656,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 140,
-          "risk_median": 1.981147320052628,
+          "n_predictions": 139,
+          "risk_median": 2.1912687919843847,
           "supported": true
         },
         "10": {
-          "n_models": 30,
-          "n_predictions": 94,
-          "risk_median": 0.9871300034679535,
+          "n_models": 29,
+          "n_predictions": 88,
+          "risk_median": 0.9311513077169167,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 88,
-          "risk_median": 1.1033039446696868,
+          "n_predictions": 87,
+          "risk_median": 1.427750793701101,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 117,
-          "risk_median": 1.353358969262331,
+          "n_predictions": 116,
+          "risk_median": 1.3302012387890727,
           "supported": true
         }
       },
@@ -4598,26 +4685,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 140,
-          "risk_median": 0.9740783842872318,
+          "n_predictions": 139,
+          "risk_median": 1.1273099516090497,
           "supported": true
         },
         "10": {
           "n_models": 28,
-          "n_predictions": 87,
-          "risk_median": 0.5676279931740922,
+          "n_predictions": 85,
+          "risk_median": 0.5388662898455152,
           "supported": true
         },
         "3": {
           "n_models": 32,
           "n_predictions": 82,
-          "risk_median": 0.7414455045992021,
+          "risk_median": 0.7050553088271911,
           "supported": true
         },
         "5": {
           "n_models": 31,
-          "n_predictions": 119,
-          "risk_median": 0.5619722933433593,
+          "n_predictions": 117,
+          "risk_median": 0.6876080551497097,
           "supported": true
         }
       },
@@ -4627,26 +4714,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 139,
-          "risk_median": 1.6411297233526625,
+          "n_predictions": 140,
+          "risk_median": 1.7860643725343408,
           "supported": true
         },
         "10": {
           "n_models": 28,
-          "n_predictions": 86,
-          "risk_median": 0.8247343382820027,
+          "n_predictions": 84,
+          "risk_median": 0.8508484975038115,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 79,
-          "risk_median": 0.9430180305210065,
+          "n_predictions": 80,
+          "risk_median": 0.9289264360359581,
           "supported": true
         },
         "5": {
           "n_models": 31,
-          "n_predictions": 117,
-          "risk_median": 1.1042687605192043,
+          "n_predictions": 115,
+          "risk_median": 1.0712494301167084,
           "supported": true
         }
       },
@@ -4657,25 +4744,25 @@
         "1": {
           "n_models": 32,
           "n_predictions": 142,
-          "risk_median": 1.0107564915308132,
+          "risk_median": 1.0419133218508705,
           "supported": true
         },
         "10": {
           "n_models": 27,
-          "n_predictions": 89,
-          "risk_median": 0.5581413718874799,
+          "n_predictions": 97,
+          "risk_median": 0.5469527287883267,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 85,
-          "risk_median": 0.6961809854322283,
+          "n_predictions": 86,
+          "risk_median": 0.7142539445438132,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 118,
-          "risk_median": 0.7094644455028281,
+          "n_predictions": 122,
+          "risk_median": 0.5466005885388299,
           "supported": true
         }
       },
@@ -4685,26 +4772,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 136,
-          "risk_median": 1.9026383581250421,
+          "n_predictions": 137,
+          "risk_median": 2.405339767996125,
           "supported": true
         },
         "10": {
           "n_models": 28,
           "n_predictions": 95,
-          "risk_median": 1.7426938299975205,
+          "risk_median": 1.5691588032218284,
           "supported": true
         },
         "3": {
           "n_models": 31,
-          "n_predictions": 77,
-          "risk_median": 2.1758277076836094,
+          "n_predictions": 80,
+          "risk_median": 1.4765129812685842,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 116,
-          "risk_median": 1.6761892473776179,
+          "n_predictions": 115,
+          "risk_median": 1.3999336830284186,
           "supported": true
         }
       },
@@ -4714,26 +4801,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 141,
-          "risk_median": 0.7748305755056499,
+          "n_predictions": 140,
+          "risk_median": 0.8464012258857458,
           "supported": true
         },
         "10": {
           "n_models": 29,
-          "n_predictions": 84,
-          "risk_median": 0.6656382546711228,
+          "n_predictions": 85,
+          "risk_median": 0.6906904350732361,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 85,
-          "risk_median": 0.6489330571071648,
+          "n_predictions": 86,
+          "risk_median": 0.6993478344692576,
           "supported": true
         },
         "5": {
           "n_models": 31,
-          "n_predictions": 108,
-          "risk_median": 0.6394582438178276,
+          "n_predictions": 111,
+          "risk_median": 0.6438535800508944,
           "supported": true
         }
       },
@@ -4743,26 +4830,26 @@
       "by_k": {
         "1": {
           "n_models": 32,
-          "n_predictions": 144,
-          "risk_median": 4.5232773010889815,
+          "n_predictions": 143,
+          "risk_median": 4.714201552550044,
           "supported": true
         },
         "10": {
           "n_models": 28,
-          "n_predictions": 88,
-          "risk_median": 3.1032103174858126,
+          "n_predictions": 89,
+          "risk_median": 2.96404196209013,
           "supported": true
         },
         "3": {
           "n_models": 32,
           "n_predictions": 86,
-          "risk_median": 2.839011292518304,
+          "risk_median": 3.0647395584172408,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 120,
-          "risk_median": 2.2652749395712135,
+          "n_predictions": 119,
+          "risk_median": 2.252338409325029,
           "supported": true
         }
       },
@@ -4773,25 +4860,25 @@
         "1": {
           "n_models": 32,
           "n_predictions": 141,
-          "risk_median": 0.9531860702517285,
+          "risk_median": 1.02253785378754,
           "supported": true
         },
         "10": {
           "n_models": 29,
-          "n_predictions": 89,
-          "risk_median": 0.7986183275256735,
+          "n_predictions": 93,
+          "risk_median": 0.7943646069966945,
           "supported": true
         },
         "3": {
           "n_models": 32,
-          "n_predictions": 83,
-          "risk_median": 0.8823460848509939,
+          "n_predictions": 82,
+          "risk_median": 0.9343481949710508,
           "supported": true
         },
         "5": {
           "n_models": 32,
-          "n_predictions": 115,
-          "risk_median": 0.886480241228945,
+          "n_predictions": 117,
+          "risk_median": 0.8383855765010573,
           "supported": true
         }
       },
@@ -4800,11 +4887,11 @@
   },
   "calibration_population": {
     "leakage_control": "risk and scale metrics exclude the target model; deploy lookups use only held-out model/probe and temporal residuals",
-    "n_predictions": 30182,
+    "n_predictions": 30992,
     "n_target_models": 59,
     "sources": {
-      "leave_one_model_out_probe": 20412,
-      "temporal_release": 9770
+      "leave_one_model_out_probe": 21042,
+      "temporal_release": 9950
     },
     "unit": "target-model-balanced residual medians"
   },
@@ -4813,400 +4900,400 @@
     "1": {
       "group_corrected_quantile_level": 0.9152542372881356,
       "n_models": 59,
-      "scale": 3.5759413857324387
+      "scale": 3.4623373874478687
     },
     "10": {
       "group_corrected_quantile_level": 0.92,
       "n_models": 50,
-      "scale": 3.271947481715587
+      "scale": 3.415751302990735
     },
     "3": {
-      "group_corrected_quantile_level": 0.9245283018867925,
-      "n_models": 53,
-      "scale": 3.234630865139131
+      "group_corrected_quantile_level": 0.9152542372881356,
+      "n_models": 59,
+      "scale": 3.082769414373503
     },
     "5": {
-      "group_corrected_quantile_level": 0.9245283018867925,
-      "n_models": 53,
-      "scale": 3.3940003282726807
+      "group_corrected_quantile_level": 0.9152542372881356,
+      "n_models": 59,
+      "scale": 3.2179170286284413
     }
   },
   "context_risk": {
     "global_k": {
       "1": {
         "n_models": 59,
-        "n_predictions": 9284,
-        "risk_median": 1.9383353012593574,
+        "n_predictions": 9524,
+        "risk_median": 2.1839783946733604,
         "supported": true
       },
       "10": {
         "n_models": 50,
-        "n_predictions": 7196,
-        "risk_median": 1.3343382845765852,
+        "n_predictions": 7382,
+        "risk_median": 1.323921551598655,
         "supported": true
       },
       "3": {
-        "n_models": 53,
-        "n_predictions": 5370,
-        "risk_median": 1.6281379044605373,
+        "n_models": 59,
+        "n_predictions": 5550,
+        "risk_median": 1.746675214488377,
         "supported": true
       },
       "5": {
-        "n_models": 53,
-        "n_predictions": 8332,
-        "risk_median": 1.5217585562471143,
+        "n_models": 59,
+        "n_predictions": 8536,
+        "risk_median": 1.676550747092179,
         "supported": true
       }
     },
     "suite": {
       "10|eva": {
         "n_models": 19,
-        "n_predictions": 722,
-        "risk_median": 1.9479342445908117,
+        "n_predictions": 733,
+        "risk_median": 1.9723835304446595,
         "supported": true
       },
       "10|hest": {
         "n_models": 23,
-        "n_predictions": 745,
-        "risk_median": 0.5976075777922176,
+        "n_predictions": 754,
+        "risk_median": 0.6215408094335118,
         "supported": true
       },
       "10|pathobench": {
         "n_models": 12,
-        "n_predictions": 4143,
-        "risk_median": 2.2420020094475994,
+        "n_predictions": 4147,
+        "risk_median": 2.2516982000736725,
         "supported": true
       },
       "10|pathorob": {
         "n_models": 14,
-        "n_predictions": 144,
-        "risk_median": 4.847214788451888,
+        "n_predictions": 289,
+        "risk_median": 6.341345350988089,
         "supported": true
       },
       "10|thunder": {
         "n_models": 32,
-        "n_predictions": 1442,
-        "risk_median": 1.1626298528042867,
+        "n_predictions": 1459,
+        "risk_median": 1.1417362180161241,
         "supported": true
       },
       "1|eva": {
         "n_models": 19,
-        "n_predictions": 1058,
-        "risk_median": 1.9765213619561166,
+        "n_predictions": 1060,
+        "risk_median": 1.7173791723325138,
         "supported": true
       },
       "1|hest": {
         "n_models": 26,
-        "n_predictions": 1110,
-        "risk_median": 0.835141197399226,
+        "n_predictions": 1109,
+        "risk_median": 0.8875932710251462,
         "supported": true
       },
       "1|pathobench": {
         "n_models": 12,
-        "n_predictions": 4654,
-        "risk_median": 2.6474113783347875,
+        "n_predictions": 4651,
+        "risk_median": 2.692853896790794,
         "supported": true
       },
       "1|pathorob": {
         "n_models": 20,
-        "n_predictions": 218,
-        "risk_median": 6.240745551513726,
+        "n_predictions": 453,
+        "risk_median": 9.385340984424307,
         "supported": true
       },
       "1|thunder": {
         "n_models": 32,
-        "n_predictions": 2244,
-        "risk_median": 1.6673223417925769,
+        "n_predictions": 2251,
+        "risk_median": 1.8279316323436774,
         "supported": true
       },
       "3|eva": {
         "n_models": 19,
-        "n_predictions": 701,
-        "risk_median": 1.8830756443884553,
+        "n_predictions": 702,
+        "risk_median": 2.4782626011809654,
         "supported": true
       },
       "3|hest": {
         "n_models": 26,
-        "n_predictions": 619,
-        "risk_median": 0.7904765370379181,
+        "n_predictions": 618,
+        "risk_median": 0.688837378215803,
         "supported": true
       },
       "3|pathobench": {
         "n_models": 12,
-        "n_predictions": 2602,
-        "risk_median": 2.5305427789151302,
+        "n_predictions": 2601,
+        "risk_median": 2.598569019733052,
         "supported": true
       },
       "3|pathorob": {
-        "n_models": 14,
-        "n_predictions": 113,
-        "risk_median": 5.0999267654329685,
+        "n_models": 20,
+        "n_predictions": 287,
+        "risk_median": 9.09099902536812,
         "supported": true
       },
       "3|thunder": {
         "n_models": 32,
-        "n_predictions": 1335,
-        "risk_median": 1.3787975895770082,
+        "n_predictions": 1342,
+        "risk_median": 1.4375011651584941,
         "supported": true
       },
       "5|eva": {
         "n_models": 19,
-        "n_predictions": 919,
-        "risk_median": 1.7629349080104646,
+        "n_predictions": 928,
+        "risk_median": 1.8266373478310527,
         "supported": true
       },
       "5|hest": {
         "n_models": 26,
-        "n_predictions": 949,
-        "risk_median": 0.7264290099700315,
+        "n_predictions": 962,
+        "risk_median": 0.7230826488348061,
         "supported": true
       },
       "5|pathobench": {
         "n_models": 12,
-        "n_predictions": 4416,
-        "risk_median": 2.3668693384139132,
+        "n_predictions": 4426,
+        "risk_median": 2.379926761281432,
         "supported": true
       },
       "5|pathorob": {
-        "n_models": 14,
-        "n_predictions": 167,
-        "risk_median": 4.603921483297995,
+        "n_models": 20,
+        "n_predictions": 341,
+        "risk_median": 9.84702235197281,
         "supported": true
       },
       "5|thunder": {
         "n_models": 32,
-        "n_predictions": 1881,
-        "risk_median": 1.4655112193947346,
+        "n_predictions": 1879,
+        "risk_median": 1.263754970102335,
         "supported": true
       }
     },
     "suite_same_probe": {
       "10|eva|false": {
         "n_models": 2,
-        "n_predictions": 75,
-        "risk_median": 2.256673334599178,
+        "n_predictions": 105,
+        "risk_median": 1.9294675838982371,
         "supported": false
       },
       "10|eva|true": {
         "n_models": 19,
-        "n_predictions": 647,
-        "risk_median": 1.9479342445908117,
+        "n_predictions": 628,
+        "risk_median": 1.9723835304446595,
         "supported": true
       },
       "10|hest|false": {
-        "n_models": 4,
-        "n_predictions": 99,
-        "risk_median": 0.732050511926353,
-        "supported": false
+        "n_models": 6,
+        "n_predictions": 117,
+        "risk_median": 0.7069697209827694,
+        "supported": true
       },
       "10|hest|true": {
         "n_models": 23,
-        "n_predictions": 646,
-        "risk_median": 0.5824521824601447,
+        "n_predictions": 637,
+        "risk_median": 0.607250097888091,
         "supported": true
       },
       "10|pathobench|true": {
         "n_models": 12,
-        "n_predictions": 4143,
-        "risk_median": 2.2420020094475994,
+        "n_predictions": 4147,
+        "risk_median": 2.2516982000736725,
         "supported": true
       },
       "10|pathorob|false": {
-        "n_models": 11,
+        "n_models": 8,
         "n_predictions": 96,
-        "risk_median": 4.571511859180465,
+        "risk_median": 9.03583528291384,
         "supported": true
       },
       "10|pathorob|true": {
-        "n_models": 10,
-        "n_predictions": 48,
-        "risk_median": 2.518701248858001,
+        "n_models": 14,
+        "n_predictions": 193,
+        "risk_median": 4.344048014274222,
         "supported": true
       },
       "10|thunder|false": {
-        "n_models": 2,
-        "n_predictions": 32,
-        "risk_median": 0.8456312125833207,
+        "n_models": 3,
+        "n_predictions": 96,
+        "risk_median": 1.4629488877492918,
         "supported": false
       },
       "10|thunder|true": {
         "n_models": 32,
-        "n_predictions": 1410,
-        "risk_median": 1.1626298528042867,
+        "n_predictions": 1363,
+        "risk_median": 1.1023449674311099,
         "supported": true
       },
       "1|eva|false": {
-        "n_models": 12,
-        "n_predictions": 588,
-        "risk_median": 1.5295189896512156,
+        "n_models": 13,
+        "n_predictions": 618,
+        "risk_median": 1.553068093224013,
         "supported": true
       },
       "1|eva|true": {
         "n_models": 16,
-        "n_predictions": 470,
-        "risk_median": 2.066248055747362,
+        "n_predictions": 442,
+        "risk_median": 2.0689192498021107,
         "supported": true
       },
       "1|hest|false": {
-        "n_models": 22,
-        "n_predictions": 774,
-        "risk_median": 0.8624461400756029,
+        "n_models": 23,
+        "n_predictions": 765,
+        "risk_median": 0.839519942758912,
         "supported": true
       },
       "1|hest|true": {
         "n_models": 20,
-        "n_predictions": 336,
-        "risk_median": 0.7494447844271228,
+        "n_predictions": 344,
+        "risk_median": 0.789453739632906,
         "supported": true
       },
       "1|pathobench|false": {
-        "n_models": 5,
-        "n_predictions": 770,
-        "risk_median": 1.7904178434305642,
-        "supported": true
+        "n_models": 4,
+        "n_predictions": 568,
+        "risk_median": 2.2885606074573097,
+        "supported": false
       },
       "1|pathobench|true": {
-        "n_models": 11,
-        "n_predictions": 3884,
-        "risk_median": 2.6687095625228068,
+        "n_models": 12,
+        "n_predictions": 4083,
+        "risk_median": 2.7234920162242453,
         "supported": true
       },
       "1|pathorob|false": {
         "n_models": 14,
-        "n_predictions": 174,
-        "risk_median": 4.379380334503999,
+        "n_predictions": 318,
+        "risk_median": 9.64812165400711,
         "supported": true
       },
       "1|pathorob|true": {
-        "n_models": 9,
-        "n_predictions": 44,
-        "risk_median": 7.141917152775584,
+        "n_models": 14,
+        "n_predictions": 135,
+        "risk_median": 6.804638461398163,
         "supported": true
       },
       "1|thunder|false": {
-        "n_models": 15,
-        "n_predictions": 864,
-        "risk_median": 1.5057056858211766,
+        "n_models": 17,
+        "n_predictions": 976,
+        "risk_median": 1.7669211797195672,
         "supported": true
       },
       "1|thunder|true": {
-        "n_models": 29,
-        "n_predictions": 1380,
-        "risk_median": 1.7597330459208251,
+        "n_models": 27,
+        "n_predictions": 1275,
+        "risk_median": 1.7107230549691366,
         "supported": true
       },
       "3|eva|false": {
-        "n_models": 6,
-        "n_predictions": 176,
-        "risk_median": 1.8798969156197387,
+        "n_models": 8,
+        "n_predictions": 161,
+        "risk_median": 2.4411104477552463,
         "supported": true
       },
       "3|eva|true": {
-        "n_models": 17,
-        "n_predictions": 525,
-        "risk_median": 2.2530130765457272,
+        "n_models": 19,
+        "n_predictions": 541,
+        "risk_median": 2.4782626011809654,
         "supported": true
       },
       "3|hest|false": {
-        "n_models": 19,
-        "n_predictions": 261,
-        "risk_median": 0.8396382639580011,
+        "n_models": 20,
+        "n_predictions": 234,
+        "risk_median": 0.6219575758798701,
         "supported": true
       },
       "3|hest|true": {
-        "n_models": 24,
-        "n_predictions": 358,
-        "risk_median": 0.8403202285131375,
+        "n_models": 25,
+        "n_predictions": 384,
+        "risk_median": 0.6893714324307112,
         "supported": true
       },
       "3|pathobench|false": {
         "n_models": 2,
-        "n_predictions": 84,
-        "risk_median": 2.086830240598122,
+        "n_predictions": 122,
+        "risk_median": 2.356129849761171,
         "supported": false
       },
       "3|pathobench|true": {
         "n_models": 12,
-        "n_predictions": 2518,
-        "risk_median": 2.7387161228048456,
+        "n_predictions": 2479,
+        "risk_median": 2.5854355347328095,
         "supported": true
       },
       "3|pathorob|false": {
-        "n_models": 14,
-        "n_predictions": 87,
-        "risk_median": 5.46099938381068,
+        "n_models": 11,
+        "n_predictions": 156,
+        "risk_median": 10.658494099425727,
         "supported": true
       },
       "3|pathorob|true": {
-        "n_models": 8,
-        "n_predictions": 26,
-        "risk_median": 6.8333387404581885,
+        "n_models": 14,
+        "n_predictions": 131,
+        "risk_median": 6.512808526791652,
         "supported": true
       },
       "3|thunder|false": {
-        "n_models": 10,
-        "n_predictions": 208,
-        "risk_median": 1.0946351046331877,
+        "n_models": 8,
+        "n_predictions": 192,
+        "risk_median": 1.4363329897197907,
         "supported": true
       },
       "3|thunder|true": {
-        "n_models": 31,
-        "n_predictions": 1127,
-        "risk_median": 1.449347734728633,
+        "n_models": 32,
+        "n_predictions": 1150,
+        "risk_median": 1.3820224986664797,
         "supported": true
       },
       "5|eva|false": {
         "n_models": 4,
-        "n_predictions": 165,
-        "risk_median": 1.9234717766833604,
+        "n_predictions": 210,
+        "risk_median": 2.118696673863326,
         "supported": false
       },
       "5|eva|true": {
         "n_models": 19,
-        "n_predictions": 754,
-        "risk_median": 1.7629349080104646,
+        "n_predictions": 718,
+        "risk_median": 1.8266373478310527,
         "supported": true
       },
       "5|hest|false": {
-        "n_models": 13,
-        "n_predictions": 270,
-        "risk_median": 0.771697106629702,
+        "n_models": 16,
+        "n_predictions": 297,
+        "risk_median": 0.753100448303627,
         "supported": true
       },
       "5|hest|true": {
         "n_models": 26,
-        "n_predictions": 679,
-        "risk_median": 0.7000728219352386,
+        "n_predictions": 665,
+        "risk_median": 0.6511645613871693,
         "supported": true
       },
       "5|pathobench|true": {
         "n_models": 12,
-        "n_predictions": 4416,
-        "risk_median": 2.3668693384139132,
+        "n_predictions": 4426,
+        "risk_median": 2.379926761281432,
         "supported": true
       },
       "5|pathorob|false": {
-        "n_models": 13,
-        "n_predictions": 132,
-        "risk_median": 4.782581613128102,
+        "n_models": 11,
+        "n_predictions": 162,
+        "risk_median": 10.575410653461432,
         "supported": true
       },
       "5|pathorob|true": {
-        "n_models": 8,
-        "n_predictions": 35,
-        "risk_median": 5.206060901126374,
+        "n_models": 19,
+        "n_predictions": 179,
+        "risk_median": 6.023811035619886,
         "supported": true
       },
       "5|thunder|false": {
-        "n_models": 5,
-        "n_predictions": 208,
-        "risk_median": 1.503915065345197,
-        "supported": true
+        "n_models": 3,
+        "n_predictions": 144,
+        "risk_median": 1.1639161031613767,
+        "supported": false
       },
       "5|thunder|true": {
         "n_models": 32,
-        "n_predictions": 1673,
-        "risk_median": 1.4660179512759868,
+        "n_predictions": 1735,
+        "risk_median": 1.2784085553405262,
         "supported": true
       }
     }
@@ -8992,300 +9079,259 @@
   "crossfit_metrics": {
     "by_k": {
       "1": {
-        "interval_coverage": 0.9674709177078845,
-        "median_absolute_error": 1.9186965989537583,
-        "median_interval_width": 17.52178968160905,
+        "interval_coverage": 0.9630407391852163,
+        "median_absolute_error": 2.076463266994601,
+        "median_interval_width": 17.376200552979128,
         "n_abstained": 0,
-        "n_calibrated": 9284,
-        "n_predictions": 9284,
+        "n_calibrated": 9524,
+        "n_predictions": 9524,
         "prediction_coverage": 1.0,
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 3.347342913408983,
-            "medae": 1.9186965989537583,
-            "n": 9284
+            "mae": 3.663839708378918,
+            "medae": 2.076463266994601,
+            "n": 9524
           },
           {
             "kept_fraction": 0.8,
-            "mae": 2.481528451817071,
-            "medae": 1.5738117797277553,
-            "n": 7428
+            "mae": 2.6528792945561226,
+            "medae": 1.7094587450880283,
+            "n": 7620
           },
           {
             "kept_fraction": 0.6,
-            "mae": 1.9591550093725147,
-            "medae": 1.301989423253346,
-            "n": 5571
+            "mae": 2.090275650175742,
+            "medae": 1.3932236960825435,
+            "n": 5715
           },
           {
             "kept_fraction": 0.4,
-            "mae": 1.561827501020375,
-            "medae": 1.0870633442819795,
-            "n": 3714
+            "mae": 1.6757998017312137,
+            "medae": 1.1372138113549255,
+            "n": 3810
           },
           {
             "kept_fraction": 0.2,
-            "mae": 1.1258375234013607,
-            "medae": 0.8798088809272571,
-            "n": 1857
+            "mae": 1.2388715977385283,
+            "medae": 0.9691719473405698,
+            "n": 1905
           }
         ]
       },
       "10": {
-        "interval_coverage": 0.9412173429683157,
-        "median_absolute_error": 1.6084002926873957,
-        "median_interval_width": 13.173982476567566,
+        "interval_coverage": 0.9448658900027093,
+        "median_absolute_error": 1.601152722097531,
+        "median_interval_width": 13.674798532336268,
         "n_abstained": 0,
-        "n_calibrated": 7196,
-        "n_predictions": 7196,
+        "n_calibrated": 7382,
+        "n_predictions": 7382,
         "prediction_coverage": 1.0,
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 2.8759622852078537,
-            "medae": 1.6084002926873957,
-            "n": 7196
+            "mae": 2.9678849027163015,
+            "medae": 1.601152722097531,
+            "n": 7382
           },
           {
             "kept_fraction": 0.8,
-            "mae": 2.1203777508834483,
-            "medae": 1.3068416132751395,
-            "n": 5757
+            "mae": 2.213355566065529,
+            "medae": 1.3237471527174733,
+            "n": 5906
           },
           {
             "kept_fraction": 0.6,
-            "mae": 1.6145033005504044,
-            "medae": 1.0692982496246302,
-            "n": 4318
+            "mae": 1.6412766667060987,
+            "medae": 1.0677168398119434,
+            "n": 4430
           },
           {
             "kept_fraction": 0.4,
-            "mae": 1.1966503064492482,
-            "medae": 0.8371023836821578,
-            "n": 2879
+            "mae": 1.2348413105570049,
+            "medae": 0.8552509287851962,
+            "n": 2953
           },
           {
             "kept_fraction": 0.2,
-            "mae": 0.8273991240302162,
-            "medae": 0.668664042911324,
-            "n": 1440
+            "mae": 0.8163627701491679,
+            "medae": 0.655339111338705,
+            "n": 1477
           }
         ]
       },
       "3": {
-        "interval_coverage": 0.9307262569832402,
-        "median_absolute_error": 1.8393191250579797,
-        "median_interval_width": 13.83246359517629,
+        "interval_coverage": 0.9362162162162162,
+        "median_absolute_error": 2.0039227198300082,
+        "median_interval_width": 15.616183648101394,
         "n_abstained": 0,
-        "n_calibrated": 5370,
-        "n_predictions": 5370,
+        "n_calibrated": 5550,
+        "n_predictions": 5550,
         "prediction_coverage": 1.0,
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 3.2145183516176408,
-            "medae": 1.8393191250579797,
-            "n": 5370
+            "mae": 3.730648010964987,
+            "medae": 2.0039227198300082,
+            "n": 5550
           },
           {
             "kept_fraction": 0.8,
-            "mae": 2.5407871456472733,
-            "medae": 1.556153258308406,
-            "n": 4296
+            "mae": 2.7008662051670114,
+            "medae": 1.6306463399590037,
+            "n": 4440
           },
           {
             "kept_fraction": 0.6,
-            "mae": 1.9502324808539784,
-            "medae": 1.2466318542401744,
-            "n": 3222
+            "mae": 2.064009450446222,
+            "medae": 1.2678443392023695,
+            "n": 3330
           },
           {
             "kept_fraction": 0.4,
-            "mae": 1.4088203393246632,
-            "medae": 0.9932144011385446,
-            "n": 2148
+            "mae": 1.4308605030328798,
+            "medae": 0.9869700432189177,
+            "n": 2220
           },
           {
             "kept_fraction": 0.2,
-            "mae": 1.0710583152412532,
-            "medae": 0.8351249704601109,
-            "n": 1074
+            "mae": 1.0944866035046523,
+            "medae": 0.8299448459271446,
+            "n": 1110
           }
         ]
       },
       "5": {
-        "interval_coverage": 0.9421507441190591,
-        "median_absolute_error": 1.7362738296193498,
-        "median_interval_width": 13.145779531095883,
+        "interval_coverage": 0.9481021555763823,
+        "median_absolute_error": 1.7463084172241992,
+        "median_interval_width": 14.451332230660782,
         "n_abstained": 0,
-        "n_calibrated": 8332,
-        "n_predictions": 8332,
+        "n_calibrated": 8536,
+        "n_predictions": 8536,
         "prediction_coverage": 1.0,
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 2.995526936408544,
-            "medae": 1.7362738296193498,
-            "n": 8332
+            "mae": 3.2206112609308697,
+            "medae": 1.7463084172241992,
+            "n": 8536
           },
           {
             "kept_fraction": 0.8,
-            "mae": 2.1744796500940997,
-            "medae": 1.381436333968061,
-            "n": 6666
+            "mae": 2.269891370514018,
+            "medae": 1.409548433821982,
+            "n": 6829
           },
           {
             "kept_fraction": 0.6,
-            "mae": 1.7470071609866797,
-            "medae": 1.1556123222557204,
-            "n": 5000
+            "mae": 1.787460557717029,
+            "medae": 1.141856125086207,
+            "n": 5122
           },
           {
             "kept_fraction": 0.4,
-            "mae": 1.3029315247597228,
-            "medae": 0.8899816430940035,
-            "n": 3333
+            "mae": 1.323121022708713,
+            "medae": 0.8867778279483076,
+            "n": 3415
           },
           {
             "kept_fraction": 0.2,
-            "mae": 0.928154836094804,
-            "medae": 0.7206608344626204,
-            "n": 1667
+            "mae": 0.9022847017996725,
+            "medae": 0.7251417418476933,
+            "n": 1708
           }
         ]
       }
     },
     "by_source": {
       "leave_one_model_out_probe": {
-        "interval_coverage": 0.9402312365275328,
-        "median_absolute_error": 1.8279846910011983,
-        "median_interval_width": 14.125179838173377,
+        "interval_coverage": 0.9419731964642144,
+        "median_absolute_error": 1.9314347673455714,
+        "median_interval_width": 15.013500956768674,
         "n_abstained": 0,
-        "n_calibrated": 20412,
-        "n_predictions": 20412,
+        "n_calibrated": 21042,
+        "n_predictions": 21042,
         "prediction_coverage": 1.0,
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 3.240788490661801,
-            "medae": 1.8279846910011983,
-            "n": 20412
+            "mae": 3.579927144139648,
+            "medae": 1.9314347673455714,
+            "n": 21042
           },
           {
             "kept_fraction": 0.8,
-            "mae": 2.4127010954570345,
-            "medae": 1.4970101106671514,
-            "n": 16330
+            "mae": 2.545434048274039,
+            "medae": 1.5631135290323002,
+            "n": 16834
           },
           {
             "kept_fraction": 0.6,
-            "mae": 1.8888815242738293,
-            "medae": 1.2242267082513223,
-            "n": 12248
+            "mae": 1.9429949955542478,
+            "medae": 1.2501218555626465,
+            "n": 12626
           },
           {
             "kept_fraction": 0.4,
-            "mae": 1.4547152543869417,
-            "medae": 0.9917688239301725,
-            "n": 8165
+            "mae": 1.4647145466009466,
+            "medae": 0.9958367880003607,
+            "n": 8417
           },
           {
             "kept_fraction": 0.2,
-            "mae": 1.0247394604205229,
-            "medae": 0.7806992599930496,
-            "n": 4083
+            "mae": 1.039572998748384,
+            "medae": 0.790023540298094,
+            "n": 4209
           }
         ]
       },
       "temporal_release": {
-        "interval_coverage": 0.9632548618219038,
-        "median_absolute_error": 1.6575796982455735,
-        "median_interval_width": 14.706147131695808,
+        "interval_coverage": 0.9663316582914573,
+        "median_absolute_error": 1.7092793076756863,
+        "median_interval_width": 15.518816665487897,
         "n_abstained": 0,
-        "n_calibrated": 9770,
-        "n_predictions": 9770,
+        "n_calibrated": 9950,
+        "n_predictions": 9950,
         "prediction_coverage": 1.0,
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 2.8497313739405055,
-            "medae": 1.6575796982455735,
-            "n": 9770
+            "mae": 2.9819842162439865,
+            "medae": 1.7092793076756863,
+            "n": 9950
           },
           {
             "kept_fraction": 0.8,
-            "mae": 2.145017027460209,
-            "medae": 1.3727361146955204,
-            "n": 7816
+            "mae": 2.230775056120067,
+            "medae": 1.408322164653086,
+            "n": 7960
           },
           {
             "kept_fraction": 0.6,
-            "mae": 1.6235277745797072,
-            "medae": 1.1087462587370567,
-            "n": 5862
+            "mae": 1.6785243485972563,
+            "medae": 1.1128800001619723,
+            "n": 5970
           },
           {
             "kept_fraction": 0.4,
-            "mae": 1.263572475667536,
-            "medae": 0.877193176681736,
-            "n": 3908
+            "mae": 1.3177819195202272,
+            "medae": 0.9120404315917021,
+            "n": 3980
           },
           {
             "kept_fraction": 0.2,
-            "mae": 0.9101480132268555,
-            "medae": 0.7218505494597913,
-            "n": 1954
+            "mae": 0.9328811546330142,
+            "medae": 0.7494602141259534,
+            "n": 1990
           }
         ]
       }
     },
     "by_suite": {
       "eva": {
-        "interval_coverage": 0.9411764705882353,
-        "median_absolute_error": 1.9281138070345136,
-        "median_interval_width": 13.177413485157828,
-        "n_abstained": 0,
-        "n_calibrated": 3400,
-        "n_predictions": 3400,
-        "prediction_coverage": 1.0,
-        "risk_coverage_curve": [
-          {
-            "kept_fraction": 1.0,
-            "mae": 2.912619341060581,
-            "medae": 1.9281138070345136,
-            "n": 3400
-          },
-          {
-            "kept_fraction": 0.8,
-            "mae": 2.5259126690217832,
-            "medae": 1.6374637424643055,
-            "n": 2720
-          },
-          {
-            "kept_fraction": 0.6,
-            "mae": 2.2199919339808725,
-            "medae": 1.4349444591344138,
-            "n": 2040
-          },
-          {
-            "kept_fraction": 0.4,
-            "mae": 2.076666493254555,
-            "medae": 1.2515583853311867,
-            "n": 1360
-          },
-          {
-            "kept_fraction": 0.2,
-            "mae": 1.2922139068798344,
-            "medae": 0.9075227378357766,
-            "n": 680
-          }
-        ]
-      },
-      "hest": {
-        "interval_coverage": 0.9605609114811569,
-        "median_absolute_error": 0.7309845161601345,
-        "median_interval_width": 5.156192620412753,
+        "interval_coverage": 0.9474145486415425,
+        "median_absolute_error": 1.9921624362943362,
+        "median_interval_width": 14.006408034530295,
         "n_abstained": 0,
         "n_calibrated": 3423,
         "n_predictions": 3423,
@@ -9293,198 +9339,239 @@
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 0.925713676930425,
-            "medae": 0.7309845161601345,
+            "mae": 2.961053479770664,
+            "medae": 1.9921624362943362,
             "n": 3423
           },
           {
             "kept_fraction": 0.8,
-            "mae": 0.852559365769722,
-            "medae": 0.6849101176050425,
+            "mae": 2.56812303291924,
+            "medae": 1.7341526154127038,
             "n": 2739
           },
           {
             "kept_fraction": 0.6,
-            "mae": 0.8228192494724601,
-            "medae": 0.6520671080660136,
+            "mae": 2.3530823040832884,
+            "medae": 1.484489038459408,
             "n": 2054
           },
           {
             "kept_fraction": 0.4,
-            "mae": 0.7312141512532312,
-            "medae": 0.5795750076490052,
+            "mae": 2.053437611207369,
+            "medae": 1.2312014149843051,
             "n": 1370
           },
           {
             "kept_fraction": 0.2,
-            "mae": 0.6675658131155672,
-            "medae": 0.5695874372869412,
+            "mae": 1.3742121862951184,
+            "medae": 0.9573195126057499,
             "n": 685
           }
         ]
       },
-      "pathobench": {
-        "interval_coverage": 0.9521340499525767,
-        "median_absolute_error": 2.4185931400171725,
-        "median_interval_width": 18.278883270616348,
+      "hest": {
+        "interval_coverage": 0.9610804530932326,
+        "median_absolute_error": 0.7397732144554539,
+        "median_interval_width": 5.021580706745738,
         "n_abstained": 0,
-        "n_calibrated": 15815,
-        "n_predictions": 15815,
+        "n_calibrated": 3443,
+        "n_predictions": 3443,
         "prediction_coverage": 1.0,
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 3.6269630303787412,
-            "medae": 2.4185931400171725,
-            "n": 15815
+            "mae": 0.9358518259575903,
+            "medae": 0.7397732144554539,
+            "n": 3443
           },
           {
             "kept_fraction": 0.8,
-            "mae": 2.979466675283182,
-            "medae": 2.06288130701693,
-            "n": 12652
+            "mae": 0.8647681758592792,
+            "medae": 0.7049527016738395,
+            "n": 2755
           },
           {
             "kept_fraction": 0.6,
-            "mae": 2.4773041448144824,
-            "medae": 1.7257921469560387,
-            "n": 9489
+            "mae": 0.7732936377247182,
+            "medae": 0.6002769419907352,
+            "n": 2066
           },
           {
             "kept_fraction": 0.4,
-            "mae": 2.12814584894636,
-            "medae": 1.4731362236771517,
-            "n": 6326
+            "mae": 0.7627004358570526,
+            "medae": 0.5992463888952955,
+            "n": 1378
           },
           {
             "kept_fraction": 0.2,
-            "mae": 1.6737820407960562,
-            "medae": 1.1574155605353411,
-            "n": 3163
+            "mae": 0.6136031365723288,
+            "medae": 0.4537451954508711,
+            "n": 689
+          }
+        ]
+      },
+      "pathobench": {
+        "interval_coverage": 0.9526698262243286,
+        "median_absolute_error": 2.4629839910351734,
+        "median_interval_width": 18.881890952904314,
+        "n_abstained": 0,
+        "n_calibrated": 15825,
+        "n_predictions": 15825,
+        "prediction_coverage": 1.0,
+        "risk_coverage_curve": [
+          {
+            "kept_fraction": 1.0,
+            "mae": 3.693188703596082,
+            "medae": 2.4629839910351734,
+            "n": 15825
+          },
+          {
+            "kept_fraction": 0.8,
+            "mae": 3.0549702441523596,
+            "medae": 2.1419791968006336,
+            "n": 12660
+          },
+          {
+            "kept_fraction": 0.6,
+            "mae": 2.591504767634778,
+            "medae": 1.7783485941072428,
+            "n": 9495
+          },
+          {
+            "kept_fraction": 0.4,
+            "mae": 2.0992306438301456,
+            "medae": 1.4529906879657943,
+            "n": 6330
+          },
+          {
+            "kept_fraction": 0.2,
+            "mae": 1.6830093769692442,
+            "medae": 1.1449803672286265,
+            "n": 3165
           }
         ]
       },
       "pathorob": {
-        "interval_coverage": 0.9485981308411215,
-        "median_absolute_error": 5.0364915746500145,
-        "median_interval_width": 31.166054107178763,
+        "interval_coverage": 0.9722627737226277,
+        "median_absolute_error": 7.2027479164267305,
+        "median_interval_width": 49.8896811430669,
         "n_abstained": 0,
-        "n_calibrated": 642,
-        "n_predictions": 642,
+        "n_calibrated": 1370,
+        "n_predictions": 1370,
         "prediction_coverage": 1.0,
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 10.043685644123954,
-            "medae": 5.0364915746500145,
-            "n": 642
+            "mae": 11.562269987904493,
+            "medae": 7.2027479164267305,
+            "n": 1370
           },
           {
             "kept_fraction": 0.8,
-            "mae": 8.195005910047206,
-            "medae": 3.8876011324364654,
-            "n": 514
+            "mae": 8.593545323286412,
+            "medae": 5.349004831940277,
+            "n": 1096
           },
           {
             "kept_fraction": 0.6,
-            "mae": 4.184294853147544,
-            "medae": 2.8665395565604115,
-            "n": 386
+            "mae": 5.829127009316056,
+            "medae": 3.893882445667529,
+            "n": 822
           },
           {
             "kept_fraction": 0.4,
-            "mae": 4.783733582215841,
-            "medae": 3.3717381162529563,
-            "n": 257
+            "mae": 5.140498041058719,
+            "medae": 3.370824551952275,
+            "n": 548
           },
           {
             "kept_fraction": 0.2,
-            "mae": 5.692209890557929,
-            "medae": 4.483417401317524,
-            "n": 129
+            "mae": 4.6068485779396156,
+            "medae": 2.630032686141483,
+            "n": 274
           }
         ]
       },
       "thunder": {
-        "interval_coverage": 0.9342219646479282,
-        "median_absolute_error": 1.3913114938026467,
-        "median_interval_width": 10.088866727042351,
+        "interval_coverage": 0.9343529072283941,
+        "median_absolute_error": 1.4127277182506504,
+        "median_interval_width": 10.04414024503751,
         "n_abstained": 0,
-        "n_calibrated": 6902,
-        "n_predictions": 6902,
+        "n_calibrated": 6931,
+        "n_predictions": 6931,
         "prediction_coverage": 1.0,
         "risk_coverage_curve": [
           {
             "kept_fraction": 1.0,
-            "mae": 2.479391482190847,
-            "medae": 1.3913114938026467,
-            "n": 6902
+            "mae": 2.5042165492353226,
+            "medae": 1.4127277182506504,
+            "n": 6931
           },
           {
             "kept_fraction": 0.8,
-            "mae": 1.6057252511980946,
-            "medae": 1.1529636358170876,
-            "n": 5522
+            "mae": 1.6338723660115768,
+            "medae": 1.1336104808540455,
+            "n": 5545
           },
           {
             "kept_fraction": 0.6,
-            "mae": 1.3285758118412685,
-            "medae": 0.9932792629050482,
-            "n": 4142
+            "mae": 1.3423287391607217,
+            "medae": 0.9890015485834738,
+            "n": 4159
           },
           {
             "kept_fraction": 0.4,
-            "mae": 1.1007371848795373,
-            "medae": 0.8356908521048467,
-            "n": 2761
+            "mae": 1.1897272273152788,
+            "medae": 0.8976753188731834,
+            "n": 2773
           },
           {
             "kept_fraction": 0.2,
-            "mae": 0.9581831305849172,
-            "medae": 0.7519388889505336,
-            "n": 1381
+            "mae": 0.9747437770085468,
+            "medae": 0.7821542570569306,
+            "n": 1387
           }
         ]
       }
     },
     "overall": {
-      "interval_coverage": 0.9476840500960838,
-      "median_absolute_error": 1.7714381529647554,
-      "median_interval_width": 14.320779340121362,
+      "interval_coverage": 0.9497934950955085,
+      "median_absolute_error": 1.8554082880493112,
+      "median_interval_width": 15.252979846485744,
       "n_abstained": 0,
-      "n_calibrated": 30182,
-      "n_predictions": 30182,
+      "n_calibrated": 30992,
+      "n_predictions": 30992,
       "prediction_coverage": 1.0,
       "risk_coverage_curve": [
         {
           "kept_fraction": 1.0,
-          "mae": 3.1142021799346438,
-          "medae": 1.7714381529647554,
-          "n": 30182
+          "mae": 3.3879572121390726,
+          "medae": 1.8554082880493112,
+          "n": 30992
         },
         {
           "kept_fraction": 0.8,
-          "mae": 2.3258296572044053,
-          "medae": 1.449648764270325,
-          "n": 24146
+          "mae": 2.447869053399228,
+          "medae": 1.5109798790348776,
+          "n": 24794
         },
         {
           "kept_fraction": 0.6,
-          "mae": 1.8104898621241723,
-          "medae": 1.1954316345256402,
-          "n": 18110
+          "mae": 1.8593766611949074,
+          "medae": 1.2016446456616237,
+          "n": 18596
         },
         {
           "kept_fraction": 0.4,
-          "mae": 1.3975395515331195,
-          "medae": 0.9549211502335737,
-          "n": 12073
+          "mae": 1.428481968861028,
+          "medae": 0.9700624212018596,
+          "n": 12397
         },
         {
           "kept_fraction": 0.2,
-          "mae": 0.9892000465897602,
-          "medae": 0.7651006609847215,
-          "n": 6037
+          "mae": 1.0058543178202117,
+          "medae": 0.7720362701535066,
+          "n": 6199
         }
       ]
     }
@@ -9492,9 +9579,9 @@
   "description": "Group-balanced 90% conformal intervals for a genuinely unseen pathology model row given sparse known scores.",
   "inputs": {
     "probe_seeds": 3,
-    "simulation_jobs": 645,
+    "simulation_jobs": 681,
     "temporal_path": "experiments/temporal_deployment_rank1.json",
-    "temporal_sha256": "01d56533655420530892a5b2d98888fa61c375edc7d35e6b278ee0a7471f1807"
+    "temporal_sha256": "5f74cf5ab88da0e23da8af06fc7bf28a9072fbdd9472a47444af44f4bb814ccf"
   },
   "limitations": [
     "Coverage is retrospective and marginal over the available pathology-model population, not a clinical guarantee.",
@@ -9514,12 +9601,12 @@
   "probe_bucket_rule": "largest supported k not exceeding the number of known scores",
   "raw_predictions": {
     "path": "experiments/new_model_confidence_predictions_rank1.csv",
-    "rows": 30182,
-    "sha256": "ee58ea5923e95423496ead0b99abd82ee46e3eb1fcdd4f6b116491edb5de7376"
+    "rows": 30992,
+    "sha256": "fd595324c19425aa9be35864d3fac6db477317914f4360fd8d341c92fa36a727"
   },
   "schema_version": 1,
   "scores": {
-    "sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9"
+    "sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c"
   },
   "supported_probe_counts": [
     1,

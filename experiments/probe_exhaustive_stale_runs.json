@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "status": "superseded_old_matrix_audit_only",
+  "reason": "Execution was stopped when the source audit identified 100 canonical published PathoROB APD/clustering cells. The matrix revision and replacement exact searches are now complete, but these partial 59x165 chunks remain preserved as old-matrix audit evidence and must never be resumed or merged.",
+  "stopped_at_utc": "2026-08-06T07:36:35Z",
+  "old_matrix": {
+    "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9",
+    "n_models": 59,
+    "n_evaluations": 165,
+    "n_observed": 1967
+  },
+  "replacement_completion": [
+    "canonical replacement matrix: 59x168, 2027 observed cells, scores SHA256 f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
+    "replacement 25-task exact search: 53130/53130 combinations complete and scalar-certified",
+    "replacement 30-task exact search: 142506/142506 combinations complete and scalar-certified",
+    "replacement status: experiments/probe_exhaustive_execution_status.json",
+    "do not remove this registry until the old chunks have an explicit archive disposition"
+  ],
+  "runs": [
+    {
+      "name": "pathology_pipeline_proxy_25_choose_5",
+      "out_dir": "experiments/probe_exhaustive_runs/cheap25_medae_k5",
+      "status": "stale_partial_old_matrix",
+      "config_sha256": "367fe45f0844ecc64562b819a430df704c8b80395ce793aa9157654ec855f737",
+      "candidate_allowlist_sha256": "f65ef5cf4017a10c3b2db0b46021ac08745dd2ccdcc9bb6b53d6cd788e322eb9",
+      "valid_chunks": 16,
+      "valid_unique_combinations": 3577,
+      "expected_combinations": 53130,
+      "raw_bytes": 80124516,
+      "invalid_or_duplicate_records": 0
+    },
+    {
+      "name": "pathology_error_informed_pruned_30_choose_5",
+      "out_dir": "experiments/probe_exhaustive_runs/pruned30_medae_k5",
+      "status": "stale_partial_old_matrix",
+      "config_sha256": "b5cad3805f13c9aa0ace66e6644f95506bcd00e0b7eddc50704706f6ee3d3042",
+      "candidate_allowlist_sha256": "96708f3df3828115655eb08e48c05a1a23edfc9588aa7c807530727387e23ad3",
+      "valid_chunks": 2,
+      "valid_unique_combinations": 512,
+      "expected_combinations": 142506,
+      "raw_bytes": 11509562,
+      "invalid_or_duplicate_records": 0
+    }
+  ]
+}

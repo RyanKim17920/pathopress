@@ -58,6 +58,7 @@ input, select, button {
 button { cursor: pointer; background: var(--green); color: white; border-color: var(--green); font-weight: 750; }
 button.secondary { background: transparent; color: var(--green); }
 button:disabled { opacity: .55; cursor: wait; }
+.starter-card button:disabled { cursor: not-allowed; }
 
 .result-card { margin: 1.5rem 0; padding: clamp(1rem, 3vw, 2rem); border-radius: .75rem; background: var(--ink); color: white; }
 .result-card .score { font-size: clamp(3rem, 10vw, 7rem); line-height: 1; font-weight: 800; letter-spacing: -.06em; }
@@ -73,6 +74,25 @@ th, td { padding: .65rem .55rem; border-bottom: 1px solid var(--line); text-alig
 th { color: var(--muted); font-size: .78rem; text-transform: uppercase; letter-spacing: .07em; }
 .current-row { background: var(--mint); }
 
+.matrix-controls { display: grid; grid-template-columns: 1fr 1fr minmax(12rem, .7fr); gap: .75rem; }
+.matrix-wrap { max-height: 72vh; overflow: auto; border: 1px solid var(--line); border-radius: .6rem; }
+.matrix-table { width: max-content; min-width: 100%; font-size: .72rem; }
+.matrix-table th { position: sticky; z-index: 1; background: var(--card); }
+.matrix-table thead th { top: 0; max-width: 7.5rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.matrix-table th:first-child { left: 0; z-index: 2; max-width: 11rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.matrix-table th, .matrix-table td { padding: .16rem; border: 1px solid rgba(203, 208, 200, .55); }
+.matrix-cell { min-height: 2rem; width: 3.2rem; padding: .25rem; border-radius: .2rem; background: rgba(36, 94, 69, var(--score-alpha)); color: var(--ink); font-size: .7rem; }
+.matrix-cell.predicted { border-style: dashed; font-style: italic; }
+.matrix-cell.reported { border-style: solid; font-weight: 800; }
+.matrix-cell.light-cell-text { color: white; }
+.matrix-cell:focus-visible { outline: 3px solid var(--orange); outline-offset: 1px; }
+.matrix-empty { color: var(--line); text-align: center; }
+.matrix-legend { display: flex; align-items: center; gap: .45rem; color: var(--muted); }
+.legend-swatch { width: 1.4rem; height: 1rem; display: inline-block; background: rgba(36, 94, 69, .55); border: 2px solid var(--green); }
+.legend-swatch.predicted { border-style: dashed; margin-left: .8rem; }
+.starter-card { margin: 1rem 0; padding: 1rem; border: 1px solid var(--line); border-radius: .7rem; background: var(--mint); }
+.starter-card h3 { margin-top: 0; }
+
 .known-score-rows { margin: 1rem 0; display: grid; gap: .65rem; }
 .known-row { display: grid; grid-template-columns: minmax(0, 1fr) 9rem auto; gap: .65rem; }
 .remove-row { background: transparent; color: #8b342d; border-color: #cfa9a2; }
@@ -84,6 +104,7 @@ footer { padding: 3rem 1rem 5rem; text-align: center; color: var(--muted); }
 @media (max-width: 720px) {
   .site-header { align-items: flex-start; flex-direction: column; }
   .picker-grid { grid-template-columns: 1fr; }
+  .matrix-controls { grid-template-columns: 1fr; }
   .known-row { grid-template-columns: 1fr 7rem; }
   .remove-row { grid-column: 1 / -1; }
 }

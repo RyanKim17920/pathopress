@@ -34,7 +34,7 @@
       "name": "method_comparison_grid",
       "command": "python3 experiments/run_method_comparison.py --merge && python3 scripts/plot_method_comparison.py",
       "inputs": ["data/scores.csv", "experiments/folds_s10_f3_bs42.json", "experiments/run_method_comparison.py", "scripts/plot_method_comparison.py", "src/pathopress"],
-      "dependencies": [{"path": "experiments/method_comparison/predictions", "role": "ignored_cache", "config": {"expected_shards": 343, "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9", "folds_sha256": "6363c9426ca55397548a8e4234bc22d4a22733758d0e06221140464acd0618e5"}}],
+      "dependencies": [{"path": "experiments/method_comparison/predictions", "role": "ignored_cache", "config": {"expected_shards": 343, "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c", "folds_sha256": "f6cb9f7d68d7b3c7d3b4ca1aeacce935a19be2bf4e5e4b4e38f79a8baf690713"}}],
       "artifacts": ["experiments/method_comparison/manifest.json", "experiments/method_comparison/results.json", "experiments/method_comparison/top_methods.csv", "experiments/method_comparison/top_methods.md", "figures/method_comparison_grid.png", "figures/method_comparison_grid.pdf"],
       "external_calls": false
     },
@@ -56,15 +56,18 @@
       "name": "probe_compression",
       "command": "python3 experiments/run_probe_compression.py && python3 scripts/plot_probe_compression.py",
       "inputs": ["data/scores.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/probe_selection_results_rank1.json", "experiments/run_probe_compression.py", "scripts/plot_probe_compression.py", "src/pathopress"],
-      "artifacts": ["experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "figures/probe_compression_curves_rank1.png", "figures/probe_compression_curves_rank1.pdf"],
+      "artifacts": ["experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "outputs/probe_compression_random_all_known_raw_rank1.csv.gz", "figures/probe_compression_curves_rank1.png", "figures/probe_compression_curves_rank1.pdf"],
       "external_calls": false
     },
     {
       "name": "probe_exhaustive",
-      "command": "python3 experiments/build_probe_pruning.py && python3 experiments/run_probe_exhaustive.py --help",
-      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/probe_selection_results_rank1.json", "experiments/build_probe_pruning.py", "experiments/run_probe_exhaustive.py", "src/pathopress"],
-      "dependencies": [],
-      "artifacts": ["experiments/probe_pruning_rank1_top30.json", "data/error_informed_probe_allowlist_rank1_top30.json", "experiments/probe_exhaustive_execution_status.json", "experiments/probe_exhaustive_runs/cheap25_medae_k5/config.json", "experiments/probe_exhaustive_runs/pruned30_medae_k5/config.json"],
+      "command": "python3 experiments/validate_probe_exhaustive_chunks.py && python3 experiments/validate_probe_exhaustive_merged.py && python3 experiments/validate_probe_exhaustive_top.py && python3 experiments/build_probe_exhaustive_summary.py",
+      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v2_top25.json", "data/error_informed_probe_allowlist_rank1_top30.json", "experiments/probe_pruning_rank1_top30.json", "experiments/run_probe_exhaustive.py", "experiments/fast_rank1.cpp", "experiments/run_probe_exhaustive_v2.py", "experiments/fast_rank1_v2.cpp", "experiments/verify_fast_rank1.py", "experiments/validate_probe_exhaustive_chunks.py", "experiments/validate_probe_exhaustive_merged.py", "experiments/validate_probe_exhaustive_top.py", "experiments/build_probe_exhaustive_summary.py", "src/pathopress"],
+      "dependencies": [
+        {"path": "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/shards", "role": "ignored_raw_cache", "config": {"expected_chunks": 240, "expected_records": 53130, "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c", "config_sha256": "42974b7b5d21f7beb51fdaba491fb4d5f34d85762271935d5bcf84e31efa75d8"}},
+        {"path": "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/shards", "role": "ignored_raw_cache", "config": {"expected_chunks": 560, "expected_records": 142506, "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c", "config_sha256": "fd40559e91ee1b060c2d27ac1067818f127ba1ebd20fa580d09185366a879c3b"}}
+      ],
+      "artifacts": ["experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/config.json", "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/merged_summary.json.gz", "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/config.json", "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/merged_summary.json.gz", "experiments/probe_exhaustive_integrity_manifest.json", "experiments/probe_exhaustive_merged_validation.json", "experiments/probe_exhaustive_scalar_top_validation.json", "experiments/probe_exhaustive_fast_equivalence.json", "experiments/probe_exhaustive_fast_equivalence_v2.json", "experiments/probe_exhaustive_runner_parity.json", "experiments/probe_exhaustive_execution_status.json", "experiments/probe_exhaustive_rank1.json"],
       "external_calls": false
     },
     {
@@ -77,7 +80,7 @@
     {
       "name": "confidence_calibration",
       "command": "python3 experiments/run_confidence_calibration.py && python3 scripts/plot_confidence_calibration.py",
-      "inputs": ["data/scores.csv", "experiments/run_confidence_calibration.py", "scripts/plot_confidence_calibration.py", "src/pathopress"],
+      "inputs": ["data/scores.csv", "experiments/folds_s10_f3_bs42.json", "experiments/method_comparison/manifest.json", "experiments/method_comparison/results.json", "experiments/method_comparison/predictions", "experiments/run_confidence_calibration.py", "scripts/plot_confidence_calibration.py", "src/pathopress"],
       "artifacts": ["experiments/confidence_calibration_rank1.json", "experiments/confidence_cells_rank1.csv", "figures/confidence_calibration_rank1.png", "figures/confidence_calibration_rank1.pdf"],
       "external_calls": false
     },
@@ -99,7 +102,7 @@
       "name": "prediction_error_factors",
       "command": "python3 experiments/run_prediction_error_factors.py --merge-only && python3 scripts/build_prediction_error_factor_tables.py && python3 scripts/plot_prediction_error_factors.py",
       "inputs": ["data/scores.csv", "data/tasks.csv", "data/model_metadata.csv", "data/model_release_dates.csv", "experiments/error_analysis_rank1.json", "experiments/run_prediction_error_factors.py", "scripts/build_prediction_error_factor_tables.py", "scripts/plot_prediction_error_factors.py", "src/pathopress"],
-      "dependencies": [{"path": "experiments/prediction_error_factor_shards", "role": "ignored_cache", "config": {"active_units": 5785, "matrix_sha256": "adbae84f7dfe406a26ab062392f6331c393496534cd0be68d56f76330dc8d2de"}}, {"path": "outputs/prediction_error_factor_predictions_rank1.csv", "role": "ignored_raw_cache", "config": {"rows": 279487, "matrix_sha256": "adbae84f7dfe406a26ab062392f6331c393496534cd0be68d56f76330dc8d2de"}}],
+      "dependencies": [{"path": "experiments/prediction_error_factor_shards", "role": "ignored_cache", "config": {"active_units": 6030, "matrix_sha256": "b6b1e1ad47948bb265432dfea8a09a1a692edcc633b186f20c65a0a7e3295b32"}}, {"path": "outputs/prediction_error_factor_predictions_rank1.csv", "role": "ignored_raw_cache", "config": {"rows": 289681, "matrix_sha256": "b6b1e1ad47948bb265432dfea8a09a1a692edcc633b186f20c65a0a7e3295b32"}}],
       "artifacts": ["experiments/prediction_error_factors_rank1.json", "experiments/prediction_error_factor_manifest.json", "outputs/prediction_error_factor_records_rank1.csv", "outputs/prediction_error_factor_table_rank1.csv", "outputs/prediction_error_factor_table_appendix_rank1.csv", "figures/predictability_factors_benchmark_rank1.png", "figures/predictability_factors_benchmark_rank1.pdf", "figures/predictability_factors_model_rank1.png", "figures/predictability_factors_model_rank1.pdf", "figures/predictability_factors_benchmark_appendix_rank1.png", "figures/predictability_factors_benchmark_appendix_rank1.pdf", "figures/predictability_factors_model_appendix_rank1.png", "figures/predictability_factors_model_appendix_rank1.pdf"],
       "external_calls": false
     },
@@ -112,9 +115,9 @@
     },
     {
       "name": "llm_baseline_contract_only",
-      "command": "python3 experiments/run_llm_baseline.py all-mock && python3 scripts/plot_llm_baseline.py",
-      "inputs": ["data/scores.csv", "data/tasks.csv", "experiments/folds_s10_f3_bs42.json", "experiments/run_llm_baseline.py", "scripts/merge_llm_baseline_metrics.py", "scripts/plot_llm_baseline.py", "src/pathopress"],
-      "artifacts": ["experiments/llm_baseline", "figures/llm_baseline_status.png", "figures/llm_baseline_status.pdf"],
+      "command": "python3 experiments/run_llm_baseline.py prepare --scope full && python3 experiments/run_llm_baseline.py all-mock --scope smoke && python3 scripts/plot_llm_baseline.py",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "experiments/folds_s10_f3_bs42.json", "experiments/benchpress_style_results.json", "experiments/run_llm_baseline.py", "scripts/merge_llm_baseline_metrics.py", "scripts/plot_llm_baseline.py", "src/pathopress"],
+      "artifacts": ["experiments/llm_baseline", "experiments/llm_baseline_smoke", "figures/llm_baseline_status.png", "figures/llm_baseline_status.pdf"],
       "external_calls": false
     },
     {
@@ -134,7 +137,7 @@
     {
       "name": "publication_hero",
       "command": "python3 scripts/plot_publication_hero.py && python3 scripts/plot_benchpress_style_hero.py && python3 scripts/plot_probe_dual_objective.py",
-      "inputs": ["data/scores.csv", "experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "scripts/plot_publication_hero.py", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py", "src/pathopress"],
+      "inputs": ["data/scores.csv", "experiments/probe_compression_rank1.json", "experiments/probe_exhaustive_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "scripts/plot_publication_hero.py", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py", "src/pathopress"],
       "artifacts": ["experiments/publication_hero_summary.json", "experiments/benchpress_style_hero_summary.json", "outputs/probe_dual_objective_rank1.csv", "figures/pathopress_hero_rank1.png", "figures/pathopress_hero_rank1.pdf", "figures/pathopress_benchpress_hero_rank1.png", "figures/pathopress_benchpress_hero_rank1.pdf", "figures/pathopress_benchpress_ranking_rank1.png", "figures/pathopress_benchpress_ranking_rank1.pdf", "figures/probe_dual_objective_rank1.png", "figures/probe_dual_objective_rank1.pdf"],
       "external_calls": false
     },
@@ -142,14 +145,14 @@
       "name": "publication_metadata_overview",
       "command": "python3 scripts/plot_metadata_overview.py",
       "inputs": ["data/scores.csv", "data/tasks.csv", "data/model_metadata.csv", "data/model_release_dates.csv", "scripts/plot_metadata_overview.py", "src/pathopress"],
-      "artifacts": ["experiments/publication_metadata_summary.json", "figures/pathopress_metadata_overview.png", "figures/pathopress_metadata_overview.pdf"],
+      "artifacts": ["experiments/publication_metadata_summary.json", "figures/pathopress_metadata_overview.png", "figures/pathopress_metadata_overview.pdf", "figures/pathopress_releases.png", "figures/pathopress_releases.pdf", "figures/pathopress_coverage.png", "figures/pathopress_coverage.pdf", "figures/pathopress_evaluation_mix.png", "figures/pathopress_evaluation_mix.pdf", "figures/pathopress_observed_cells_by_family.png", "figures/pathopress_observed_cells_by_family.pdf", "figures/pathopress_source_provenance.png", "figures/pathopress_source_provenance.pdf"],
       "external_calls": false
     },
     {
       "name": "public_export",
-      "command": "python3 scripts/build_public_release.py",
-      "inputs": ["data/scores.csv", "data/tasks.csv", "data/suites.csv", "data/provenance.json", "data/model_metadata.csv", "experiments/confidence_cells_rank1.csv", "experiments/new_model_confidence_rank1.json", "scripts/build_public_release.py", "src/pathopress"],
-      "artifacts": ["experiments/deployment_confidence_rank1.json", "exports/pathopress_public", "website/data.json"],
+      "command": "python3 scripts/build_public_release.py && python3 scripts/build_website_starter_sets.py && python3 scripts/publish_hf_dataset.py",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/suites.csv", "data/provenance.json", "data/model_metadata.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/confidence_calibration_rank1.json", "experiments/confidence_cells_rank1.csv", "experiments/new_model_confidence_rank1.json", "experiments/probe_compression_rank1.json", "pyproject.toml", "uv.lock", "scripts/build_public_release.py", "scripts/build_hf_dataset.py", "scripts/build_website_starter_sets.py", "scripts/publish_hf_dataset.py", "src/pathopress"],
+      "artifacts": ["experiments/deployment_confidence_rank1.json", "exports/pathopress_public", "website/data.json", "website/starter_sets.json"],
       "external_calls": false
     }
   ]

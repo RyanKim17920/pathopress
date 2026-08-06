@@ -2,22 +2,22 @@
   "schema_version": 1,
   "matrix": {
     "n_models": 59,
-    "n_evaluations": 165,
-    "n_observed": 1967
+    "n_evaluations": 168,
+    "n_observed": 2027
   },
   "tables": {
     "model_inventory": 59,
-    "evaluation_inventory": 165,
+    "evaluation_inventory": 168,
     "threshold_sensitivity": 18,
     "svd_submatrix_sensitivity": 4
   },
   "source_sha256": {
-    "scores.csv": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9",
-    "tasks.csv": "1041706bb3d8f83e06e9acefb7c002193f1938dce90c69b2be05f005a2c63289",
+    "scores.csv": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
+    "tasks.csv": "21f51e78071dbd453eb2afb48ae866718d4c9f3c790e6da2f6fb39e4065be431",
     "model_metadata.csv": "a255719534391db72be2211e434fc153ca2d236fa1740552165e6c943a8018e4",
     "model_release_dates.csv": "99e418b87be538c044a7f345f29f1d6e6a2b1b0de136fe41cf679aedf660946f",
-    "evaluation_feasibility.csv": "643b757df6a506723bb5bdd2f38d61af34335c6c1993f10980307f3fe945b330",
-    "threshold_sweep.json": "6b75cb75afdaee197f14989e2a30385baae9178f034511a46f4c2919ec2ae33b",
+    "evaluation_feasibility.csv": "bff448f4b1f3772c184e3458617c4b5d921bdddec5aa55245dc91f4f2ae6a683",
+    "threshold_sweep.json": "ba58cd8943d54bbaaa8a3eb58ec8e1357a10c65c9e0fba6ab7c115c9739e6cd2",
     "submatrix_sweep.json": "ac1fb14ed8d79d8a51629faf652783e9b89a207b3f4c3a9fa1e8c136e60e85c0"
   }
 }

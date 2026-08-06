@@ -1,0 +1,28 @@
+{
+  "analysis_ineligible_apd_rows": 40,
+  "duplicate_group_crosschecked_rows": 1468,
+  "ledger_path": "data/score_review_ledger.csv",
+  "ledger_sha256": "6bf374fd2ee9dded8ef1e8023179a2e4b5acda805ae9b38856de39f6f9162ffe",
+  "locator_reachable_rows": 2076,
+  "reported_external_rows": 9,
+  "retained_primary_rows": 2027,
+  "review_outcomes": {
+    "reported_external": 9,
+    "source_locator_crosschecked": 1465,
+    "source_locator_validated": 602
+  },
+  "reviewed_at": "2026-08-06T00:00:00Z",
+  "reviewer_type": "automated_agent_review",
+  "schema_version": 1,
+  "score_rows": 2076,
+  "source_files": {
+    "source_data/exaone_path_2_5_pathobench_2512.14019v1.csv": "26fbce672fe4cffe73ffc7459c63309efa5984377743fb27085d4c051a59586b",
+    "source_data/pathorob_nature2026_and_repo_examples.csv": "472c1e581854f7b80427291770f47d7f665f563d787495ab0276b50930a2104e",
+    "source_data/pinned/eva/pathology.csv": "a8e39569bca60b762652e41da4f17ef031e7bb7b29f98b6101342b8da5298ff9",
+    "source_data/pinned/eva_midnight/README.md": "7595d9ac11154d804a9e920abae185bd98798ebd4ba375490f1a845dc32d2001",
+    "source_data/pinned/hest/README.md": "3d002564045d3c493f30386df7983ee34b0f2f7ac89bf32ac63a5f780395d811",
+    "source_data/pinned/pathorob/README.md": "2d87485e399409bb7ef4c2fe56601c3bde72237d14c921aec361dbf4cb9ba4ee",
+    "source_data/pinned/thunder/leaderboards.md": "f174930a107fd0f72ae5b7f4251e86b734713d9335fb067b2b68a1d7f12c3022",
+    "source_data/threads_pathobench_2501.16652v1.csv": "876ad2edb815c80d0191656930a5f0a2728802361981906e4c694916dd13ff61"
+  }
+}

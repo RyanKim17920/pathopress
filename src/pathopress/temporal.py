@@ -12,6 +12,7 @@ from typing import Iterable, Sequence
 import numpy as np
 
 from pathopress.completion import complete
+from pathopress.metrics import MEDAPE_EPSILON, median_absolute_percentage_error
 
 
 PROTOCOL_VERSION = "pathology_temporal_deployment_hard_rule_v1"
@@ -235,7 +236,6 @@ def run_unit(
     actual_array = np.asarray(metric_actual)
     predicted_array = np.asarray(metric_predicted)
     absolute_error = np.abs(predicted_array - actual_array)
-    percentage_error = 100.0 * absolute_error / np.abs(actual_array)
     not_predictable = sum(row["prediction_source"] == "not_predictable" for row in raw)
     return {
         "config": {
@@ -251,6 +251,7 @@ def run_unit(
             "train_rule": "verified models with release_date strictly before cutoff_date",
             "probe_rule": "randomly reveal k of the target model's observed scores",
             "metric_rule": "revealed exact cells plus hidden cells with finite predictions",
+            "medape_epsilon": MEDAPE_EPSILON,
             "train_model_ids": train_ids,
             "revealed_evaluation_ids": [evaluations[j] for j in revealed_js],
             "n_eval_cells": len(raw),
@@ -262,7 +263,7 @@ def run_unit(
         "metrics": {
             "n": len(metric_actual),
             "medae": float(np.median(absolute_error)),
-            "medape": float(np.median(percentage_error)),
+            "medape": median_absolute_percentage_error(actual_array, predicted_array),
         },
         "raw_predictions": raw,
     }

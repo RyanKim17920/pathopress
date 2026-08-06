@@ -16,9 +16,9 @@
   },
   "inputs": {
     "tasks_path": "data/tasks.csv",
-    "tasks_sha256": "1041706bb3d8f83e06e9acefb7c002193f1938dce90c69b2be05f005a2c63289",
+    "tasks_sha256": "21f51e78071dbd453eb2afb48ae866718d4c9f3c790e6da2f6fb39e4065be431",
     "scores_path": "data/scores.csv",
-    "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9"
+    "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c"
   },
   "sources": [
     {
@@ -3178,6 +3178,66 @@
       "scope_note": "TCGA has distinct 2x2 and 4x4 robustness endpoints; current RI leaderboard reports TCGA 2x2, Camelyon, and Tolkach ESCA only, so TCGA 4x4 remains an unscored catalog endpoint."
     },
     {
+      "source_id": "task_source:pathorob.nature2026.camelyon.clustering_score",
+      "source_name": "Retained protocol source for pathorob.nature2026.camelyon.clustering_score",
+      "suite_id": "pathorob",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "pathorob.nature2026.camelyon.clustering_score",
+        "dataset_id": "camelyon",
+        "num_samples": "not_reported",
+        "sample_unit": "patch",
+        "task_type": "robustness_analysis",
+        "target": "clustering_score",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Canonical published mean from Nature Source Data Fig. 6b; approximately [-1,1], normalized as (score+1)*50. Shares task identity and dataset artifact with the generic PathoROB clustering endpoint."
+    },
+    {
+      "source_id": "task_source:pathorob.nature2026.tcga_4x4.clustering_score",
+      "source_name": "Retained protocol source for pathorob.nature2026.tcga_4x4.clustering_score",
+      "suite_id": "pathorob",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "pathorob.nature2026.tcga_4x4.clustering_score",
+        "dataset_id": "tcga_4x4",
+        "num_samples": "not_reported",
+        "sample_unit": "patch",
+        "task_type": "robustness_analysis",
+        "target": "clustering_score",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Canonical published mean from Nature Source Data Fig. 6b; approximately [-1,1], normalized as (score+1)*50. Shares task identity and dataset artifact with the generic PathoROB clustering endpoint."
+    },
+    {
+      "source_id": "task_source:pathorob.nature2026.tolkach_esca.clustering_score",
+      "source_name": "Retained protocol source for pathorob.nature2026.tolkach_esca.clustering_score",
+      "suite_id": "pathorob",
+      "evidence_type": "primary_task_config_or_report_table",
+      "source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+      "locators": [
+        "task row fields: num_samples, sample_unit, task_type, target, protocol"
+      ],
+      "raw_evidence": {
+        "protocol_id": "pathorob.nature2026.tolkach_esca.clustering_score",
+        "dataset_id": "tolkach_esca",
+        "num_samples": "not_reported",
+        "sample_unit": "patch",
+        "task_type": "robustness_analysis",
+        "target": "clustering_score",
+        "audit_status": "parsed_primary_source"
+      },
+      "scope_note": "Canonical published mean from Nature Source Data Fig. 6b; approximately [-1,1], normalized as (score+1)*50. Shares task identity and dataset artifact with the generic PathoROB clustering endpoint."
+    },
+    {
       "source_id": "task_source:pathorob.tcga_2x2.robustness_index",
       "source_name": "Retained protocol source for pathorob.tcga_2x2.robustness_index",
       "suite_id": "pathorob",
@@ -3539,43 +3599,43 @@
     }
   ],
   "summary": {
-    "n_evaluations": 165,
+    "n_evaluations": 168,
     "coverage_definition": "field_coverage_count includes sourced benchmark-family/default context; field_direct_evaluation_coverage_count requires scope=evaluation",
     "field_coverage_count": {
-      "sample_count": 141,
-      "sample_unit": 165,
-      "access": 165,
-      "label_artifact": 165,
+      "sample_count": 143,
+      "sample_unit": 168,
+      "access": 168,
+      "label_artifact": 168,
       "annotation_hours": 0,
       "acquisition_scale": 16,
       "stain": 9,
-      "compute_configuration": 165,
+      "compute_configuration": 168,
       "hardware_model": 0,
       "observed_runtime": 0,
       "dollar_cost": 0,
-      "software_license": 165,
-      "dataset_license": 17
+      "software_license": 168,
+      "dataset_license": 19
     },
     "field_coverage_fraction": {
-      "sample_count": 0.8545454545454545,
+      "sample_count": 0.8511904761904762,
       "sample_unit": 1.0,
       "access": 1.0,
       "label_artifact": 1.0,
       "annotation_hours": 0.0,
-      "acquisition_scale": 0.09696969696969697,
-      "stain": 0.05454545454545454,
+      "acquisition_scale": 0.09523809523809523,
+      "stain": 0.05357142857142857,
       "compute_configuration": 1.0,
       "hardware_model": 0.0,
       "observed_runtime": 0.0,
       "dollar_cost": 0.0,
       "software_license": 1.0,
-      "dataset_license": 0.10303030303030303
+      "dataset_license": 0.1130952380952381
     },
     "field_direct_evaluation_coverage_count": {
-      "sample_count": 141,
-      "sample_unit": 165,
+      "sample_count": 143,
+      "sample_unit": 168,
       "access": 31,
-      "label_artifact": 165,
+      "label_artifact": 168,
       "annotation_hours": 0,
       "acquisition_scale": 16,
       "stain": 0,
@@ -3584,22 +3644,22 @@
       "observed_runtime": 0,
       "dollar_cost": 0,
       "software_license": 0,
-      "dataset_license": 17
+      "dataset_license": 19
     },
     "field_direct_evaluation_coverage_fraction": {
-      "sample_count": 0.8545454545454545,
+      "sample_count": 0.8511904761904762,
       "sample_unit": 1.0,
-      "access": 0.18787878787878787,
+      "access": 0.18452380952380953,
       "label_artifact": 1.0,
       "annotation_hours": 0.0,
-      "acquisition_scale": 0.09696969696969697,
+      "acquisition_scale": 0.09523809523809523,
       "stain": 0.0,
-      "compute_configuration": 0.09090909090909091,
+      "compute_configuration": 0.08928571428571429,
       "hardware_model": 0.0,
       "observed_runtime": 0.0,
       "dollar_cost": 0.0,
       "software_license": 0.0,
-      "dataset_license": 0.10303030303030303
+      "dataset_license": 0.1130952380952381
     },
     "field_coverage_by_suite": {
       "eva": {
@@ -3651,20 +3711,20 @@
         "n_evaluations": 122
       },
       "pathorob": {
-        "sample_count": 3,
-        "sample_unit": 3,
-        "access": 3,
-        "label_artifact": 3,
+        "sample_count": 5,
+        "sample_unit": 6,
+        "access": 6,
+        "label_artifact": 6,
         "annotation_hours": 0,
         "acquisition_scale": 0,
         "stain": 0,
-        "compute_configuration": 3,
+        "compute_configuration": 6,
         "hardware_model": 0,
         "observed_runtime": 0,
         "dollar_cost": 0,
-        "software_license": 3,
-        "dataset_license": 3,
-        "n_evaluations": 3
+        "software_license": 6,
+        "dataset_license": 5,
+        "n_evaluations": 6
       },
       "thunder": {
         "sample_count": 16,
@@ -3687,7 +3747,7 @@
       "tier_1_direct_small_labeled": 4,
       "tier_2_direct_labeled": 21,
       "tier_3_aggregated_or_wsi": 126,
-      "tier_4_specialized_protocol": 14
+      "tier_4_specialized_protocol": 17
     },
     "numeric_cost_curve": {
       "supported": false,
@@ -28177,6 +28237,524 @@
         "dataset_license": {
           "status": "reported",
           "value": "CC0-1.0",
+          "source_id": "pathorob_readme_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "pathorob.nature2026.camelyon.clustering_score",
+      "suite_id": "pathorob",
+      "dataset_id": "camelyon",
+      "protocol_id": "pathorob.nature2026.camelyon.clustering_score",
+      "task_source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "reported",
+          "value": {
+            "raw_metadata_rows": 22402,
+            "excluded_ood_rows": 2002,
+            "evaluated_rows": 20400
+          },
+          "source_id": "pathorob_configs_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/data/metadata/camelyon.csv",
+          "locator": "CSV row count and robustness_index.get_meta OOD exclusion",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation",
+          "unit": "patch records"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "patch",
+          "source_id": "task_source:pathorob.nature2026.camelyon.clustering_score",
+          "source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Canonical published mean from Nature Source Data Fig. 6b; approximately [-1,1], normalized as (score+1)*50. Shares task identity and dataset artifact with the generic PathoROB clustering endpoint."
+        },
+        "access": {
+          "status": "reported",
+          "value": "official Hugging Face collection download",
+          "source_id": "pathorob_readme_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md",
+          "locator": "README.md:64-77",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing biological-class and acquisition-site metadata",
+          "source_id": "task_source:pathorob.nature2026.camelyon.clustering_score",
+          "source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0",
+            "task_source:pathorob.nature2026.camelyon.clustering_score"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0",
+            "task_source:pathorob.nature2026.camelyon.clustering_score"
+          ]
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "feature_batch_size": 32,
+            "workers": 0,
+            "device": "CUDA when available, otherwise CPU"
+          },
+          "source_id": "pathorob_configs_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/pathorob/features/extract_features.py",
+          "locator": "extract_features.py:35-45",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "BSD-3-Clause",
+          "source_id": "pathorob_license_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/LICENSE",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC0-1.0",
+          "source_id": "pathorob_readme_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md",
+          "locator": "license statement",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation"
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "pathorob.nature2026.tcga_4x4.clustering_score",
+      "suite_id": "pathorob",
+      "dataset_id": "tcga_4x4",
+      "protocol_id": "pathorob.nature2026.tcga_4x4.clustering_score",
+      "task_source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No source-audited PathoROB metadata row count is available for this dataset or aggregate endpoint.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0",
+            "task_source:pathorob.nature2026.tcga_4x4.clustering_score"
+          ]
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "patch",
+          "source_id": "task_source:pathorob.nature2026.tcga_4x4.clustering_score",
+          "source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Canonical published mean from Nature Source Data Fig. 6b; approximately [-1,1], normalized as (score+1)*50. Shares task identity and dataset artifact with the generic PathoROB clustering endpoint."
+        },
+        "access": {
+          "status": "reported",
+          "value": "official Hugging Face collection download",
+          "source_id": "pathorob_readme_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md",
+          "locator": "README.md:64-77",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing biological-class and acquisition-site metadata",
+          "source_id": "task_source:pathorob.nature2026.tcga_4x4.clustering_score",
+          "source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0",
+            "task_source:pathorob.nature2026.tcga_4x4.clustering_score"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0",
+            "task_source:pathorob.nature2026.tcga_4x4.clustering_score"
+          ]
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "feature_batch_size": 32,
+            "workers": 0,
+            "device": "CUDA when available, otherwise CPU"
+          },
+          "source_id": "pathorob_configs_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/pathorob/features/extract_features.py",
+          "locator": "extract_features.py:35-45",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "BSD-3-Clause",
+          "source_id": "pathorob_license_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/LICENSE",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Underlying dataset license was not stated in the audited benchmark source; repository license is not substituted.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0",
+            "task_source:pathorob.nature2026.tcga_4x4.clustering_score"
+          ]
+        }
+      },
+      "pre_error_feasibility": {
+        "tier": "tier_4_specialized_protocol",
+        "basis": "segmentation, spatial regression, robustness, or other specialized protocol",
+        "derivation_timing": "protocol metadata only; defined before prediction errors",
+        "claim_boundary": "feasibility stratum, not measured money, labor, compute, or runtime"
+      },
+      "missing_fields": [
+        "acquisition_scale",
+        "annotation_hours",
+        "dataset_license",
+        "dollar_cost",
+        "hardware_model",
+        "observed_runtime",
+        "sample_count",
+        "stain"
+      ],
+      "numeric_cost_curve_eligible": false,
+      "numeric_cost_curve_exclusion": "observed_runtime and dollar_cost are not both directly reported"
+    },
+    {
+      "evaluation_id": "pathorob.nature2026.tolkach_esca.clustering_score",
+      "suite_id": "pathorob",
+      "dataset_id": "tolkach_esca",
+      "protocol_id": "pathorob.nature2026.tolkach_esca.clustering_score",
+      "task_source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+      "task_audit_status": "parsed_primary_source",
+      "facts": {
+        "sample_count": {
+          "status": "reported",
+          "value": {
+            "raw_metadata_rows": 9000,
+            "excluded_ood_rows": 0,
+            "evaluated_rows": 9000
+          },
+          "source_id": "pathorob_configs_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/data/metadata/tolkach_esca_reduced.csv",
+          "locator": "CSV row count and robustness_index.get_meta OOD exclusion",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "evaluation",
+          "unit": "patch records"
+        },
+        "sample_unit": {
+          "status": "reported",
+          "value": "patch",
+          "source_id": "task_source:pathorob.nature2026.tolkach_esca.clustering_score",
+          "source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+          "locator": "sample_unit",
+          "evidence_type": "primary_task_config_or_report_table",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Canonical published mean from Nature Source Data Fig. 6b; approximately [-1,1], normalized as (score+1)*50. Shares task identity and dataset artifact with the generic PathoROB clustering endpoint."
+        },
+        "access": {
+          "status": "reported",
+          "value": "official Hugging Face collection download",
+          "source_id": "pathorob_readme_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md",
+          "locator": "README.md:64-77",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_family"
+        },
+        "label_artifact": {
+          "status": "reported",
+          "value": "existing biological-class and acquisition-site metadata",
+          "source_id": "task_source:pathorob.nature2026.tolkach_esca.clustering_score",
+          "source_url": "https://www.nature.com/articles/s41467-026-73923-2",
+          "locator": "task_type + target",
+          "evidence_type": "deterministic_protocol_metadata_classification",
+          "confidence": "medium",
+          "scope": "evaluation",
+          "notes": "Describes the supplied label artifact only; it is not measured annotation labor."
+        },
+        "annotation_hours": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No measured annotation labor was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ],
+          "unit": "hours"
+        },
+        "acquisition_scale": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific magnification or mpp value was extracted from the audited source.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0",
+            "task_source:pathorob.nature2026.tolkach_esca.clustering_score"
+          ]
+        },
+        "stain": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "Stain was not encoded as an evaluation-level field in the audited source.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0",
+            "task_source:pathorob.nature2026.tolkach_esca.clustering_score"
+          ]
+        },
+        "compute_configuration": {
+          "status": "reported",
+          "value": {
+            "feature_batch_size": 32,
+            "workers": 0,
+            "device": "CUDA when available, otherwise CPU"
+          },
+          "source_id": "pathorob_configs_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/pathorob/features/extract_features.py",
+          "locator": "extract_features.py:35-45",
+          "evidence_type": "declared_budget_not_observed_usage",
+          "confidence": "high",
+          "scope": "benchmark_default"
+        },
+        "hardware_model": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No evaluation-specific hardware make/model was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ]
+        },
+        "observed_runtime": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No observed per-evaluation elapsed time was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ],
+          "unit": "seconds"
+        },
+        "dollar_cost": {
+          "status": "not_reported",
+          "value": null,
+          "reason": "No numeric evaluation dollar cost was reported.",
+          "searched_source_ids": [
+            "pathorob_readme_6583cf0",
+            "pathorob_configs_6583cf0",
+            "pathorob_license_6583cf0"
+          ],
+          "unit": "USD"
+        },
+        "software_license": {
+          "status": "reported",
+          "value": "BSD-3-Clause",
+          "source_id": "pathorob_license_6583cf0",
+          "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/LICENSE",
+          "locator": "repository license",
+          "evidence_type": "direct_primary_source",
+          "confidence": "high",
+          "scope": "benchmark_software",
+          "notes": "Not a substitute for the underlying dataset license."
+        },
+        "dataset_license": {
+          "status": "reported",
+          "value": "CC-BY-SA-4.0",
           "source_id": "pathorob_readme_6583cf0",
           "source_url": "https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md",
           "locator": "license statement",

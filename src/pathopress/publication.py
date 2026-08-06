@@ -59,6 +59,20 @@ def quarter(value: str) -> str:
     return f"{parsed.year}-Q{(parsed.month - 1) // 3 + 1}"
 
 
+def score_source_group(url: str) -> str:
+    """Map pathology score evidence into explicit upstream-analogue groups."""
+
+    domain = url.split("//", 1)[-1].split("/", 1)[0].lower()
+    if domain in {"github.com", "huggingface.co"}:
+        return "Official benchmark repository"
+    if domain in {
+        "arxiv.org", "doi.org", "link.springer.com", "nature.com",
+        "www.nature.com", "openreview.net", "proceedings.mlr.press",
+    }:
+        return "Primary paper or report"
+    return "Other cited primary source"
+
+
 def metadata_panel_counts(
     scores: list[dict[str, str]],
     tasks: list[dict[str, str]],
@@ -84,6 +98,12 @@ def metadata_panel_counts(
     }
     release_quarters = Counter(quarter(row["release_date"]) for row in release_by_model.values())
     observed_quarters: Counter[str] = Counter()
+    coverage_by_quarter: dict[str, list[int]] = defaultdict(list)
+    score_count_by_model = Counter(row["model_id"] for row in retained_scores)
+    for model_id, release in release_by_model.items():
+        coverage_by_quarter[quarter(release["release_date"])].append(
+            score_count_by_model[model_id]
+        )
     for row in retained_scores:
         release = release_by_model.get(row["model_id"])
         if release:
@@ -94,6 +114,9 @@ def metadata_panel_counts(
     )
     suites = Counter(row["suite_id"] for row in retained_tasks)
     audit = Counter(row["audit_status"] for row in retained_scores)
+    source_provenance = Counter(
+        score_source_group(row["reference_url"]) for row in retained_scores
+    )
     source_domains: Counter[str] = Counter()
     for row in retained_tasks:
         url = row["reference_url"].split("//", 1)[-1]
@@ -101,10 +124,24 @@ def metadata_panel_counts(
     return {
         "release_quarters": dict(sorted(release_quarters.items())),
         "observed_score_quarters": dict(sorted(observed_quarters.items())),
+        "coverage_by_release_quarter": {
+            release_quarter: {
+                "median": float(sorted(values)[len(values) // 2])
+                if len(values) % 2 else float(
+                    (sorted(values)[len(values) // 2 - 1] + sorted(values)[len(values) // 2]) / 2
+                ),
+                "mean": float(sum(values) / len(values)),
+                "n_models": len(values),
+            }
+            for release_quarter, values in sorted(coverage_by_quarter.items())
+        },
         "task_family": dict(sorted(task_family.items(), key=lambda item: (-item[1], item[0]))),
         "observed_family": dict(sorted(observed_family.items(), key=lambda item: (-item[1], item[0]))),
         "suite_tasks": dict(sorted(suites.items(), key=lambda item: (-item[1], item[0]))),
         "score_audit_status": dict(sorted(audit.items(), key=lambda item: (-item[1], item[0]))),
+        "source_provenance": dict(
+            sorted(source_provenance.items(), key=lambda item: (-item[1], item[0]))
+        ),
         "task_source_domains": dict(sorted(source_domains.items(), key=lambda item: (-item[1], item[0]))),
         "n_models": len(retained_models),
         "n_evaluations": len(retained_evaluations),

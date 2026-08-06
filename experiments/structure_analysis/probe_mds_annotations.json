@@ -4,8 +4,8 @@
     {
       "rank": 1,
       "evaluation_id": "thunder.spider_skin.linear_probing",
-      "mds_x": -0.16755695767410642,
-      "mds_y": 0.0034125374509448967,
+      "mds_x": 0.17282759046934476,
+      "mds_y": -0.0038520156738174544,
       "offset_points": [
         -26,
         22
@@ -13,9 +13,9 @@
     },
     {
       "rank": 2,
-      "evaluation_id": "eva.leaderboard.camelyon16_small.test",
-      "mds_x": -0.15806321232657664,
-      "mds_y": 0.0028872560419207667,
+      "evaluation_id": "thunder.esca.linear_probing",
+      "mds_x": 0.1643227974656943,
+      "mds_y": -0.003521255580342279,
       "offset_points": [
         -10,
         30
@@ -23,9 +23,9 @@
     },
     {
       "rank": 3,
-      "evaluation_id": "thunder.tcga_uniform.linear_probing",
-      "mds_x": -0.10286087710806929,
-      "mds_y": 0.0020630326406317337,
+      "evaluation_id": "eva.leaderboard.monusac.test",
+      "mds_x": 0.07607569705273824,
+      "mds_y": -0.001130591847514202,
       "offset_points": [
         8,
         30
@@ -33,9 +33,9 @@
     },
     {
       "rank": 4,
-      "evaluation_id": "pathobench.threads2025.cptac_hnsc.casp8-mutation",
-      "mds_x": -0.049197615450308374,
-      "mds_y": 5.898632645845011e-06,
+      "evaluation_id": "hest.read.gene_expression",
+      "mds_x": 0.12390209423724186,
+      "mds_y": -0.002578436141147092,
       "offset_points": [
         25,
         22
@@ -43,9 +43,9 @@
     },
     {
       "rank": 5,
-      "evaluation_id": "pathobench.exaone2025.cptac_brca.tp53-mutation",
-      "mds_x": 0.7073625515702349,
-      "mds_y": -0.22440609178392656,
+      "evaluation_id": "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+      "mds_x": 0.04904904818935616,
+      "mds_y": 0.00012494005376847395,
       "offset_points": [
         -30,
         5
@@ -53,9 +53,9 @@
     },
     {
       "rank": 6,
-      "evaluation_id": "thunder.mhist.linear_probing",
-      "mds_x": 0.010387422897857596,
-      "mds_y": -0.0008354460926327651,
+      "evaluation_id": "pathobench.exaone2025.bracs.slidelevel-fine",
+      "mds_x": -0.687319996507063,
+      "mds_y": 0.3098548547615892,
       "offset_points": [
         -12,
         12
@@ -63,9 +63,9 @@
     },
     {
       "rank": 7,
-      "evaluation_id": "thunder.esca.linear_probing",
-      "mds_x": -0.15896041710366288,
-      "mds_y": 0.0030874564787878363,
+      "evaluation_id": "pathobench.threads2025.bracs.slidelevel-coarse",
+      "mds_x": 0.03716697721847872,
+      "mds_y": 8.758508780058734e-05,
       "offset_points": [
         8,
         12
@@ -73,9 +73,9 @@
     },
     {
       "rank": 8,
-      "evaluation_id": "hest.skcm.gene_expression",
-      "mds_x": -0.13691985865959388,
-      "mds_y": 0.0025512802054146145,
+      "evaluation_id": "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation",
+      "mds_x": 0.056452552877702275,
+      "mds_y": 0.00014909236274162434,
       "offset_points": [
         27,
         5
@@ -84,8 +84,8 @@
     {
       "rank": 9,
       "evaluation_id": "thunder.spider_breast.linear_probing",
-      "mds_x": -0.11761235409148882,
-      "mds_y": 0.002401684469002898,
+      "mds_x": 0.12042644143568622,
+      "mds_y": -0.002625801452917494,
       "offset_points": [
         -18,
         -16
@@ -93,9 +93,9 @@
     },
     {
       "rank": 10,
-      "evaluation_id": "pathobench.exaone2025.cptac_gbm.egfr-mutation",
-      "mds_x": 0.5237246465949227,
-      "mds_y": 0.010601502327543907,
+      "evaluation_id": "thunder.tcga_uniform.linear_probing",
+      "mds_x": 0.10535894168277715,
+      "mds_y": -0.0022440230119527443,
       "offset_points": [
         18,
         -16

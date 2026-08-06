@@ -1,0 +1,1441 @@
+{
+  "exporter": {
+    "implementation": "pathopress.public_data.build_public_export",
+    "implementation_sha256": "8e401c08c4e28db2aa28f8d2d20525fad1eb11a712df56ad78b6bcad3cd3e56c",
+    "pandas_used": false,
+    "pandas_version": null,
+    "parquet_backend": "pyarrow",
+    "pyarrow_version": "25.0.0",
+    "uv_lock_sha256": "eb5882fefc2124a854f3ab830e6671aa807cd8465c1a5fff4ac6fdaabcd8822a"
+  },
+  "pathology_adaptation": "BenchPress benchmark_id maps to PathoPress evaluation_id; normalized_score preserves direction on a 0-100 fit scale.",
+  "schema_version": "pathopress-hf-table-schema-v1",
+  "tables": {
+    "benchmarks": {
+      "csv": "data/benchmarks.csv",
+      "fields": [
+        {
+          "logical_type": "string",
+          "name": "evaluation_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "suite_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "dataset_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "task_name",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "task_family",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "target",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "sample_unit",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "task_type",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "num_samples",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "endpoint",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "metric",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "direction",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "protocol",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "reference_url",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "audit_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "int64",
+          "name": "observed_models",
+          "nullable": true
+        }
+      ],
+      "parquet": "data/benchmarks.parquet",
+      "upstream_name": "benchmarks"
+    },
+    "evaluations_all": {
+      "csv": "data/evaluations_all.csv",
+      "fields": [
+        {
+          "logical_type": "string",
+          "name": "evaluation_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "suite_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "dataset_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "task_name",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "task_family",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "target",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "sample_unit",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "task_type",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "num_samples",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "endpoint",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "metric",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "direction",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "protocol",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "reference_url",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "audit_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "int64",
+          "name": "observed_models",
+          "nullable": true
+        }
+      ],
+      "parquet": "data/evaluations_all.parquet"
+    },
+    "evaluations_paper": {
+      "csv": "data/evaluations_paper.csv",
+      "fields": [
+        {
+          "logical_type": "string",
+          "name": "evaluation_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "suite_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "dataset_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "task_name",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "task_family",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "target",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "sample_unit",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "task_type",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "num_samples",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "endpoint",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "metric",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "direction",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "protocol",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "reference_url",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "audit_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "int64",
+          "name": "observed_models",
+          "nullable": true
+        }
+      ],
+      "parquet": "data/evaluations_paper.parquet"
+    },
+    "models": {
+      "csv": "data/models.csv",
+      "fields": [
+        {
+          "logical_type": "string",
+          "name": "model_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "provider",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "family",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "model_type",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "modality",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "parameter_count",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "release_date",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "primary_source_url",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "verification_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "int64",
+          "name": "observed_scores",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "represented_suites",
+          "nullable": true
+        }
+      ],
+      "parquet": "data/models.parquet",
+      "upstream_name": "models"
+    },
+    "models_all": {
+      "csv": "data/models_all.csv",
+      "fields": [
+        {
+          "logical_type": "string",
+          "name": "model_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "provider",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "family",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "model_type",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "modality",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "parameter_count",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "release_date",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "primary_source_url",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "verification_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "int64",
+          "name": "observed_scores",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "represented_suites",
+          "nullable": true
+        }
+      ],
+      "parquet": "data/models_all.parquet"
+    },
+    "models_paper": {
+      "csv": "data/models_paper.csv",
+      "fields": [
+        {
+          "logical_type": "string",
+          "name": "model_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "provider",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "family",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "model_type",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "modality",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "parameter_count",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "release_date",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "primary_source_url",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "verification_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "int64",
+          "name": "observed_scores",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "represented_suites",
+          "nullable": true
+        }
+      ],
+      "parquet": "data/models_paper.parquet"
+    },
+    "score_matrix_paper_wide": {
+      "csv": "data/score_matrix_paper_wide.csv",
+      "fields": [
+        {
+          "logical_type": "string",
+          "name": "model_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.bach.validation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.bracs.validation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.breakhis.validation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.camelyon16_small.test",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.camelyon16_small.validation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.consep.validation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.crc.validation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.gleason_arvaniti.validation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.mhist.test",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.monusac.test",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.panda_small.test",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.panda_small.validation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.patch_camelyon.test",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.patch_camelyon.validation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "eva.leaderboard.patch_camelyon_10shot.test",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.ccrcc.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.coad.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.idc.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.lung.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.lymph_idc.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.paad.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.prad.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.read.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.skcm.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.bc_therapy.er-status",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.bc_therapy.grade",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.bc_therapy.her2-status",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.bc_therapy.residual-cancer-burden",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.bcnb.er",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.bcnb.her2",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.bcnb.pr",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.boehmk_.pfs",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.bracs.slidelevel-coarse",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.bracs.slidelevel-fine",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_brca.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_brca.pik3ca-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_brca.tp53-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_ccrcc.bap1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_ccrcc.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_ccrcc.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_ccrcc.pbrm1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_ccrcc.vhl-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_coad.acvr2a-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_coad.apc-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_coad.arid1a-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_coad.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_coad.kras-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_coad.msi-h",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_coad.pik3ca-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_coad.setd1b-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_coad.tp53-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_gbm.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_gbm.tp53-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_hnsc.casp8-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_hnsc.histologic-grade",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_hnsc.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_hnsc.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_lscc.arid1a-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_lscc.histologic-grade",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_lscc.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_lscc.keap1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_luad.egfr-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_luad.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_luad.kras-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_luad.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_luad.stk11-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_luad.tp53-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_ov.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_pda.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_pda.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_pda.smad4-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_ucec.ctnnb1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_ucec.immune-class",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.cptac_ucec.pten-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.ebrains.diagnosis",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.ebrains.diagnosis-group",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.ebrains.idh-status",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.hancook.grading-scc-conventional-keratinizing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.hancook.grading-scc-conventional-nonkeratinizing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.hancook.lymphovascular-invasion-l",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.hancook.os-treatment-rdc",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.hancook.perineural-invasion-pn",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.hancook.primarily-metastasis",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.hancook.primary-tumor-site",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.hancook.vascular-invasion-v",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.herroi.response",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.imp.grade",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.mbc_.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.mbc_.recist",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.mut-het-rcc.bap1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.mut-het-rcc.pbrm1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.mut-het-rcc.setd2-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.nadt.response",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.natbrca.lymphovascular-invasion",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.ovarian.response",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.panda.isup-grade",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.sr386_.braf-mutant-binary",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.sr386_.died-within-5-years",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.sr386_.mmr-loss-binary",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.sr386_.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.sr386_.ras-mutant-binary",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.visiomel.relapse-noprev-melanoma",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.exaone2025.visiomel.relapse-overall",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.bcnb.er",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.bcnb.her2",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.bcnb.pr",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.boehmk_.pfs",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.bracs.slidelevel-coarse",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.bracs.slidelevel-fine",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_brca.pik3ca-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_brca.tp53-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_ccrcc.bap1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_ccrcc.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_coad.kras-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_coad.tp53-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_gbm.egfr-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_gbm.tp53-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_hnsc.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_lscc.arid1a-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_lscc.keap1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_luad.egfr-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_luad.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_luad.stk11-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_luad.tp53-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_pda.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.cptac_pda.smad4-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.ebrains.diagnosis",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.ebrains.diagnosis-group",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.imp.grade",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.mbc_.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.mbc_.recist",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.mut-het-rcc.bap1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.mut-het-rcc.pbrm1-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.mut-het-rcc.setd2-mutation",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.nadt.response",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.natbrca.lymphovascular-invasion",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.ovarian.response",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.panda.isup-grade",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.sr386_.braf-mutant-binary",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.sr386_.died-within-5-years",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.sr386_.mmr-loss-binary",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.sr386_.os",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathobench.threads2025.sr386_.ras-mutant-binary",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathorob.camelyon.robustness_index",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathorob.nature2026.camelyon.clustering_score",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathorob.nature2026.tcga_4x4.clustering_score",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathorob.nature2026.tolkach_esca.clustering_score",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathorob.tcga_2x2.robustness_index",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "pathorob.tolkach_esca.robustness_index",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.bach.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.bracs.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.break_his.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.ccrcc.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.crc.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.esca.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.mhist.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.patch_camelyon.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.spider_breast.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.spider_colorectal.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.spider_skin.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.spider_thorax.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.tcga_crc_msi.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.tcga_tils.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.tcga_uniform.linear_probing",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "thunder.wilds.linear_probing",
+          "nullable": true
+        }
+      ],
+      "parquet": "data/score_matrix_paper_wide.parquet"
+    },
+    "scores_all": {
+      "csv": "data/scores_all.csv",
+      "fields": [
+        {
+          "logical_type": "string",
+          "name": "model_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "evaluation_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "value",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "normalized_score",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "suite_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "metric",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "reference_url",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "source_locator",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "extraction_date",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "review_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "audit_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "lineage",
+          "nullable": true
+        }
+      ],
+      "parquet": "data/scores_all.parquet"
+    },
+    "scores_paper": {
+      "csv": "data/scores_paper.csv",
+      "fields": [
+        {
+          "logical_type": "string",
+          "name": "model_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "evaluation_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "value",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "normalized_score",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "suite_id",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "metric",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "reference_url",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "source_locator",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "extraction_date",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "review_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "audit_status",
+          "nullable": true
+        },
+        {
+          "logical_type": "string",
+          "name": "lineage",
+          "nullable": true
+        }
+      ],
+      "parquet": "data/scores_paper.parquet"
+    }
+  }
+}

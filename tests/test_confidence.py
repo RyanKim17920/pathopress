@@ -5,13 +5,19 @@ import numpy as np
 from pathopress.confidence import (
     conformal_interval,
     coverage_width,
+    crossfit_trust_probability,
     crossfit_error_risk,
+    fit_trust_calibrator,
+    predict_serialized_trust,
+    RELATIVE_WIDTH_DENOMINATOR_EPSILON,
+    relative_width_denominator_mask,
     risk_coverage_curve,
     spearman_uncertainty_error,
     stack_features,
     structural_support_features_for_cells,
     uncertainty_tercile_errors,
 )
+from pathopress.metrics import MEDAPE_EPSILON
 
 
 class ConfidencePrimitiveTests(unittest.TestCase):
@@ -29,6 +35,41 @@ class ConfidencePrimitiveTests(unittest.TestCase):
         self.assertEqual(rows[0]["n"], 5)
         self.assertEqual(rows[1]["n"], 3)
         self.assertEqual(rows[1]["medae"], 2.0)
+
+    def test_percentage_metrics_use_shared_denominator_boundary(self) -> None:
+        just_above = np.nextafter(MEDAPE_EPSILON, np.inf)
+        actual = np.asarray([
+            MEDAPE_EPSILON, -MEDAPE_EPSILON, just_above, -just_above,
+        ])
+        predicted = np.zeros(4)
+        rows = risk_coverage_curve(actual, predicted, np.ones(4), fractions=(1.0,))
+        # Exact-boundary denominators are excluded; both just-above values are
+        # one hundred percent errors.
+        self.assertEqual(rows[0]["medape"], 100.0)
+
+        lower = -np.abs(actual)
+        upper = np.abs(actual)
+        interval = coverage_width(actual, lower, upper)
+        self.assertAlmostEqual(interval["median_relative_width"], 200.0)
+
+    def test_relative_width_uses_its_distinct_upstream_denominator_boundary(self) -> None:
+        just_above = np.nextafter(RELATIVE_WIDTH_DENOMINATOR_EPSILON, np.inf)
+        mask = relative_width_denominator_mask(np.asarray([
+            RELATIVE_WIDTH_DENOMINATOR_EPSILON,
+            -RELATIVE_WIDTH_DENOMINATOR_EPSILON,
+            just_above,
+            -just_above,
+            MEDAPE_EPSILON,
+        ]))
+        np.testing.assert_array_equal(mask, [False, False, True, True, True])
+        # A denominator between 1e-8 and MedAPE's 1e-6 boundary participates
+        # in relative interval width, exactly as in upstream BenchPress.
+        interval = coverage_width(
+            np.asarray([1e-7, 2.0]),
+            np.asarray([-0.9999999, 1.0]),
+            np.asarray([1.0000001, 3.0]),
+        )
+        self.assertGreater(interval["median_relative_width"], 1e9)
 
     def test_conformal_scale_is_fit_without_target_fold(self) -> None:
         actual = np.zeros(12)
@@ -89,6 +130,49 @@ class ConfidencePrimitiveTests(unittest.TestCase):
         self.assertEqual(set(selected), {"0", "1", "2", "3"})
         self.assertTrue(np.all(np.isfinite(uncertainty)))
         self.assertTrue(np.all(uncertainty >= 0.0))
+
+    def test_trust_calibrator_is_monotone_decreasing_in_risk(self) -> None:
+        risk = np.arange(100, dtype=float)
+        actual = np.zeros(100)
+        predicted = np.concatenate([np.zeros(70), np.full(30, 20.0)])
+        predictor, metadata = fit_trust_calibrator(risk, actual, predicted, n_bins=10)
+        probability = predictor(risk)
+        self.assertTrue(np.all(np.diff(probability) <= 1e-12))
+        replay = predict_serialized_trust(risk, metadata)
+        np.testing.assert_allclose(replay, probability)
+        self.assertGreater(probability[0], probability[-1])
+
+    def test_trust_probability_leaves_target_fold_out(self) -> None:
+        # Fold 0 always misses the ten-point event and fold 1 always meets it.
+        # A proper leave-fold calibrator therefore assigns the opposite fold's
+        # prevalence, visibly distinguishing it from in-sample calibration.
+        actual = np.zeros(40)
+        predicted = np.asarray([20.0] * 20 + [1.0] * 20)
+        risk = np.ones(40)
+        folds = np.asarray([0] * 20 + [1] * 20)
+        probability, metadata = crossfit_trust_probability(
+            risk, actual, predicted, folds, n_bins=4
+        )
+        np.testing.assert_allclose(probability[:20], 1.0)
+        np.testing.assert_allclose(probability[20:], 0.0)
+        self.assertEqual(set(metadata), {"0", "1"})
+
+    def test_trust_probability_purges_repeated_target_groups(self) -> None:
+        folds = np.repeat(np.arange(4), 10)
+        groups = np.tile(np.arange(10), 4)
+        # Folds 0/1 share groups 0-9 and folds 2/3 share groups 10-19.
+        groups[20:] += 10
+        risk = np.linspace(0.1, 4.0, 40)
+        actual = np.zeros(40)
+        predicted = np.linspace(0.0, 20.0, 40)
+        probability, metadata = crossfit_trust_probability(
+            risk, actual, predicted, folds, group_id=groups, n_bins=4
+        )
+        self.assertTrue(np.all(np.isfinite(probability)))
+        self.assertTrue(all(
+            int(row["n_purged_repeated_target_instances"]) == 10
+            for row in metadata.values()
+        ))
 
 
 if __name__ == "__main__":

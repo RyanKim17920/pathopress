@@ -11,9 +11,11 @@ from __future__ import annotations
 
 import math
 import warnings
-from typing import Iterable
+from typing import Callable, Iterable, Mapping
 
 import numpy as np
+
+from .metrics import median_absolute_percentage_error
 
 
 DEFAULT_RISK_MODEL_GRID = (
@@ -23,6 +25,20 @@ DEFAULT_RISK_MODEL_GRID = (
     ("mlp", (64, 32)),
 )
 
+DEFAULT_TRUST_THRESHOLD = 10.0
+DEFAULT_TRUST_BINS = 20
+# Pinned BenchPress interval-width denominator guard.  This is intentionally
+# distinct from metrics.MEDAPE_EPSILON (1e-6): upstream confidence diagnostics
+# use 1e-8 for relative interval width while MedAPE excludes through 1e-6.
+RELATIVE_WIDTH_DENOMINATOR_EPSILON = 1e-8
+
+
+def relative_width_denominator_mask(actual: np.ndarray) -> np.ndarray:
+    """Return the exact upstream-supported denominators for relative width."""
+
+    values = np.asarray(actual, dtype=float)
+    return np.isfinite(values) & (np.abs(values) > RELATIVE_WIDTH_DENOMINATOR_EPSILON)
+
 
 def error_metrics(actual: np.ndarray, predicted: np.ndarray) -> dict[str, float | int]:
     actual = np.asarray(actual, dtype=float)
@@ -31,15 +47,11 @@ def error_metrics(actual: np.ndarray, predicted: np.ndarray) -> dict[str, float 
     if not np.any(valid):
         return {"n": 0, "mae": float("nan"), "medae": float("nan"), "medape": float("nan")}
     error = np.abs(predicted[valid] - actual[valid])
-    denominator = np.abs(actual[valid])
-    relative = denominator > 1e-8
     return {
         "n": int(valid.sum()),
         "mae": float(np.mean(error)),
         "medae": float(np.median(error)),
-        "medape": float(np.median(error[relative] / denominator[relative]) * 100.0)
-        if np.any(relative)
-        else float("nan"),
+        "medape": median_absolute_percentage_error(actual[valid], predicted[valid]),
     }
 
 
@@ -89,7 +101,7 @@ def coverage_width(
         }
     widths = upper[valid] - lower[valid]
     covered = (actual[valid] >= lower[valid]) & (actual[valid] <= upper[valid])
-    relative = np.abs(actual[valid]) > 1e-8
+    relative = relative_width_denominator_mask(actual[valid])
     return {
         "coverage": float(np.mean(covered)),
         "median_width": float(np.median(widths)),
@@ -408,3 +420,219 @@ def summarize_confidence_method(
         "conformal_90_interval": coverage_width(actual, lower, upper),
         "conformal_90_scale_median": float(np.nanmedian(scale)),
     }
+
+
+def _pava_increasing(values: np.ndarray, weights: np.ndarray) -> np.ndarray:
+    """Weighted pool-adjacent-violators fit for nondecreasing values.
+
+    This is the same deterministic primitive used by BenchPress's public trust
+    probability export.  Keeping it local avoids an optional isotonic-regression
+    dependency and makes the serialized mapping directly reproducible.
+    """
+
+    values = np.asarray(values, dtype=float)
+    weights = np.asarray(weights, dtype=float)
+    if values.ndim != 1 or values.shape != weights.shape:
+        raise ValueError("values and weights must be equal-length vectors")
+    block_values: list[float] = []
+    block_weights: list[float] = []
+    starts: list[int] = []
+    ends: list[int] = []
+    for index, (value, weight) in enumerate(zip(values, weights, strict=True)):
+        if not np.isfinite(value) or not np.isfinite(weight) or weight <= 0:
+            raise ValueError("PAVA inputs must be finite with positive weights")
+        block_values.append(float(value))
+        block_weights.append(float(weight))
+        starts.append(index)
+        ends.append(index + 1)
+        while len(block_values) >= 2 and block_values[-2] > block_values[-1]:
+            merged_weight = block_weights[-2] + block_weights[-1]
+            merged_value = (
+                block_values[-2] * block_weights[-2]
+                + block_values[-1] * block_weights[-1]
+            ) / merged_weight
+            block_values[-2:] = [merged_value]
+            block_weights[-2:] = [merged_weight]
+            starts[-2:] = [starts[-2]]
+            ends[-2:] = [ends[-1]]
+    output = np.empty_like(values)
+    for value, start, end in zip(block_values, starts, ends, strict=True):
+        output[start:end] = value
+    return output
+
+
+def fit_trust_calibrator(
+    uncertainty: np.ndarray,
+    actual: np.ndarray,
+    predicted: np.ndarray,
+    *,
+    threshold: float = DEFAULT_TRUST_THRESHOLD,
+    n_bins: int = DEFAULT_TRUST_BINS,
+) -> tuple[Callable[[np.ndarray], np.ndarray], dict[str, object]]:
+    """Fit BenchPress's decreasing binned-isotonic trust mapping.
+
+    Trust is the probability that absolute prediction error is at most
+    ``threshold`` normalized score points.  The input predictions must already
+    be out-of-fold when this function is used for evaluation.
+    """
+
+    uncertainty = np.asarray(uncertainty, dtype=float)
+    actual = np.asarray(actual, dtype=float)
+    predicted = np.asarray(predicted, dtype=float)
+    if not (uncertainty.shape == actual.shape == predicted.shape):
+        raise ValueError("uncertainty, actual, and predicted must have equal shape")
+    if not np.isfinite(threshold) or threshold <= 0:
+        raise ValueError("trust threshold must be finite and positive")
+    if n_bins < 1:
+        raise ValueError("n_bins must be positive")
+    finite = np.isfinite(uncertainty) & np.isfinite(actual) & np.isfinite(predicted)
+    risk = uncertainty[finite]
+    trusted = (np.abs(predicted[finite] - actual[finite]) <= threshold).astype(float)
+    if not risk.size:
+        raise ValueError("no finite held-out risk values available for trust calibration")
+    order = np.argsort(risk, kind="mergesort")
+    risk = risk[order]
+    trusted = trusted[order]
+    bins = np.array_split(np.arange(risk.size), min(int(n_bins), risk.size))
+    centers = np.asarray([np.median(risk[index]) for index in bins], dtype=float)
+    empirical = np.asarray([np.mean(trusted[index]) for index in bins], dtype=float)
+    weights = np.asarray([len(index) for index in bins], dtype=float)
+    # Higher risk must not imply higher trust.
+    calibrated = -_pava_increasing(-empirical, weights)
+    calibrated = np.clip(calibrated, 0.0, 1.0)
+
+    def predict(values: np.ndarray) -> np.ndarray:
+        values = np.asarray(values, dtype=float)
+        output = np.full(values.shape, np.nan, dtype=float)
+        valid = np.isfinite(values)
+        output[valid] = np.interp(
+            values[valid], centers, calibrated,
+            left=calibrated[0], right=calibrated[-1],
+        )
+        return output
+
+    metadata: dict[str, object] = {
+        "threshold_normalized_points": float(threshold),
+        "n_calibration_cells": int(risk.size),
+        "n_bins": int(len(bins)),
+        "bin_risk_median": centers.tolist(),
+        "bin_empirical_trust_probability": empirical.tolist(),
+        "bin_calibrated_trust_probability": calibrated.tolist(),
+        "bin_weight": weights.astype(int).tolist(),
+        "monotonicity": "nonincreasing_probability_with_increasing_risk",
+    }
+    return predict, metadata
+
+
+def predict_serialized_trust(
+    uncertainty: np.ndarray | float,
+    calibrator: Mapping[str, object],
+) -> np.ndarray:
+    """Apply a JSON-serializable trust calibrator without target outcomes."""
+
+    values = np.asarray(uncertainty, dtype=float)
+    centers = np.asarray(calibrator.get("bin_risk_median", []), dtype=float)
+    probabilities = np.asarray(
+        calibrator.get("bin_calibrated_trust_probability", []), dtype=float
+    )
+    if not centers.size or centers.shape != probabilities.shape:
+        raise ValueError("invalid serialized trust calibrator")
+    output = np.full(values.shape, np.nan, dtype=float)
+    valid = np.isfinite(values)
+    output[valid] = np.interp(
+        values[valid], centers, probabilities,
+        left=probabilities[0], right=probabilities[-1],
+    )
+    return output
+
+
+def trust_probability_summary(
+    actual: np.ndarray,
+    predicted: np.ndarray,
+    probability: np.ndarray,
+    *,
+    threshold: float = DEFAULT_TRUST_THRESHOLD,
+    n_bins: int = 10,
+) -> dict[str, object]:
+    """Evaluate cross-fitted trust probabilities and emit a reliability curve."""
+
+    actual = np.asarray(actual, dtype=float)
+    predicted = np.asarray(predicted, dtype=float)
+    probability = np.asarray(probability, dtype=float)
+    valid = np.isfinite(actual) & np.isfinite(predicted) & np.isfinite(probability)
+    if not np.any(valid):
+        raise ValueError("no finite trust probabilities")
+    outcome = (np.abs(predicted[valid] - actual[valid]) <= threshold).astype(float)
+    probability = np.clip(probability[valid], 0.0, 1.0)
+    order = np.argsort(probability, kind="mergesort")
+    groups = np.array_split(order, min(int(n_bins), len(order)))
+    reliability = [
+        {
+            "n": int(len(index)),
+            "mean_predicted_probability": float(np.mean(probability[index])),
+            "empirical_probability": float(np.mean(outcome[index])),
+        }
+        for index in groups
+    ]
+    weights = np.asarray([row["n"] for row in reliability], dtype=float)
+    calibration_gap = np.asarray(
+        [abs(row["mean_predicted_probability"] - row["empirical_probability"])
+         for row in reliability],
+        dtype=float,
+    )
+    clipped = np.clip(probability, 1e-12, 1.0 - 1e-12)
+    return {
+        "threshold_normalized_points": float(threshold),
+        "n": int(len(outcome)),
+        "event_prevalence": float(np.mean(outcome)),
+        "mean_predicted_probability": float(np.mean(probability)),
+        "brier_score": float(np.mean((probability - outcome) ** 2)),
+        "log_loss": float(-np.mean(outcome * np.log(clipped) + (1.0 - outcome) * np.log(1.0 - clipped))),
+        "expected_calibration_error": float(np.average(calibration_gap, weights=weights)),
+        "reliability_curve": reliability,
+    }
+
+
+def crossfit_trust_probability(
+    uncertainty: np.ndarray,
+    actual: np.ndarray,
+    predicted: np.ndarray,
+    fold_id: np.ndarray,
+    *,
+    group_id: np.ndarray | None = None,
+    threshold: float = DEFAULT_TRUST_THRESHOLD,
+    n_bins: int = DEFAULT_TRUST_BINS,
+) -> tuple[np.ndarray, dict[str, dict[str, object]]]:
+    """Calibrate trust while leaving each target point-prediction fold out."""
+
+    uncertainty = np.asarray(uncertainty, dtype=float)
+    actual = np.asarray(actual, dtype=float)
+    predicted = np.asarray(predicted, dtype=float)
+    fold_id = np.asarray(fold_id, dtype=int)
+    if not (uncertainty.shape == actual.shape == predicted.shape == fold_id.shape):
+        raise ValueError("cross-fit trust inputs must have equal shape")
+    groups = None if group_id is None else np.asarray(group_id)
+    if groups is not None and groups.shape != fold_id.shape:
+        raise ValueError("group_id must match the cross-fit trust input shape")
+    output = np.full_like(uncertainty, np.nan, dtype=float)
+    metadata: dict[str, dict[str, object]] = {}
+    for fold in np.unique(fold_id):
+        test = fold_id == fold
+        training = fold_id != fold
+        purged = 0
+        if groups is not None:
+            repeated_target = np.isin(groups, np.unique(groups[test]))
+            purged = int(np.sum(training & repeated_target))
+            training &= ~repeated_target
+        predictor, fold_metadata = fit_trust_calibrator(
+            uncertainty[training], actual[training], predicted[training],
+            threshold=threshold, n_bins=n_bins,
+        )
+        output[test] = predictor(uncertainty[test])
+        metadata[str(int(fold))] = {
+            **fold_metadata,
+            "held_out_fold": int(fold),
+            "n_output_cells": int(test.sum()),
+            "n_purged_repeated_target_instances": purged,
+        }
+    return output, metadata

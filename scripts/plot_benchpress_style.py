@@ -18,6 +18,7 @@ matplotlib.use("Agg")
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Patch
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -96,7 +97,7 @@ def matrix_order(matrix, models, evaluations, metadata):
     return row_order, col_order
 
 
-def add_suite_axis(ax, ordered_evaluations, metadata) -> None:
+def suite_groups(ordered_evaluations, metadata) -> list[tuple[str, int, int]]:
     groups: list[tuple[str, int, int]] = []
     start = 0
     while start < len(ordered_evaluations):
@@ -106,12 +107,27 @@ def add_suite_axis(ax, ordered_evaluations, metadata) -> None:
             end += 1
         groups.append((suite, start, end))
         start = end
-    ax.set_xticks([(start + end - 1) / 2 for _, start, end in groups])
-    ax.set_xticklabels([suite.upper() for suite, _, _ in groups])
+    return groups
+
+
+def suite_legend_handles(groups: list[tuple[str, int, int]]) -> list[Patch]:
+    return [
+        Patch(facecolor=SUITE_COLORS.get(suite, GRAY), edgecolor="none", label=suite.upper())
+        for suite, _, _ in groups
+    ]
+
+
+def add_suite_axis(ax, ordered_evaluations, metadata) -> list[tuple[str, int, int]]:
+    groups = suite_groups(ordered_evaluations, metadata)
+    # Narrow pathology suites can occupy only a handful of pixels in this
+    # 168-column matrix. A shared color legend is legible; centered suite-name
+    # ticks are not, so the band carries the grouping and the legend names it.
+    ax.set_xticks([])
     for suite, start, end in groups:
         ax.plot([start - 0.5, end - 0.5], [-1.15, -1.15], color=SUITE_COLORS.get(suite, GRAY), lw=5, clip_on=False)
         if end < len(ordered_evaluations):
             ax.axvline(end - 0.5, color="white", lw=1.5)
+    return groups
 
 
 def plot_observation_pattern(matrix, models, evaluations, metadata, output_dir):
@@ -121,13 +137,24 @@ def plot_observation_pattern(matrix, models, evaluations, metadata, output_dir):
     fig, ax = plt.subplots(figsize=(8.0, 5.0))
     cmap = colors.ListedColormap(["white", BLUE])
     ax.imshow(observed, cmap=cmap, interpolation="nearest", aspect="auto")
-    add_suite_axis(ax, ordered_evaluations, metadata)
+    groups = add_suite_axis(ax, ordered_evaluations, metadata)
     ax.set_yticks([])
     ax.set_ylabel(f"{len(models)} models")
     ax.set_xlabel(f"{len(evaluations)} scored evaluations")
     ax.set_title(
         f"Published score coverage: {int(observed.sum())}/{observed.size} cells ({observed.mean():.1%})"
     )
+    fig.legend(
+        handles=suite_legend_handles(groups),
+        loc="lower center",
+        bbox_to_anchor=(0.5, -0.015),
+        ncol=len(groups),
+        frameon=False,
+        fontsize=7.5,
+        handlelength=1.4,
+        columnspacing=1.0,
+    )
+    fig.subplots_adjust(bottom=0.17)
     for spine in ax.spines.values():
         spine.set_visible(False)
     save(fig, output_dir, "matrix_observation_pattern")
@@ -149,13 +176,25 @@ def plot_completed_matrix(matrix, models, evaluations, metadata, output_dir, ran
     rgba[..., 3] = np.where(np.isfinite(original), 1.0, 0.48)
     axes[1].imshow(rgba, aspect="auto")
     axes[1].set_title(f"Completed matrix (latent interaction rank {rank})")
+    groups = []
     for ax in axes:
-        add_suite_axis(ax, ordered_evaluations, metadata)
+        groups = add_suite_axis(ax, ordered_evaluations, metadata)
         ax.set_yticks([])
         for spine in ax.spines.values():
             spine.set_visible(False)
     axes[0].set_xlabel("White = unreported")
     axes[1].set_xlabel("Solid = reported; translucent = imputed")
+    fig.legend(
+        handles=suite_legend_handles(groups),
+        loc="lower center",
+        bbox_to_anchor=(0.5, -0.015),
+        ncol=len(groups),
+        frameon=False,
+        fontsize=8.0,
+        handlelength=1.5,
+        columnspacing=1.2,
+    )
+    fig.subplots_adjust(bottom=0.17)
     cbar = fig.colorbar(image, ax=axes, shrink=0.8, pad=0.02)
     cbar.set_label("Normalized score (0–100)")
     save(fig, output_dir, f"matrix_completed_rank{rank}")

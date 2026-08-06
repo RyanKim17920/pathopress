@@ -19,6 +19,16 @@ CHARCOAL = "#002b36"
 GRID = "#e5e9ef"
 
 
+def _rank_contract_note(data):
+    protocol = data["protocol"]
+    pathology_rank = int(protocol["pathology_rank"])
+    upstream_rank = int(protocol["upstream_rank"])
+    return (
+        f"Prediction errors use the selected pathology rank-{pathology_rank} predictor; "
+        f"the low-rank-fit diagnostic intentionally retains the upstream rank-{upstream_rank} definition."
+    )
+
+
 def _finite(rows, x_key, y_key="medae"):
     x = np.asarray([
         np.nan if row.get(x_key) is None else float(row[x_key]) for row in rows
@@ -99,7 +109,8 @@ def benchmark_main(data, output: Path):
     ax.set_title("D  Paired evidence interventions", loc="left", fontweight="bold")
     _style(axes)
     fig.suptitle("Benchmark-side pathology prediction-error factors", fontsize=15, fontweight="bold")
-    fig.tight_layout(rect=(0, 0, 1, 0.96), h_pad=2.0)
+    fig.text(0.5, 0.012, _rank_contract_note(data), ha="center", fontsize=8.5, color=CHARCOAL)
+    fig.tight_layout(rect=(0, 0.045, 1, 0.96), h_pad=2.0)
     _save(fig, output / "predictability_factors_benchmark_rank1")
     plt.close(fig)
 
@@ -124,12 +135,12 @@ def model_main(data, output: Path):
         patch.set_facecolor(color); patch.set_alpha(0.58)
     test = tests["is_slide_model"]
     ax.text(
-        0.03, 0.97, _stat_annotation(test), transform=ax.transAxes,
-        ha="left", va="top", fontsize=9, linespacing=1.15,
+        0.97, 0.97, _stat_annotation(test), transform=ax.transAxes,
+        ha="right", va="top", fontsize=9, linespacing=1.15,
         zorder=10,
-        # The first Tile outlier sits directly behind this label.  A generous,
-        # opaque pad prevents its circular edge from reading as punctuation.
-        bbox={"boxstyle": "round,pad=0.7", "fc": "white", "ec": "none", "alpha": 1.0},
+        # The Tile outlier stack sits under the upper-left label position;
+        # right alignment keeps the statistic clear of those circular edges.
+        bbox={"boxstyle": "round,pad=0.35", "fc": "white", "ec": "none", "alpha": 1.0},
     )
     ax.set_ylabel("MedAE (normalized points)")
     ax.set_title("B  Model type", loc="left", fontweight="bold")
@@ -138,7 +149,8 @@ def model_main(data, output: Path):
     _scatter(axes[1, 1], rows, "rank2_r2", "D  Low-rank fit", "Rank-2 reconstruction $R^2$", VIOLET, tests["rank2_r2"])
     _style(axes)
     fig.suptitle("Model-side pathology prediction-error factors", fontsize=15, fontweight="bold")
-    fig.tight_layout(rect=(0, 0, 1, 0.96), h_pad=2.0)
+    fig.text(0.5, 0.012, _rank_contract_note(data), ha="center", fontsize=8.5, color=CHARCOAL)
+    fig.tight_layout(rect=(0, 0.045, 1, 0.96), h_pad=2.0)
     _save(fig, output / "predictability_factors_model_rank1")
     plt.close(fig)
 

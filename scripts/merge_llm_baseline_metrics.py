@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import gzip
 import json
 import sys
 from pathlib import Path
@@ -17,14 +18,17 @@ from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E
 
 
 def _read_jsonl(path: Path) -> list[dict]:
-    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    if path.is_dir():
+        return [row for shard in sorted(path.glob("*.jsonl.gz")) for row in _read_jsonl(shard)]
+    text = gzip.decompress(path.read_bytes()).decode("utf-8") if path.suffix == ".gz" else path.read_text(encoding="utf-8")
+    return [json.loads(line) for line in text.splitlines() if line.strip()]
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scores", type=Path, default=ROOT / "data/scores.csv")
     parser.add_argument("--config", type=Path, default=ROOT / "experiments/llm_baseline/config.json")
-    parser.add_argument("--requests", type=Path, default=ROOT / "experiments/llm_baseline/requests.jsonl")
+    parser.add_argument("--requests", type=Path, default=ROOT / "experiments/llm_baseline/requests")
     parser.add_argument("--responses", nargs="+", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=ROOT / "experiments/llm_baseline/merged_metrics.json")
     return parser.parse_args()
@@ -40,7 +44,9 @@ def main() -> None:
     ids = [row["request_id"] for row in responses]
     if len(ids) != len(set(ids)):
         raise ValueError("duplicate request_id across response shards")
-    result = evaluate_cached_responses(requests, responses, matrix, config)
+    result = evaluate_cached_responses(
+        requests, responses, matrix, config, require_complete=True, require_real=True
+    )
     result["response_shards"] = [str(path.resolve().relative_to(ROOT.resolve())) for path in args.responses]
     result["publication_policy"] = (
         "Eligible for headline comparison only when all used responses declare a validated real backend kind. "

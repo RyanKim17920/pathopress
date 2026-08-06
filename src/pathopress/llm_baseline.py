@@ -16,14 +16,15 @@ from typing import Any, Iterable, Sequence
 import numpy as np
 
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 CONDITIONS = (
-    "matrix_named",
-    "matrix_blind",
+    "zero_shot_named",
+    "zero_shot_blind",
     "five_shot_named",
     "five_shot_blind",
 )
 REAL_BACKEND_KINDS = {"openai_compatible", "anthropic_compatible", "local_model"}
+EXECUTION_METADATA_KEYS = {"model_version", "settings", "receipt"}
 
 
 def canonical_json(value: Any) -> str:
@@ -46,12 +47,21 @@ def make_config(
     min_shared: int = 5,
     max_target_known: int = 12,
     max_peer_shared: int = 4,
+    zero_shot_model_batch_size: int = 10,
+    five_shot_named_cell_batch_size: int = 64,
+    five_shot_blind_cell_batch_size: int = 16,
 ) -> dict[str, Any]:
     config = {
         "schema_version": SCHEMA_VERSION,
         "protocol": "pathopress_llm_baseline_s10_f3_bs42",
+        "upstream": {
+            "repository": "https://github.com/microsoft/benchpress",
+            "commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
+            "matrix_source": "experiments/sec4_building_benchpress/llm_completer/shared.py",
+            "five_shot_source": "experiments/sec4_building_benchpress/llm_completer/five_shot_predictor/run.py",
+        },
         "upstream_semantics": {
-            "matrix": "sparse score matrix; named/informed versus anonymized/blind",
+            "zero_shot": "full sparse score matrix; named/informed versus anonymized/blind; target models batched",
             "five_shot": "five highest-Pearson peers with target score observed and at least five shared visible scores",
         },
         "pathology_adaptation": {
@@ -70,6 +80,11 @@ def make_config(
         "min_shared": int(min_shared),
         "max_target_known": int(max_target_known),
         "max_peer_shared": int(max_peer_shared),
+        "batch_sizes": {
+            "zero_shot_models": int(zero_shot_model_batch_size),
+            "five_shot_named_cells": int(five_shot_named_cell_batch_size),
+            "five_shot_blind_cells": int(five_shot_blind_cell_batch_size),
+        },
         "conditions": list(CONDITIONS),
     }
     config["config_sha256"] = object_sha256(config)
@@ -86,6 +101,14 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ValueError("LLM baseline conditions do not match the pinned condition set")
     if config.get("n_shots") != 5 or config.get("min_shared") != 5:
         raise ValueError("five-shot peer semantics drifted from the pinned protocol")
+    if config.get("max_target_known") != 12 or config.get("max_peer_shared") != 4:
+        raise ValueError("five-shot prompt caps drifted from the pinned upstream protocol")
+    if config.get("batch_sizes") != {
+        "zero_shot_models": 10,
+        "five_shot_named_cells": 64,
+        "five_shot_blind_cells": 16,
+    }:
+        raise ValueError("LLM baseline batch sizes drifted from the pinned upstream protocol")
 
 
 def format_matrix_csv(
@@ -135,12 +158,11 @@ def build_matrix_messages(
     if blind:
         definitions = "Model and evaluation identities and metadata are anonymized."
     else:
-        target_evaluations = sorted({evaluations[j] for _, j in cells})
-        definitions = "Target evaluation definitions:\n" + "\n".join(
+        definitions = "Evaluation definitions:\n" + "\n".join(
             f"- {evaluation}: family={task_metadata[evaluation].get('task_family', 'unknown')}; "
             f"sample_unit={task_metadata[evaluation].get('sample_unit', 'unknown')}; "
             f"metric={task_metadata[evaluation].get('metric', 'unknown')}"
-            for evaluation in target_evaluations
+            for evaluation in evaluations
         )
     system = (
         "You predict missing normalized pathology foundation-model evaluation scores. "
@@ -244,18 +266,28 @@ def render_five_shot_messages(
     *,
     blind: bool,
 ) -> list[dict[str, str]]:
+    batch_labels = None
+    if blind:
+        used_indices: list[int] = []
+        for query in queries:
+            used_indices.extend([query["evaluation_index"], *query["target_known_indices"]])
+            for example in query["examples"]:
+                used_indices.extend(example["shared_indices"])
+        unique_indices = list(dict.fromkeys(used_indices))
+        batch_labels = {
+            value: f"Benchmark {chr(ord('A') + offset) if offset < 26 else offset + 1}"
+            for offset, value in enumerate(unique_indices)
+        }
     lines = [
-        "Estimate normalized pathology benchmark scores from five nearest peer-model examples.",
-        "Return only JSON mapping each query_id to a 0-100 numeric score; do not explain.",
+        "You are estimating pathology benchmark results before running expensive evaluations.",
+        "Each query gives compact known scores for a target model and five nearest peer-model examples.",
+        "Make a quick numerical estimate from the nearest peers; do not explain or show calculations.",
+        "Return ONLY valid JSON mapping each query_id to a 0-100 numeric score, e.g. {\"q0\": 72.5}.",
     ]
     for query in queries:
         i, j = query["model_index"], query["evaluation_index"]
-        used = [j, *query["target_known_indices"]]
-        for example in query["examples"]:
-            used.extend(example["shared_indices"])
-        unique = list(dict.fromkeys(used))
-        labels = {value: f"Benchmark {offset + 1}" for offset, value in enumerate(unique)} if blind else None
-        target_model = f"Target {query['query_id']}" if blind else models[i]
+        labels = batch_labels
+        target_model = f"Target model {query['query_id']}" if blind else models[i]
         target_evaluation = labels[j] if labels is not None else evaluations[j]
         if not blind:
             metadata = task_metadata[evaluations[j]]
@@ -277,7 +309,7 @@ def render_five_shot_messages(
             lines.append("- No eligible peers.")
         for number, example in enumerate(query["examples"], 1):
             peer = example["peer_index"]
-            peer_name = f"Peer {query['query_id']}-{number}" if blind else models[peer]
+            peer_name = f"Peer model {query['query_id']}-{number}" if blind else models[peer]
             lines.append(
                 f"- {peer_name}; shared={_score_list(train, peer, example['shared_indices'], evaluations, labels)}; "
                 f"{target_evaluation}={train[peer, j]:.3f}"
@@ -303,7 +335,7 @@ def build_request(
     if condition not in CONDITIONS:
         raise ValueError(f"unknown LLM baseline condition: {condition}")
     blind = condition.endswith("blind")
-    if condition.startswith("matrix"):
+    if condition.startswith("zero_shot"):
         messages = build_matrix_messages(train, cells, models, evaluations, task_metadata, blind=blind)
         query_meta: list[dict[str, Any]] = []
     else:
@@ -351,31 +383,171 @@ def validate_request(request: dict[str, Any], config: dict[str, Any]) -> None:
         raise ValueError("request has an unknown condition")
 
 
-def parse_prediction_payload(text: str, query_ids: set[str]) -> dict[str, float]:
+def parse_prediction_payload(
+    text: str, query_ids: set[str], *, strict: bool = False
+) -> dict[str, float]:
     stripped = text.strip()
     if stripped.startswith("```"):
         stripped = stripped.removeprefix("```json").removeprefix("```").removesuffix("```").strip()
     try:
         data = json.loads(stripped)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as error:
+        if strict:
+            raise ValueError("response_text is not valid JSON") from error
         return {}
     if isinstance(data, dict) and isinstance(data.get("predictions"), dict):
         data = data["predictions"]
     if not isinstance(data, dict):
+        if strict:
+            raise ValueError("response payload must be a JSON object")
         return {}
+    if strict and set(data) != query_ids:
+        missing = sorted(query_ids - set(data))
+        extra = sorted(set(data) - query_ids)
+        raise ValueError(f"response query set mismatch; missing={missing}; extra={extra}")
     parsed = {}
     for key, value in data.items():
         if key not in query_ids:
+            if strict:
+                raise ValueError(f"unexpected query id: {key}")
             continue
         if isinstance(value, dict):
             value = value.get("score", value.get("prediction"))
         try:
             numeric = float(value)
-        except (TypeError, ValueError):
+        except (TypeError, ValueError) as error:
+            if strict:
+                raise ValueError(f"non-numeric prediction for {key}") from error
             continue
-        if np.isfinite(numeric):
-            parsed[key] = float(np.clip(numeric, 0.0, 100.0))
+        if not np.isfinite(numeric):
+            if strict:
+                raise ValueError(f"non-finite prediction for {key}")
+            continue
+        if strict and not 0.0 <= numeric <= 100.0:
+            raise ValueError(f"prediction outside normalized 0-100 range for {key}")
+        parsed[key] = float(numeric if strict else np.clip(numeric, 0.0, 100.0))
     return parsed
+
+
+def seal_external_response(
+    raw: dict[str, Any], request: dict[str, Any], config: dict[str, Any]
+) -> dict[str, Any]:
+    """Strictly validate and hash one provider-neutral external response row."""
+
+    validate_request(request, config)
+    required = {"request_id", "backend_kind", "provider", "model", "response_text"}
+    missing = sorted(required - set(raw))
+    if missing:
+        raise ValueError(f"external response is missing required fields: {missing}")
+    extra = sorted(set(raw) - required - {"usage", "cost", "execution_metadata"})
+    if extra:
+        raise ValueError(f"external response has unsupported fields: {extra}")
+    if raw["request_id"] != request["request_id"]:
+        raise ValueError("external response request_id mismatch")
+    if raw["backend_kind"] not in REAL_BACKEND_KINDS:
+        raise ValueError("external response must declare a supported real backend kind")
+    if not isinstance(raw["provider"], str) or not raw["provider"].strip():
+        raise ValueError("external response provider must be non-empty")
+    if not isinstance(raw["model"], str) or not raw["model"].strip():
+        raise ValueError("external response model must be non-empty")
+    execution_metadata = raw.get("execution_metadata", {})
+    if not isinstance(execution_metadata, dict):
+        raise ValueError("external response execution_metadata must be an object")
+    metadata_extra = sorted(set(execution_metadata) - EXECUTION_METADATA_KEYS)
+    if metadata_extra:
+        raise ValueError(f"unsupported execution_metadata fields: {metadata_extra}")
+    version = execution_metadata.get("model_version")
+    if version is not None and (not isinstance(version, str) or not version.strip()):
+        raise ValueError("execution_metadata model_version must be a non-empty string")
+    settings = execution_metadata.get("settings")
+    if settings is not None and not isinstance(settings, dict):
+        raise ValueError("execution_metadata settings must be an object")
+    if "receipt" in execution_metadata and execution_metadata["receipt"] is None:
+        raise ValueError("execution_metadata receipt must not be null when supplied")
+    metadata_hashes = {
+        key + "_sha256": object_sha256(value.strip() if key == "model_version" else value)
+        for key, value in execution_metadata.items()
+    }
+    query_ids = {target["query_id"] for target in request["targets"]}
+    parsed = parse_prediction_payload(raw["response_text"], query_ids, strict=True)
+    usage = raw.get("usage", {"input_tokens": None, "output_tokens": None, "status": "not_reported"})
+    if not isinstance(usage, dict):
+        raise ValueError("external response usage must be an object")
+    cost = raw.get("cost", {"status": "not_reported", "currency": None, "amount": None})
+    if not isinstance(cost, dict):
+        raise ValueError("external response cost must be an object")
+    if cost.get("amount") is not None and (
+        not isinstance(cost.get("amount"), (int, float)) or cost["amount"] < 0
+    ):
+        raise ValueError("external response cost amount must be nonnegative when reported")
+    response = {
+        "schema_version": SCHEMA_VERSION,
+        "request_id": request["request_id"],
+        "request_sha256": request["request_sha256"],
+        "config_sha256": config["config_sha256"],
+        "backend_kind": raw["backend_kind"],
+        "provider": raw["provider"].strip(),
+        "model": raw["model"].strip(),
+        "status": "complete_validated_real",
+        "headline_eligible": True,
+        "response_text": raw["response_text"],
+        "parsed_predictions": parsed,
+        "usage": usage,
+        "cost": cost,
+        "execution_metadata_hashes": metadata_hashes,
+    }
+    response["response_sha256"] = object_sha256(response)
+    return response
+
+
+def summarize_real_execution(responses: Sequence[dict[str, Any]]) -> dict[str, Any]:
+    """Require one fixed genuine backend/provider/model and summarize sealed evidence."""
+
+    if not responses:
+        raise ValueError("real response pack is empty")
+    identities = {
+        (row.get("backend_kind"), row.get("provider"), row.get("model")) for row in responses
+    }
+    if len(identities) != 1:
+        raise ValueError(
+            "real response pack must use exactly one backend_kind/provider/model identity"
+        )
+    backend_kind, provider, model = next(iter(identities))
+    identity = {"backend_kind": backend_kind, "provider": provider, "model": model}
+    metadata = [row.get("execution_metadata_hashes", {}) for row in responses]
+    allowed = {"model_version_sha256", "settings_sha256", "receipt_sha256"}
+    for record in metadata:
+        if not isinstance(record, dict) or set(record) - allowed:
+            raise ValueError("sealed response has invalid execution metadata hashes")
+        if any(
+            not isinstance(value, str)
+            or len(value) != 64
+            or any(character not in "0123456789abcdef" for character in value)
+            for value in record.values()
+        ):
+            raise ValueError("sealed response has malformed execution metadata hash")
+    fixed_evidence: dict[str, Any] = {}
+    for key in ("model_version_sha256", "settings_sha256"):
+        values = {record[key] for record in metadata if key in record}
+        if len(values) > 1:
+            raise ValueError(f"real response pack has inconsistent {key}")
+        fixed_evidence[key] = next(iter(values)) if values else None
+        fixed_evidence[key.removesuffix("_sha256") + "_reported_responses"] = sum(
+            key in record for record in metadata
+        )
+    receipt_records = sorted([
+        {"request_id": row["request_id"], "receipt_sha256": record["receipt_sha256"]}
+        for row, record in zip(responses, metadata)
+        if "receipt_sha256" in record
+    ], key=lambda row: row["request_id"])
+    return {
+        "fixed_identity": identity,
+        "fixed_identity_sha256": object_sha256(identity),
+        "model_sha256": object_sha256(model),
+        **fixed_evidence,
+        "receipt_reported_responses": len(receipt_records),
+        "receipt_pack_sha256": object_sha256(receipt_records) if receipt_records else None,
+    }
 
 
 def deterministic_mock_response(
@@ -415,7 +587,7 @@ def deterministic_mock_response(
 
 
 def validate_response(
-    response: dict[str, Any], request: dict[str, Any], config: dict[str, Any]
+    response: dict[str, Any], request: dict[str, Any], config: dict[str, Any], *, require_real: bool = False
 ) -> None:
     validate_request(request, config)
     supplied = response.get("response_sha256")
@@ -428,6 +600,15 @@ def validate_response(
             raise ValueError(f"response {key} mismatch")
     if response.get("backend_kind") == "deterministic_mock" and response.get("headline_eligible") is not False:
         raise ValueError("mock responses must never be headline eligible")
+    if require_real:
+        if response.get("backend_kind") not in REAL_BACKEND_KINDS:
+            raise ValueError("real merge received a non-real backend kind")
+        if response.get("headline_eligible") is not True or response.get("status") != "complete_validated_real":
+            raise ValueError("real response was not sealed as a complete validated response")
+        expected = {target["query_id"] for target in request["targets"]}
+        parsed = parse_prediction_payload(response.get("response_text", ""), expected, strict=True)
+        if response.get("parsed_predictions") != parsed:
+            raise ValueError("sealed parsed_predictions do not match response_text")
 
 
 def evaluate_cached_responses(
@@ -435,20 +616,33 @@ def evaluate_cached_responses(
     responses: Sequence[dict[str, Any]],
     matrix: np.ndarray,
     config: dict[str, Any],
+    *,
+    require_complete: bool = False,
+    require_real: bool = False,
 ) -> dict[str, Any]:
     by_request = {row["request_id"]: row for row in responses}
     if len(by_request) != len(responses):
         raise ValueError("duplicate cached response request_id")
+    request_ids = {row["request_id"] for row in requests}
+    unexpected = sorted(set(by_request) - request_ids)
+    missing = sorted(request_ids - set(by_request))
+    if unexpected:
+        raise ValueError(f"responses contain unknown request_ids: {unexpected[:5]}")
+    if require_complete and missing:
+        raise ValueError(f"response pack is incomplete: {len(missing)} request_ids missing")
+    execution = summarize_real_execution(responses) if require_real else None
     raw = []
     backend_kinds = set()
     for request in requests:
         response = by_request.get(request["request_id"])
         if response is None:
             continue
-        validate_response(response, request, config)
+        validate_response(response, request, config, require_real=require_real)
         backend_kinds.add(response["backend_kind"])
         parsed = parse_prediction_payload(
-            response["response_text"], {target["query_id"] for target in request["targets"]}
+            response["response_text"],
+            {target["query_id"] for target in request["targets"]},
+            strict=require_complete,
         )
         for target in request["targets"]:
             qid, i, j = target["query_id"], target["model_index"], target["evaluation_index"]
@@ -466,10 +660,13 @@ def evaluate_cached_responses(
                     "actual": float(matrix[i, j]),
                     "predicted": float(parsed[qid]),
                     "backend_kind": response["backend_kind"],
+                    "provider": response.get("provider"),
+                    "provider_model": response.get("model"),
                     "headline_eligible": bool(response["headline_eligible"]),
                 }
             )
     summaries = []
+    fold_metrics = []
     for condition in CONDITIONS:
         rows = [row for row in raw if row["condition"] == condition]
         errors = np.asarray([abs(row["predicted"] - row["actual"]) for row in rows], dtype=float)
@@ -478,25 +675,65 @@ def evaluate_cached_responses(
             dtype=float,
         )
         requested = sum(len(request["targets"]) for request in requests if request["condition"] == condition)
+        condition_folds = []
+        for fold_id in sorted({row["fold_id"] for row in rows}):
+            fold_rows = [row for row in rows if row["fold_id"] == fold_id]
+            fold_errors = np.asarray(
+                [abs(row["predicted"] - row["actual"]) for row in fold_rows], dtype=float
+            )
+            fold_ape = np.asarray(
+                [
+                    100 * abs(row["predicted"] - row["actual"]) / abs(row["actual"])
+                    for row in fold_rows if abs(row["actual"]) > 1e-12
+                ],
+                dtype=float,
+            )
+            record = {
+                "condition": condition,
+                "fold_id": int(fold_id),
+                "seed": int(fold_rows[0]["seed"]),
+                "fold": int(fold_rows[0]["fold"]),
+                "n": len(fold_rows),
+                "medae": float(np.median(fold_errors)) if len(fold_errors) else None,
+                "medape": float(np.median(fold_ape)) if len(fold_ape) else None,
+            }
+            condition_folds.append(record)
+            fold_metrics.append(record)
+        medae_folds = [row["medae"] for row in condition_folds if row["medae"] is not None]
+        medape_folds = [row["medape"] for row in condition_folds if row["medape"] is not None]
         summaries.append(
             {
                 "condition": condition,
                 "n": len(rows),
                 "n_requested": requested,
                 "coverage": len(rows) / requested if requested else 0.0,
-                "medae": float(np.median(errors)) if len(errors) else None,
-                "medape": float(np.median(ape)) if len(ape) else None,
+                "n_folds": len(condition_folds),
+                "medae": float(np.median(medae_folds)) if medae_folds else None,
+                "medape": float(np.median(medape_folds)) if medape_folds else None,
+                "pooled_medae": float(np.median(errors)) if len(errors) else None,
+                "pooled_medape": float(np.median(ape)) if len(ape) else None,
             }
         )
-    headline = bool(backend_kinds) and backend_kinds.issubset(REAL_BACKEND_KINDS) and all(
+    complete = len(responses) == len(requests) and all(
+        row["coverage"] == 1.0 for row in summaries if row["n_requested"] > 0
+    )
+    headline = complete and bool(backend_kinds) and backend_kinds.issubset(REAL_BACKEND_KINDS) and all(
         row["headline_eligible"] for row in raw
     )
-    return {
+    result = {
         "schema_version": SCHEMA_VERSION,
         "config_sha256": config["config_sha256"],
         "backend_kinds": sorted(backend_kinds),
+        "request_count": len(requests),
+        "response_count": len(responses),
+        "missing_response_count": len(missing),
+        "complete": complete,
         "headline_eligible": headline,
         "result_status": "real_cached_results" if headline else ("mock_contract_validation_only" if raw else "unrun"),
         "summary": summaries,
+        "fold_metrics": fold_metrics,
         "raw_predictions": raw,
     }
+    if execution is not None:
+        result["real_execution"] = execution
+    return result

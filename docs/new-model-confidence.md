@@ -13,7 +13,7 @@ the rest. It repeats this at `k = 1, 3, 5, 10` over three deterministic probe
 seeds. It also includes pinned temporal-release simulations, where each target
 was predicted using only models released before its cutoff.
 
-The raw audit contains 30,182 hidden predictions from 59 target models:
+The raw audit contains 30,992 hidden predictions from 59 target models:
 20,412 leave-one-model-out sparse-probe predictions and 9,770 temporal-release
 predictions. Risk combines a model-balanced evaluation residual with a
 suite/same-suite-probe context. Evaluation risk requires at least five distinct
@@ -38,8 +38,9 @@ contexts are model-balanced so densely reported source models do not dominate.
 
 ## Empirical results and interpretation
 
-At a nominal 90% level, nested held-out empirical coverage is 94.77% overall
-with a 14.32-point median width. Coverage is 96.74% at `k=1`, 93.06% at `k=3`,
+At a nominal 90% level, nested held-out empirical coverage is 94.98% overall
+with a 15.25-point median width. Coverage is 96.30% at `k=1`, 93.62% at `k=3`,
+94.81% at `k=5`, and 94.49% at `k=10`.
 94.22% at `k=5`, and 94.12% at `k=10`. The leave-one-model-out population
 covers 94.02%; the temporal population covers 96.33%. Risk ordering is useful:
 retaining lower-risk predictions progressively reduces held-out MedAE.

@@ -37,6 +37,12 @@ def main() -> int:
         default=ROOT / "experiments" / "deployment_confidence_rank1.json",
     )
     parser.add_argument(
+        "--confidence-calibration",
+        type=Path,
+        default=ROOT / "experiments" / "confidence_calibration_rank1.json",
+        help="Full cross-fitted hybrid confidence/trust artifact",
+    )
+    parser.add_argument(
         "--new-model-confidence",
         type=Path,
         default=ROOT / "experiments" / "new_model_confidence_rank1.json",
@@ -50,7 +56,8 @@ def main() -> int:
     args = parser.parse_args()
 
     confidence = build_deployment_confidence_artifact(
-        args.confidence_cells, args.scores
+        args.confidence_cells, args.scores,
+        confidence_calibration_path=args.confidence_calibration,
     )
     args.confidence_output.parent.mkdir(parents=True, exist_ok=True)
     args.confidence_output.write_text(

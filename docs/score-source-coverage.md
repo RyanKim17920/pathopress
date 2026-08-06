@@ -1,6 +1,6 @@
 # Numerical score-source coverage
 
-This note defines which EVA and Patho-Bench numbers enter the registry, which
+This note defines which EVA, Patho-Bench, and PathoROB numbers enter the registry, which
 reported numbers remain excluded or quarantined, and what cannot safely be
 inferred from either category. A score being present means that it was parsed
 from a pinned first-party report and passed structural checks. It does **not**
@@ -18,10 +18,15 @@ completion target.
 | EXAONE Path 2.5, Patho-Bench Table 4 | 560 = 80 tasks × 7 models | 560 protocol-specific cells | Ingested |
 | THREADS public Patho-Bench-compatible results | 336 = 42 tasks × 8 frozen representation rows | 336 protocol-specific cells | Ingested |
 | THREADS internal results | 96 = 12 tasks × 8 frozen representation rows | 0 | Not extracted into the snapshot and not eligible for the public registry |
+| PathoROB Nature Source Data | 100 = 20 models × (2 APD + 3 clustering protocols) | 100 raw registry cells; 60 clustering cells analysis-eligible | Ingested with endpoint-specific eligibility |
+| PathoROB pinned repository examples | 22 = two models across per-dataset/aggregate APD and clustering | 0 | Extracted to the audit snapshot; quarantined as version-different examples |
 
-After the three ingested additions, `data/scores.csv` contains 1,976 score cells:
+After the ingested additions, `data/scores.csv` contains 2,076 score cells:
 265 EVA, 896 Patho-Bench (560 EXAONE plus 336 THREADS), 234 HEST, 512 THUNDER,
-and 69 PathoROB. The generated counts and source hashes are recorded in
+and 169 PathoROB. Of these, 2,027 have an analysis-eligible primary-source
+normalization, 40 canonical APD cells are raw-registry-only, and nine PathoROB
+RI cells are external-publication reports. The generated counts and source
+hashes are recorded in
 [`data/provenance.json`](../data/provenance.json).
 
 ## EVA: 265 selected numerical cells
@@ -187,6 +192,54 @@ pooling (`chief-patch-mean`) distinct from the CHIEF slide encoder
 likewise have versioned protocol IDs; they do not inherit a current generic
 Patho-Bench protocol merely because the dataset and target match.
 
+## PathoROB: complete APD and clustering paper tables recovered
+
+The published Nature Communications article supplies a 20.2 MB
+[Source Data workbook](https://pmc.ncbi.nlm.nih.gov/articles/instance/13260997/bin/41467_2026_73923_MOESM4_ESM.xlsx)
+through PMC. The workbook is pinned by SHA-256
+`07456f3ffc5270ea1d8d48a8f82c08a5be396c88f99cc0227968dad721943047`.
+The reproducible standard-library extractor is
+[`scripts/extract_pathorob_scores.py`](../scripts/extract_pathorob_scores.py),
+and its 122-row audit snapshot is
+[`source_data/pathorob_nature2026_and_repo_examples.csv`](../source_data/pathorob_nature2026_and_repo_examples.csv).
+
+Two complete published score blocks were previously missing:
+
+- `Fig-3d-correlation_apds_x_ri` provides 20 models by two distinct aggregate
+  endpoints, APD-ID and APD-OOD: 40 canonical means. APD is the signed relative
+  accuracy change from the balanced training split, averaged across the
+  nonbaseline correlation splits, 20 repetitions, and Camelyon, TCGA 4×4, and
+  Tolkach ESCA. Zero means no performance drop; the paper states that
+  increasingly negative values indicate worse drops and describes
+  higher/closer-to-zero values as better. The workbook's 60 corrected
+  observations per model/endpoint reproduce every summary mean and the reported
+  95% confidence interval rule.
+- `Fig-6b-clustering` provides 20 models by three dataset protocols: 60
+  canonical means and standard deviations over 50 random initializations. The
+  score is `ARI(biological labels) - ARI(medical-center labels)` and the paper
+  declares an approximate `[-1,1]` domain with higher values better. These cells
+  therefore use the auditable normalization `(score + 1) × 50`.
+
+The APD means are fully retained in `data/scores.csv`, with their exact signed
+percent values and explicit APD-ID/APD-OOD protocol rows. They are not admitted
+to the factor matrix: neither the paper nor project policy defines a bounded
+common-scale normalization, so their `normalized_score` is intentionally blank
+and their audit status is `parsed_primary_source_analysis_ineligible`. No
+clipping, empirical rescaling, or arbitrary logistic scale is introduced.
+
+The pinned PathoROB repository contains 22 additional example results for only
+UNI2-h and Phikon-v2: 12 per-dataset APD values, four aggregate APD values, and
+six clustering values. Several differ slightly from the final paper workbook.
+They remain source- and version-specific rows in the audit snapshot under
+`pathorob.repoexample2026.*`; they are not merged with the final paper values or
+inserted into `data/scores.csv`.
+
+The resulting raw registry is 2,076 cells. The accepted factor matrix is
+59 models × 168 protocols with 2,027 observed cells: only the three new
+clustering protocols add matrix columns, while the two APD protocols remain
+raw-registry-only. This inclusion decision is made before any downstream
+completion experiment is regenerated.
+
 ## Deduplication and validation boundaries
 
 Deduplication happens at explicit levels:
@@ -199,8 +252,9 @@ Deduplication happens at explicit levels:
   evaluation protocols;
 - aliases may identify the same base model, but a patch encoder plus mean
   pooling is not collapsed into a slide encoder with the same family name;
-- averages, rankings, and other derived summaries are excluded rather than
-  treated as additional observations.
+- convenience leaderboard averages, rankings, and other derived summaries are
+  excluded unless the paper explicitly defines the aggregate as a primary
+  endpoint, as it does for PathoROB APD-ID/APD-OOD.
 
 Every ingested score is currently `machine_parsed_single_source`. Structural
 validation checks source hashes, table shape, exact task and model sets,

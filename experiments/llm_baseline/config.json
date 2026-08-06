@@ -1,8 +1,14 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "protocol": "pathopress_llm_baseline_s10_f3_bs42",
+  "upstream": {
+    "repository": "https://github.com/microsoft/benchpress",
+    "commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
+    "matrix_source": "experiments/sec4_building_benchpress/llm_completer/shared.py",
+    "five_shot_source": "experiments/sec4_building_benchpress/llm_completer/five_shot_predictor/run.py"
+  },
   "upstream_semantics": {
-    "matrix": "sparse score matrix; named/informed versus anonymized/blind",
+    "zero_shot": "full sparse score matrix; named/informed versus anonymized/blind; target models batched",
     "five_shot": "five highest-Pearson peers with target score observed and at least five shared visible scores"
   },
   "pathology_adaptation": {
@@ -10,11 +16,11 @@
     "selected_completion_rank": 1,
     "reasoning_flag": "omitted because pathology encoders do not have the upstream LLM reasoning-mode attribute"
   },
-  "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9",
-  "folds_sha256": "6363c9426ca55397548a8e4234bc22d4a22733758d0e06221140464acd0618e5",
+  "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
+  "folds_sha256": "f6cb9f7d68d7b3c7d3b4ca1aeacce935a19be2bf4e5e4b4e38f79a8baf690713",
   "matrix_shape": [
     59,
-    165
+    168
   ],
   "models": [
     "atlas",
@@ -225,6 +231,9 @@
     "pathobench.threads2025.sr386_.os",
     "pathobench.threads2025.sr386_.ras-mutant-binary",
     "pathorob.camelyon.robustness_index",
+    "pathorob.nature2026.camelyon.clustering_score",
+    "pathorob.nature2026.tcga_4x4.clustering_score",
+    "pathorob.nature2026.tolkach_esca.clustering_score",
     "pathorob.tcga_2x2.robustness_index",
     "pathorob.tolkach_esca.robustness_index",
     "thunder.bach.linear_probing",
@@ -245,18 +254,52 @@
     "thunder.wilds.linear_probing"
   ],
   "fold_ids": [
-    0
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29
   ],
-  "cell_limit": 8,
+  "cell_limit": null,
   "n_shots": 5,
   "min_shared": 5,
   "max_target_known": 12,
   "max_peer_shared": 4,
+  "batch_sizes": {
+    "zero_shot_models": 10,
+    "five_shot_named_cells": 64,
+    "five_shot_blind_cells": 16
+  },
   "conditions": [
-    "matrix_named",
-    "matrix_blind",
+    "zero_shot_named",
+    "zero_shot_blind",
     "five_shot_named",
     "five_shot_blind"
   ],
-  "config_sha256": "316f8082878aa4067d955d4ff0375c67de7190e2ea16e03bdc9a3c2e7ea26f17"
+  "config_sha256": "ac7a7cb84dfe961fb50996ea6ae641b1829423aa8a02881b707688537d5e3e4d"
 }

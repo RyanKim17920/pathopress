@@ -18,9 +18,9 @@
     "compute_runtime"
   ],
   "excluded_cost_reason": "metadata_incomplete; no numeric values imputed",
-  "tasks_sha256": "1041706bb3d8f83e06e9acefb7c002193f1938dce90c69b2be05f005a2c63289",
-  "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9",
-  "n_retained_evaluations": 165,
+  "tasks_sha256": "15a7704c29bd65b6737988129f020c08fcd42223ad422116a03368ebaa1c6ee6",
+  "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
+  "n_retained_evaluations": 168,
   "n_allowlisted": 4,
   "evaluation_ids": [
     "thunder.bach.linear_probing",

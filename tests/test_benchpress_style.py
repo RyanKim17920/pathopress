@@ -35,6 +35,14 @@ class BenchPressStyleFoldTests(unittest.TestCase):
         second = MODULE.make_folds(matrix, n_folds=3, seed=7)
         self.assertEqual([cells for _, cells in first], [cells for _, cells in second])
 
+    def test_cv_metrics_exclude_zero_and_pinned_epsilon_from_medape(self) -> None:
+        result = MODULE.metrics(
+            [0.0, 1e-6, 10.0],
+            [100.0, 100.0, 11.0],
+        )
+        self.assertEqual(result["n"], 3)
+        self.assertEqual(result["medape"], 10.0)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -14,9 +14,9 @@ new-institution shifts.
 
 PathoPress currently provides:
 
-- a five-suite registry with 287 protocols over 145 task identities;
-- 1,976 reported score rows, of which 1,967 form a fixed 59 × 165 research
-  matrix at 20.2054% density;
+- a five-suite registry with 292 protocols over 147 task identities;
+- 2,076 reported score rows, of which 2,027 form a fixed 59 × 168 research
+  matrix at 20.4500% density;
 - a hash-bound matrix and ten-seed, three-fold artifact;
 - direct numerical parity for the BenchPress point completer and core classical
   methods;
@@ -72,22 +72,25 @@ The machine-readable evidence is in [tasks.csv](../data/tasks.csv),
 [deduplication.csv](../data/deduplication.csv), and
 [provenance.json](../data/provenance.json). Score extraction and exclusions are
 documented in [score-source-coverage.md](score-source-coverage.md). The score
-pool contains Patho-Bench 896, EVA 265, HEST 234, THUNDER 512, and PathoROB 69
-rows. Nine `reported_external` rows are excluded from the fixed paper matrix.
+pool contains Patho-Bench 896, EVA 265, HEST 234, THUNDER 512, and PathoROB 169
+rows. Forty signed APD rows remain in the raw registry but are analysis-ineligible
+because the source defines no bounded common-scale mapping; nine
+`reported_external` rows are also excluded from the fixed paper matrix.
 
 ## Does the matrix support completion?
 
 Yes, retrospectively, with material heterogeneity.
 
-- Matched rank-1 bias ALS: 3.005264 MAE / 1.603026 MedAE versus column median
-  4.092133/2.477500 over 19,670 OOF predictions.
+- Matched rank-1 bias ALS: 3.222008 MAE / 1.647585 MedAE versus column median
+  4.275274/2.500000 over 20,270 OOF predictions.
 - A largest complete 32 × 16 block has stable rank 1.431; its first one/two
   components explain 69.88%/87.57% of variance.
-- All 165 retained evaluations have a neighbor sharing at least five models;
-  the median best absolute correlation is 0.918881.
-- Random-cell rank 1 is 2.834996/1.526795, but leave-one-suite-block-out rank 1
-  degrades to 5.612789/3.525174 and prefers rank 5 at 4.952972/3.055638.
-- Sparse-new-model rank 1 is 3.190380/1.817465 over 4,896 prediction instances.
+- All 168 retained evaluations have a neighbor sharing at least five models;
+  the median best absolute correlation is 0.916362.
+- Random-cell rank 1 is 3.050584/1.603529, but leave-one-suite-block-out rank 1
+  degrades to 5.688229/3.537207 and improves through tested rank 6 at
+  5.093822/3.175723.
+- Sparse-new-model rank 1 is 3.503746/1.894207 over 5,046 prediction instances.
 
 The result is useful structure, not one universal low-dimensional pathology
 ability. Suite-block missingness, author-selected evaluations, model-family
@@ -95,10 +98,10 @@ clustering, and native endpoint differences can all create apparent low rank.
 
 ## Does a small panel work?
 
-Retrospectively, yes. From a 1.900 all-known scorecard MedAE baseline, greedy
-rank-1 selection reaches 1.481124 with five probes and 1.196456 with ten.
-Strict hidden-only values are 1.612112 and 1.539134; isolated held-out-model
-values are 1.951271 and 1.879857.
+Retrospectively, yes. From a 1.935 all-known scorecard MedAE baseline, greedy
+rank-1 selection reaches 1.474879 with five probes and 1.270529 with ten.
+Strict hidden-only values are 1.637639 and 1.538607; isolated held-out-model
+values are 2.126261 and 2.142613.
 
 Those protocols answer different questions. The all-known curve is
 transductive and includes exact revealed cells. Held-out-model validation is
@@ -109,8 +112,10 @@ input/label pipeline rule, not a measured cost model. It matches BenchPress's
 candidate count while adapting the task identities to pathology. A defensible
 practical panel still needs runtime, GPU/memory, sample acquisition, staining,
 annotation, tissue, and licensing audits. Exact choose-five plans cover 53,130
-pre-error and 142,506 error-informed combinations, but are marked unrun after a
-measured smoke projected 3.92 and 10.51 single-host hours.
+pre-error and 142,506 error-informed combinations. Both searches are complete:
+their certified MedAE optima are 1.485944 and 1.427339, respectively. This does
+not turn the 25-task proxy into measured cost, and neither result is globally
+exhaustive over all 168 evaluations.
 
 ## What remains difficult
 
@@ -121,14 +126,15 @@ measured smoke projected 3.92 and 10.51 single-host hours.
 | Prospective validation | High | preregistered newer models and external institutions not used during selection |
 | Family/site leakage analysis | High | stronger canonical family, pretraining, cohort, and institution metadata |
 | Confidence for unseen rows | High | calibration designed around genuinely new models, with abstention |
-| Real LLM baselines | Low engineering, nonzero cost | provider execution for four named/blind conditions; current runner has no network client |
+| Real LLM baselines | Low engineering, nonzero unknown cost | execute the complete 1,990-request pack for four named/blind conditions; current runner has no network client |
 | Hosted release/maintenance | Moderate, ongoing | deployment, versioned snapshots, CI freshness, review/contribution workflow |
 
 The real LLM baseline is not a scientific blocker: upstream treats it as an
 experimental comparator, while the classical grid contains the core evidence.
-PathoPress has hash-bound request/response schemas, deterministic mock contract
-tests, and merge logic. [Real-run status](../experiments/llm_baseline/real_run_status.json)
-is explicitly `unrun`; mock errors are not headline eligible.
+PathoPress has hash-bound request/response schemas, deterministic compressed
+request shards, a strict complete-response importer, mock contract tests, and
+merge logic. [Real-run status](../experiments/llm_baseline/real_run_status.json)
+is explicitly `unrun`; cost is unknown and mock errors are not headline eligible.
 
 ## Release gates
 
@@ -156,8 +162,11 @@ PYTHONPATH=src python3 experiments/run_benchpress_style.py
 PYTHONPATH=src python3 experiments/run_structure_analysis.py
 PYTHONPATH=src python3 experiments/run_probe_compression.py
 PYTHONPATH=src python3 experiments/build_probe_pruning.py
-# See experiments/README.md for the independent run-shard loops.
-PYTHONPATH=src python3 experiments/run_probe_exhaustive.py merge --out-dir experiments/probe_exhaustive_runs/cheap25_medae_k5
+# Validate the completed hash-bound exact-search artifacts.
+PYTHONPATH=src python3 experiments/validate_probe_exhaustive_chunks.py
+PYTHONPATH=src python3 experiments/validate_probe_exhaustive_merged.py
+PYTHONPATH=src python3 experiments/validate_probe_exhaustive_top.py
+PYTHONPATH=src python3 experiments/build_probe_exhaustive_summary.py
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
 PYTHONPATH=src python3 experiments/run_temporal_deployment.py
 ```

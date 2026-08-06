@@ -165,7 +165,7 @@ def render_curves(payload: dict[str, object], output_base: Path) -> None:
     plt.close(fig)
 
 
-def render_informativeness(csv_path: Path, output_base: Path, top_n: int = 15) -> None:
+def build_informativeness_figure(csv_path: Path, top_n: int = 15):
     with csv_path.open(newline="", encoding="utf-8") as handle:
         rows = list(csv.DictReader(handle))[:top_n]
     rows.reverse()
@@ -174,17 +174,16 @@ def render_informativeness(csv_path: Path, output_base: Path, top_n: int = 15) -
     colors = [SUITE_COLORS.get(row["suite_id"], GRAY) for row in rows]
     coverages = [100.0 * float(row["model_coverage"]) for row in rows]
 
-    fig, ax = plt.subplots(figsize=(9.0, 6.5))
-    bars = ax.barh(names, improvements, color=colors, alpha=0.9)
-    for bar, coverage in zip(bars, coverages):
-        width = bar.get_width()
-        ax.text(
-            width + (0.025 if width >= 0 else -0.025),
-            bar.get_y() + bar.get_height() / 2,
-            f"{coverage:.0f}% coverage",
-            va="center", ha="left" if width >= 0 else "right",
-            fontsize=8, color=CHARCOAL,
-        )
+    y = np.arange(len(rows))
+    fig, (ax, coverage_ax) = plt.subplots(
+        1,
+        2,
+        figsize=(10.6, 7.8),
+        sharey=True,
+        gridspec_kw={"width_ratios": (4.7, 1.15), "wspace": 0.04},
+    )
+    ax.barh(y, improvements, color=colors, alpha=0.9)
+    ax.set_yticks(y, names)
     ax.axvline(0, color=CHARCOAL, lw=0.8)
     ax.set_xlabel("Reduction in all-known scorecard MedAE vs column-median baseline")
     ax.set_title(
@@ -192,12 +191,44 @@ def render_informativeness(csv_path: Path, output_base: Path, top_n: int = 15) -
         fontsize=14, fontweight="bold", color=CHARCOAL,
     )
     ax.grid(axis="x", color=GRID, alpha=0.75, lw=0.7)
+
+    coverage_ax.barh(y, coverages, color="#CFD8DC", alpha=0.95)
+    coverage_ax.set_xlim(0, 100)
+    coverage_ax.set_xlabel("Model coverage (%)", fontsize=9)
+    coverage_ax.set_xticks([0, 50, 100])
+    coverage_ax.tick_params(axis="y", left=False, labelleft=False)
+    coverage_ax.grid(axis="x", color=GRID, alpha=0.75, lw=0.7)
+    coverage_ax.set_axisbelow(True)
+    for row_y, coverage in zip(y, coverages):
+        coverage_ax.text(
+            min(coverage + 3.0, 97.0),
+            row_y,
+            f"{coverage:.0f}%",
+            va="center",
+            ha="left" if coverage <= 90 else "right",
+            fontsize=7.5,
+            color=CHARCOAL,
+        )
     legend_handles = [
         plt.Line2D([0], [0], color=color, lw=7, label=suite.upper())
         for suite, color in SUITE_COLORS.items()
     ]
-    ax.legend(handles=legend_handles, frameon=False, loc="lower right")
-    fig.tight_layout()
+    fig.legend(
+        handles=legend_handles,
+        frameon=False,
+        loc="lower center",
+        bbox_to_anchor=(0.62, 0.005),
+        ncol=len(legend_handles),
+        fontsize=8,
+        handlelength=1.5,
+        columnspacing=1.1,
+    )
+    fig.subplots_adjust(left=0.27, right=0.98, top=0.91, bottom=0.16)
+    return fig, ax, coverage_ax
+
+
+def render_informativeness(csv_path: Path, output_base: Path, top_n: int = 15) -> None:
+    fig, _, _ = build_informativeness_figure(csv_path, top_n=top_n)
     for suffix in ("png", "pdf"):
         path = output_base.with_suffix(f".{suffix}")
         path.parent.mkdir(parents=True, exist_ok=True)

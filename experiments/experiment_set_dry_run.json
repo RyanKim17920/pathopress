@@ -4,9 +4,9 @@
   "execution": "none_dry_run_only",
   "summary": {
     "components": 21,
-    "declared_inputs": 118,
-    "declared_dependencies": 3,
-    "declared_artifacts": 108,
+    "declared_inputs": 140,
+    "declared_dependencies": 5,
+    "declared_artifacts": 128,
     "external_call_components": 0
   },
   "experiments": [
@@ -110,7 +110,7 @@
       "missing_artifacts": [],
       "declared_inputs": 6,
       "declared_dependencies": 0,
-      "declared_artifacts": 4,
+      "declared_artifacts": 5,
       "external_calls": false,
       "dry_run_only": true
     },
@@ -121,9 +121,9 @@
       "missing_inputs": [],
       "missing_dependencies": [],
       "missing_artifacts": [],
-      "declared_inputs": 6,
-      "declared_dependencies": 0,
-      "declared_artifacts": 5,
+      "declared_inputs": 14,
+      "declared_dependencies": 2,
+      "declared_artifacts": 12,
       "external_calls": false,
       "dry_run_only": true
     },
@@ -147,7 +147,7 @@
       "missing_inputs": [],
       "missing_dependencies": [],
       "missing_artifacts": [],
-      "declared_inputs": 4,
+      "declared_inputs": 8,
       "declared_dependencies": 0,
       "declared_artifacts": 4,
       "external_calls": false,
@@ -212,9 +212,9 @@
       "missing_inputs": [],
       "missing_dependencies": [],
       "missing_artifacts": [],
-      "declared_inputs": 7,
+      "declared_inputs": 8,
       "declared_dependencies": 0,
-      "declared_artifacts": 3,
+      "declared_artifacts": 4,
       "external_calls": false,
       "dry_run_only": true
     },
@@ -251,7 +251,7 @@
       "missing_inputs": [],
       "missing_dependencies": [],
       "missing_artifacts": [],
-      "declared_inputs": 7,
+      "declared_inputs": 8,
       "declared_dependencies": 0,
       "declared_artifacts": 11,
       "external_calls": false,
@@ -266,7 +266,7 @@
       "missing_artifacts": [],
       "declared_inputs": 6,
       "declared_dependencies": 0,
-      "declared_artifacts": 3,
+      "declared_artifacts": 13,
       "external_calls": false,
       "dry_run_only": true
     },
@@ -277,9 +277,9 @@
       "missing_inputs": [],
       "missing_dependencies": [],
       "missing_artifacts": [],
-      "declared_inputs": 9,
+      "declared_inputs": 17,
       "declared_dependencies": 0,
-      "declared_artifacts": 3,
+      "declared_artifacts": 4,
       "external_calls": false,
       "dry_run_only": true
     }

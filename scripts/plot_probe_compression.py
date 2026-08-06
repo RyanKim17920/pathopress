@@ -16,6 +16,14 @@ COLORS = {"any_candidate": "#1368CE", "pre_error_low_friction_allowlist": "#D149
 LABELS = {"any_candidate": "Any evaluation", "pre_error_low_friction_allowlist": "Pre-error feasibility proxy"}
 
 
+def probe_ticks(max_k: int) -> list[int]:
+    """Return readable ticks for the upstream-equivalent k<=30 random range."""
+
+    if max_k <= 10:
+        return list(range(1, max_k + 1))
+    return [value for value in (1, 5, 10, 15, 20, 25, 30) if value <= max_k]
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=ROOT / "experiments/probe_compression_rank1.json")
@@ -26,6 +34,12 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     payload = json.loads(args.input.read_text(encoding="utf-8"))
+    score_random_max_k = max(
+        entry["k"]
+        for mode in ("any_candidate", "pre_error_low_friction_allowlist")
+        for protocol in ("all_known", "heldout")
+        for entry in payload["curves"][mode][f"{protocol}_random"]
+    )
     fig, axes = plt.subplots(2, 2, figsize=(11.2, 8.2), sharex=True)
     for column, metric in enumerate(("medae", "medape")):
         for row_index, protocol in enumerate(("all_known", "heldout")):
@@ -59,7 +73,7 @@ def main() -> None:
             ax.set_ylabel("Normalized-score points" if metric == "medae" else "Absolute percentage error (%)")
             if row_index == 1:
                 ax.set_xlabel("Number of measured probe evaluations (k)")
-            ax.set_xticks(range(1, 11))
+            ax.set_xticks(probe_ticks(score_random_max_k))
     handles, labels = axes[0, 0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", ncol=2, frameon=False, bbox_to_anchor=(0.5, 0.012))
     fig.suptitle("PathoPress probe compression under pinned BenchPress masking semantics", fontsize=14)

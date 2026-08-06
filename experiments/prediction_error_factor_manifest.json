@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "matrix_sha256": "adbae84f7dfe406a26ab062392f6331c393496534cd0be68d56f76330dc8d2de",
+  "matrix_sha256": "b6b1e1ad47948bb265432dfea8a09a1a692edcc633b186f20c65a0a7e3295b32",
   "regeneration_command": "PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --workers 8",
   "resume_command": "PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --workers 8",
   "merge_only_command": "PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --merge-only",
@@ -8,32 +8,32 @@
     "merged_summary": {
       "path": "experiments/prediction_error_factors_rank1.json",
       "tracked": true,
-      "bytes": 204083,
-      "sha256": "ad288c6c624e8cd3ec7cd798f43394a5b41ec9bd61cb9d256d51c1144300e2f6"
+      "bytes": 210898,
+      "sha256": "49501e8dbb08de0dc9a6bb814da67edcec20b3c1e1fec1444cba1d1839f3f498"
     },
     "merged_records": {
       "path": "outputs/prediction_error_factor_records_rank1.csv",
       "tracked": true,
-      "rows": 11535,
-      "bytes": 2569851,
-      "sha256": "73a63637685240558ce10e887e241cc3e110ddb23800660d386b7289286b6017"
+      "rows": 11990,
+      "bytes": 2655629,
+      "sha256": "544d5defeb592523d7945610b56d1b46363e1cea4ba8e3a0cab4c067b10fe794"
     },
     "raw_predictions": {
       "path": "outputs/prediction_error_factor_predictions_rank1.csv",
       "tracked": false,
       "ignore_rule": "outputs/prediction_error_factor_predictions_rank1.csv",
-      "rows": 279487,
-      "bytes": 30107523,
-      "sha256": "8f2bbbaed674bb1f9ecd1f590074fb83ccbfc563110793335229facf81132169"
+      "rows": 289681,
+      "bytes": 31278613,
+      "sha256": "307ff38252c8ffb34e2b11c60ece003415705b7db16f0dad3da7294c63aa0179"
     },
     "unit_cache": {
       "path": "experiments/prediction_error_factor_shards",
       "tracked": false,
       "ignore_rule": "experiments/prediction_error_factor_shards/",
-      "files": 5795,
-      "active_units": 5785,
-      "inactive_preserved_files": 10,
-      "bytes": 21803672,
+      "files": 6030,
+      "active_units": 6030,
+      "inactive_preserved_files": 0,
+      "bytes": 22579496,
       "contract": "One atomic JSON shard per deterministic hypothesis/target/seed unit; reruns validate matrix identity and skip matching shards."
     }
   }

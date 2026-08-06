@@ -1,7 +1,13 @@
 from __future__ import annotations
 
 import math
+import csv
+import importlib.util
+import io
+import sys
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
 import numpy as np
 
@@ -18,6 +24,15 @@ from pathopress.probe_compression import (
     sharded_combinations,
 )
 
+from scripts.plot_probe_compression import probe_ticks
+
+
+RUNNER_PATH = Path(__file__).resolve().parents[1] / "experiments/run_probe_compression.py"
+RUNNER_SPEC = importlib.util.spec_from_file_location("run_probe_compression_test", RUNNER_PATH)
+assert RUNNER_SPEC is not None and RUNNER_SPEC.loader is not None
+RUNNER = importlib.util.module_from_spec(RUNNER_SPEC)
+RUNNER_SPEC.loader.exec_module(RUNNER)
+
 
 MATRIX = np.array(
     [
@@ -30,6 +45,41 @@ MATRIX = np.array(
 
 
 class ProbeCompressionTests(unittest.TestCase):
+    def test_runner_separates_k30_all_known_from_k10_controls(self) -> None:
+        with patch.object(sys, "argv", [str(RUNNER_PATH)]):
+            args = RUNNER.parse_args()
+        self.assertEqual(args.max_random_k, 30)
+        self.assertEqual(args.max_heldout_random_k, 10)
+        self.assertEqual(args.max_ranking_random_k, 10)
+
+    def test_all_known_random_curve_can_stream_per_cell_raw_rows(self) -> None:
+        class ImmediateExecutor:
+            @staticmethod
+            def map(function, jobs):
+                return map(function, jobs)
+
+        fields = [
+            "protocol", "candidate_mode", "method", "selection_objective",
+            "repeat", "k", "model_id", "evaluation_id",
+            "actual_normalized_score", "predicted_normalized_score",
+            "is_revealed_probe_cell", "is_hidden_prediction",
+        ]
+        output = io.StringIO()
+        writer = csv.DictWriter(output, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        curves = RUNNER._random_curves(
+            ImmediateExecutor(), MATRIX, [0, 1, 2], max_k=3, repeats=2,
+            seed=42, rank=1, evaluations=["e0", "e1", "e2"],
+            raw_writer=writer, models=["m0", "m1", "m2", "m3"],
+            candidate_mode="any_candidate",
+        )
+        self.assertEqual(len(curves), 6)
+        output.seek(0)
+        rows = list(csv.DictReader(output))
+        self.assertEqual(len(rows), 6 * MATRIX.size)
+        self.assertEqual({int(row["k"]) for row in rows}, {1, 2, 3})
+        self.assertEqual({row["method"] for row in rows}, {"random_prefix"})
+
     def test_all_known_reveals_probes_exactly_and_scores_medae_medape(self) -> None:
         predictions = predict_all_known(MATRIX, [1], rank=1)
         np.testing.assert_array_equal(predictions.predicted[:, 1], MATRIX[:, 1])
@@ -112,6 +162,10 @@ class ProbeCompressionTests(unittest.TestCase):
             self.assertEqual(repeat[0], repeat[1][:1])
             self.assertEqual(repeat[1], repeat[2][:2])
             self.assertEqual(set(repeat[-1]), {2, 5, 9})
+
+    def test_probe_plot_ticks_cover_upstream_random_k30_range(self) -> None:
+        self.assertEqual(probe_ticks(10), list(range(1, 11)))
+        self.assertEqual(probe_ticks(30), [1, 5, 10, 15, 20, 25, 30])
 
     def test_rank_pruning_uses_all_steps_normalized_rank_and_id_ties(self) -> None:
         trajectory = [

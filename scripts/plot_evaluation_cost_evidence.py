@@ -37,6 +37,22 @@ TIER_LABELS = {
 }
 
 
+def denominator_copy(total: int) -> dict[str, str]:
+    """Return every figure label that states the retained-protocol denominator.
+
+    Keeping this copy in one small, testable function prevents a regenerated
+    registry and a previously hard-coded plot annotation from drifting apart.
+    """
+
+    return {
+        "coverage_title": f"A. Evidence coverage (n={total:,})",
+        "missingness_footer": (
+            "Observed runtime, hardware make/model, annotation hours, and dollar cost: "
+            f"0/{total:,}. A numeric cost curve is therefore unsupported."
+        ),
+    }
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=ROOT / "data/evaluation_cost_evidence.json")
@@ -49,6 +65,7 @@ def main() -> None:
     payload = json.loads(args.input.read_text(encoding="utf-8"))
     summary = payload["summary"]
     total = int(summary["n_evaluations"])
+    copy = denominator_copy(total)
     fields = list(FIELD_LABELS)
     any_counts = summary["field_coverage_count"]
     direct_counts = summary["field_direct_evaluation_coverage_count"]
@@ -66,7 +83,7 @@ def main() -> None:
     ax.invert_yaxis()
     ax.set_xlim(0, 105)
     ax.set_xlabel("Retained protocols with evidence (%)")
-    ax.set_title("A. Evidence coverage (n=165)", loc="left", fontweight="bold")
+    ax.set_title(copy["coverage_title"], loc="left", fontweight="bold")
     ax.grid(axis="x", color="#dddddd", linewidth=0.7)
     ax.set_axisbelow(True)
     ax.legend(frameon=False, loc="lower right")
@@ -143,8 +160,7 @@ def main() -> None:
     fig.text(
         0.5,
         -0.015,
-        "Observed runtime, hardware make/model, annotation hours, and dollar cost: 0/165. "
-        "A numeric cost curve is therefore unsupported.",
+        copy["missingness_footer"],
         ha="center",
         fontsize=10,
         color="#8c2d04",

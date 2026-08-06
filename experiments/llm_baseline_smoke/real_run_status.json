@@ -1,0 +1,42 @@
+{
+  "schema_version": 2,
+  "config_sha256": "0b41d09c5b13c6b5cce46fd410e3614b4dc7e17f6e559ddaa4e5baf036961517",
+  "status": "unrun",
+  "headline_eligible": false,
+  "reason": "The complete offline request pack is prepared, but no genuine provider responses have been supplied.",
+  "conditions": {
+    "zero_shot_named": "unrun",
+    "zero_shot_blind": "unrun",
+    "five_shot_named": "unrun",
+    "five_shot_blind": "unrun"
+  },
+  "request_count": 4,
+  "expected_response_count": 4,
+  "received_response_count": 0,
+  "target_prediction_count": 32,
+  "request_counts_by_condition": {
+    "zero_shot_named": 1,
+    "zero_shot_blind": 1,
+    "five_shot_named": 1,
+    "five_shot_blind": 1
+  },
+  "target_counts_by_condition": {
+    "zero_shot_named": 8,
+    "zero_shot_blind": 8,
+    "five_shot_named": 8,
+    "five_shot_blind": 8
+  },
+  "cost": {
+    "status": "unknown_until_external_execution",
+    "currency": null,
+    "amount": null
+  },
+  "token_usage": {
+    "status": "unknown_until_external_execution",
+    "input_tokens": null,
+    "output_tokens": null
+  },
+  "credential_handling": "not_read_or_used_by_this_runner",
+  "sole_external_action": "Execute every record in the provider-neutral requests/ JSONL shards with one chosen genuine LLM and supply one raw JSONL response per request_id.",
+  "expected_response_contract": "exactly one complete response per request_id; import-real validates and hash-seals it"
+}

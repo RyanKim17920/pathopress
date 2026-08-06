@@ -6665,6 +6665,147 @@
     },
     "suite_id": "pathorob"
   },
+  "pathorob.nature2026.camelyon.clustering_score": {
+    "best_neighbor": "eva.leaderboard.mhist.test",
+    "best_neighbor_suite_id": "eva",
+    "max_abs_r": 0.663087,
+    "max_r": 0.663087,
+    "max_r2": 0.439684,
+    "medae": 13.340721,
+    "medape": 40.02739,
+    "n_shared": 8,
+    "raw_predictions": {
+      "actuals": [
+        50.6013,
+        79.1646,
+        57.1735,
+        0.436606,
+        49.83,
+        48.6843,
+        50.3193,
+        49.8495
+      ],
+      "model_indices": [
+        19,
+        26,
+        41,
+        42,
+        45,
+        53,
+        54,
+        56
+      ],
+      "predictions": [
+        59.56718708603587,
+        40.64455697790609,
+        15.721934741423937,
+        5.439557650160211,
+        40.64455697790609,
+        59.56718708603587,
+        34.520744180326446,
+        81.13919403668841
+      ]
+    },
+    "suite_id": "pathorob"
+  },
+  "pathorob.nature2026.tcga_4x4.clustering_score": {
+    "best_neighbor": "eva.leaderboard.bach.validation",
+    "best_neighbor_suite_id": "eva",
+    "max_abs_r": 0.775597,
+    "max_r": 0.775597,
+    "max_r2": 0.60155,
+    "medae": 0.930585,
+    "medape": 1.804478,
+    "n_shared": 8,
+    "raw_predictions": {
+      "actuals": [
+        50.7226,
+        63.948,
+        50.2101,
+        50.0919,
+        50.6231,
+        53.6,
+        56.4099,
+        59.1846
+      ],
+      "model_indices": [
+        19,
+        26,
+        41,
+        42,
+        45,
+        53,
+        54,
+        56
+      ],
+      "predictions": [
+        51.86227215667147,
+        57.30670848581995,
+        50.65770234233755,
+        50.774193132449405,
+        51.86227215667147,
+        52.98995567357662,
+        61.07400949505014,
+        58.463101330954686
+      ]
+    },
+    "suite_id": "pathorob"
+  },
+  "pathorob.nature2026.tolkach_esca.clustering_score": {
+    "best_neighbor": "thunder.spider_colorectal.linear_probing",
+    "best_neighbor_suite_id": "thunder",
+    "max_abs_r": 0.766245,
+    "max_r": -0.766245,
+    "max_r2": 0.587131,
+    "medae": 2.102227,
+    "medape": 2.236486,
+    "n_shared": 12,
+    "raw_predictions": {
+      "actuals": [
+        97.3318,
+        98.0132,
+        95.0672,
+        96.7325,
+        98.0434,
+        96.2942,
+        88.5377,
+        81.4094,
+        89.7453,
+        93.2628,
+        95.932,
+        84.4126
+      ],
+      "model_indices": [
+        6,
+        7,
+        19,
+        21,
+        39,
+        41,
+        42,
+        45,
+        53,
+        54,
+        55,
+        56
+      ],
+      "predictions": [
+        97.56823402905921,
+        98.07572435449424,
+        93.33728818320876,
+        92.17432253491651,
+        97.56823402905921,
+        96.74944122506673,
+        94.00703576006602,
+        91.73908006749129,
+        91.2775890389623,
+        90.78825842568469,
+        92.17432253491651,
+        89.13611217941323
+      ]
+    },
+    "suite_id": "pathorob"
+  },
   "pathorob.tcga_2x2.robustness_index": {
     "best_neighbor": "pathorob.tolkach_esca.robustness_index",
     "best_neighbor_suite_id": "pathorob",

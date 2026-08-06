@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "integrity_manifest": "experiments/probe_exhaustive_integrity_manifest.json",
+  "integrity_manifest_sha256": "54b7516e23ad4b956eef5e49179fad645d74c3539ca320a90e1e917673c3f9bd",
+  "runs": [
+    {
+      "run_dir": "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91",
+      "config_sha256": "42974b7b5d21f7beb51fdaba491fb4d5f34d85762271935d5bcf84e31efa75d8",
+      "merged_summary": "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/merged_summary.json.gz",
+      "merged_summary_sha256": "0a3bf1bb2f7578cdfd04d1304d9364cf23063edf9580acda062c466cabcfd70a",
+      "total_combinations": 53130,
+      "top_rows_validated": 1001,
+      "best": {
+        "combo_index": 36747,
+        "probe_set": [
+          "eva.leaderboard.gleason_arvaniti.validation",
+          "thunder.break_his.linear_probing",
+          "thunder.esca.linear_probing",
+          "thunder.mhist.linear_probing",
+          "thunder.spider_breast.linear_probing"
+        ],
+        "score": 1.4859436149202452,
+        "medape": 2.0174430046922955,
+        "medae": 1.4859436149202452,
+        "n": 2027,
+        "elapsed_s": 0.6177234649658203
+      },
+      "ordering_rule": "ascending (score, combo_index)",
+      "all_record_order_source": "expected_top derived by deep validation from every raw combination record"
+    },
+    {
+      "run_dir": "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91",
+      "config_sha256": "fd40559e91ee1b060c2d27ac1067818f127ba1ebd20fa580d09185366a879c3b",
+      "merged_summary": "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/merged_summary.json.gz",
+      "merged_summary_sha256": "14d5e0b3623e4dfb9b437518fb6f7f62a9430c9f4ae26c3a7c3fc50970ec0db1",
+      "total_combinations": 142506,
+      "top_rows_validated": 1001,
+      "best": {
+        "combo_index": 46897,
+        "probe_set": [
+          "thunder.tcga_uniform.linear_probing",
+          "thunder.spider_breast.linear_probing",
+          "hest.read.gene_expression",
+          "pathorob.nature2026.tcga_4x4.clustering_score",
+          "thunder.break_his.linear_probing"
+        ],
+        "score": 1.4273387397169017,
+        "medape": 1.9342638128337362,
+        "medae": 1.4273387397169017,
+        "n": 2027,
+        "elapsed_s": 0.48947787284851074
+      },
+      "ordering_rule": "ascending (score, combo_index)",
+      "all_record_order_source": "expected_top derived by deep validation from every raw combination record"
+    }
+  ]
+}

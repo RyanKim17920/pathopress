@@ -23,6 +23,7 @@ from .prediction import (
     DEFAULT_REGULARIZATION,
     PredictionDataset,
     calibrated_interval,
+    calibrated_trust_probability,
     complete_dataset,
     load_confidence_artifact,
     load_prediction_dataset,
@@ -120,8 +121,10 @@ def _prediction_row(
     }
     if confidence is not None:
         lower, upper, calibration_scope = calibrated_interval(
-            prediction, suite, confidence
+            prediction, suite, confidence,
+            model_id=model, evaluation_id=evaluation,
         )
+        trust = calibrated_trust_probability(model, evaluation, confidence)
         row.update(
             {
                 "confidence_method": confidence["artifact_type"],
@@ -129,6 +132,10 @@ def _prediction_row(
                 "lower_90": round(lower, 6),
                 "upper_90": round(upper, 6),
                 "calibration_scope": calibration_scope,
+                **{
+                    key: round(value, 6) if isinstance(value, float) else value
+                    for key, value in trust.items()
+                },
             }
         )
     return row
@@ -293,6 +300,15 @@ def _product_rows(
                 output_row.update({
                     key: round(value, 6) if isinstance(value, float) else value
                     for key, value in confidence_result.items()
+                })
+                output_row.update({
+                    "trust_probability": None,
+                    "trust_probability_status": "abstained_population_mismatch",
+                    "trust_abstention_reason": (
+                        "the existing-model hybrid trust calibrator is not valid for a genuinely unseen model row"
+                    ),
+                    "trust_event": "abs_error_le_10_normalized_points",
+                    "trust_threshold_normalized_points": 10.0,
                 })
             rows.append(output_row)
         return rows

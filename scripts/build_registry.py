@@ -588,6 +588,7 @@ def build_pathorob(commit: str) -> list[dict[str, object]]:
     rows = []
     for metric, family in metrics:
         for dataset in datasets:
+            is_apd = metric == "average_performance_drop"
             rows.append(
                 {
                     "evaluation_id": f"pathorob.{dataset}.{metric}",
@@ -601,16 +602,91 @@ def build_pathorob(commit: str) -> list[dict[str, object]]:
                     "num_samples": "not_reported",
                     "endpoint": metric,
                     "metric": metric,
-                    "direction": "higher" if metric != "average_performance_drop" else "lower",
-                    "protocol": "PathoROB center-robustness protocol across TCGA 2x2, TCGA 4x4, Camelyon, and Tolkach ESCA benchmark datasets.",
+                    "direction": "higher",
+                    "protocol": (
+                        "PathoROB endpoint catalog across TCGA 2x2, TCGA 4x4, Camelyon, and Tolkach ESCA. Signed APD is higher/closer to zero when better; APD-ID and APD-OOD require separate score-bearing protocols."
+                        if is_apd
+                        else "PathoROB center-robustness protocol across TCGA 2x2, TCGA 4x4, Camelyon, and Tolkach ESCA benchmark datasets."
+                    ),
                     "reference_url": ref,
                     "audit_status": "parsed_primary_source",
-                    "audit_notes": "TCGA has distinct 2x2 and 4x4 robustness endpoints; current RI leaderboard reports TCGA 2x2, Camelyon, and Tolkach ESCA only, so TCGA 4x4 remains an unscored catalog endpoint.",
+                    "audit_notes": (
+                        "TCGA has distinct 2x2 and 4x4 robustness endpoints. Generic APD rows are catalog placeholders only: the published APD-ID and APD-OOD means are represented by separate Nature-2026 protocols and never merged into this ambiguous endpoint."
+                        if is_apd
+                        else "TCGA has distinct 2x2 and 4x4 robustness endpoints; current RI leaderboard reports TCGA 2x2, Camelyon, and Tolkach ESCA only, so TCGA 4x4 remains an unscored catalog endpoint."
+                    ),
                 }
             )
     if len(rows) != 12:
         raise AssertionError("PathoROB endpoint construction drifted")
     return rows
+
+
+def build_pathorob_nature_protocols(
+    snapshot: Path, tasks: list[dict[str, object]]
+) -> list[dict[str, object]]:
+    """Materialize the five score-bearing protocols in the Nature Source Data."""
+    with snapshot.open(newline="", encoding="utf-8") as handle:
+        evidence = [row for row in csv.DictReader(handle) if row["source_scope"] == "published_paper"]
+    if len(evidence) != 100:
+        raise ValueError(f"expected 100 published PathoROB rows, found {len(evidence)}")
+    by_id = {str(row["evaluation_id"]): row for row in tasks}
+    unique = {row["evaluation_id"]: row for row in evidence}
+    expected = {
+        "pathorob.nature2026.all_datasets.apd_id",
+        "pathorob.nature2026.all_datasets.apd_ood",
+        "pathorob.nature2026.camelyon.clustering_score",
+        "pathorob.nature2026.tcga_4x4.clustering_score",
+        "pathorob.nature2026.tolkach_esca.clustering_score",
+    }
+    if set(unique) != expected:
+        raise ValueError(f"unexpected PathoROB Nature protocol set: {sorted(unique)}")
+    output: list[dict[str, object]] = []
+    for evaluation_id in sorted(unique):
+        source = unique[evaluation_id]
+        endpoint = source["endpoint"]
+        dataset = source["dataset_scope"]
+        if endpoint == "clustering_score":
+            base_id = f"pathorob.{dataset}.clustering_score"
+            if base_id not in by_id:
+                raise ValueError(f"missing PathoROB clustering base protocol: {base_id}")
+            row = dict(by_id[base_id])
+            row.update(
+                {
+                    "evaluation_id": evaluation_id,
+                    "protocol_id": evaluation_id,
+                    "metric": "clustering_score",
+                    "direction": "higher",
+                    "protocol": source["protocol"],
+                    "reference_url": source["reference_url"],
+                    "audit_status": "parsed_primary_source",
+                    "audit_notes": "Canonical published mean from Nature Source Data Fig. 6b; approximately [-1,1], normalized as (score+1)*50. Shares task identity and dataset artifact with the generic PathoROB clustering endpoint.",
+                }
+            )
+        else:
+            row = {
+                "evaluation_id": evaluation_id,
+                "protocol_id": evaluation_id,
+                "task_identity_id": f"task.pathorob.all_datasets.{endpoint}",
+                "dataset_artifact_id": "artifact.pathorob.camelyon+tcga_4x4+tolkach_esca",
+                "suite_id": "pathorob",
+                "dataset_id": "all_datasets",
+                "task_name": f"all-dataset {endpoint}",
+                "task_family": "shortcut_generalization",
+                "target": "signed relative generalization-performance change under spurious medical-center correlation",
+                "sample_unit": "patch",
+                "task_type": "robustness_analysis",
+                "num_samples": "n=60 model-level observations (20 repetitions x 3 datasets)",
+                "endpoint": endpoint,
+                "metric": "average_performance_drop_percent",
+                "direction": "higher_closer_to_zero",
+                "protocol": source["protocol"],
+                "reference_url": source["reference_url"],
+                "audit_status": "parsed_primary_source",
+                "audit_notes": "Canonical published signed APD mean from Nature Source Data Fig. 3d. Registry-eligible but factor-analysis-ineligible: the source defines no bounded common-scale normalization, so normalized_score is intentionally blank and its score audit_status excludes it from matrix loading.",
+            }
+        output.append(row)
+    return output
 
 
 EXACT_TASK_IDENTITIES = {
@@ -700,7 +776,7 @@ def score_row(
     model_id: str,
     evaluation_id: str,
     value: float,
-    normalized: float,
+    normalized: float | None,
     suite: str,
     metric: str,
     ref: str,
@@ -715,7 +791,7 @@ def score_row(
         "model_revision": "not_reported",
         "evaluation_id": evaluation_id,
         "value": f"{value:.6g}",
-        "normalized_score": f"{normalized:.6g}",
+        "normalized_score": "" if normalized is None else f"{normalized:.6g}",
         "suite_id": suite,
         "metric": metric,
         "reference_url": ref,
@@ -986,6 +1062,86 @@ def parse_pathorob_scores(source: Path, commit: str) -> tuple[list[dict[str, obj
     return scores, aliases
 
 
+def parse_pathorob_nature_scores(
+    snapshot: Path, tasks: list[dict[str, object]]
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    """Load the 100 canonical means while excluding version-different examples."""
+    with snapshot.open(newline="", encoding="utf-8") as handle:
+        all_rows = list(csv.DictReader(handle))
+    required = {
+        "source_scope", "source_table", "source_row", "model_alias", "model_id",
+        "dataset_scope", "endpoint", "evaluation_id", "metric", "value", "value_unit",
+        "uncertainty", "direction", "protocol", "reference_url", "source_locator",
+        "source_revision", "source_sha256", "inclusion_status", "inclusion_reason",
+    }
+    if not all_rows or set(all_rows[0]) != required:
+        raise ValueError("unexpected PathoROB Nature score snapshot schema")
+    paper = [row for row in all_rows if row["source_scope"] == "published_paper"]
+    examples = [row for row in all_rows if row["source_scope"] == "repository_example"]
+    if len(paper) != 100 or len(examples) != 22:
+        raise ValueError(
+            f"PathoROB source-scope audit failed: paper={len(paper)}, examples={len(examples)}"
+        )
+    contracts = {str(row["evaluation_id"]): row for row in tasks if row["suite_id"] == "pathorob"}
+    scores: list[dict[str, object]] = []
+    aliases: dict[str, dict[str, object]] = {}
+    seen: set[tuple[str, str]] = set()
+    eligible = 0
+    for row in paper:
+        evaluation_id = row["evaluation_id"]
+        contract = contracts.get(evaluation_id)
+        if contract is None or contract["metric"] != row["metric"]:
+            raise ValueError(f"PathoROB Nature task/metric mismatch: {evaluation_id}")
+        model_id = row["model_id"]
+        alias = row["model_alias"]
+        cell = (model_id, evaluation_id)
+        if cell in seen:
+            raise ValueError(f"duplicate PathoROB Nature score cell: {cell}")
+        seen.add(cell)
+        value = float(row["value"])
+        if row["endpoint"] == "clustering_score":
+            if row["inclusion_status"] != "canonical_analysis_eligible" or not -1.0 <= value <= 1.0:
+                raise ValueError(f"invalid canonical clustering row: {row}")
+            normalized: float | None = (value + 1.0) * 50.0
+            audit = "parsed_primary_source"
+            eligible += 1
+        else:
+            if row["inclusion_status"] != "canonical_analysis_ineligible":
+                raise ValueError(f"invalid canonical APD row: {row}")
+            normalized = None
+            audit = "parsed_primary_source_analysis_ineligible"
+        score = score_row(
+            alias,
+            model_id,
+            evaluation_id,
+            value,
+            normalized,
+            "pathorob",
+            row["metric"],
+            row["reference_url"],
+            row["source_locator"],
+            f"{row['source_revision']}@sha256:{row['source_sha256']} -> scripts/extract_pathorob_scores.py -> {snapshot.name} -> build_registry.py -> scores.csv",
+            audit,
+            uncertainty=row["uncertainty"],
+        )
+        # Preserve the exact published decimal rather than score_row's compact formatting.
+        score["value"] = row["value"]
+        score["extraction_date"] = "2026-08-06"
+        scores.append(score)
+        aliases[alias] = alias_row(
+            alias,
+            model_id,
+            "pathorob",
+            row["reference_url"],
+            "Alias in the canonical PathoROB Nature Source Data workbook.",
+        )
+    if len(scores) != 100 or eligible != 60 or len(seen) != 100:
+        raise ValueError(
+            f"PathoROB Nature score audit failed: scores={len(scores)}, eligible={eligible}"
+        )
+    return scores, list(aliases.values())
+
+
 def alias_row(alias: str, model_id: str, suite: str, ref: str, notes: str) -> dict[str, object]:
     return {"alias": alias, "model_id": model_id, "suite_id": suite, "reference_url": ref, "audit_notes": notes}
 
@@ -1004,6 +1160,7 @@ def build_dedup(tasks: list[dict[str, object]]) -> list[dict[str, object]]:
                 "pathobench.exaone2025.",
                 "pathobench.threads2025.",
                 "eva.leaderboard.",
+                "pathorob.nature2026.",
             ))
             for member in members
         )
@@ -1017,10 +1174,15 @@ def build_dedup(tasks: list[dict[str, object]]) -> list[dict[str, object]]:
         identity for identity, members in duplicates.items()
         if any(member.startswith("eva.leaderboard.") for member in members)
     }
+    pathorob_variant_identities = {
+        identity for identity, members in duplicates.items()
+        if any(member.startswith("pathorob.nature2026.") for member in members)
+    }
     if (
         set(duplicates) != expected_duplicate_identities
         or len(pathobench_variant_identities) != 80
         or len(eva_variant_identities) != 11
+        or len(pathorob_variant_identities) != 3
     ):
         raise ValueError(
             "exact duplicate task identity audit failed: "
@@ -1033,7 +1195,7 @@ def build_dedup(tasks: list[dict[str, object]]) -> list[dict[str, object]]:
         canonical = next(
             (
                 member for member in members
-                if not member.startswith(("pathobench.exaone2025.", "pathobench.threads2025.", "eva.leaderboard."))
+                if not member.startswith(("pathobench.exaone2025.", "pathobench.threads2025.", "eva.leaderboard.", "pathorob.nature2026."))
             ),
             members[0],
         )
@@ -1089,6 +1251,12 @@ def main() -> None:
         default=Path(__file__).resolve().parents[1]
         / "source_data/threads_pathobench_2501.16652v1.csv",
     )
+    parser.add_argument(
+        "--pathorob-nature-snapshot",
+        type=Path,
+        default=Path(__file__).resolve().parents[1]
+        / "source_data/pathorob_nature2026_and_repo_examples.csv",
+    )
     args = parser.parse_args()
 
     commits = {name: git(args.sources / name, "rev-parse", "HEAD") for name in REPOSITORIES}
@@ -1100,10 +1268,11 @@ def main() -> None:
         *build_pathorob(commits["pathorob"]),
     ]
     materialize_task_contracts(tasks)
+    tasks.extend(build_pathorob_nature_protocols(args.pathorob_nature_snapshot, tasks))
     tasks.extend(build_exaone_pathobench_protocols(args.exaone_pathobench_snapshot, tasks))
     tasks.extend(build_threads_pathobench_protocols(args.threads_pathobench_snapshot, tasks))
     tasks.extend(build_eva_leaderboard_protocols(args.sources / "eva", commits["eva"], tasks))
-    expected = {"pathobench": 217, "eva": 28, "thunder": 21, "hest": 9, "pathorob": 12}
+    expected = {"pathobench": 217, "eva": 28, "thunder": 21, "hest": 9, "pathorob": 17}
     actual = {suite: sum(row["suite_id"] == suite for row in tasks) for suite in expected}
     if actual != expected:
         raise ValueError(f"task inventory mismatch: {actual}")
@@ -1113,7 +1282,7 @@ def main() -> None:
         "eva": "Thirteen canonical offline configs plus 15 split- and reduced-data-specific leaderboard protocols.",
         "thunder": "All code-backed dataset configs represented by a primary linear-probe or segmentation endpoint.",
         "hest": "PCA-256 plus ridge regression morphology-to-gene-expression benchmark; Pearson r.",
-        "pathorob": "Four dataset endpoints (TCGA 2x2, TCGA 4x4, Camelyon, Tolkach ESCA) crossed with three robustness metrics.",
+        "pathorob": "Twelve generic endpoint-catalog rows plus five canonical Nature-2026 score protocols: aggregate APD-ID/APD-OOD and clustering on Camelyon, TCGA 4x4, and Tolkach ESCA.",
     }
     suite_names = {"pathobench": "Patho-Bench", "eva": "EVA", "thunder": "THUNDER", "hest": "HEST-Benchmark", "pathorob": "PathoROB"}
     suite_repo = {"pathobench": "pathobench_hf", "eva": "eva", "thunder": "thunder", "hest": "hest", "pathorob": "pathorob"}
@@ -1135,6 +1304,9 @@ def main() -> None:
     hest_scores, hest_aliases = parse_hest_scores(args.sources / "hest", commits["hest"])
     thunder_scores, thunder_aliases = parse_thunder_scores(args.sources / "thunder", commits["thunder"])
     pathorob_scores, pathorob_aliases = parse_pathorob_scores(args.sources / "pathorob", commits["pathorob"])
+    pathorob_nature_scores, pathorob_nature_aliases = parse_pathorob_nature_scores(
+        args.pathorob_nature_snapshot, tasks
+    )
     pathobench_scores, pathobench_aliases = parse_exaone_pathobench_scores(
         args.exaone_pathobench_snapshot, tasks
     )
@@ -1153,12 +1325,22 @@ def main() -> None:
     eva_scores = [row.registry_row("2026-08-05") for row in eva_selected]
     scores = (
         pathobench_scores + threads_scores + eva_scores
-        + hest_scores + thunder_scores + pathorob_scores
+        + hest_scores + thunder_scores + pathorob_scores + pathorob_nature_scores
     )
     for row in scores:
-        missing = [field for field in SCORE_FIELDS if row.get(field) in (None, "")]
+        allowed_blank = (
+            {"normalized_score"}
+            if row["audit_status"] == "parsed_primary_source_analysis_ineligible"
+            else set()
+        )
+        missing = [
+            field for field in SCORE_FIELDS
+            if row.get(field) in (None, "") and field not in allowed_blank
+        ]
         if missing:
             raise ValueError(f"score evidence row has blank contract fields {missing}: {row}")
+        if row["audit_status"] == "parsed_primary_source_analysis_ineligible" and row["normalized_score"] != "":
+            raise ValueError("analysis-ineligible score must not carry an invented normalization")
     eva_aliases = [
         alias_row(
             row.reported_model_alias,
@@ -1171,7 +1353,7 @@ def main() -> None:
     ]
     aliases = (
         pathobench_aliases + threads_aliases + eva_aliases
-        + hest_aliases + thunder_aliases + pathorob_aliases
+        + hest_aliases + thunder_aliases + pathorob_aliases + pathorob_nature_aliases
     )
     aliases = sorted(
         {(row["suite_id"], row["alias"]): row for row in aliases}.values(),
@@ -1199,6 +1381,8 @@ def main() -> None:
             "f1": "Scores already reported on 0-100 scale; preserved.",
             "robustness_index": "Raw RI in [0,1] multiplied by 100.",
             "pearson_r": "(r + 1) * 50; logit(normalized/100) equals 2 * atanh(r), a scaled Fisher-z.",
+            "clustering_score": "PathoROB declares an approximately [-1,1] domain; canonical Nature-2026 means use (score + 1) * 50.",
+            "average_performance_drop_percent": "No common-scale normalization. Raw signed percent is preserved exactly with normalized_score blank and audit_status=parsed_primary_source_analysis_ineligible. Zero is the no-drop reference; the paper states that increasingly negative values are worse and describes higher/closer-to-zero as better, but defines no bounded domain.",
         },
         "repositories": {
             name: {
@@ -1245,6 +1429,20 @@ def main() -> None:
                 "conflict_audit_path": portable_artifact_path(
                     args.output / "eva_source_conflicts.csv"
                 ),
+            },
+            "pathorob_nature2026": {
+                "url": "https://www.nature.com/articles/s41467-026-73923-2",
+                "pmcid": "PMC13260997",
+                "source_data_url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/13260997/bin/41467_2026_73923_MOESM4_ESM.xlsx",
+                "source_data_sha256": "07456f3ffc5270ea1d8d48a8f82c08a5be396c88f99cc0227968dad721943047",
+                "snapshot_path": portable_artifact_path(args.pathorob_nature_snapshot),
+                "snapshot_sha256": hashlib.sha256(args.pathorob_nature_snapshot.read_bytes()).hexdigest(),
+                "published_models": 20,
+                "published_apd_endpoints": 2,
+                "published_apd_cells": 40,
+                "published_clustering_protocols": 3,
+                "published_clustering_cells": 60,
+                "repository_example_cells_quarantined": 22,
             }
         },
         "counts": {
@@ -1264,7 +1462,10 @@ def main() -> None:
             "model_aliases": len(aliases),
             "scores": len(scores),
             "scores_by_suite": {suite: sum(row["suite_id"] == suite for row in scores) for suite in ("pathobench", "eva", "hest", "thunder", "pathorob")},
-            "scores_by_audit_status": {status: sum(row["audit_status"] == status for row in scores) for status in ("parsed_primary_source", "reported_external")},
+            "scores_by_audit_status": {
+                status: sum(row["audit_status"] == status for row in scores)
+                for status in sorted({str(row["audit_status"]) for row in scores})
+            },
             "scores_by_review_status": {"machine_parsed_single_source": sum(row["review_status"] == "machine_parsed_single_source" for row in scores)},
             "deduplication_memberships": len(dedup),
             "deduplication_groups": len({row["group_id"] for row in dedup}),
@@ -1280,6 +1481,8 @@ def main() -> None:
             "HEST and THUNDER average columns are not independent evaluation cells and are excluded from scores.csv.",
             "Score rows are machine-parsed from one reporting source each. audit_status=parsed_primary_source is prototype evidence, not independent or dual-source verification.",
             "PathoROB external-publication rows are retained with audit_status=reported_external; PathoROB explicitly says those values were not validated by its authors.",
+            "PathoROB Nature Source Data contributes 100 canonical primary-source means across 20 models: 40 aggregate APD-ID/APD-OOD cells and 60 clustering cells over three explicit dataset protocols. The 22 pinned-repository example results are preserved only in the evidence snapshot because their two-model values differ slightly from the paper.",
+            "Canonical PathoROB clustering scores enter the factor matrix after the source-declared approximately [-1,1] affine normalization. Canonical APD values remain in the raw registry with exact signed percent values but no normalized_score; they are analysis-ineligible because neither the source nor project policy defines a non-arbitrary bounded normalization.",
             "Exact dedup groups are derived from duplicate task_identity_id values. Two broader semantic-overlap groups remain manually adjudicated and keep separate task identities.",
             "evaluation_id is retained as a compatibility alias equal to protocol_id; protocol-specific scores are never overwritten during deduplication.",
         ],

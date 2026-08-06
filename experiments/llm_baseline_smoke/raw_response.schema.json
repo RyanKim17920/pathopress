@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PathoPress raw provider-neutral response JSONL record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_id",
+    "backend_kind",
+    "provider",
+    "model",
+    "response_text"
+  ],
+  "properties": {
+    "request_id": {
+      "type": "string"
+    },
+    "backend_kind": {
+      "enum": [
+        "openai_compatible",
+        "anthropic_compatible",
+        "local_model"
+      ]
+    },
+    "provider": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "response_text": {
+      "type": "string"
+    },
+    "usage": {
+      "type": "object"
+    },
+    "cost": {
+      "type": "object"
+    },
+    "execution_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "model_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "settings": {
+          "type": "object"
+        },
+        "receipt": {}
+      }
+    }
+  }
+}

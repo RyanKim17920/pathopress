@@ -1,0 +1,4699 @@
+{
+  "schema_version": 1,
+  "status": "passed",
+  "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
+  "equivalence_sha256": "f3f9e9b021593113d78387ec4bfe46b25ca1aadc5e15ebe4b276baaad3ba211a",
+  "integrity_manifest_sha256": "54b7516e23ad4b956eef5e49179fad645d74c3539ca320a90e1e917673c3f9bd",
+  "merged_validation_sha256": "03035f5372ced215de8d173859a4768447adb4239bb96e4af56cc8ff2002606c",
+  "scientific_engine": {
+    "rank": 1,
+    "regularization": 0.1,
+    "iterations": 40,
+    "ensembles": 10,
+    "seeds": [
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ]
+  },
+  "validation_rule": "Recompute the accelerated top-N with the scalar Python predictor; require observed deltas within the hash-bound tolerance and the scalar winner to remain separated from accelerated rank N+1. Also recompute MedAE/MedAPE only (not full cell arrays) at 32 deterministic indices spread across each full combination space.",
+  "runs": [
+    {
+      "run_dir": "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91",
+      "config_sha256": "42974b7b5d21f7beb51fdaba491fb4d5f34d85762271935d5bcf84e31efa75d8",
+      "merged_summary_sha256": "0a3bf1bb2f7578cdfd04d1304d9364cf23063edf9580acda062c466cabcfd70a",
+      "total_combinations": 53130,
+      "scalar_validated_top": 100,
+      "max_absolute_metric_delta": 3.552713678800501e-14,
+      "deterministic_spread": {
+        "rule": "unique integer points from linspace(0,total_combinations-1,count); scalar MedAE/MedAPE metric recomputation covers the full combo-index range, not only finalists; it is not a full cell-array comparison",
+        "requested_count": 32,
+        "validated_count": 32,
+        "combo_indices": [
+          0,
+          1713,
+          3427,
+          5141,
+          6855,
+          8569,
+          10283,
+          11996,
+          13710,
+          15424,
+          17138,
+          18852,
+          20566,
+          22279,
+          23993,
+          25707,
+          27421,
+          29135,
+          30849,
+          32562,
+          34276,
+          35990,
+          37704,
+          39418,
+          41132,
+          42845,
+          44559,
+          46273,
+          47987,
+          49701,
+          51415,
+          53129
+        ],
+        "max_absolute_metric_delta": 3.774758283725532e-14,
+        "comparisons": [
+          {
+            "combo_index": 0,
+            "medae": 2.3707855460814358,
+            "medape": 3.2575706055283127,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bach.validation",
+              "eva.leaderboard.bracs.validation",
+              "eva.leaderboard.breakhis.validation",
+              "eva.leaderboard.crc.validation",
+              "eva.leaderboard.gleason_arvaniti.validation"
+            ],
+            "accelerated_medae": 2.3707855460814358,
+            "accelerated_medape": 3.2575706055283127,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 1713,
+            "medae": 1.785212034059171,
+            "medape": 2.4823625582919777,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bach.validation",
+              "eva.leaderboard.bracs.validation",
+              "thunder.patch_camelyon.linear_probing",
+              "thunder.tcga_tils.linear_probing",
+              "thunder.wilds.linear_probing"
+            ],
+            "accelerated_medae": 1.785212034059171,
+            "accelerated_medape": 2.4823625582919777,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 3427,
+            "medae": 1.7544965392857392,
+            "medape": 2.3967879954739297,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bach.validation",
+              "eva.leaderboard.crc.validation",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "thunder.ccrcc.linear_probing",
+              "thunder.spider_breast.linear_probing"
+            ],
+            "accelerated_medae": 1.7544965392857392,
+            "accelerated_medape": 2.3967879954739297,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 5141,
+            "medae": 1.6927783380585737,
+            "medape": 2.29226857072139,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bach.validation",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "eva.leaderboard.patch_camelyon_10shot.test",
+              "thunder.break_his.linear_probing",
+              "thunder.tcga_uniform.linear_probing"
+            ],
+            "accelerated_medae": 1.6927783380585737,
+            "accelerated_medape": 2.29226857072139,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 6855,
+            "medae": 1.71125067089649,
+            "medape": 2.3687337954619467,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bach.validation",
+              "eva.leaderboard.patch_camelyon.test",
+              "eva.leaderboard.patch_camelyon.validation",
+              "thunder.patch_camelyon.linear_probing",
+              "thunder.tcga_tils.linear_probing"
+            ],
+            "accelerated_medae": 1.71125067089649,
+            "accelerated_medape": 2.3687337954619467,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 8569,
+            "medae": 1.730572239165042,
+            "medape": 2.3795161164940497,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bach.validation",
+              "eva.leaderboard.patch_camelyon_10shot.test",
+              "thunder.ccrcc.linear_probing",
+              "thunder.spider_colorectal.linear_probing",
+              "thunder.tcga_uniform.linear_probing"
+            ],
+            "accelerated_medae": 1.730572239165042,
+            "accelerated_medape": 2.3795161164940497,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 10283,
+            "medae": 1.8945746184310082,
+            "medape": 2.601144235629208,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bach.validation",
+              "thunder.crc.linear_probing",
+              "thunder.spider_skin.linear_probing",
+              "thunder.tcga_tils.linear_probing",
+              "thunder.tcga_uniform.linear_probing"
+            ],
+            "accelerated_medae": 1.8945746184310082,
+            "accelerated_medape": 2.601144235629208,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 11996,
+            "medae": 1.6778837219729326,
+            "medape": 2.29226857072139,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bracs.validation",
+              "eva.leaderboard.breakhis.validation",
+              "thunder.crc.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "thunder.tcga_uniform.linear_probing"
+            ],
+            "accelerated_medae": 1.6778837219729184,
+            "accelerated_medape": 2.29226857072139,
+            "absolute_medae_delta": 1.4210854715202004e-14,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 13710,
+            "medae": 1.7447138638831916,
+            "medape": 2.4095368903806462,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bracs.validation",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "eva.leaderboard.patch_camelyon.test",
+              "thunder.bach.linear_probing",
+              "thunder.spider_thorax.linear_probing"
+            ],
+            "accelerated_medae": 1.7447138638831916,
+            "accelerated_medape": 2.4095368903806462,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 15424,
+            "medae": 1.740018577750071,
+            "medape": 2.365399493872935,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bracs.validation",
+              "eva.leaderboard.mhist.test",
+              "thunder.crc.linear_probing",
+              "thunder.spider_colorectal.linear_probing",
+              "thunder.wilds.linear_probing"
+            ],
+            "accelerated_medae": 1.740018577750071,
+            "accelerated_medape": 2.365399493872935,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 17138,
+            "medae": 1.6532363012243607,
+            "medape": 2.208757756889899,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bracs.validation",
+              "eva.leaderboard.patch_camelyon_10shot.test",
+              "thunder.bach.linear_probing",
+              "thunder.ccrcc.linear_probing",
+              "thunder.tcga_uniform.linear_probing"
+            ],
+            "accelerated_medae": 1.6532363012243536,
+            "accelerated_medape": 2.2087577568899155,
+            "absolute_medae_delta": 7.105427357601002e-15,
+            "absolute_medape_delta": 1.6431300764452317e-14
+          },
+          {
+            "combo_index": 18852,
+            "medae": 1.6298118661676142,
+            "medape": 2.2164123869191363,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.bracs.validation",
+              "thunder.ccrcc.linear_probing",
+              "thunder.esca.linear_probing",
+              "thunder.spider_skin.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing"
+            ],
+            "accelerated_medae": 1.6298118661676142,
+            "accelerated_medape": 2.2164123869191363,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 20566,
+            "medae": 1.6794276644762363,
+            "medape": 2.3266944267341763,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.breakhis.validation",
+              "eva.leaderboard.crc.validation",
+              "thunder.ccrcc.linear_probing",
+              "thunder.spider_breast.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing"
+            ],
+            "accelerated_medae": 1.6794276644762363,
+            "accelerated_medape": 2.3266944267341385,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 3.774758283725532e-14
+          },
+          {
+            "combo_index": 22279,
+            "medae": 1.6970130827041885,
+            "medape": 2.3379626827293447,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.breakhis.validation",
+              "eva.leaderboard.mhist.test",
+              "eva.leaderboard.patch_camelyon_10shot.test",
+              "thunder.break_his.linear_probing",
+              "thunder.tcga_tils.linear_probing"
+            ],
+            "accelerated_medae": 1.6970130827041885,
+            "accelerated_medape": 2.3379626827293447,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 23993,
+            "medae": 1.7286138977654701,
+            "medape": 2.348065427389508,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.breakhis.validation",
+              "eva.leaderboard.patch_camelyon.validation",
+              "thunder.bracs.linear_probing",
+              "thunder.crc.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing"
+            ],
+            "accelerated_medae": 1.7286138977654701,
+            "accelerated_medape": 2.348065427389508,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 25707,
+            "medae": 1.721781435363937,
+            "medape": 2.3369949952393387,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.breakhis.validation",
+              "thunder.bracs.linear_probing",
+              "thunder.mhist.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "thunder.wilds.linear_probing"
+            ],
+            "accelerated_medae": 1.721781435363937,
+            "accelerated_medape": 2.3369949952393387,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 27421,
+            "medae": 1.7527436735191202,
+            "medape": 2.4823625582919777,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.crc.validation",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "thunder.bach.linear_probing",
+              "thunder.crc.linear_probing",
+              "thunder.spider_thorax.linear_probing"
+            ],
+            "accelerated_medae": 1.7527436735191202,
+            "accelerated_medape": 2.4823625582919777,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 29135,
+            "medae": 1.7300895173837674,
+            "medape": 2.440657784864136,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.crc.validation",
+              "eva.leaderboard.patch_camelyon.test",
+              "eva.leaderboard.patch_camelyon_10shot.test",
+              "thunder.spider_breast.linear_probing",
+              "thunder.spider_thorax.linear_probing"
+            ],
+            "accelerated_medae": 1.7300895173837674,
+            "accelerated_medape": 2.440657784864136,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 30849,
+            "medae": 1.6231315026548643,
+            "medape": 2.2699424938055155,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.crc.validation",
+              "eva.leaderboard.patch_camelyon_10shot.test",
+              "thunder.mhist.linear_probing",
+              "thunder.spider_breast.linear_probing",
+              "thunder.spider_colorectal.linear_probing"
+            ],
+            "accelerated_medae": 1.6231315026548643,
+            "accelerated_medape": 2.2699424938055155,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 32562,
+            "medae": 1.6298118661676142,
+            "medape": 2.1876973001418314,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.crc.validation",
+              "thunder.esca.linear_probing",
+              "thunder.spider_thorax.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "thunder.tcga_uniform.linear_probing"
+            ],
+            "accelerated_medae": 1.6298118661676142,
+            "accelerated_medape": 2.1876973001418314,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 34276,
+            "medae": 1.638800095665971,
+            "medape": 2.2196212433518605,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "eva.leaderboard.patch_camelyon.test",
+              "thunder.break_his.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "thunder.wilds.linear_probing"
+            ],
+            "accelerated_medae": 1.638800095665971,
+            "accelerated_medape": 2.2196212433518605,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 35990,
+            "medae": 1.6250064879631054,
+            "medape": 2.162978199436355,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "thunder.bach.linear_probing",
+              "thunder.ccrcc.linear_probing",
+              "thunder.esca.linear_probing",
+              "thunder.spider_skin.linear_probing"
+            ],
+            "accelerated_medae": 1.6250064879631054,
+            "accelerated_medape": 2.162978199436355,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 37704,
+            "medae": 1.6986370354900373,
+            "medape": 2.33693919357367,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.mhist.test",
+              "eva.leaderboard.patch_camelyon.test",
+              "eva.leaderboard.patch_camelyon.validation",
+              "thunder.crc.linear_probing",
+              "thunder.tcga_tils.linear_probing"
+            ],
+            "accelerated_medae": 1.6986370354900373,
+            "accelerated_medape": 2.336939193573656,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 1.4210854715202004e-14
+          },
+          {
+            "combo_index": 39418,
+            "medae": 1.6906991812965657,
+            "medape": 2.3023351124283846,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.mhist.test",
+              "eva.leaderboard.patch_camelyon_10shot.test",
+              "thunder.ccrcc.linear_probing",
+              "thunder.mhist.linear_probing",
+              "thunder.spider_breast.linear_probing"
+            ],
+            "accelerated_medae": 1.6906991812965657,
+            "accelerated_medape": 2.3023351124283846,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 41132,
+            "medae": 1.6159155389579212,
+            "medape": 2.1779357020735532,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.mhist.test",
+              "thunder.crc.linear_probing",
+              "thunder.spider_breast.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "thunder.tcga_uniform.linear_probing"
+            ],
+            "accelerated_medae": 1.6159155389579212,
+            "accelerated_medape": 2.1779357020735532,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 42845,
+            "medae": 1.6806101265194684,
+            "medape": 2.297619338528386,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.patch_camelyon.test",
+              "thunder.bach.linear_probing",
+              "thunder.break_his.linear_probing",
+              "thunder.crc.linear_probing",
+              "thunder.esca.linear_probing"
+            ],
+            "accelerated_medae": 1.6806101265194826,
+            "accelerated_medape": 2.297619338528386,
+            "absolute_medae_delta": 1.4210854715202004e-14,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 44559,
+            "medae": 1.6890640031006257,
+            "medape": 2.2988695184465033,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.patch_camelyon.test",
+              "thunder.spider_thorax.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "thunder.tcga_uniform.linear_probing",
+              "thunder.wilds.linear_probing"
+            ],
+            "accelerated_medae": 1.6890640031006257,
+            "accelerated_medape": 2.2988695184465033,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 46273,
+            "medae": 1.7061474918656785,
+            "medape": 2.394330485158426,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.patch_camelyon.validation",
+              "thunder.ccrcc.linear_probing",
+              "thunder.crc.linear_probing",
+              "thunder.spider_thorax.linear_probing",
+              "thunder.tcga_tils.linear_probing"
+            ],
+            "accelerated_medae": 1.7061474918656785,
+            "accelerated_medape": 2.394330485158426,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 47987,
+            "medae": 1.645068811301897,
+            "medape": 2.2147013288681454,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.patch_camelyon_10shot.test",
+              "thunder.break_his.linear_probing",
+              "thunder.patch_camelyon.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "thunder.wilds.linear_probing"
+            ],
+            "accelerated_medae": 1.645068811301897,
+            "accelerated_medape": 2.2147013288681454,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 49701,
+            "medae": 1.630170719077725,
+            "medape": 2.2080012314441895,
+            "n": 2027,
+            "probe_set": [
+              "thunder.bach.linear_probing",
+              "thunder.crc.linear_probing",
+              "thunder.mhist.linear_probing",
+              "thunder.spider_skin.linear_probing",
+              "thunder.tcga_uniform.linear_probing"
+            ],
+            "accelerated_medae": 1.630170719077725,
+            "accelerated_medape": 2.2080012314441895,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 51415,
+            "medae": 1.6234873759684092,
+            "medape": 2.1582775875318316,
+            "n": 2027,
+            "probe_set": [
+              "thunder.break_his.linear_probing",
+              "thunder.crc.linear_probing",
+              "thunder.mhist.linear_probing",
+              "thunder.spider_skin.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing"
+            ],
+            "accelerated_medae": 1.6234873759684092,
+            "accelerated_medape": 2.1582775875318316,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 53129,
+            "medae": 1.7867751681068,
+            "medape": 2.4151248010533375,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_thorax.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "thunder.tcga_tils.linear_probing",
+              "thunder.tcga_uniform.linear_probing",
+              "thunder.wilds.linear_probing"
+            ],
+            "accelerated_medae": 1.7867751681068,
+            "accelerated_medape": 2.415124801053327,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 1.0658141036401503e-14
+          }
+        ]
+      },
+      "metric_tolerance": 1e-11,
+      "winner_certified": true,
+      "best": {
+        "combo_index": 36747,
+        "medae": 1.4859436149202452,
+        "medape": 2.0174430046922955,
+        "n": 2027,
+        "probe_set": [
+          "eva.leaderboard.gleason_arvaniti.validation",
+          "thunder.break_his.linear_probing",
+          "thunder.esca.linear_probing",
+          "thunder.mhist.linear_probing",
+          "thunder.spider_breast.linear_probing"
+        ],
+        "accelerated_medae": 1.4859436149202452,
+        "accelerated_medape": 2.0174430046922955,
+        "absolute_medae_delta": 0.0,
+        "absolute_medape_delta": 0.0
+      },
+      "runner_up": {
+        "combo_index": 46084,
+        "medae": 1.490646432173591,
+        "medape": 1.9909331299465989,
+        "n": 2027,
+        "probe_set": [
+          "eva.leaderboard.patch_camelyon.validation",
+          "thunder.break_his.linear_probing",
+          "thunder.esca.linear_probing",
+          "thunder.spider_breast.linear_probing",
+          "thunder.tcga_uniform.linear_probing"
+        ],
+        "accelerated_medae": 1.490646432173591,
+        "accelerated_medape": 1.9909331299465989,
+        "absolute_medae_delta": 0.0,
+        "absolute_medape_delta": 0.0
+      },
+      "scalar_best_runner_up_gap": 0.00470281725334587,
+      "first_unvalidated_accelerated_medae": 1.5311911622677314,
+      "best_to_unvalidated_boundary_gap": 0.04524754734748626,
+      "comparisons": [
+        {
+          "combo_index": 36747,
+          "medae": 1.4859436149202452,
+          "medape": 2.0174430046922955,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.4859436149202452,
+          "accelerated_medape": 2.0174430046922955,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46084,
+          "medae": 1.490646432173591,
+          "medape": 1.9909331299465989,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.490646432173591,
+          "accelerated_medape": 1.9909331299465989,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 21612,
+          "medae": 1.4929958560122856,
+          "medape": 2.0085107229786336,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.4929958560122856,
+          "accelerated_medape": 2.0085107229786336,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 51593,
+          "medae": 1.497315161419678,
+          "medape": 2.0450739047490725,
+          "n": 2027,
+          "probe_set": [
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.4973151614196638,
+          "accelerated_medape": 2.0450739047490725,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36822,
+          "medae": 1.4995837425459229,
+          "medape": 2.0114932507170993,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.4995837425459229,
+          "accelerated_medape": 2.0114932507170993,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36768,
+          "medae": 1.5008802025538657,
+          "medape": 2.024103806586265,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5008802025538657,
+          "accelerated_medape": 2.024103806586265,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46120,
+          "medae": 1.501163280143487,
+          "medape": 2.0428110369112193,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.501163280143487,
+          "accelerated_medape": 2.0428110369112193,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 35467,
+          "medae": 1.5024398940782788,
+          "medape": 2.0606789697952053,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.5024398940782788,
+          "accelerated_medape": 2.0606789697952053,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36804,
+          "medae": 1.5024398940782788,
+          "medape": 2.048476214740591,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5024398940782788,
+          "accelerated_medape": 2.048476214740591,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 43704,
+          "medae": 1.5025090060183288,
+          "medape": 2.0316461475285466,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5025090060183288,
+          "accelerated_medape": 2.03164614752858,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 3.3306690738754696e-14
+        },
+        {
+          "combo_index": 37376,
+          "medae": 1.5065983207033469,
+          "medape": 2.072040501983566,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5065983207033469,
+          "accelerated_medape": 2.072040501983598,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 3.197442310920451e-14
+        },
+        {
+          "combo_index": 21862,
+          "medae": 1.507529215188363,
+          "medape": 1.9786757049602908,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.507529215188363,
+          "accelerated_medape": 1.9786757049602908,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 23397,
+          "medae": 1.5092106172843955,
+          "medape": 2.0991916100799566,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.5092106172843955,
+          "accelerated_medape": 2.0991916100799566,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46126,
+          "medae": 1.510009887900246,
+          "medape": 2.0442008208552043,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.510009887900246,
+          "accelerated_medape": 2.0442008208552043,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46138,
+          "medae": 1.510009887900246,
+          "medape": 1.9912369112009864,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.510009887900246,
+          "accelerated_medape": 1.9912369112009864,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36832,
+          "medae": 1.5127066746756839,
+          "medape": 2.106176104138012,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5127066746756839,
+          "accelerated_medape": 2.106176104138012,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46102,
+          "medae": 1.5131122847880647,
+          "medape": 1.9844354971375664,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5131122847880505,
+          "accelerated_medape": 1.9844354971375497,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 1.6653345369377348e-14
+        },
+        {
+          "combo_index": 51572,
+          "medae": 1.5147004566674553,
+          "medape": 2.03092969106502,
+          "n": 2027,
+          "probe_set": [
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5147004566674553,
+          "accelerated_medape": 2.03092969106502,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 51624,
+          "medae": 1.5148528477082124,
+          "medape": 2.0568296373453436,
+          "n": 2027,
+          "probe_set": [
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5148528477082124,
+          "accelerated_medape": 2.0568296373453223,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 2.1316282072803006e-14
+        },
+        {
+          "combo_index": 35705,
+          "medae": 1.5148840921486482,
+          "medape": 2.096275726324989,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5148840921486482,
+          "accelerated_medape": 2.096275726325006,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.687538997430238e-14
+        },
+        {
+          "combo_index": 51590,
+          "medae": 1.5172697814680163,
+          "medape": 2.096665655657411,
+          "n": 2027,
+          "probe_set": [
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5172697814680163,
+          "accelerated_medape": 2.096665655657431,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.9984014443252818e-14
+        },
+        {
+          "combo_index": 36779,
+          "medae": 1.5188293536688349,
+          "medape": 2.0479819537331148,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5188293536688349,
+          "accelerated_medape": 2.0479819537331148,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 17572,
+          "medae": 1.5192611517461572,
+          "medape": 2.0237246277608567,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5192611517461572,
+          "accelerated_medape": 2.0237246277608567,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 14872,
+          "medae": 1.519738882686866,
+          "medape": 2.0906584576170926,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.519738882686866,
+          "accelerated_medape": 2.0906584576170926,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 17560,
+          "medae": 1.519738882686866,
+          "medape": 2.072441187551777,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.519738882686866,
+          "accelerated_medape": 2.072441187551777,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 21614,
+          "medae": 1.519738882686866,
+          "medape": 2.073898195130366,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.519738882686866,
+          "accelerated_medape": 2.073898195130366,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 31923,
+          "medae": 1.519738882686866,
+          "medape": 2.062731685208894,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.crc.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.519738882686866,
+          "accelerated_medape": 2.062731685208894,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 35469,
+          "medae": 1.519738882686866,
+          "medape": 2.0943507907157937,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.519738882686866,
+          "accelerated_medape": 2.0943507907157937,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 51586,
+          "medae": 1.519738882686866,
+          "medape": 2.075435540102831,
+          "n": 2027,
+          "probe_set": [
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.519738882686866,
+          "accelerated_medape": 2.075435540102831,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 35710,
+          "medae": 1.5197965900706691,
+          "medape": 2.1098854119091692,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5197965900706691,
+          "accelerated_medape": 2.1098854119091692,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 22053,
+          "medae": 1.5201074719535086,
+          "medape": 2.084137330856988,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.5201074719535086,
+          "accelerated_medape": 2.084137330856988,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 47940,
+          "medae": 1.5202896686866936,
+          "medape": 2.0573144130039887,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5202896686866936,
+          "accelerated_medape": 2.0573144130039887,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36810,
+          "medae": 1.5206965875936902,
+          "medape": 2.048941993535047,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5206965875936902,
+          "accelerated_medape": 2.048941993535047,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 35717,
+          "medae": 1.520752582128992,
+          "medape": 2.0552205959465693,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.520752582128992,
+          "accelerated_medape": 2.0552205959465693,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36753,
+          "medae": 1.5209914154849287,
+          "medape": 2.071729030132703,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5209914154849287,
+          "accelerated_medape": 2.071729030132703,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 38979,
+          "medae": 1.5224392957811546,
+          "medape": 2.015039337940705,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5224392957811546,
+          "accelerated_medape": 2.015039337940705,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33605,
+          "medae": 1.523460737639894,
+          "medape": 2.0192494053330283,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "accelerated_medae": 1.523460737639894,
+          "accelerated_medape": 2.0192494053330283,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 17322,
+          "medae": 1.524020623986317,
+          "medape": 2.016852599071001,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.016852599071001,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 21623,
+          "medae": 1.524020623986317,
+          "medape": 2.059773070859852,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.0597730708598294,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 2.2648549702353193e-14
+        },
+        {
+          "combo_index": 22051,
+          "medae": 1.524020623986317,
+          "medape": 2.1204013218091573,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.12040132180918,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 2.2648549702353193e-14
+        },
+        {
+          "combo_index": 33017,
+          "medae": 1.524020623986317,
+          "medape": 2.096665655657411,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.096665655657431,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.9984014443252818e-14
+        },
+        {
+          "combo_index": 43054,
+          "medae": 1.524020623986317,
+          "medape": 2.09168087201267,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.bach.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.09168087201267,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 45984,
+          "medae": 1.524020623986317,
+          "medape": 2.070700268122745,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.070700268122745,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46002,
+          "medae": 1.524020623986317,
+          "medape": 2.0158162696941018,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.0158162696941018,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46099,
+          "medae": 1.524020623986317,
+          "medape": 2.0779470809224816,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.0779470809224816,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46148,
+          "medae": 1.524020623986317,
+          "medape": 2.0916865051131293,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.0916865051131293,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 51544,
+          "medae": 1.524020623986317,
+          "medape": 2.0114932507170993,
+          "n": 2027,
+          "probe_set": [
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.524020623986317,
+          "accelerated_medape": 2.0114932507170993,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 31977,
+          "medae": 1.5246687546792828,
+          "medape": 2.0510164296358755,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.crc.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5246687546792828,
+          "accelerated_medape": 2.0510164296358755,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 17554,
+          "medae": 1.5247752065441063,
+          "medape": 2.083925526005987,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5247752065441063,
+          "accelerated_medape": 2.083925526005987,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 5881,
+          "medae": 1.5248025524369098,
+          "medape": 2.0916865051131293,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bach.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.5248025524369098,
+          "accelerated_medape": 2.0916865051131293,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46069,
+          "medae": 1.525188585792847,
+          "medape": 2.071729030132703,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.525188585792847,
+          "accelerated_medape": 2.071729030132703,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33137,
+          "medae": 1.5254711315332088,
+          "medape": 2.115338506870313,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.5254711315332088,
+          "accelerated_medape": 2.115338506870313,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36668,
+          "medae": 1.5255130510295203,
+          "medape": 2.083078972148896,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5255130510295203,
+          "accelerated_medape": 2.0830789721488787,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.7319479184152442e-14
+        },
+        {
+          "combo_index": 51581,
+          "medae": 1.5259460877414455,
+          "medape": 2.0846531366723067,
+          "n": 2027,
+          "probe_set": [
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5259460877414597,
+          "accelerated_medape": 2.0846531366723067,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 43715,
+          "medae": 1.5260614114698683,
+          "medape": 2.0552205959465693,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5260614114698683,
+          "accelerated_medape": 2.0552205959465693,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46095,
+          "medae": 1.5265513064601492,
+          "medape": 2.0354315696058807,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5265513064601492,
+          "accelerated_medape": 2.0354315696058807,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36759,
+          "medae": 1.5266641117517281,
+          "medape": 2.0787884278397906,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "accelerated_medae": 1.5266641117517281,
+          "accelerated_medape": 2.0787884278397906,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 37369,
+          "medae": 1.5269062820544264,
+          "medape": 2.1207307017059307,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5269062820544264,
+          "accelerated_medape": 2.1207307017059307,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36686,
+          "medae": 1.5282344535984578,
+          "medape": 2.0407232209121413,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.ccrcc.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5282344535984578,
+          "accelerated_medape": 2.0407232209121413,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 18659,
+          "medae": 1.5283122040121668,
+          "medape": 2.0606789697952053,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5283122040121597,
+          "accelerated_medape": 2.0606789697952053,
+          "absolute_medae_delta": 7.105427357601002e-15,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 16082,
+          "medae": 1.5284171704933556,
+          "medape": 2.0142244665251434,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.0142244665251434,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 16320,
+          "medae": 1.5284171704933556,
+          "medape": 2.09444999593705,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.09444999593705,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 21642,
+          "medae": 1.5284171704933556,
+          "medape": 2.0916865051131293,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.0916865051131293,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 22189,
+          "medae": 1.5284171704933556,
+          "medape": 2.09444999593705,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.09444999593705,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 23403,
+          "medae": 1.5284171704933556,
+          "medape": 2.0808824267490835,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.0808824267490835,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 31959,
+          "medae": 1.5284171704933556,
+          "medape": 2.0723544227745307,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.crc.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.0723544227745307,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33441,
+          "medae": 1.5284171704933556,
+          "medape": 2.074553106733319,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.074553106733319,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33447,
+          "medae": 1.5284171704933556,
+          "medape": 2.0085107229786336,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.0085107229786336,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33616,
+          "medae": 1.5284171704933556,
+          "medape": 2.0707705787194253,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.0707705787194253,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33625,
+          "medae": 1.5284171704933556,
+          "medape": 2.0338624889326935,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "thunder.esca.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.0338624889326935,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36786,
+          "medae": 1.5284171704933556,
+          "medape": 2.0114932507170993,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.0114932507170993,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36815,
+          "medae": 1.5284171704933556,
+          "medape": 2.0536095551035802,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.0536095551035802,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 37006,
+          "medae": 1.5284171704933556,
+          "medape": 2.1207307017059307,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.ccrcc.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.1207307017059307,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46082,
+          "medae": 1.5284171704933556,
+          "medape": 2.047641391056904,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.047641391056904,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 47904,
+          "medae": 1.5284171704933556,
+          "medape": 2.057278336841525,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5284171704933556,
+          "accelerated_medape": 2.057278336841525,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 9822,
+          "medae": 1.5285330568852586,
+          "medape": 2.014295258125844,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bach.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.mhist.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.014295258125844,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 14736,
+          "medae": 1.5285330568852586,
+          "medape": 2.127879113921082,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.127879113921082,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 17324,
+          "medae": 1.5285330568852586,
+          "medape": 2.0766199831242487,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.0766199831242487,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 18623,
+          "medae": 1.5285330568852586,
+          "medape": 2.0450739047490725,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.0450739047490725,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33019,
+          "medae": 1.5285330568852586,
+          "medape": 2.084137330856988,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.084137330856988,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33411,
+          "medae": 1.5285330568852586,
+          "medape": 1.9957364098416484,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 1.9957364098416484,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33603,
+          "medae": 1.5285330568852586,
+          "medape": 2.119906098476729,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.119906098476729,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33607,
+          "medae": 1.5285330568852586,
+          "medape": 2.04024147229172,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.mhist.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.04024147229172,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 34423,
+          "medae": 1.5285330568852586,
+          "medape": 2.0552205959465693,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.0552205959465693,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 35699,
+          "medae": 1.5285330568852586,
+          "medape": 2.120693268224019,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.120693268224019,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36843,
+          "medae": 1.5285330568852586,
+          "medape": 2.1300559137512356,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.1300559137512356,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 38985,
+          "medae": 1.5285330568852586,
+          "medape": 2.058542174749399,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.esca.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.058542174749399,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 43719,
+          "medae": 1.5285330568852586,
+          "medape": 2.0791042249273977,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.0791042249273977,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46103,
+          "medae": 1.5285330568852586,
+          "medape": 2.054537623099647,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.wilds.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.054537623099647,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 51554,
+          "medae": 1.5285330568852586,
+          "medape": 2.0843008925027573,
+          "n": 2027,
+          "probe_set": [
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285330568852586,
+          "accelerated_medape": 2.0843008925027573,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36838,
+          "medae": 1.5285535993224926,
+          "medape": 2.101702294028664,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5285535993224926,
+          "accelerated_medape": 2.1017022940286996,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 3.552713678800501e-14
+        },
+        {
+          "combo_index": 23399,
+          "medae": 1.528963439961771,
+          "medape": 2.112871339047401,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.528963439961771,
+          "accelerated_medape": 2.112871339047401,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 21855,
+          "medae": 1.5293812285846258,
+          "medape": 2.089838382251264,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5293812285846258,
+          "accelerated_medape": 2.089838382251264,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 38997,
+          "medae": 1.530297324031224,
+          "medape": 2.044571711627674,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.validation",
+            "thunder.esca.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.530297324031224,
+          "accelerated_medape": 2.044571711627674,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 21850,
+          "medae": 1.5305798658322516,
+          "medape": 2.0648558293943355,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.breakhis.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5305798658322516,
+          "accelerated_medape": 2.0648558293943355,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 40644,
+          "medae": 1.530728772865615,
+          "medape": 2.0632159612665015,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.mhist.test",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.530728772865615,
+          "accelerated_medape": 2.0632159612665015,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 36766,
+          "medae": 1.530834958512898,
+          "medape": 2.050031450460466,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "accelerated_medae": 1.530834958512898,
+          "accelerated_medape": 2.050031450460466,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 14738,
+          "medae": 1.5308390750423513,
+          "medape": 2.0956665146699165,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.mhist.test",
+            "eva.leaderboard.patch_camelyon.test",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing"
+          ],
+          "accelerated_medae": 1.5308390750423513,
+          "accelerated_medape": 2.095666514669931,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.4654943925052066e-14
+        },
+        {
+          "combo_index": 17565,
+          "medae": 1.5309267238291397,
+          "medape": 2.072067792136172,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.patch_camelyon_10shot.test",
+            "thunder.mhist.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5309267238291397,
+          "accelerated_medape": 2.072067792136172,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 37401,
+          "medae": 1.5309766357086687,
+          "medape": 2.109026462854709,
+          "n": 2027,
+          "probe_set": [
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.esca.linear_probing",
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.tcga_uniform.linear_probing"
+          ],
+          "accelerated_medae": 1.5309766357086687,
+          "accelerated_medape": 2.109026462854709,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        }
+      ]
+    },
+    {
+      "run_dir": "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91",
+      "config_sha256": "fd40559e91ee1b060c2d27ac1067818f127ba1ebd20fa580d09185366a879c3b",
+      "merged_summary_sha256": "14d5e0b3623e4dfb9b437518fb6f7f62a9430c9f4ae26c3a7c3fc50970ec0db1",
+      "total_combinations": 142506,
+      "scalar_validated_top": 100,
+      "max_absolute_metric_delta": 3.175237850427948e-14,
+      "deterministic_spread": {
+        "rule": "unique integer points from linspace(0,total_combinations-1,count); scalar MedAE/MedAPE metric recomputation covers the full combo-index range, not only finalists; it is not a full cell-array comparison",
+        "requested_count": 32,
+        "validated_count": 32,
+        "combo_indices": [
+          0,
+          4596,
+          9193,
+          13790,
+          18387,
+          22984,
+          27581,
+          32178,
+          36775,
+          41372,
+          45969,
+          50566,
+          55163,
+          59760,
+          64357,
+          68954,
+          73550,
+          78147,
+          82744,
+          87341,
+          91938,
+          96535,
+          101132,
+          105729,
+          110326,
+          114923,
+          119520,
+          124117,
+          128714,
+          133311,
+          137908,
+          142505
+        ],
+        "max_absolute_metric_delta": 4.1300296516055823e-14,
+        "comparisons": [
+          {
+            "combo_index": 0,
+            "medae": 1.4925814092923417,
+            "medape": 2.0176968564632873,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_skin.linear_probing",
+              "thunder.esca.linear_probing",
+              "thunder.tcga_uniform.linear_probing",
+              "eva.leaderboard.monusac.test",
+              "thunder.spider_breast.linear_probing"
+            ],
+            "accelerated_medae": 1.4925814092923417,
+            "accelerated_medape": 2.0176968564632873,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 4596,
+            "medae": 1.6541224154111802,
+            "medape": 2.223196048106453,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_skin.linear_probing",
+              "thunder.tcga_uniform.linear_probing",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "eva.leaderboard.patch_camelyon.test",
+              "thunder.patch_camelyon.linear_probing"
+            ],
+            "accelerated_medae": 1.6541224154111802,
+            "accelerated_medape": 2.223196048106453,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 9193,
+            "medae": 1.6388844393623714,
+            "medape": 2.2606579243486267,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_skin.linear_probing",
+              "thunder.spider_breast.linear_probing",
+              "pathobench.exaone2025.bracs.slidelevel-fine",
+              "pathorob.nature2026.camelyon.clustering_score",
+              "pathobench.exaone2025.bracs.slidelevel-coarse"
+            ],
+            "accelerated_medae": 1.6388844393623714,
+            "accelerated_medape": 2.2606579243486267,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 13790,
+            "medae": 1.6372417952351412,
+            "medape": 2.2088415123418588,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_skin.linear_probing",
+              "pathobench.exaone2025.bracs.slidelevel-fine",
+              "eva.leaderboard.camelyon16_small.test",
+              "pathorob.nature2026.camelyon.clustering_score",
+              "pathobench.exaone2025.bracs.slidelevel-coarse"
+            ],
+            "accelerated_medae": 1.6372417952351412,
+            "accelerated_medape": 2.2088415123418588,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 18387,
+            "medae": 1.5659392416361442,
+            "medape": 2.139816285708844,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_skin.linear_probing",
+              "pathorob.nature2026.tcga_4x4.clustering_score",
+              "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation",
+              "eva.leaderboard.patch_camelyon.test",
+              "pathobench.exaone2025.cptac_brca.tp53-mutation"
+            ],
+            "accelerated_medae": 1.5659392416361442,
+            "accelerated_medape": 2.139816285708844,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 22984,
+            "medae": 1.6090676379969366,
+            "medape": 2.2524715843967713,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_skin.linear_probing",
+              "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+              "pathobench.exaone2025.cptac_luad.immune-class",
+              "hest.paad.gene_expression",
+              "pathobench.exaone2025.cptac_pda.os"
+            ],
+            "accelerated_medae": 1.6090676379969295,
+            "accelerated_medape": 2.2524715843968126,
+            "absolute_medae_delta": 7.105427357601002e-15,
+            "absolute_medape_delta": 4.1300296516055823e-14
+          },
+          {
+            "combo_index": 27581,
+            "medae": 1.5716802046856486,
+            "medape": 2.138835179797387,
+            "n": 2027,
+            "probe_set": [
+              "thunder.esca.linear_probing",
+              "eva.leaderboard.monusac.test",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "thunder.spider_colorectal.linear_probing",
+              "pathobench.exaone2025.cptac_pda.os"
+            ],
+            "accelerated_medae": 1.5716802046856486,
+            "accelerated_medape": 2.138835179797387,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 32178,
+            "medae": 1.630017715891384,
+            "medape": 2.2284159106377617,
+            "n": 2027,
+            "probe_set": [
+              "thunder.esca.linear_probing",
+              "hest.read.gene_expression",
+              "eva.leaderboard.panda_small.test",
+              "thunder.break_his.linear_probing",
+              "pathobench.exaone2025.bracs.slidelevel-coarse"
+            ],
+            "accelerated_medae": 1.630017715891384,
+            "accelerated_medape": 2.2284159106377617,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 36775,
+            "medae": 1.7980202696056153,
+            "medape": 2.4306549026895006,
+            "n": 2027,
+            "probe_set": [
+              "thunder.esca.linear_probing",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+              "hest.paad.gene_expression",
+              "pathobench.exaone2025.bracs.slidelevel-coarse"
+            ],
+            "accelerated_medae": 1.7980202696056153,
+            "accelerated_medape": 2.4306549026895006,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 41372,
+            "medae": 1.7206928586365393,
+            "medape": 2.340478631695485,
+            "n": 2027,
+            "probe_set": [
+              "thunder.esca.linear_probing",
+              "pathorob.nature2026.camelyon.clustering_score",
+              "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation",
+              "hest.paad.gene_expression",
+              "eva.leaderboard.patch_camelyon_10shot.test"
+            ],
+            "accelerated_medae": 1.7206928586365393,
+            "accelerated_medape": 2.340478631695485,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 45969,
+            "medae": 1.6123020078891557,
+            "medape": 2.2196212433518605,
+            "n": 2027,
+            "probe_set": [
+              "thunder.tcga_uniform.linear_probing",
+              "eva.leaderboard.monusac.test",
+              "thunder.spider_colorectal.linear_probing",
+              "thunder.patch_camelyon.linear_probing",
+              "thunder.spider_thorax.linear_probing"
+            ],
+            "accelerated_medae": 1.6123020078891557,
+            "accelerated_medape": 2.2196212433518605,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 50566,
+            "medae": 1.5776818549673095,
+            "medape": 2.0684656276298172,
+            "n": 2027,
+            "probe_set": [
+              "thunder.tcga_uniform.linear_probing",
+              "hest.read.gene_expression",
+              "thunder.tcga_crc_msi.linear_probing",
+              "pathobench.exaone2025.cptac_luad.immune-class",
+              "eva.leaderboard.mhist.test"
+            ],
+            "accelerated_medae": 1.5776818549673095,
+            "accelerated_medape": 2.0684656276298172,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 55163,
+            "medae": 1.5108109925135125,
+            "medape": 2.084732063232725,
+            "n": 2027,
+            "probe_set": [
+              "thunder.tcga_uniform.linear_probing",
+              "eva.leaderboard.panda_small.test",
+              "thunder.tcga_crc_msi.linear_probing",
+              "hest.skcm.gene_expression",
+              "pathobench.exaone2025.cptac_pda.os"
+            ],
+            "accelerated_medae": 1.5108109925135125,
+            "accelerated_medape": 2.0847320632327078,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 1.7319479184152442e-14
+          },
+          {
+            "combo_index": 59760,
+            "medae": 1.5916637435069845,
+            "medape": 2.1239323534076897,
+            "n": 2027,
+            "probe_set": [
+              "thunder.tcga_uniform.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "eva.leaderboard.patch_camelyon.test",
+              "pathobench.exaone2025.cptac_brca.tp53-mutation",
+              "eva.leaderboard.mhist.test"
+            ],
+            "accelerated_medae": 1.5916637435069845,
+            "accelerated_medape": 2.1239323534076897,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 64357,
+            "medae": 1.915476218426619,
+            "medape": 2.63294197891682,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.monusac.test",
+              "hest.read.gene_expression",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "pathorob.nature2026.tcga_4x4.clustering_score",
+              "hest.skcm.gene_expression"
+            ],
+            "accelerated_medae": 1.915476218426619,
+            "accelerated_medape": 2.63294197891682,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 68954,
+            "medae": 2.1603869389823984,
+            "medape": 2.892089027773559,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.monusac.test",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation",
+              "eva.leaderboard.mhist.test",
+              "pathobench.exaone2025.bracs.slidelevel-coarse"
+            ],
+            "accelerated_medae": 2.16038693898237,
+            "accelerated_medape": 2.892089027773559,
+            "absolute_medae_delta": 2.842170943040401e-14,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 73550,
+            "medae": 1.6237596433866344,
+            "medape": 2.206030695578724,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.monusac.test",
+              "thunder.spider_colorectal.linear_probing",
+              "thunder.patch_camelyon.linear_probing",
+              "pathobench.exaone2025.cptac_brca.tp53-mutation",
+              "eva.leaderboard.patch_camelyon_10shot.test"
+            ],
+            "accelerated_medae": 1.6237596433866344,
+            "accelerated_medape": 2.206030695578724,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 78147,
+            "medae": 1.6794276644762363,
+            "medape": 2.2877815421216674,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_breast.linear_probing",
+              "hest.read.gene_expression",
+              "thunder.tcga_crc_msi.linear_probing",
+              "thunder.patch_camelyon.linear_probing",
+              "hest.paad.gene_expression"
+            ],
+            "accelerated_medae": 1.6794276644762363,
+            "accelerated_medape": 2.2877815421216674,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 82744,
+            "medae": 1.5947373625349854,
+            "medape": 2.2388642975707587,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_breast.linear_probing",
+              "eva.leaderboard.panda_small.test",
+              "thunder.tcga_crc_msi.linear_probing",
+              "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+              "pathobench.exaone2025.cptac_brca.tp53-mutation"
+            ],
+            "accelerated_medae": 1.5947373625349854,
+            "accelerated_medape": 2.2388642975707587,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 87341,
+            "medae": 1.710512989742881,
+            "medape": 2.2679108839895905,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_breast.linear_probing",
+              "thunder.tcga_crc_msi.linear_probing",
+              "eva.leaderboard.patch_camelyon.test",
+              "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+              "thunder.spider_thorax.linear_probing"
+            ],
+            "accelerated_medae": 1.710512989742881,
+            "accelerated_medape": 2.2679108839895905,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 91938,
+            "medae": 1.897879819152351,
+            "medape": 2.6616305306956085,
+            "n": 2027,
+            "probe_set": [
+              "hest.read.gene_expression",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "pathorob.nature2026.camelyon.clustering_score",
+              "hest.skcm.gene_expression",
+              "eva.leaderboard.mhist.test"
+            ],
+            "accelerated_medae": 1.897879819152351,
+            "accelerated_medape": 2.6616305306956085,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 96535,
+            "medae": 1.631318022215524,
+            "medape": 2.2196212433518605,
+            "n": 2027,
+            "probe_set": [
+              "hest.read.gene_expression",
+              "thunder.spider_colorectal.linear_probing",
+              "thunder.break_his.linear_probing",
+              "thunder.patch_camelyon.linear_probing",
+              "hest.paad.gene_expression"
+            ],
+            "accelerated_medae": 1.631318022215524,
+            "accelerated_medape": 2.2196212433518605,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 101132,
+            "medae": 2.1776957470144964,
+            "medape": 2.9506597053844077,
+            "n": 2027,
+            "probe_set": [
+              "pathobench.exaone2025.bracs.slidelevel-fine",
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "thunder.break_his.linear_probing",
+              "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+              "pathobench.exaone2025.bracs.slidelevel-coarse"
+            ],
+            "accelerated_medae": 2.1776957470144964,
+            "accelerated_medape": 2.9506597053844077,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 105729,
+            "medae": 1.7280048078789179,
+            "medape": 2.348135344796912,
+            "n": 2027,
+            "probe_set": [
+              "pathobench.exaone2025.bracs.slidelevel-fine",
+              "thunder.spider_colorectal.linear_probing",
+              "pathobench.exaone2025.cptac_brca.tp53-mutation",
+              "pathobench.threads2025.bcnb.her2",
+              "pathobench.exaone2025.cptac_pda.os"
+            ],
+            "accelerated_medae": 1.728004807878932,
+            "accelerated_medape": 2.348135344796912,
+            "absolute_medae_delta": 1.4210854715202004e-14,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 110326,
+            "medae": 2.007111086083306,
+            "medape": 2.7305306373183473,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "pathorob.nature2026.tcga_4x4.clustering_score",
+              "eva.leaderboard.camelyon16_small.test",
+              "pathobench.exaone2025.cptac_brca.tp53-mutation",
+              "eva.leaderboard.patch_camelyon_10shot.test"
+            ],
+            "accelerated_medae": 2.007111086083306,
+            "accelerated_medape": 2.73053063731836,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 1.2878587085651816e-14
+          },
+          {
+            "combo_index": 114923,
+            "medae": 2.0091441891041555,
+            "medape": 2.7079140353035984,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.gleason_arvaniti.validation",
+              "thunder.break_his.linear_probing",
+              "hest.skcm.gene_expression",
+              "pathobench.exaone2025.cptac_luad.immune-class",
+              "hest.paad.gene_expression"
+            ],
+            "accelerated_medae": 2.0091441891041555,
+            "accelerated_medape": 2.7079140353035984,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 119520,
+            "medae": 1.5698479767433753,
+            "medape": 2.1866903487655893,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.panda_small.test",
+              "pathorob.nature2026.camelyon.clustering_score",
+              "hest.skcm.gene_expression",
+              "thunder.patch_camelyon.linear_probing",
+              "pathobench.exaone2025.bracs.slidelevel-coarse"
+            ],
+            "accelerated_medae": 1.5698479767433753,
+            "accelerated_medape": 2.1866903487655893,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 124117,
+            "medae": 1.7121903645048206,
+            "medape": 2.288572789946166,
+            "n": 2027,
+            "probe_set": [
+              "pathorob.nature2026.tcga_4x4.clustering_score",
+              "pathorob.nature2026.camelyon.clustering_score",
+              "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation",
+              "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+              "thunder.spider_thorax.linear_probing"
+            ],
+            "accelerated_medae": 1.7121903645048206,
+            "accelerated_medape": 2.288572789946166,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 128714,
+            "medae": 1.6773315807862872,
+            "medape": 2.269027492978911,
+            "n": 2027,
+            "probe_set": [
+              "eva.leaderboard.camelyon16_small.test",
+              "thunder.tcga_crc_msi.linear_probing",
+              "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+              "eva.leaderboard.patch_camelyon.test",
+              "eva.leaderboard.mhist.test"
+            ],
+            "accelerated_medae": 1.6773315807862872,
+            "accelerated_medape": 2.269027492978911,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 133311,
+            "medae": 1.6586725756932381,
+            "medape": 2.255157062639296,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_colorectal.linear_probing",
+              "hest.skcm.gene_expression",
+              "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+              "pathobench.threads2025.bcnb.her2",
+              "pathobench.exaone2025.cptac_pda.os"
+            ],
+            "accelerated_medae": 1.6586725756932381,
+            "accelerated_medape": 2.255157062639296,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 137908,
+            "medae": 1.6779668056580022,
+            "medape": 2.3061490608266966,
+            "n": 2027,
+            "probe_set": [
+              "thunder.tcga_crc_msi.linear_probing",
+              "pathobench.exaone2025.cptac_gbm.egfr-mutation",
+              "pathobench.threads2025.bcnb.her2",
+              "thunder.spider_thorax.linear_probing",
+              "eva.leaderboard.patch_camelyon_10shot.test"
+            ],
+            "accelerated_medae": 1.6779668056580022,
+            "accelerated_medape": 2.3061490608266966,
+            "absolute_medae_delta": 0.0,
+            "absolute_medape_delta": 0.0
+          },
+          {
+            "combo_index": 142505,
+            "medae": 1.7872448606361928,
+            "medape": 2.4462876017818296,
+            "n": 2027,
+            "probe_set": [
+              "thunder.spider_thorax.linear_probing",
+              "eva.leaderboard.patch_camelyon_10shot.test",
+              "eva.leaderboard.mhist.test",
+              "pathobench.exaone2025.cptac_pda.os",
+              "pathobench.exaone2025.bracs.slidelevel-coarse"
+            ],
+            "accelerated_medae": 1.787244860636207,
+            "accelerated_medape": 2.4462876017818296,
+            "absolute_medae_delta": 1.4210854715202004e-14,
+            "absolute_medape_delta": 0.0
+          }
+        ]
+      },
+      "metric_tolerance": 1e-11,
+      "winner_certified": true,
+      "best": {
+        "combo_index": 46897,
+        "medae": 1.4273387397169017,
+        "medape": 1.9342638128337362,
+        "n": 2027,
+        "probe_set": [
+          "thunder.tcga_uniform.linear_probing",
+          "thunder.spider_breast.linear_probing",
+          "hest.read.gene_expression",
+          "pathorob.nature2026.tcga_4x4.clustering_score",
+          "thunder.break_his.linear_probing"
+        ],
+        "accelerated_medae": 1.4273387397169017,
+        "accelerated_medape": 1.9342638128337362,
+        "absolute_medae_delta": 0.0,
+        "absolute_medape_delta": 0.0
+      },
+      "runner_up": {
+        "combo_index": 24085,
+        "medae": 1.427658532271444,
+        "medape": 1.9671775653385615,
+        "n": 2027,
+        "probe_set": [
+          "thunder.esca.linear_probing",
+          "thunder.tcga_uniform.linear_probing",
+          "thunder.spider_breast.linear_probing",
+          "hest.read.gene_expression",
+          "thunder.break_his.linear_probing"
+        ],
+        "accelerated_medae": 1.427658532271444,
+        "accelerated_medape": 1.9671775653385442,
+        "absolute_medae_delta": 0.0,
+        "absolute_medape_delta": 1.7319479184152442e-14
+      },
+      "scalar_best_runner_up_gap": 0.00031979255454217537,
+      "first_unvalidated_accelerated_medae": 1.474254282263189,
+      "best_to_unvalidated_boundary_gap": 0.04691554254628727,
+      "comparisons": [
+        {
+          "combo_index": 46897,
+          "medae": 1.4273387397169017,
+          "medape": 1.9342638128337362,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4273387397169017,
+          "accelerated_medape": 1.9342638128337362,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 24085,
+          "medae": 1.427658532271444,
+          "medape": 1.9671775653385615,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.427658532271444,
+          "accelerated_medape": 1.9671775653385442,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.7319479184152442e-14
+        },
+        {
+          "combo_index": 47883,
+          "medae": 1.437804600123144,
+          "medape": 1.9891081025038686,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing",
+            "eva.leaderboard.patch_camelyon.test"
+          ],
+          "accelerated_medae": 1.437804600123144,
+          "accelerated_medape": 1.9891081025038686,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 49875,
+          "medae": 1.4396501384817384,
+          "medape": 1.9412454723859347,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4396501384817384,
+          "accelerated_medape": 1.9412454723859347,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 29401,
+          "medae": 1.443509291687846,
+          "medape": 1.9637849146937558,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.443509291687846,
+          "accelerated_medape": 1.9637849146937558,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46951,
+          "medae": 1.443509291687846,
+          "medape": 1.9538753791463965,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.443509291687846,
+          "accelerated_medape": 1.9538753791463965,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33153,
+          "medae": 1.444845530998279,
+          "medape": 2.0154085871941345,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.444845530998279,
+          "accelerated_medape": 2.0154085871941536,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.9095836023552692e-14
+        },
+        {
+          "combo_index": 24171,
+          "medae": 1.4455760227568248,
+          "medape": 1.9607939530140892,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4455760227568248,
+          "accelerated_medape": 1.9607939530140892,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 24225,
+          "medae": 1.4455965784972165,
+          "medape": 1.9610086891292138,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4455965784972165,
+          "accelerated_medape": 1.9610086891292138,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 45518,
+          "medae": 1.447232405431535,
+          "medape": 1.9804291879375153,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.447232405431535,
+          "accelerated_medape": 1.9804291879375153,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 24272,
+          "medae": 1.447383317071683,
+          "medape": 1.9809725170872874,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.447383317071683,
+          "accelerated_medape": 1.9809725170872707,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.6653345369377348e-14
+        },
+        {
+          "combo_index": 32824,
+          "medae": 1.4490939351418959,
+          "medape": 2.007758718094878,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.449093935141903,
+          "accelerated_medape": 2.007758718094878,
+          "absolute_medae_delta": 7.105427357601002e-15,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 54483,
+          "medae": 1.4494418294547202,
+          "medape": 2.0114932507170993,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.panda_small.test",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4494418294547344,
+          "accelerated_medape": 2.0114932507170993,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 32364,
+          "medae": 1.4499224677590803,
+          "medape": 1.976255032869888,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.4499224677590803,
+          "accelerated_medape": 1.976255032869902,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.3988810110276972e-14
+        },
+        {
+          "combo_index": 24517,
+          "medae": 1.4501027698409104,
+          "medape": 1.9448125570638035,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4501027698409104,
+          "accelerated_medape": 1.9448125570638035,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 48671,
+          "medae": 1.4508383356165382,
+          "medape": 1.9745822257139274,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.4508383356165382,
+          "accelerated_medape": 1.9745822257139274,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 4026,
+          "medae": 1.452051613344679,
+          "medape": 2.004787104247142,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.452051613344679,
+          "accelerated_medape": 2.004787104247142,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 29347,
+          "medae": 1.452051613344679,
+          "medape": 1.958767124942429,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.452051613344679,
+          "accelerated_medape": 1.958767124942429,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 44597,
+          "medae": 1.452051613344679,
+          "medape": 1.968539185098634,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.452051613344679,
+          "accelerated_medape": 1.968539185098634,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 44706,
+          "medae": 1.452051613344679,
+          "medape": 1.9786757049602908,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.452051613344679,
+          "accelerated_medape": 1.9786757049602908,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 56012,
+          "medae": 1.452051613344679,
+          "medape": 1.9891081025038686,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing",
+            "eva.leaderboard.patch_camelyon.test"
+          ],
+          "accelerated_medae": 1.452051613344679,
+          "accelerated_medape": 1.9891081025038686,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 56017,
+          "medae": 1.4521342144698792,
+          "medape": 1.9711592306059111,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing",
+            "hest.paad.gene_expression"
+          ],
+          "accelerated_medae": 1.4521342144698792,
+          "accelerated_medape": 1.9711592306059111,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 47882,
+          "medae": 1.452233760725676,
+          "medape": 1.9689882178945373,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.452233760725676,
+          "accelerated_medape": 1.968988217894569,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 3.175237850427948e-14
+        },
+        {
+          "combo_index": 50703,
+          "medae": 1.4529290355267932,
+          "medape": 1.989561234528366,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.4529290355267932,
+          "accelerated_medape": 1.989561234528366,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 49842,
+          "medae": 1.453300801493981,
+          "medape": 1.9671775653385615,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.453300801493981,
+          "accelerated_medape": 1.9671775653385442,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.7319479184152442e-14
+        },
+        {
+          "combo_index": 47851,
+          "medae": 1.4539064503414565,
+          "medape": 1.9809725170872874,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4539064503414565,
+          "accelerated_medape": 1.9809725170872707,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.6653345369377348e-14
+        },
+        {
+          "combo_index": 49914,
+          "medae": 1.4539903072892741,
+          "medape": 1.9711592306059111,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.4539903072892741,
+          "accelerated_medape": 1.9711592306059111,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 47888,
+          "medae": 1.45503595519736,
+          "medape": 1.9412454723859347,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing",
+            "hest.paad.gene_expression"
+          ],
+          "accelerated_medae": 1.45503595519736,
+          "accelerated_medape": 1.9412454723859347,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 26730,
+          "medae": 1.4558046964953348,
+          "medape": 1.9899660085086244,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_breast.linear_probing",
+            "eva.leaderboard.gleason_arvaniti.validation",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4558046964953348,
+          "accelerated_medape": 1.9899660085086244,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 50183,
+          "medae": 1.4567744423530655,
+          "medape": 2.0134675203149817,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.spider_colorectal.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4567744423530655,
+          "accelerated_medape": 2.0134675203149817,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 32939,
+          "medae": 1.4570254427313358,
+          "medape": 2.0479471369419824,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing"
+          ],
+          "accelerated_medae": 1.4570254427313358,
+          "accelerated_medape": 2.0479471369419673,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.509903313490213e-14
+        },
+        {
+          "combo_index": 44235,
+          "medae": 1.4572416825768784,
+          "medape": 1.9707284515220473,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4572416825768784,
+          "accelerated_medape": 1.9707284515220473,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 44321,
+          "medae": 1.4572416825768784,
+          "medape": 1.9809725170872874,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4572416825768784,
+          "accelerated_medape": 1.9809725170872707,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.6653345369377348e-14
+        },
+        {
+          "combo_index": 1101,
+          "medae": 1.4575866881658897,
+          "medape": 1.9711592306059111,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.esca.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4575866881658897,
+          "accelerated_medape": 1.9711592306059111,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 23761,
+          "medae": 1.4580837331476033,
+          "medape": 1.9711592306059111,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4580837331476033,
+          "accelerated_medape": 1.9711592306059111,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 24425,
+          "medae": 1.4581818464729963,
+          "medape": 1.9625902310317507,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "eva.leaderboard.panda_small.test",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "accelerated_medae": 1.4581818464729963,
+          "accelerated_medape": 1.9625902310317507,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 3610,
+          "medae": 1.458393642917045,
+          "medape": 1.989561234528366,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.458393642917045,
+          "accelerated_medape": 1.989561234528366,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 30041,
+          "medae": 1.458792308350226,
+          "medape": 1.9899660085086244,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "eva.leaderboard.panda_small.test",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.458792308350226,
+          "accelerated_medape": 1.9899660085086244,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 50336,
+          "medae": 1.4591334898211699,
+          "medape": 1.9711592306059111,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.tcga_crc_msi.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4591334898211699,
+          "accelerated_medape": 1.9711592306059111,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 47005,
+          "medae": 1.4595579389604012,
+          "medape": 1.989561234528366,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.bcnb.her2"
+          ],
+          "accelerated_medae": 1.4595579389604012,
+          "accelerated_medape": 1.989561234528366,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 48343,
+          "medae": 1.4597291830823167,
+          "medape": 2.012280678035499,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing",
+            "eva.leaderboard.patch_camelyon.test"
+          ],
+          "accelerated_medae": 1.4597291830823167,
+          "accelerated_medape": 2.012280678035499,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 872,
+          "medae": 1.459880012892235,
+          "medape": 2.0752057043017897,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.459880012892235,
+          "accelerated_medape": 2.0752057043017897,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 49876,
+          "medae": 1.4602995982196632,
+          "medape": 1.972104506040641,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.tcga_crc_msi.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4602995982196703,
+          "accelerated_medape": 1.972104506040641,
+          "absolute_medae_delta": 7.105427357601002e-15,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 48690,
+          "medae": 1.4604403598916633,
+          "medape": 2.0268699262125303,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing",
+            "hest.skcm.gene_expression",
+            "pathobench.threads2025.bcnb.her2"
+          ],
+          "accelerated_medae": 1.4604403598916633,
+          "accelerated_medape": 2.0268699262125303,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 49909,
+          "medae": 1.4609867831590577,
+          "medape": 1.9786757049602908,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing"
+          ],
+          "accelerated_medae": 1.4609867831590577,
+          "accelerated_medape": 1.9786757049602908,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 50369,
+          "medae": 1.4612834421452021,
+          "medape": 2.009674773110262,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing"
+          ],
+          "accelerated_medae": 1.4612834421452021,
+          "accelerated_medape": 2.009674773110262,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 31127,
+          "medae": 1.4612834622951567,
+          "medape": 2.0364891551851514,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.paad.gene_expression"
+          ],
+          "accelerated_medae": 1.4612834622951567,
+          "accelerated_medape": 2.0364891551851514,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 94376,
+          "medae": 1.4615597234746076,
+          "medape": 1.9711592306059111,
+          "n": 2027,
+          "probe_set": [
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing"
+          ],
+          "accelerated_medae": 1.4615597234746076,
+          "accelerated_medape": 1.9711592306059111,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 31121,
+          "medae": 1.4619235544629419,
+          "medape": 2.0040600149378065,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.4619235544629419,
+          "accelerated_medape": 2.0040600149378065,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 47009,
+          "medae": 1.4620946523847778,
+          "medape": 2.001374883111149,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "pathobench.exaone2025.cptac_pda.os"
+          ],
+          "accelerated_medae": 1.462094652384792,
+          "accelerated_medape": 2.001374883111149,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 50377,
+          "medae": 1.4621600154585082,
+          "medape": 2.033739992416473,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing",
+            "pathobench.exaone2025.cptac_pda.os"
+          ],
+          "accelerated_medae": 1.4621600154585224,
+          "accelerated_medape": 2.033739992416473,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 50778,
+          "medae": 1.4621600154585082,
+          "medape": 2.041647507722465,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_thorax.linear_probing",
+            "pathobench.exaone2025.cptac_pda.os"
+          ],
+          "accelerated_medae": 1.4621600154585224,
+          "accelerated_medape": 2.041647507722465,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 49859,
+          "medae": 1.462190617519468,
+          "medape": 1.9711592306059111,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.462190617519468,
+          "accelerated_medape": 1.9711592306059111,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 50745,
+          "medae": 1.4622347643832683,
+          "medape": 2.0401737930674817,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.4622347643832683,
+          "accelerated_medape": 2.0401737930674817,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 3972,
+          "medae": 1.4624651252173777,
+          "medape": 1.9881178174556218,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4624651252173777,
+          "accelerated_medape": 1.9881178174556218,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46997,
+          "medae": 1.4629484047651573,
+          "medape": 1.9591229974725906,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4629484047651573,
+          "accelerated_medape": 1.9591229974725906,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 48694,
+          "medae": 1.463012235705392,
+          "medape": 2.0268699262125303,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing",
+            "hest.skcm.gene_expression",
+            "pathobench.exaone2025.cptac_pda.os"
+          ],
+          "accelerated_medae": 1.463012235705392,
+          "accelerated_medape": 2.0268699262125303,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 77459,
+          "medae": 1.4637314094444633,
+          "medape": 1.9915494979331736,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4637314094444633,
+          "accelerated_medape": 1.9915494979331736,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 58745,
+          "medae": 1.4642518924640484,
+          "medape": 1.974801410767328,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.tcga_crc_msi.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.4642518924640484,
+          "accelerated_medape": 1.974801410767328,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 1047,
+          "medae": 1.4643428193624004,
+          "medape": 1.9809725170872874,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.esca.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4643428193624146,
+          "accelerated_medape": 1.9809725170872707,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 1.6653345369377348e-14
+        },
+        {
+          "combo_index": 48342,
+          "medae": 1.4655846741217573,
+          "medape": 1.993147569494725,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.4655846741217573,
+          "accelerated_medape": 1.993147569494725,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 26685,
+          "medae": 1.4656401424004883,
+          "medape": 1.9894514073088438,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4656401424004883,
+          "accelerated_medape": 1.9894514073088438,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 5746,
+          "medae": 1.4658125258528258,
+          "medape": 2.039079762675118,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.4658125258528258,
+          "accelerated_medape": 2.039079762675118,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 50771,
+          "medae": 1.4660892121732871,
+          "medape": 2.0101765692133626,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.bcnb.her2",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.4660892121732871,
+          "accelerated_medape": 2.0101765692133626,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 47001,
+          "medae": 1.4661615117715883,
+          "medape": 1.989561234528366,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.patch_camelyon.linear_probing"
+          ],
+          "accelerated_medae": 1.4661615117715883,
+          "accelerated_medape": 1.989561234528366,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 24556,
+          "medae": 1.4664014333265953,
+          "medape": 1.9902864652409826,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.4664014333265953,
+          "accelerated_medape": 1.9902864652409826,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 44634,
+          "medae": 1.4664259684836907,
+          "medape": 1.9905596057678359,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "hest.read.gene_expression",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4664259684836765,
+          "accelerated_medape": 1.9905596057678359,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 49917,
+          "medae": 1.4667539790882955,
+          "medape": 2.006882352012349,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing",
+            "pathobench.exaone2025.cptac_pda.os"
+          ],
+          "accelerated_medae": 1.4667539790882955,
+          "accelerated_medape": 2.006882352012349,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 77965,
+          "medae": 1.4667720334048795,
+          "medape": 2.00295845223112,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4667720334048795,
+          "accelerated_medape": 2.00295845223112,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 23783,
+          "medae": 1.467100008764021,
+          "medape": 1.9729952559657136,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "hest.read.gene_expression",
+            "thunder.tcga_crc_msi.linear_probing"
+          ],
+          "accelerated_medae": 1.467100008764021,
+          "accelerated_medape": 1.9729952559657136,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 24484,
+          "medae": 1.4671187247790556,
+          "medape": 1.9899716598034594,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4671187247790556,
+          "accelerated_medape": 1.9899716598034594,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 1102,
+          "medae": 1.4676129402517475,
+          "medape": 1.9943041747155426,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.esca.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4676129402517475,
+          "accelerated_medape": 1.9943041747155426,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 45905,
+          "medae": 1.4676129402517475,
+          "medape": 1.9843848908938442,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4676129402517475,
+          "accelerated_medape": 1.9843848908938442,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 50229,
+          "medae": 1.4676129402517475,
+          "medape": 1.9786757049602908,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4676129402517475,
+          "accelerated_medape": 1.9786757049602908,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 26826,
+          "medae": 1.4677542702381032,
+          "medape": 1.972104506040641,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4677542702381032,
+          "accelerated_medape": 1.972104506040641,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 60,
+          "medae": 1.4677904337850833,
+          "medape": 1.9861410563703463,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.esca.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4677904337850833,
+          "accelerated_medape": 1.9861410563703463,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 47002,
+          "medae": 1.4689977194866302,
+          "medape": 2.001374883111149,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "pathobench.exaone2025.cptac_brca.tp53-mutation"
+          ],
+          "accelerated_medae": 1.4689977194866302,
+          "accelerated_medape": 2.001374883111149,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 33221,
+          "medae": 1.4693402858020903,
+          "medape": 2.041026568521926,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "hest.read.gene_expression",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.bcnb.her2",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.4693402858020903,
+          "accelerated_medape": 2.041026568521926,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 94863,
+          "medae": 1.4701418757690448,
+          "medape": 2.0792721801733305,
+          "n": 2027,
+          "probe_set": [
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "thunder.spider_thorax.linear_probing",
+            "pathobench.exaone2025.cptac_pda.os"
+          ],
+          "accelerated_medae": 1.4701418757690448,
+          "accelerated_medape": 2.0792721801733083,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 2.220446049250313e-14
+        },
+        {
+          "combo_index": 56011,
+          "medae": 1.470296745494153,
+          "medape": 1.9809725170872874,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.spider_colorectal.linear_probing",
+            "thunder.break_his.linear_probing",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.470296745494153,
+          "accelerated_medape": 1.9809725170872707,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.6653345369377348e-14
+        },
+        {
+          "combo_index": 54518,
+          "medae": 1.4704010194076318,
+          "medape": 1.9786757049602908,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.panda_small.test",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.tcga_crc_msi.linear_probing",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.4704010194076318,
+          "accelerated_medape": 1.9786757049602908,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 50335,
+          "medae": 1.470763343642787,
+          "medape": 1.9515689934940528,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.470763343642787,
+          "accelerated_medape": 1.9515689934940528,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 44375,
+          "medae": 1.4714625404491528,
+          "medape": 2.0114932507170993,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4714625404491528,
+          "accelerated_medape": 2.0114932507170993,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 96182,
+          "medae": 1.4715428003883346,
+          "medape": 2.0631730228391323,
+          "n": 2027,
+          "probe_set": [
+            "hest.read.gene_expression",
+            "thunder.spider_colorectal.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "pathobench.exaone2025.cptac_pda.os"
+          ],
+          "accelerated_medae": 1.4715428003883346,
+          "accelerated_medape": 2.0631730228391127,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 1.9539925233402755e-14
+        },
+        {
+          "combo_index": 50365,
+          "medae": 1.4720100795182205,
+          "medape": 2.0140366632499562,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4720100795182347,
+          "accelerated_medape": 2.0140366632499562,
+          "absolute_medae_delta": 1.4210854715202004e-14,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 5752,
+          "medae": 1.4720640321068288,
+          "medape": 2.0322346180296513,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.paad.gene_expression"
+          ],
+          "accelerated_medae": 1.4720640321068288,
+          "accelerated_medape": 2.0322346180296513,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46877,
+          "medae": 1.4721629058065844,
+          "medape": 1.9904445455810156,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "eva.leaderboard.panda_small.test",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4721629058065844,
+          "accelerated_medape": 1.9904445455810156,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 49724,
+          "medae": 1.4721657142894458,
+          "medape": 2.012280678035499,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "hest.read.gene_expression",
+            "eva.leaderboard.panda_small.test",
+            "thunder.break_his.linear_probing",
+            "thunder.spider_thorax.linear_probing"
+          ],
+          "accelerated_medae": 1.4721657142894458,
+          "accelerated_medape": 2.012280678035499,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 46898,
+          "medae": 1.4722020000582319,
+          "medape": 1.9786757049602908,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4722020000582319,
+          "accelerated_medape": 1.9786757049602908,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 26790,
+          "medae": 1.4724929043350272,
+          "medape": 2.0065721743919642,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_breast.linear_probing",
+            "eva.leaderboard.camelyon16_small.test",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4724929043350272,
+          "accelerated_medape": 2.0065721743919642,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 3797,
+          "medae": 1.472508524651687,
+          "medape": 2.0114932507170993,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.472508524651687,
+          "accelerated_medape": 2.0114932507170993,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 56273,
+          "medae": 1.4733709681914036,
+          "medape": 1.944336194831696,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.break_his.linear_probing",
+            "hest.paad.gene_expression"
+          ],
+          "accelerated_medae": 1.4733709681914036,
+          "accelerated_medape": 1.944336194831696,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 131255,
+          "medae": 1.4733992006796726,
+          "medape": 2.0972136031286457,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_colorectal.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.paad.gene_expression",
+            "pathobench.exaone2025.cptac_pda.os"
+          ],
+          "accelerated_medae": 1.4733992006796797,
+          "accelerated_medape": 2.0972136031286457,
+          "absolute_medae_delta": 7.105427357601002e-15,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 30912,
+          "medae": 1.473577832653973,
+          "medape": 2.012280678035499,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.tcga_crc_msi.linear_probing",
+            "thunder.break_his.linear_probing",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.473577832653973,
+          "accelerated_medape": 2.012280678035499,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 77505,
+          "medae": 1.4736286630240443,
+          "medape": 2.003514280970213,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_breast.linear_probing",
+            "hest.read.gene_expression",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.4736286630240443,
+          "accelerated_medape": 2.003514280970213,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 1028,
+          "medae": 1.47363062171614,
+          "medape": 1.972104506040641,
+          "n": 2027,
+          "probe_set": [
+            "thunder.spider_skin.linear_probing",
+            "thunder.esca.linear_probing",
+            "hest.read.gene_expression",
+            "eva.leaderboard.panda_small.test",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation"
+          ],
+          "accelerated_medae": 1.47363062171614,
+          "accelerated_medape": 1.972104506040641,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 48677,
+          "medae": 1.4737132031402922,
+          "medape": 1.9839660277589335,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "thunder.break_his.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.paad.gene_expression"
+          ],
+          "accelerated_medae": 1.4737132031402922,
+          "accelerated_medape": 1.9839660277589335,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 56280,
+          "medae": 1.4737647212791671,
+          "medape": 2.0170192101003166,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "thunder.tcga_crc_msi.linear_probing",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.skcm.gene_expression"
+          ],
+          "accelerated_medae": 1.4737647212791671,
+          "accelerated_medape": 2.0170192101003166,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 47901,
+          "medae": 1.4737887966264225,
+          "medape": 2.0411999308788022,
+          "n": 2027,
+          "probe_set": [
+            "thunder.tcga_uniform.linear_probing",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.tcga_4x4.clustering_score",
+            "pathobench.threads2025.cptac_hnsc.casp8-mutation",
+            "hest.paad.gene_expression"
+          ],
+          "accelerated_medae": 1.4737887966264225,
+          "accelerated_medape": 2.0411999308788022,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        },
+        {
+          "combo_index": 26825,
+          "medae": 1.4741507808013878,
+          "medape": 1.9839134540583971,
+          "n": 2027,
+          "probe_set": [
+            "thunder.esca.linear_probing",
+            "eva.leaderboard.monusac.test",
+            "thunder.spider_breast.linear_probing",
+            "pathorob.nature2026.camelyon.clustering_score",
+            "thunder.break_his.linear_probing"
+          ],
+          "accelerated_medae": 1.4741507808013878,
+          "accelerated_medape": 1.9839134540583971,
+          "absolute_medae_delta": 0.0,
+          "absolute_medape_delta": 0.0
+        }
+      ]
+    }
+  ]
+}

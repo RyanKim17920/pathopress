@@ -10,6 +10,7 @@ run is rejected unless ``--allow-incomplete`` is explicitly requested.
 from __future__ import annotations
 
 import argparse
+import ctypes
 import gzip
 import hashlib
 import itertools
@@ -38,6 +39,7 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
 from pathopress.probe_compression import (  # noqa: E402
+    ProbePredictions,
     predict_all_known,
     score_predictions,
 )
@@ -49,9 +51,17 @@ UPSTREAM_REFERENCE_COMMIT = "0a684b63ee0e4a401cb907a3827a82ea997d74c4"
 DEFAULT_CHUNK_SIZE = 256
 PREDICTOR_RANK = 1
 PREDICTOR_REGULARIZATION = 0.1
+FAST_SOURCE = ROOT / "experiments" / "fast_rank1.cpp"
+DEFAULT_FAST_EQUIVALENCE = (
+    ROOT / "experiments" / "probe_exhaustive_fast_equivalence.json"
+)
+STALE_RUN_REGISTRY = ROOT / "experiments" / "probe_exhaustive_stale_runs.json"
 
 _WORKER_MATRIX: np.ndarray | None = None
 _WORKER_EVALUATION_IDS: tuple[str, ...] = ()
+_WORKER_FAST_FUNCTION: Any | None = None
+_WORKER_FAST_INITIAL_ROWS: np.ndarray | None = None
+_WORKER_FAST_INITIAL_COLUMNS: np.ndarray | None = None
 
 
 def _open_text(path: Path, mode: str):
@@ -95,6 +105,63 @@ def _short_text_hash(values: Sequence[str]) -> str:
 
 def _safe_token(value: str) -> str:
     return "".join(char if char.isalnum() or char in "-_" else "_" for char in value)
+
+
+def _assert_run_is_active(out_dir: Path) -> None:
+    """Fail closed for stopped score-matrix snapshots retained for audit."""
+
+    if not STALE_RUN_REGISTRY.exists():
+        return
+    registry = _load_json(STALE_RUN_REGISTRY)
+    relative = _display_path(out_dir)
+    for run in registry.get("runs", []):
+        if run.get("out_dir") == relative and run.get("status") != "active":
+            raise RuntimeError(
+                f"Run directory {relative} is marked {run.get('status')!r} in "
+                f"{STALE_RUN_REGISTRY}. Use a new hash-bound --out-dir after "
+                "rebuilding the matrix and candidate allowlists; retained chunks "
+                "are audit evidence only."
+            )
+
+
+def _validate_fast_equivalence(
+    scores: Path, library: Path, equivalence_path: Path
+) -> dict[str, Any]:
+    if not equivalence_path.is_file():
+        raise FileNotFoundError(
+            f"Missing fast-backend equivalence evidence: {equivalence_path}. "
+            "Run experiments/verify_fast_rank1.py first."
+        )
+    payload = _load_json(equivalence_path)
+    inputs = payload.get("inputs", {})
+    engine = payload.get("scientific_engine", {})
+    observed = payload.get("observed", {})
+    tolerances = payload.get("tolerances", {})
+    checks = {
+        "status": payload.get("status") == "passed",
+        "scores_sha256": inputs.get("scores_sha256") == _sha256_bytes(scores),
+        "source_sha256": inputs.get("source_sha256") == _sha256_bytes(FAST_SOURCE),
+        "library_sha256": inputs.get("library_sha256") == _sha256_bytes(library),
+        "rank": engine.get("rank") == PREDICTOR_RANK,
+        "regularization": engine.get("regularization") == PREDICTOR_REGULARIZATION,
+        "iterations": engine.get("iterations") == 40,
+        "ensembles": engine.get("ensembles") == 10,
+        "seeds": engine.get("seeds") == list(range(42, 52)),
+        "cell_tolerance": float(
+            observed.get("max_absolute_cell_delta", float("inf"))
+        )
+        <= float(tolerances.get("max_absolute_cell_delta", -1.0)),
+        "metric_tolerance": float(
+            observed.get("max_absolute_metric_delta", float("inf"))
+        )
+        <= float(tolerances.get("max_absolute_metric_delta", -1.0)),
+    }
+    failed = [key for key, passed in checks.items() if not passed]
+    if failed:
+        raise RuntimeError(
+            f"Fast-backend equivalence evidence is stale or failed checks: {failed}"
+        )
+    return payload
 
 
 def _parse_csv_ids(value: str | None) -> list[str]:
@@ -400,12 +467,46 @@ def _is_valid_existing_chunk(
     return valid
 
 
-def _init_worker(matrix: np.ndarray, evaluation_ids: tuple[str, ...], seed: int) -> None:
+def _init_worker(
+    matrix: np.ndarray,
+    evaluation_ids: tuple[str, ...],
+    seed: int,
+    fast_library: str | None = None,
+) -> None:
     global _WORKER_MATRIX, _WORKER_EVALUATION_IDS
+    global _WORKER_FAST_FUNCTION, _WORKER_FAST_INITIAL_ROWS, _WORKER_FAST_INITIAL_COLUMNS
     _WORKER_MATRIX = matrix
     _WORKER_EVALUATION_IDS = evaluation_ids
+    _WORKER_FAST_FUNCTION = None
+    _WORKER_FAST_INITIAL_ROWS = None
+    _WORKER_FAST_INITIAL_COLUMNS = None
     np.random.seed(seed)
     random.seed(seed)
+    if fast_library is not None:
+        library = ctypes.CDLL(fast_library)
+        function = library.complete_target_rank1
+        vector = np.ctypeslib.ndpointer(
+            dtype=np.float64, ndim=1, flags="C_CONTIGUOUS"
+        )
+        function.argtypes = [
+            vector,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.c_int,
+            vector,
+            vector,
+            vector,
+        ]
+        function.restype = ctypes.c_int
+        initial_rows = []
+        initial_columns = []
+        for offset in range(10):
+            rng = np.random.RandomState(seed + offset)
+            initial_rows.append(rng.normal(0.0, 0.01, size=matrix.shape[0]))
+            initial_columns.append(rng.normal(0.0, 0.01, size=matrix.shape[1]))
+        _WORKER_FAST_FUNCTION = function
+        _WORKER_FAST_INITIAL_ROWS = np.ascontiguousarray(initial_rows).ravel()
+        _WORKER_FAST_INITIAL_COLUMNS = np.ascontiguousarray(initial_columns).ravel()
 
 
 def _pack_predictions(result: Any) -> dict[str, list[int] | list[float]]:
@@ -418,17 +519,60 @@ def _pack_predictions(result: Any) -> dict[str, list[int] | list[float]]:
     }
 
 
+def _predict_all_known_fast(
+    matrix: np.ndarray, probe_indices: tuple[int, ...]
+) -> ProbePredictions:
+    if (
+        _WORKER_FAST_FUNCTION is None
+        or _WORKER_FAST_INITIAL_ROWS is None
+        or _WORKER_FAST_INITIAL_COLUMNS is None
+    ):
+        raise RuntimeError("fast worker was not initialized")
+    observed = np.isfinite(matrix)
+    probe_columns = np.zeros(matrix.shape[1], dtype=bool)
+    probe_columns[list(probe_indices)] = True
+    revealed = observed & probe_columns[None, :]
+    heldout = observed & ~probe_columns[None, :]
+    predicted = np.full_like(matrix, np.nan)
+    predicted[revealed] = matrix[revealed]
+    for row in range(matrix.shape[0]):
+        hidden = heldout[row]
+        if not hidden.any():
+            continue
+        train = matrix.copy()
+        train[row, ~probe_columns] = np.nan
+        target_predictions = np.empty(matrix.shape[1], dtype=np.float64)
+        return_code = _WORKER_FAST_FUNCTION(
+            np.ascontiguousarray(train).ravel(),
+            matrix.shape[0],
+            matrix.shape[1],
+            row,
+            _WORKER_FAST_INITIAL_ROWS,
+            _WORKER_FAST_INITIAL_COLUMNS,
+            target_predictions,
+        )
+        if return_code != 0:
+            raise RuntimeError(f"fast rank-1 completion failed with code {return_code}")
+        predicted[row, hidden] = target_predictions[hidden]
+    return ProbePredictions(
+        tuple(probe_indices), matrix, predicted, observed, revealed, heldout
+    )
+
+
 def _evaluate_combo(job: tuple[int, tuple[int, ...], str]) -> dict[str, Any]:
     combo_index, probe_indices, metric = job
     if _WORKER_MATRIX is None:
         raise RuntimeError("worker was not initialized")
     started = time.time()
-    predictions = predict_all_known(
-        _WORKER_MATRIX,
-        probe_indices,
-        rank=PREDICTOR_RANK,
-        regularization=PREDICTOR_REGULARIZATION,
-    )
+    if _WORKER_FAST_FUNCTION is None:
+        predictions = predict_all_known(
+            _WORKER_MATRIX,
+            probe_indices,
+            rank=PREDICTOR_RANK,
+            regularization=PREDICTOR_REGULARIZATION,
+        )
+    else:
+        predictions = _predict_all_known_fast(_WORKER_MATRIX, probe_indices)
     metrics = score_predictions(predictions)
     probe_ids = [_WORKER_EVALUATION_IDS[index] for index in probe_indices]
 
@@ -476,6 +620,12 @@ def iter_assigned_combos(
 
 
 def run_shard(args: argparse.Namespace) -> None:
+    if args.fast_library is not None and not args.fast_library.is_file():
+        raise FileNotFoundError(f"Missing fast execution library: {args.fast_library}")
+    if args.fast_library is not None:
+        _validate_fast_equivalence(
+            args.scores, args.fast_library, args.fast_equivalence
+        )
     matrix, model_ids, evaluation_ids = _load_matrix(args.scores)
     candidate_indices, candidate_ids, allowlist_sha256 = _load_candidates(
         evaluation_ids, args.candidate_allowlist, args.candidate_limit
@@ -483,6 +633,7 @@ def run_shard(args: argparse.Namespace) -> None:
     out_dir = (args.out_dir or _default_out_dir(
         args, _candidate_source_label(args.candidate_allowlist)
     )).resolve()
+    _assert_run_is_active(out_dir)
     config, fixed_indices, remaining_candidates = _build_config(
         args,
         matrix,
@@ -538,7 +689,12 @@ def run_shard(args: argparse.Namespace) -> None:
         with ProcessPoolExecutor(
             max_workers=int(args.workers),
             initializer=_init_worker,
-            initargs=(matrix, tuple(evaluation_ids), SEED),
+            initargs=(
+                matrix,
+                tuple(evaluation_ids),
+                SEED,
+                str(args.fast_library.resolve()) if args.fast_library else None,
+            ),
         ) as pool:
             futures = [pool.submit(_evaluate_combo, job) for job in worker_jobs]
             for future in as_completed(futures):
@@ -585,6 +741,7 @@ def _expected_chunk_count(assigned_count: int, chunk_size: int) -> int:
 
 def merge(args: argparse.Namespace) -> None:
     out_dir = args.out_dir.resolve()
+    _assert_run_is_active(out_dir)
     config_path = out_dir / "config.json"
     if not config_path.exists():
         raise FileNotFoundError(f"Missing config: {config_path}")
@@ -594,6 +751,46 @@ def merge(args: argparse.Namespace) -> None:
     total = int(base_config["total_combinations"])
     chunk_size = int(base_config["chunk_size"])
     modulus = num_waves * num_shards
+
+    integrity_chunk_hashes: dict[str, str] | None = None
+    integrity_provenance: dict[str, str] | None = None
+    integrity_argument = getattr(args, "integrity_manifest", None)
+    if integrity_argument is not None:
+        integrity_path = integrity_argument.resolve()
+        integrity = _load_json(integrity_path)
+        if integrity.get("status") != "passed":
+            raise RuntimeError("Integrity manifest did not pass")
+        config_sha256 = _sha256_bytes(config_path)
+        matches = [
+            row
+            for row in integrity.get("runs", [])
+            if row.get("config_sha256") == config_sha256
+        ]
+        if len(matches) != 1:
+            raise RuntimeError(
+                f"Integrity manifest must contain exactly one run for {config_sha256}"
+            )
+        integrity_run = matches[0]
+        if (
+            int(integrity_run.get("validated_records", -1)) != total
+            or int(integrity_run.get("validated_chunks", -1))
+            != int(integrity_run.get("expected_chunks", -2))
+        ):
+            raise RuntimeError("Integrity manifest does not certify a complete run")
+        integrity_chunk_hashes = {
+            str(row["path"]): str(row["sha256"])
+            for row in integrity_run.get("chunks", [])
+        }
+        if len(integrity_chunk_hashes) != int(integrity_run["validated_chunks"]):
+            raise RuntimeError("Integrity manifest has duplicate/missing chunk entries")
+        integrity_provenance = {
+            "path": _display_path(integrity_path),
+            "sha256": _sha256_bytes(integrity_path),
+            "config_sha256": config_sha256,
+            "chunk_digest_aggregate_sha256": str(
+                integrity_run["chunk_digest_aggregate_sha256"]
+            ),
+        }
 
     summaries: list[dict[str, Any]] = []
     missing_chunks: list[str] = []
@@ -612,6 +809,19 @@ def merge(args: argparse.Namespace) -> None:
                 if not path.exists():
                     missing_chunks.append(str(path))
                     continue
+                if integrity_chunk_hashes is not None:
+                    key = str(_display_path(path))
+                    expected_hash = integrity_chunk_hashes.get(key)
+                    if expected_hash is None:
+                        invalid_chunks.append(
+                            {"path": str(path), "reason": "absent from integrity manifest"}
+                        )
+                        continue
+                    if _sha256_bytes(path) != expected_hash:
+                        invalid_chunks.append(
+                            {"path": str(path), "reason": "integrity SHA256 mismatch"}
+                        )
+                        continue
                 try:
                     payload = _load_json(path)
                 except (OSError, EOFError, json.JSONDecodeError) as error:
@@ -668,6 +878,7 @@ def merge(args: argparse.Namespace) -> None:
         "n_records": len(seen),
         "missing_chunks": missing_chunks,
         "invalid_chunks": invalid_chunks,
+        "integrity_manifest": integrity_provenance,
         "best": summaries[0] if summaries else None,
         "top": summaries[: args.top_n],
     }
@@ -698,6 +909,21 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--num-shards", type=int, default=1)
     run.add_argument("--shard-index", type=int, default=0)
     run.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
+    run.add_argument(
+        "--fast-library",
+        type=Path,
+        default=None,
+        help=(
+            "optional compiled experiments/fast_rank1.cpp execution backend; "
+            "scientific equivalence must be verified before production use"
+        ),
+    )
+    run.add_argument(
+        "--fast-equivalence",
+        type=Path,
+        default=DEFAULT_FAST_EQUIVALENCE,
+        help="hash-bound equivalence evidence emitted by verify_fast_rank1.py",
+    )
     run.add_argument("--chunk-size", type=int, default=DEFAULT_CHUNK_SIZE)
     run.add_argument(
         "--max-subsets",
@@ -712,6 +938,15 @@ def build_parser() -> argparse.ArgumentParser:
     merge_parser.add_argument("--out-dir", type=Path, required=True)
     merge_parser.add_argument("--top-n", type=int, default=100)
     merge_parser.add_argument("--allow-incomplete", action="store_true")
+    merge_parser.add_argument(
+        "--integrity-manifest",
+        type=Path,
+        default=None,
+        help=(
+            "full-record validation manifest; when supplied, every raw chunk "
+            "must still match its certified SHA256 before merge"
+        ),
+    )
     merge_parser.set_defaults(func=merge)
     return parser
 

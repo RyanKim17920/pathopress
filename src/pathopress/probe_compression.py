@@ -14,6 +14,7 @@ from typing import Any, Iterable, Sequence
 import numpy as np
 
 from pathopress.completion import complete
+from pathopress.metrics import absolute_percentage_errors
 from pathopress.ranking import pairwise_ranking_accuracy, top_fraction_recovery
 
 
@@ -149,11 +150,11 @@ def score_predictions(
     errors = np.abs(result.predicted - result.actual)
     parity_errors = errors[target]
     hidden_errors = errors[result.heldout_mask]
-    nonzero = target & (np.abs(result.actual) > 1e-6)
-    percentages = 100.0 * errors[nonzero] / np.abs(result.actual[nonzero])
-    hidden_nonzero = result.heldout_mask & (np.abs(result.actual) > 1e-6)
-    hidden_percentages = (
-        100.0 * errors[hidden_nonzero] / np.abs(result.actual[hidden_nonzero])
+    percentages = absolute_percentage_errors(
+        result.actual[target], result.predicted[target]
+    )
+    hidden_percentages = absolute_percentage_errors(
+        result.actual[result.heldout_mask], result.predicted[result.heldout_mask]
     )
     if ranking_scope == "at_least_one_hidden":
         ranking_actual = result.actual

@@ -230,13 +230,14 @@ def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
     def has_exact_k(rows: list[dict[str, Any]]) -> bool:
         return [row.get("k") for row in rows] == exact_k
 
-    def has_exact_random_grid(rows: list[dict[str, Any]]) -> bool:
-        return len(rows) == 100 and all(
-            [row.get("k") for row in rows if row.get("repeat") == repeat] == exact_k
+    def has_exact_random_grid(rows: list[dict[str, Any]], max_k: int = 10) -> bool:
+        expected_k = list(range(1, max_k + 1))
+        return len(rows) == 10 * max_k and all(
+            [row.get("k") for row in rows if row.get("repeat") == repeat] == expected_k
             for repeat in range(10)
         )
 
-    expected_candidates = {"any_candidate": 165, "pre_error_low_friction_allowlist": 25}
+    expected_candidates = {"any_candidate": 168, "pre_error_low_friction_allowlist": 25}
     for mode, expected in expected_candidates.items():
         curve = curves.get(mode, {})
         rank = ranking.get(mode, {})
@@ -246,17 +247,29 @@ def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
             "all_known_greedy_medape", "heldout_greedy_medape",
         ):
             require(has_exact_k(curve.get(key, [])), f"{mode}_{key}_requires_exact_k1_10")
-        for key in ("all_known_random", "heldout_random"):
-            require(
-                has_exact_random_grid(curve.get(key, [])),
-                f"{mode}_{key}_requires_exact_10x_k1_10",
-            )
+        all_known_max = min(
+            expected, int(config.get("all_known_random_curve_limit", 10))
+        )
+        heldout_max = min(
+            expected, int(config.get("heldout_random_curve_limit", 10))
+        )
+        require(
+            has_exact_random_grid(curve.get("all_known_random", []), all_known_max),
+            f"{mode}_all_known_random_requires_exact_10x_k1_{all_known_max}",
+        )
+        require(
+            has_exact_random_grid(curve.get("heldout_random", []), heldout_max),
+            f"{mode}_heldout_random_requires_exact_10x_k1_{heldout_max}",
+        )
         require(rank.get("margin") == 5.0, f"{mode}_ranking_margin5")
         require(has_exact_k(rank.get("all_known_greedy", [])), f"{mode}_ranking_all_known_exact_k1_10")
         require(has_exact_k(rank.get("heldout_greedy", [])), f"{mode}_ranking_holdout_exact_k1_10")
         require(
-            has_exact_random_grid(rank.get("all_known_random", [])),
-            f"{mode}_ranking_random_exact_10x_k1_10",
+            has_exact_random_grid(
+                rank.get("all_known_random", []),
+                min(expected, int(config.get("ranking_random_curve_limit", 10))),
+            ),
+            f"{mode}_ranking_random_exact_configured_grid",
         )
     require(
         set(ranking) == set(expected_candidates),
