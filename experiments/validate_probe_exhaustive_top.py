@@ -17,9 +17,31 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+sys.path.insert(0, str(ROOT / "experiments"))
 
-import run_probe_exhaustive as runner  # noqa: E402
+import run_probe_exhaustive as legacy_runner  # noqa: E402
+import run_probe_exhaustive_v2 as v2_runner  # noqa: E402
 from pathopress.probe_compression import predict_all_known, score_predictions  # noqa: E402
+
+
+runner = legacy_runner
+
+
+def select_runner(version: str):
+    global runner
+    runner = v2_runner if version == "v2" else legacy_runner
+    return runner
+
+
+def _equivalence_tolerances(
+    payload: dict[str, Any], version: str
+) -> tuple[dict[str, Any], int]:
+    if version == "v2":
+        return (
+            payload.get("requested_tolerances", {}),
+            int(payload.get("hard_caps", {}).get("minimum_comparisons", -1)),
+        )
+    return payload.get("tolerances", {}), 8
 
 
 def _scalar_metrics(job: tuple[int, tuple[int, ...]]) -> dict[str, Any]:
@@ -49,6 +71,13 @@ def sha256(path: Path) -> str:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run_dirs", nargs="+", type=Path)
+    parser.add_argument(
+        "--runner-version", choices=("v2", "legacy"), default="v2",
+        help=(
+            "certify schema-v2 production runs by default; use legacy only "
+            "for archived v1 runs"
+        ),
+    )
     parser.add_argument("--scores", type=Path, default=ROOT / "data" / "scores.csv")
     parser.add_argument("--validate-top", type=int, default=100)
     parser.add_argument("--spread-count", type=int, default=32)
@@ -62,11 +91,7 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=ROOT / "experiments/probe_exhaustive_merged_validation.json",
     )
-    parser.add_argument(
-        "--equivalence",
-        type=Path,
-        default=ROOT / "experiments" / "probe_exhaustive_fast_equivalence.json",
-    )
+    parser.add_argument("--equivalence", type=Path, default=None)
     parser.add_argument(
         "--output",
         type=Path,
@@ -90,6 +115,14 @@ def validate_run(
     merged_path = run_dir / "merged_summary.json.gz"
     merged = runner._load_json(merged_path)
     config = merged["config"]
+    if runner is v2_runner:
+        if (
+            config.get("schema_version") != runner.CONFIG_SCHEMA_VERSION
+            or config.get("config_schema") != "pathopress.probe_exhaustive.run.v2"
+        ):
+            raise RuntimeError(f"expected a schema-v2 run: {run_dir}")
+    elif config.get("schema_version", 1) != 1:
+        raise RuntimeError(f"expected an archived legacy-v1 run: {run_dir}")
     if not merged.get("complete") or int(merged["n_records"]) != int(
         config["total_combinations"]
     ):
@@ -239,15 +272,27 @@ def validate_run(
 
 def main() -> int:
     args = parse_args()
+    select_runner(args.runner_version)
+    if args.equivalence is None:
+        name = (
+            "probe_exhaustive_fast_equivalence_v2.json"
+            if args.runner_version == "v2"
+            else "probe_exhaustive_fast_equivalence.json"
+        )
+        args.equivalence = ROOT / "experiments" / name
     if args.validate_top < 2 or args.spread_count < 3 or args.workers < 1:
         raise ValueError(
             "--validate-top must be >=2, --spread-count >=3, and --workers positive"
         )
     equivalence = runner._load_json(args.equivalence)
+    tolerances, minimum_comparisons = _equivalence_tolerances(
+        equivalence, args.runner_version
+    )
     if (
-        float(equivalence["tolerances"]["max_absolute_cell_delta"]) > 1e-10
-        or float(equivalence["tolerances"]["max_absolute_metric_delta"]) > 1e-11
-        or len(equivalence.get("comparisons", [])) < 8
+        float(tolerances["max_absolute_cell_delta"]) > 1e-10
+        or float(tolerances["max_absolute_metric_delta"]) > 1e-11
+        or minimum_comparisons < (32 if args.runner_version == "v2" else 8)
+        or len(equivalence.get("comparisons", [])) < minimum_comparisons
         or int(equivalence.get("observed", {}).get("sample_combinations", -1))
         != len(equivalence.get("comparisons", []))
     ):
@@ -256,13 +301,19 @@ def main() -> int:
     merged_validation = runner._load_json(args.merged_validation)
     if integrity.get("status") != "passed" or merged_validation.get("status") != "passed":
         raise RuntimeError("integrity and merged-order validations must pass first")
+    if integrity.get("inputs", {}).get("runner_path") != runner._display_path(
+        Path(runner.__file__)
+    ):
+        raise RuntimeError("integrity manifest runner does not match --runner-version")
+    if merged_validation.get("runner_version") != args.runner_version:
+        raise RuntimeError("merged validation does not match --runner-version")
     runner._validate_fast_equivalence(
         args.scores,
         Path(equivalence["inputs"]["library_path"]),
         args.equivalence,
     )
     metric_tolerance = float(
-        equivalence["tolerances"]["max_absolute_metric_delta"]
+        tolerances["max_absolute_metric_delta"]
     )
     matrix, _, evaluation_ids = runner._load_matrix(args.scores)
     results = [
@@ -280,6 +331,7 @@ def main() -> int:
     payload = {
         "schema_version": 1,
         "status": "passed",
+        "runner_version": args.runner_version,
         "scores_sha256": sha256(args.scores),
         "equivalence_sha256": sha256(args.equivalence),
         "integrity_manifest_sha256": sha256(args.integrity_manifest),

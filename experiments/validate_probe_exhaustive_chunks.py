@@ -28,23 +28,24 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "experiments"))
 
-import run_probe_exhaustive as runner  # noqa: E402
+import run_probe_exhaustive as legacy_runner  # noqa: E402
+import run_probe_exhaustive_v2 as v2_runner  # noqa: E402
+
+
+# Keep the historical module-level API for tests and archived-v1 callers.  The
+# command-line validator explicitly selects schema v2 by default in ``main``.
+runner = legacy_runner
 
 
 METRIC_TOLERANCE = 1e-11
 CELL_EQUIVALENCE_CAP = 1e-10
 METRIC_EQUIVALENCE_CAP = 1e-11
-MIN_EQUIVALENCE_COMPARISONS = 8
 PREDICTION_MIN = 0.0
 PREDICTION_MAX = 100.0
 MAX_COMPRESSED_CHUNK_BYTES = 64 * 1024 * 1024
 MAX_DECOMPRESSED_CHUNK_BYTES = 256 * 1024 * 1024
 EXPECTED_TOP_COUNT = 1001
-COMPILE_COMMAND = (
-    "g++ -O3 -std=c++17 -fPIC -shared -ffp-contract=off "
-    "experiments/fast_rank1.cpp -o /tmp/libpathopress_fast_rank1.so"
-)
-EXPECTED_CONFIG_KEYS = {
+LEGACY_EXPECTED_CONFIG_KEYS = {
     "eval_protocol", "upstream_reference_commit", "k", "metric", "seed",
     "n_models", "n_evaluations", "n_observed", "n_target_cells", "eval_scope",
     "predictor_rank", "predictor_regularization", "prediction_engine",
@@ -54,6 +55,12 @@ EXPECTED_CONFIG_KEYS = {
     "remaining_candidate_ids", "remaining_candidate_hash",
     "choose_size_after_fixed", "total_combinations", "num_waves", "num_shards",
     "assignment_modulus", "chunk_size", "cell_masking",
+}
+V2_EXPECTED_CONFIG_KEYS = LEGACY_EXPECTED_CONFIG_KEYS | {
+    "schema_version", "config_schema", "model_ids", "model_ids_sha256",
+    "evaluation_ids", "evaluation_ids_sha256", "candidate_ids_sha256",
+    "fixed_probe_ids_sha256", "remaining_candidate_ids_sha256",
+    "execution_backend",
 }
 EXPECTED_MASKING_TEXT = (
     "For model i, keep observed probe cells visible and mask observed "
@@ -70,6 +77,31 @@ _EVALUATION_IDS: tuple[str, ...] = ()
 _TARGET_I: np.ndarray | None = None
 _TARGET_J: np.ndarray | None = None
 _TARGET_TRUE: np.ndarray | None = None
+
+
+def select_runner(version: str) -> Any:
+    """Select the frozen legacy runner or the schema-v2 production runner."""
+
+    global runner
+    if version == "legacy":
+        runner = legacy_runner
+    elif version == "v2":
+        runner = v2_runner
+    else:  # pragma: no cover - argparse constrains this in normal use.
+        raise ValueError(f"unknown runner version: {version}")
+    return runner
+
+
+def _equivalence_limits(
+    payload: dict[str, Any], version: str
+) -> tuple[dict[str, Any], int]:
+    if version == "v2":
+        tolerances = payload.get("requested_tolerances", {})
+        minimum = int(payload.get("hard_caps", {}).get("minimum_comparisons", -1))
+    else:
+        tolerances = payload.get("tolerances", {})
+        minimum = 8
+    return tolerances, minimum
 
 
 def sha256(path: Path) -> str:
@@ -310,14 +342,18 @@ def validate_run(
     evaluation_ids: list[str],
     cli_scores_path: Path,
     workers: int,
+    expected_backend: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     config_path = run_dir / "config.json"
     _require_regular(config_path, "run config")
     config = load_json(config_path)
-    if set(config) != EXPECTED_CONFIG_KEYS:
+    expected_keys = (
+        V2_EXPECTED_CONFIG_KEYS if runner is v2_runner else LEGACY_EXPECTED_CONFIG_KEYS
+    )
+    if set(config) != expected_keys:
         raise RuntimeError(
-            f"config key set mismatch: missing={sorted(EXPECTED_CONFIG_KEYS-set(config))}, "
-            f"extra={sorted(set(config)-EXPECTED_CONFIG_KEYS)}"
+            f"config key set mismatch: missing={sorted(expected_keys-set(config))}, "
+            f"extra={sorted(set(config)-expected_keys)}"
         )
     observed = np.isfinite(matrix)
     scores_path = Path(config["scores_path"])
@@ -338,6 +374,25 @@ def validate_run(
         raise RuntimeError(f"evaluation ID hash mismatch: {run_dir}")
     if config["model_ids_hash"] != runner._short_text_hash(model_ids):
         raise RuntimeError(f"model ID hash mismatch: {run_dir}")
+    if runner is v2_runner:
+        if (
+            config["schema_version"] != runner.CONFIG_SCHEMA_VERSION
+            or config["config_schema"] != "pathopress.probe_exhaustive.run.v2"
+            or config["model_ids"] != model_ids
+            or config["evaluation_ids"] != evaluation_ids
+            or config["model_ids_sha256"] != runner._sha256_strings(model_ids)
+            or config["evaluation_ids_sha256"]
+            != runner._sha256_strings(evaluation_ids)
+            or config["candidate_ids_sha256"]
+            != runner._sha256_strings(config["candidate_ids"])
+            or config["fixed_probe_ids_sha256"]
+            != runner._sha256_strings(config["fixed_probe_ids"])
+            or config["remaining_candidate_ids_sha256"]
+            != runner._sha256_strings(config["remaining_candidate_ids"])
+            or expected_backend is None
+            or config["execution_backend"] != expected_backend
+        ):
+            raise RuntimeError(f"schema-v2 identity/backend mismatch: {run_dir}")
     allowlist = Path(config["candidate_allowlist_path"])
     if not allowlist.is_absolute():
         allowlist = ROOT / allowlist
@@ -485,15 +540,16 @@ def validate_run(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run_dirs", nargs="+", type=Path)
+    parser.add_argument(
+        "--runner-version", choices=("v2", "legacy"), default="v2",
+        help=(
+            "validate schema-v2 production runs by default; use legacy only "
+            "for archived v1 runs"
+        ),
+    )
     parser.add_argument("--scores", type=Path, default=ROOT / "data/scores.csv")
-    parser.add_argument(
-        "--library", type=Path, default=Path("/tmp/libpathopress_fast_rank1.so")
-    )
-    parser.add_argument(
-        "--equivalence",
-        type=Path,
-        default=ROOT / "experiments/probe_exhaustive_fast_equivalence.json",
-    )
+    parser.add_argument("--library", type=Path, default=None)
+    parser.add_argument("--equivalence", type=Path, default=None)
     parser.add_argument(
         "--output",
         type=Path,
@@ -505,6 +561,25 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
+    select_runner(args.runner_version)
+    if args.equivalence is None:
+        name = (
+            "probe_exhaustive_fast_equivalence_v2.json"
+            if args.runner_version == "v2"
+            else "probe_exhaustive_fast_equivalence.json"
+        )
+        args.equivalence = ROOT / "experiments" / name
+    equivalence = load_json(args.equivalence)
+    if args.library is None:
+        if args.runner_version == "v2":
+            value = equivalence.get("inputs", {}).get("library_path")
+            if not isinstance(value, str) or not value:
+                raise RuntimeError(
+                    "schema-v2 equivalence evidence lacks inputs.library_path"
+                )
+            args.library = Path(value)
+        else:
+            args.library = Path("/tmp/libpathopress_fast_rank1.so")
     if not 1 <= args.workers <= 20:
         raise ValueError("--workers must be in [1,20]")
     for path, label in (
@@ -516,10 +591,11 @@ def main() -> int:
         (Path(__file__), "validator source"),
     ):
         _require_regular(path, label)
-    equivalence = load_json(args.equivalence)
     runner._validate_fast_equivalence(args.scores, args.library, args.equivalence)
     comparisons = equivalence.get("comparisons", [])
-    tolerances = equivalence.get("tolerances", {})
+    tolerances, minimum_comparisons = _equivalence_limits(
+        equivalence, args.runner_version
+    )
     observed_equivalence = equivalence.get("observed", {})
     recomputed_cell_max = max(
         (float(row.get("max_absolute_cell_delta", float("inf"))) for row in comparisons),
@@ -544,7 +620,8 @@ def main() -> int:
         > CELL_EQUIVALENCE_CAP
         or float(tolerances.get("max_absolute_metric_delta", float("inf")))
         > METRIC_EQUIVALENCE_CAP
-        or len(comparisons) < MIN_EQUIVALENCE_COMPARISONS
+        or minimum_comparisons < (32 if args.runner_version == "v2" else 8)
+        or len(comparisons) < minimum_comparisons
         or int(observed_equivalence.get("sample_combinations", -1))
         != len(comparisons)
         or len(unique_combo_indices) != len(comparisons)
@@ -570,6 +647,13 @@ def main() -> int:
         raise RuntimeError("library/equivalence hash mismatch")
     if equivalence["inputs"]["source_sha256"] != source_hash:
         raise RuntimeError("source/equivalence hash mismatch")
+    expected_backend = None
+    if args.runner_version == "v2":
+        expected_backend = runner._execution_backend_config(
+            equivalence,
+            args.equivalence,
+            library_hash,
+        )
     mode = stat.S_IMODE(args.library.stat().st_mode)
     if mode & (stat.S_IWUSR | stat.S_IWGRP | stat.S_IWOTH):
         raise RuntimeError("fast library must be frozen read-only before validation")
@@ -582,6 +666,7 @@ def main() -> int:
             evaluation_ids,
             args.scores.resolve(),
             args.workers,
+            expected_backend,
         )
         for run_dir in args.run_dirs
     ]
@@ -595,6 +680,13 @@ def main() -> int:
     compiler_version = subprocess.check_output(
         [compiler_path, "--version"], text=True
     ).splitlines()[0]
+    compile_flags = tuple(
+        getattr(
+            runner,
+            "FAST_COMPILE_FLAGS",
+            ("-O3", "-std=c++17", "-fPIC", "-shared", "-ffp-contract=off"),
+        )
+    )
     payload = {
         "schema_version": 1,
         "status": "passed",
@@ -630,7 +722,19 @@ def main() -> int:
             "fast_library_mode_octal": oct(mode),
             "equivalence_path": display(args.equivalence),
             "equivalence_sha256": sha256(args.equivalence),
-            "expected_compile_command_not_recovered": COMPILE_COMMAND,
+            "compile_command": " ".join(
+                [
+                    str(
+                        equivalence.get("inputs", {})
+                        .get("compiler", {})
+                        .get("path", "g++")
+                    ),
+                    *compile_flags,
+                    display(runner.FAST_SOURCE),
+                    "-o",
+                    str(args.library.resolve()),
+                ]
+            ),
             "current_host_compiler_path": compiler_path,
             "current_host_compiler_sha256": sha256(Path(compiler_path)),
             "current_host_compiler_version": compiler_version,
@@ -643,20 +747,18 @@ def main() -> int:
             "equivalence_hard_caps": {
                 "max_absolute_cell_delta": CELL_EQUIVALENCE_CAP,
                 "max_absolute_metric_delta": METRIC_EQUIVALENCE_CAP,
-                "minimum_comparisons": MIN_EQUIVALENCE_COMPARISONS,
+                "minimum_comparisons": minimum_comparisons,
             },
             "equivalence_comparisons_validated": len(comparisons),
         },
-        "backend_attribution_limitation": (
-            "Legacy chunk configs do not contain backend, library, or equivalence "
-            "hashes; this posthoc audit cannot prove which binary generated them. "
-            "The separately preserved shared-object bytes are hash-bound to the "
-            "hard-capped numerical equivalence suite, but that establishes numerical "
-            "compatibility rather than generator attribution. The compile command is "
-            "the expected command and compiler/platform fields describe the current "
-            "validation host; neither is recovered build provenance for the legacy "
-            "binary. Execution-critical Python function hashes document the unchanged "
-            "generation path without retroactively changing legacy-v1 chunk configs."
+        "runner_version": args.runner_version,
+        "backend_attribution": (
+            "Schema-v2 chunk configs bind the runner, source, library, equivalence "
+            "evidence, compiler, flags, platform, and full ordered identities."
+            if args.runner_version == "v2"
+            else
+            "Legacy-v1 chunk configs do not bind backend identity; validation proves "
+            "compatibility with the separately preserved equivalence evidence only."
         ),
         "runs": runs,
     }

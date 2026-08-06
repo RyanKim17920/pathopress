@@ -42,15 +42,31 @@ def display(path: Path) -> str:
         return str(path.resolve())
 
 
+def validate_runner_contract(config: dict[str, Any], runner_version: str) -> None:
+    if runner_version == "v2" and (
+        config.get("schema_version") != 2
+        or config.get("config_schema") != "pathopress.probe_exhaustive.run.v2"
+    ):
+        raise RuntimeError("expected a schema-v2 run")
+    if runner_version == "legacy" and config.get("schema_version", 1) != 1:
+        raise RuntimeError("expected an archived legacy-v1 run")
+
+
 def validate_run(
     run_dir: Path,
     integrity_path: Path,
     integrity: dict[str, Any],
+    runner_version: str | None = None,
 ) -> dict[str, Any]:
     config_path = run_dir / "config.json"
     merged_path = run_dir / "merged_summary.json.gz"
     config = load_json(config_path)
     merged = load_json(merged_path)
+    if runner_version is not None:
+        try:
+            validate_runner_contract(config, runner_version)
+        except RuntimeError as error:
+            raise RuntimeError(f"{error}: {run_dir}") from error
     config_hash = sha256(config_path)
     matches = [
         row
@@ -110,6 +126,13 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run_dirs", nargs="+", type=Path)
     parser.add_argument(
+        "--runner-version", choices=("v2", "legacy"), default="v2",
+        help=(
+            "validate schema-v2 production merges by default; use legacy only "
+            "for archived v1 runs"
+        ),
+    )
+    parser.add_argument(
         "--integrity-manifest",
         type=Path,
         default=ROOT / "experiments/probe_exhaustive_integrity_manifest.json",
@@ -128,13 +151,23 @@ def main() -> int:
     integrity = load_json(integrity_path)
     if integrity.get("status") != "passed":
         raise RuntimeError("integrity manifest did not pass")
+    expected_runner = (
+        "experiments/run_probe_exhaustive_v2.py"
+        if args.runner_version == "v2"
+        else "experiments/run_probe_exhaustive.py"
+    )
+    if integrity.get("inputs", {}).get("runner_path") != expected_runner:
+        raise RuntimeError("integrity manifest runner does not match --runner-version")
     runs = [
-        validate_run(run_dir.resolve(), integrity_path, integrity)
+        validate_run(
+            run_dir.resolve(), integrity_path, integrity, args.runner_version
+        )
         for run_dir in args.run_dirs
     ]
     payload = {
         "schema_version": 1,
         "status": "passed",
+        "runner_version": args.runner_version,
         "integrity_manifest": display(integrity_path),
         "integrity_manifest_sha256": sha256(integrity_path),
         "runs": runs,
