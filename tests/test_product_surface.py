@@ -399,19 +399,35 @@ class StaticWebsiteTests(unittest.TestCase):
         self.assertIn("function renderMatrixBrowser", javascript)
         self.assertIn("function setupStarterSets", javascript)
         self.assertIn('fetch("starter_sets.json")', javascript)
-        self.assertIsNone(data["meta"]["probe_compression_sha256"])
-        self.assertIsNone(data["meta"]["confidence"])
-        self.assertIsNone(data["meta"]["new_model_confidence"])
-        self.assertIsNone(data["new_model_confidence"])
+        self.assertEqual(
+            data["meta"]["scores_sha256"],
+            hashlib.sha256((root / "data" / "scores.csv").read_bytes()).hexdigest(),
+        )
+        self.assertEqual(
+            data["meta"]["probe_compression_sha256"],
+            hashlib.sha256(
+                (root / "experiments" / "probe_compression_rank1.json").read_bytes()
+            ).hexdigest(),
+        )
+        self.assertIsNotNone(data["meta"]["confidence"])
+        self.assertIsNotNone(data["meta"]["new_model_confidence"])
+        self.assertEqual(
+            data["new_model_confidence"]["scores"]["sha256"],
+            data["meta"]["scores_sha256"],
+        )
         starter_sets = json.loads((root / "website" / "starter_sets.json").read_text())
-        self.assertEqual(starter_sets["status"], "pending_exact_probe_artifact")
         self.assertEqual(starter_sets["matrix_scores_sha256"], data["meta"]["scores_sha256"])
         self.assertEqual(
-            starter_sets["feasibility_allowlists"],
-            data["meta"]["feasibility_allowlists"],
+            starter_sets["probe_compression_sha256"],
+            data["meta"]["probe_compression_sha256"],
         )
-        self.assertEqual(starter_sets["probe_count"], 0)
-        self.assertEqual(starter_sets["sets"], {})
+        self.assertEqual(starter_sets["probe_count"], 10)
+        self.assertEqual(starter_sets["default_visible_count"], 5)
+        self.assertEqual(set(starter_sets["sets"]), {"unrestricted", "feasibility"})
+        for starter in starter_sets["sets"].values():
+            evaluation_ids = starter["evaluation_ids"]
+            self.assertEqual(len(evaluation_ids), 10)
+            self.assertEqual(len(set(evaluation_ids)), 10)
         self.assertIn("different probe-compression artifact", javascript)
         self.assertIn("unique evaluations", javascript)
         self.assertIn("pending_exact_probe_artifact", javascript)
@@ -430,9 +446,12 @@ class StaticWebsiteTests(unittest.TestCase):
             for j, value in enumerate(row):
                 if value is None:
                     missing_cells += 1
-                    self.assertIsNone(data["prediction_intervals"][i][j])
-                    self.assertIsNone(data["trust_probability_status"][i][j])
-                    self.assertIsNone(data["trust_probabilities"][i][j])
+                    self.assertEqual(len(data["prediction_intervals"][i][j]), 2)
+                    self.assertEqual(
+                        data["trust_probability_status"][i][j],
+                        "calibrated_existing_model",
+                    )
+                    self.assertIsNotNone(data["trust_probabilities"][i][j])
                 else:
                     self.assertIsNone(data["trust_probabilities"][i][j])
         self.assertEqual(missing_cells, 8911)
