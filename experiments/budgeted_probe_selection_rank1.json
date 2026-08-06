@@ -1,0 +1,659 @@
+{
+  "schema_version": "pathopress-budgeted-probe-selection-v1",
+  "status": "insufficient_cost_coverage",
+  "inputs": {
+    "scores": "data/scores.csv",
+    "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
+    "tasks": "data/tasks.csv",
+    "tasks_sha256": "0c9f711767a51fee2563c7617b15a15a0244dac19207f33317580bc67ce21209",
+    "burden": "data/evaluation_burden_measurements_v1.example.json",
+    "burden_sha256": "f1d9cc353979ad642a05b963f61cd8f6fe3ddd4783a38addff3d133ed8ef8be1",
+    "budget": "data/probe_budget_v1.example.json",
+    "budget_sha256": "0f612a1432eeb306f78954d4dc7d088eeee6339cd02184ad4d8b3b8625397e25",
+    "runner_sha256": "f3482cf9f3f125fd42e1002604b3820b13753349504dae9abc8ee6f0d7bc19d5",
+    "budgeted_probes_sha256": "ece8176d54abbe2ef417ac2c261e2a43220cbd832427171bb1ca7ebf0449e102"
+  },
+  "configuration": {
+    "scenario": "reuse_existing_labels",
+    "objective": "medae",
+    "prediction_rank": 1,
+    "ranking_margin": 5.0,
+    "search": "greedy",
+    "max_probes": 10,
+    "max_subsets": 200000,
+    "missing_policy": "exclude",
+    "one_per_task_identity": true,
+    "seed": 42,
+    "workers": 1,
+    "worker_cap": 4,
+    "blas_threads_per_worker": 1,
+    "tie_break": "objective within 1e-12; normalized budget pressure; canonical cost vector; lexicographic evaluation IDs"
+  },
+  "budget": {
+    "schema_version": "pathopress-probe-budget-v1",
+    "scenario": "reuse_existing_labels",
+    "semantics": "Example constraints only. They do not imply that any protocol has measured burden evidence.",
+    "accepted_evidence_statuses": [
+      "measured",
+      "source_reported",
+      "configured_ceiling"
+    ],
+    "required_phases": [
+      "per_protocol_evaluation"
+    ],
+    "measurement_filter": {},
+    "additive_limits": {
+      "accelerator_time": {
+        "value": 36000,
+        "unit": "accelerator-seconds"
+      },
+      "annotation_labor": {
+        "value": 8,
+        "unit": "hours"
+      },
+      "direct_cost": {
+        "value": 500,
+        "unit": "USD"
+      }
+    },
+    "capacity_limits": {
+      "peak_vram": {
+        "value": 24,
+        "unit": "GiB"
+      }
+    },
+    "allowed_constraints": {
+      "access_class": [
+        "open_download",
+        "registration"
+      ],
+      "commercial_use_allowed": [
+        true
+      ]
+    }
+  },
+  "matrix": {
+    "shape": [
+      59,
+      187
+    ],
+    "n_observed": 2122,
+    "n_retained_evaluations": 187
+  },
+  "coverage": {
+    "n_retained_candidates": 187,
+    "n_canonical_receipts": 1,
+    "n_eligible_candidates": 0,
+    "eligible_evaluation_ids": [],
+    "n_excluded_candidates": 187,
+    "exclusions": {
+      "eva.leaderboard.bach.validation": [
+        "eva.leaderboard.bach.validation:not_measured"
+      ],
+      "eva.leaderboard.bracs.validation": [
+        "eva.leaderboard.bracs.validation:not_measured"
+      ],
+      "eva.leaderboard.breakhis.validation": [
+        "eva.leaderboard.breakhis.validation:not_measured"
+      ],
+      "eva.leaderboard.camelyon16_small.test": [
+        "eva.leaderboard.camelyon16_small.test:not_measured"
+      ],
+      "eva.leaderboard.camelyon16_small.validation": [
+        "eva.leaderboard.camelyon16_small.validation:not_measured"
+      ],
+      "eva.leaderboard.consep.validation": [
+        "eva.leaderboard.consep.validation:not_measured"
+      ],
+      "eva.leaderboard.crc.validation": [
+        "eva.leaderboard.crc.validation:not_measured"
+      ],
+      "eva.leaderboard.gleason_arvaniti.validation": [
+        "eva.leaderboard.gleason_arvaniti.validation:not_measured"
+      ],
+      "eva.leaderboard.mhist.test": [
+        "eva.leaderboard.mhist.test:not_measured"
+      ],
+      "eva.leaderboard.monusac.test": [
+        "eva.leaderboard.monusac.test:not_measured"
+      ],
+      "eva.leaderboard.panda_small.test": [
+        "eva.leaderboard.panda_small.test:not_measured"
+      ],
+      "eva.leaderboard.panda_small.validation": [
+        "eva.leaderboard.panda_small.validation:not_measured"
+      ],
+      "eva.leaderboard.patch_camelyon.test": [
+        "eva.leaderboard.patch_camelyon.test:not_measured"
+      ],
+      "eva.leaderboard.patch_camelyon.validation": [
+        "eva.leaderboard.patch_camelyon.validation:not_measured"
+      ],
+      "eva.leaderboard.patch_camelyon_10shot.test": [
+        "eva.leaderboard.patch_camelyon_10shot.test:not_measured"
+      ],
+      "hest.ccrcc.gene_expression": [
+        "hest.ccrcc.gene_expression:not_measured"
+      ],
+      "hest.coad.gene_expression": [
+        "hest.coad.gene_expression:not_measured"
+      ],
+      "hest.hoptimus1report2025.ccrcc.gene_expression": [
+        "hest.hoptimus1report2025.ccrcc.gene_expression:not_measured"
+      ],
+      "hest.hoptimus1report2025.coad.gene_expression": [
+        "hest.hoptimus1report2025.coad.gene_expression:not_measured"
+      ],
+      "hest.hoptimus1report2025.idc.gene_expression": [
+        "hest.hoptimus1report2025.idc.gene_expression:not_measured"
+      ],
+      "hest.hoptimus1report2025.lung.gene_expression": [
+        "hest.hoptimus1report2025.lung.gene_expression:not_measured"
+      ],
+      "hest.hoptimus1report2025.lymph_idc.gene_expression": [
+        "hest.hoptimus1report2025.lymph_idc.gene_expression:not_measured"
+      ],
+      "hest.hoptimus1report2025.paad.gene_expression": [
+        "hest.hoptimus1report2025.paad.gene_expression:not_measured"
+      ],
+      "hest.hoptimus1report2025.prad.gene_expression": [
+        "hest.hoptimus1report2025.prad.gene_expression:not_measured"
+      ],
+      "hest.hoptimus1report2025.read.gene_expression": [
+        "hest.hoptimus1report2025.read.gene_expression:not_measured"
+      ],
+      "hest.hoptimus1report2025.skcm.gene_expression": [
+        "hest.hoptimus1report2025.skcm.gene_expression:not_measured"
+      ],
+      "hest.idc.gene_expression": [
+        "hest.idc.gene_expression:not_measured"
+      ],
+      "hest.lung.gene_expression": [
+        "hest.lung.gene_expression:not_measured"
+      ],
+      "hest.lymph_idc.gene_expression": [
+        "hest.lymph_idc.gene_expression:not_measured"
+      ],
+      "hest.paad.gene_expression": [
+        "hest.paad.gene_expression:not_measured"
+      ],
+      "hest.prad.gene_expression": [
+        "hest.prad.gene_expression:not_measured"
+      ],
+      "hest.read.gene_expression": [
+        "hest.read.gene_expression:not_measured"
+      ],
+      "hest.skcm.gene_expression": [
+        "hest.skcm.gene_expression:not_measured"
+      ],
+      "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc": [
+        "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc:not_measured"
+      ],
+      "hoptimus1report2025.cam17_wilds.linear_probe_top1": [
+        "hoptimus1report2025.cam17_wilds.linear_probe_top1:not_measured"
+      ],
+      "hoptimus1report2025.crc_no_norm.linear_probe_top1": [
+        "hoptimus1report2025.crc_no_norm.linear_probe_top1:not_measured"
+      ],
+      "hoptimus1report2025.kras_crc.cptac_coad.abmil_auc": [
+        "hoptimus1report2025.kras_crc.cptac_coad.abmil_auc:not_measured"
+      ],
+      "hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc": [
+        "hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc:not_measured"
+      ],
+      "hoptimus1report2025.mhist.linear_probe_top1": [
+        "hoptimus1report2025.mhist.linear_probe_top1:not_measured"
+      ],
+      "hoptimus1report2025.msi_crc.cptac_coad.abmil_auc": [
+        "hoptimus1report2025.msi_crc.cptac_coad.abmil_auc:not_measured"
+      ],
+      "hoptimus1report2025.msi_crc.paip2020.abmil_auc": [
+        "hoptimus1report2025.msi_crc.paip2020.abmil_auc:not_measured"
+      ],
+      "hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc": [
+        "hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc:not_measured"
+      ],
+      "hoptimus1report2025.tcga_uniform.linear_probe_top1": [
+        "hoptimus1report2025.tcga_uniform.linear_probe_top1:not_measured"
+      ],
+      "pathobench.exaone2025.bc_therapy.er-status": [
+        "pathobench.exaone2025.bc_therapy.er-status:not_measured"
+      ],
+      "pathobench.exaone2025.bc_therapy.grade": [
+        "pathobench.exaone2025.bc_therapy.grade:not_measured"
+      ],
+      "pathobench.exaone2025.bc_therapy.her2-status": [
+        "pathobench.exaone2025.bc_therapy.her2-status:not_measured"
+      ],
+      "pathobench.exaone2025.bc_therapy.residual-cancer-burden": [
+        "pathobench.exaone2025.bc_therapy.residual-cancer-burden:not_measured"
+      ],
+      "pathobench.exaone2025.bcnb.er": [
+        "pathobench.exaone2025.bcnb.er:not_measured"
+      ],
+      "pathobench.exaone2025.bcnb.her2": [
+        "pathobench.exaone2025.bcnb.her2:not_measured"
+      ],
+      "pathobench.exaone2025.bcnb.pr": [
+        "pathobench.exaone2025.bcnb.pr:not_measured"
+      ],
+      "pathobench.exaone2025.boehmk_.pfs": [
+        "pathobench.exaone2025.boehmk_.pfs:not_measured"
+      ],
+      "pathobench.exaone2025.bracs.slidelevel-coarse": [
+        "pathobench.exaone2025.bracs.slidelevel-coarse:not_measured"
+      ],
+      "pathobench.exaone2025.bracs.slidelevel-fine": [
+        "pathobench.exaone2025.bracs.slidelevel-fine:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_brca.immune-class": [
+        "pathobench.exaone2025.cptac_brca.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_brca.pik3ca-mutation": [
+        "pathobench.exaone2025.cptac_brca.pik3ca-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_brca.tp53-mutation": [
+        "pathobench.exaone2025.cptac_brca.tp53-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_ccrcc.bap1-mutation": [
+        "pathobench.exaone2025.cptac_ccrcc.bap1-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_ccrcc.immune-class": [
+        "pathobench.exaone2025.cptac_ccrcc.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_ccrcc.os": [
+        "pathobench.exaone2025.cptac_ccrcc.os:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_ccrcc.pbrm1-mutation": [
+        "pathobench.exaone2025.cptac_ccrcc.pbrm1-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_ccrcc.vhl-mutation": [
+        "pathobench.exaone2025.cptac_ccrcc.vhl-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_coad.acvr2a-mutation": [
+        "pathobench.exaone2025.cptac_coad.acvr2a-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_coad.apc-mutation": [
+        "pathobench.exaone2025.cptac_coad.apc-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_coad.arid1a-mutation": [
+        "pathobench.exaone2025.cptac_coad.arid1a-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_coad.immune-class": [
+        "pathobench.exaone2025.cptac_coad.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_coad.kras-mutation": [
+        "pathobench.exaone2025.cptac_coad.kras-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_coad.msi-h": [
+        "pathobench.exaone2025.cptac_coad.msi-h:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_coad.pik3ca-mutation": [
+        "pathobench.exaone2025.cptac_coad.pik3ca-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_coad.setd1b-mutation": [
+        "pathobench.exaone2025.cptac_coad.setd1b-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_coad.tp53-mutation": [
+        "pathobench.exaone2025.cptac_coad.tp53-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_gbm.egfr-mutation": [
+        "pathobench.exaone2025.cptac_gbm.egfr-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_gbm.immune-class": [
+        "pathobench.exaone2025.cptac_gbm.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_gbm.tp53-mutation": [
+        "pathobench.exaone2025.cptac_gbm.tp53-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_hnsc.casp8-mutation": [
+        "pathobench.exaone2025.cptac_hnsc.casp8-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_hnsc.histologic-grade": [
+        "pathobench.exaone2025.cptac_hnsc.histologic-grade:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_hnsc.immune-class": [
+        "pathobench.exaone2025.cptac_hnsc.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_hnsc.os": [
+        "pathobench.exaone2025.cptac_hnsc.os:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_lscc.arid1a-mutation": [
+        "pathobench.exaone2025.cptac_lscc.arid1a-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_lscc.histologic-grade": [
+        "pathobench.exaone2025.cptac_lscc.histologic-grade:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_lscc.immune-class": [
+        "pathobench.exaone2025.cptac_lscc.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_lscc.keap1-mutation": [
+        "pathobench.exaone2025.cptac_lscc.keap1-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_luad.egfr-mutation": [
+        "pathobench.exaone2025.cptac_luad.egfr-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_luad.immune-class": [
+        "pathobench.exaone2025.cptac_luad.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_luad.kras-mutation": [
+        "pathobench.exaone2025.cptac_luad.kras-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_luad.os": [
+        "pathobench.exaone2025.cptac_luad.os:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_luad.stk11-mutation": [
+        "pathobench.exaone2025.cptac_luad.stk11-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_luad.tp53-mutation": [
+        "pathobench.exaone2025.cptac_luad.tp53-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_ov.immune-class": [
+        "pathobench.exaone2025.cptac_ov.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_pda.immune-class": [
+        "pathobench.exaone2025.cptac_pda.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_pda.os": [
+        "pathobench.exaone2025.cptac_pda.os:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_pda.smad4-mutation": [
+        "pathobench.exaone2025.cptac_pda.smad4-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_ucec.ctnnb1-mutation": [
+        "pathobench.exaone2025.cptac_ucec.ctnnb1-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_ucec.immune-class": [
+        "pathobench.exaone2025.cptac_ucec.immune-class:not_measured"
+      ],
+      "pathobench.exaone2025.cptac_ucec.pten-mutation": [
+        "pathobench.exaone2025.cptac_ucec.pten-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.ebrains.diagnosis": [
+        "pathobench.exaone2025.ebrains.diagnosis:not_measured"
+      ],
+      "pathobench.exaone2025.ebrains.diagnosis-group": [
+        "pathobench.exaone2025.ebrains.diagnosis-group:not_measured"
+      ],
+      "pathobench.exaone2025.ebrains.idh-status": [
+        "pathobench.exaone2025.ebrains.idh-status:not_measured"
+      ],
+      "pathobench.exaone2025.hancook.grading-scc-conventional-keratinizing": [
+        "pathobench.exaone2025.hancook.grading-scc-conventional-keratinizing:not_measured"
+      ],
+      "pathobench.exaone2025.hancook.grading-scc-conventional-nonkeratinizing": [
+        "pathobench.exaone2025.hancook.grading-scc-conventional-nonkeratinizing:not_measured"
+      ],
+      "pathobench.exaone2025.hancook.lymphovascular-invasion-l": [
+        "pathobench.exaone2025.hancook.lymphovascular-invasion-l:not_measured"
+      ],
+      "pathobench.exaone2025.hancook.os-treatment-rdc": [
+        "pathobench.exaone2025.hancook.os-treatment-rdc:not_measured"
+      ],
+      "pathobench.exaone2025.hancook.perineural-invasion-pn": [
+        "pathobench.exaone2025.hancook.perineural-invasion-pn:not_measured"
+      ],
+      "pathobench.exaone2025.hancook.primarily-metastasis": [
+        "pathobench.exaone2025.hancook.primarily-metastasis:not_measured"
+      ],
+      "pathobench.exaone2025.hancook.primary-tumor-site": [
+        "pathobench.exaone2025.hancook.primary-tumor-site:not_measured"
+      ],
+      "pathobench.exaone2025.hancook.vascular-invasion-v": [
+        "pathobench.exaone2025.hancook.vascular-invasion-v:not_measured"
+      ],
+      "pathobench.exaone2025.herroi.response": [
+        "pathobench.exaone2025.herroi.response:not_measured"
+      ],
+      "pathobench.exaone2025.imp.grade": [
+        "pathobench.exaone2025.imp.grade:not_measured"
+      ],
+      "pathobench.exaone2025.mbc_.os": [
+        "pathobench.exaone2025.mbc_.os:not_measured"
+      ],
+      "pathobench.exaone2025.mbc_.recist": [
+        "pathobench.exaone2025.mbc_.recist:not_measured"
+      ],
+      "pathobench.exaone2025.mut-het-rcc.bap1-mutation": [
+        "pathobench.exaone2025.mut-het-rcc.bap1-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.mut-het-rcc.pbrm1-mutation": [
+        "pathobench.exaone2025.mut-het-rcc.pbrm1-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.mut-het-rcc.setd2-mutation": [
+        "pathobench.exaone2025.mut-het-rcc.setd2-mutation:not_measured"
+      ],
+      "pathobench.exaone2025.nadt.response": [
+        "pathobench.exaone2025.nadt.response:not_measured"
+      ],
+      "pathobench.exaone2025.natbrca.lymphovascular-invasion": [
+        "pathobench.exaone2025.natbrca.lymphovascular-invasion:not_measured"
+      ],
+      "pathobench.exaone2025.ovarian.response": [
+        "pathobench.exaone2025.ovarian.response:not_measured"
+      ],
+      "pathobench.exaone2025.panda.isup-grade": [
+        "pathobench.exaone2025.panda.isup-grade:not_measured"
+      ],
+      "pathobench.exaone2025.sr386_.braf-mutant-binary": [
+        "pathobench.exaone2025.sr386_.braf-mutant-binary:not_measured"
+      ],
+      "pathobench.exaone2025.sr386_.died-within-5-years": [
+        "pathobench.exaone2025.sr386_.died-within-5-years:not_measured"
+      ],
+      "pathobench.exaone2025.sr386_.mmr-loss-binary": [
+        "pathobench.exaone2025.sr386_.mmr-loss-binary:not_measured"
+      ],
+      "pathobench.exaone2025.sr386_.os": [
+        "pathobench.exaone2025.sr386_.os:not_measured"
+      ],
+      "pathobench.exaone2025.sr386_.ras-mutant-binary": [
+        "pathobench.exaone2025.sr386_.ras-mutant-binary:not_measured"
+      ],
+      "pathobench.exaone2025.visiomel.relapse-noprev-melanoma": [
+        "pathobench.exaone2025.visiomel.relapse-noprev-melanoma:not_measured"
+      ],
+      "pathobench.exaone2025.visiomel.relapse-overall": [
+        "pathobench.exaone2025.visiomel.relapse-overall:not_measured"
+      ],
+      "pathobench.threads2025.bcnb.er": [
+        "pathobench.threads2025.bcnb.er:not_measured"
+      ],
+      "pathobench.threads2025.bcnb.her2": [
+        "pathobench.threads2025.bcnb.her2:not_measured"
+      ],
+      "pathobench.threads2025.bcnb.pr": [
+        "pathobench.threads2025.bcnb.pr:not_measured"
+      ],
+      "pathobench.threads2025.boehmk_.pfs": [
+        "pathobench.threads2025.boehmk_.pfs:not_measured"
+      ],
+      "pathobench.threads2025.bracs.slidelevel-coarse": [
+        "pathobench.threads2025.bracs.slidelevel-coarse:not_measured"
+      ],
+      "pathobench.threads2025.bracs.slidelevel-fine": [
+        "pathobench.threads2025.bracs.slidelevel-fine:not_measured"
+      ],
+      "pathobench.threads2025.cptac_brca.pik3ca-mutation": [
+        "pathobench.threads2025.cptac_brca.pik3ca-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_brca.tp53-mutation": [
+        "pathobench.threads2025.cptac_brca.tp53-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_ccrcc.bap1-mutation": [
+        "pathobench.threads2025.cptac_ccrcc.bap1-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_ccrcc.os": [
+        "pathobench.threads2025.cptac_ccrcc.os:not_measured"
+      ],
+      "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation": [
+        "pathobench.threads2025.cptac_ccrcc.pbrm1-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_coad.kras-mutation": [
+        "pathobench.threads2025.cptac_coad.kras-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_coad.tp53-mutation": [
+        "pathobench.threads2025.cptac_coad.tp53-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_gbm.egfr-mutation": [
+        "pathobench.threads2025.cptac_gbm.egfr-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_gbm.tp53-mutation": [
+        "pathobench.threads2025.cptac_gbm.tp53-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_hnsc.casp8-mutation": [
+        "pathobench.threads2025.cptac_hnsc.casp8-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_hnsc.os": [
+        "pathobench.threads2025.cptac_hnsc.os:not_measured"
+      ],
+      "pathobench.threads2025.cptac_lscc.arid1a-mutation": [
+        "pathobench.threads2025.cptac_lscc.arid1a-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_lscc.keap1-mutation": [
+        "pathobench.threads2025.cptac_lscc.keap1-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_luad.egfr-mutation": [
+        "pathobench.threads2025.cptac_luad.egfr-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_luad.os": [
+        "pathobench.threads2025.cptac_luad.os:not_measured"
+      ],
+      "pathobench.threads2025.cptac_luad.stk11-mutation": [
+        "pathobench.threads2025.cptac_luad.stk11-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_luad.tp53-mutation": [
+        "pathobench.threads2025.cptac_luad.tp53-mutation:not_measured"
+      ],
+      "pathobench.threads2025.cptac_pda.os": [
+        "pathobench.threads2025.cptac_pda.os:not_measured"
+      ],
+      "pathobench.threads2025.cptac_pda.smad4-mutation": [
+        "pathobench.threads2025.cptac_pda.smad4-mutation:not_measured"
+      ],
+      "pathobench.threads2025.ebrains.diagnosis": [
+        "pathobench.threads2025.ebrains.diagnosis:not_measured"
+      ],
+      "pathobench.threads2025.ebrains.diagnosis-group": [
+        "pathobench.threads2025.ebrains.diagnosis-group:not_measured"
+      ],
+      "pathobench.threads2025.imp.grade": [
+        "pathobench.threads2025.imp.grade:not_measured"
+      ],
+      "pathobench.threads2025.mbc_.os": [
+        "pathobench.threads2025.mbc_.os:not_measured"
+      ],
+      "pathobench.threads2025.mbc_.recist": [
+        "pathobench.threads2025.mbc_.recist:not_measured"
+      ],
+      "pathobench.threads2025.mut-het-rcc.bap1-mutation": [
+        "pathobench.threads2025.mut-het-rcc.bap1-mutation:not_measured"
+      ],
+      "pathobench.threads2025.mut-het-rcc.pbrm1-mutation": [
+        "pathobench.threads2025.mut-het-rcc.pbrm1-mutation:not_measured"
+      ],
+      "pathobench.threads2025.mut-het-rcc.setd2-mutation": [
+        "pathobench.threads2025.mut-het-rcc.setd2-mutation:not_measured"
+      ],
+      "pathobench.threads2025.nadt.response": [
+        "pathobench.threads2025.nadt.response:not_measured"
+      ],
+      "pathobench.threads2025.natbrca.lymphovascular-invasion": [
+        "pathobench.threads2025.natbrca.lymphovascular-invasion:not_measured"
+      ],
+      "pathobench.threads2025.ovarian.response": [
+        "pathobench.threads2025.ovarian.response:not_measured"
+      ],
+      "pathobench.threads2025.panda.isup-grade": [
+        "pathobench.threads2025.panda.isup-grade:not_measured"
+      ],
+      "pathobench.threads2025.sr386_.braf-mutant-binary": [
+        "pathobench.threads2025.sr386_.braf-mutant-binary:not_measured"
+      ],
+      "pathobench.threads2025.sr386_.died-within-5-years": [
+        "pathobench.threads2025.sr386_.died-within-5-years:not_measured"
+      ],
+      "pathobench.threads2025.sr386_.mmr-loss-binary": [
+        "pathobench.threads2025.sr386_.mmr-loss-binary:not_measured"
+      ],
+      "pathobench.threads2025.sr386_.os": [
+        "pathobench.threads2025.sr386_.os:not_measured"
+      ],
+      "pathobench.threads2025.sr386_.ras-mutant-binary": [
+        "pathobench.threads2025.sr386_.ras-mutant-binary:not_measured"
+      ],
+      "pathorob.camelyon.robustness_index": [
+        "pathorob.camelyon.robustness_index:not_measured"
+      ],
+      "pathorob.nature2026.camelyon.clustering_score": [
+        "pathorob.nature2026.camelyon.clustering_score:not_measured"
+      ],
+      "pathorob.nature2026.tcga_4x4.clustering_score": [
+        "pathorob.nature2026.tcga_4x4.clustering_score:not_measured"
+      ],
+      "pathorob.nature2026.tolkach_esca.clustering_score": [
+        "pathorob.nature2026.tolkach_esca.clustering_score:not_measured"
+      ],
+      "pathorob.tcga_2x2.robustness_index": [
+        "pathorob.tcga_2x2.robustness_index:not_measured"
+      ],
+      "pathorob.tolkach_esca.robustness_index": [
+        "pathorob.tolkach_esca.robustness_index:not_measured"
+      ],
+      "thunder.bach.linear_probing": [
+        "0000000000000000000000000000000000000000000000000000000000000000.accelerator_time:not_measured",
+        "0000000000000000000000000000000000000000000000000000000000000000.annotation_labor:not_measured",
+        "0000000000000000000000000000000000000000000000000000000000000000.constraints.access_class:not_reported",
+        "0000000000000000000000000000000000000000000000000000000000000000.constraints.commercial_use_allowed:not_reported",
+        "0000000000000000000000000000000000000000000000000000000000000000.direct_cost:not_measured",
+        "0000000000000000000000000000000000000000000000000000000000000000.peak_vram:not_measured"
+      ],
+      "thunder.bracs.linear_probing": [
+        "thunder.bracs.linear_probing:not_measured"
+      ],
+      "thunder.break_his.linear_probing": [
+        "thunder.break_his.linear_probing:not_measured"
+      ],
+      "thunder.ccrcc.linear_probing": [
+        "thunder.ccrcc.linear_probing:not_measured"
+      ],
+      "thunder.crc.linear_probing": [
+        "thunder.crc.linear_probing:not_measured"
+      ],
+      "thunder.esca.linear_probing": [
+        "thunder.esca.linear_probing:not_measured"
+      ],
+      "thunder.mhist.linear_probing": [
+        "thunder.mhist.linear_probing:not_measured"
+      ],
+      "thunder.patch_camelyon.linear_probing": [
+        "thunder.patch_camelyon.linear_probing:not_measured"
+      ],
+      "thunder.spider_breast.linear_probing": [
+        "thunder.spider_breast.linear_probing:not_measured"
+      ],
+      "thunder.spider_colorectal.linear_probing": [
+        "thunder.spider_colorectal.linear_probing:not_measured"
+      ],
+      "thunder.spider_skin.linear_probing": [
+        "thunder.spider_skin.linear_probing:not_measured"
+      ],
+      "thunder.spider_thorax.linear_probing": [
+        "thunder.spider_thorax.linear_probing:not_measured"
+      ],
+      "thunder.tcga_crc_msi.linear_probing": [
+        "thunder.tcga_crc_msi.linear_probing:not_measured"
+      ],
+      "thunder.tcga_tils.linear_probing": [
+        "thunder.tcga_tils.linear_probing:not_measured"
+      ],
+      "thunder.tcga_uniform.linear_probing": [
+        "thunder.tcga_uniform.linear_probing:not_measured"
+      ],
+      "thunder.wilds.linear_probing": [
+        "thunder.wilds.linear_probing:not_measured"
+      ]
+    }
+  },
+  "reason": "No retained evaluation has complete accepted burden evidence under all active numeric, capacity, access, and license constraints. No selection or chart is valid."
+}

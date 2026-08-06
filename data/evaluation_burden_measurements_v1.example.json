@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "schema_path": "data/evaluation_burden_measurements.schema.json",
+  "measurement": {
+    "measurement_id": "0000000000000000000000000000000000000000000000000000000000000000",
+    "model_revision": "example/model@revision",
+    "evaluation_id": "thunder.bach.linear_probing",
+    "run_config_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+    "hardware_id": "example-hardware-not-a-measurement",
+    "cache_scope": "warm",
+    "artifact_group_id": "thunder.dataset.bach",
+    "phase": "per_protocol_evaluation",
+    "execution_status": "completed",
+    "exit_code": 0,
+    "started_at": "2026-01-01T00:00:00+00:00",
+    "completed_at": "2026-01-01T00:00:00+00:00",
+    "command_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+    "command": null,
+    "run_config_path": null,
+    "host": {
+      "hostname": "example",
+      "platform": "example",
+      "python": "example",
+      "cpu_count": null
+    },
+    "resources": {
+      "wall_time": {"status": "not_measured", "value": null, "unit": "seconds", "reason": "Example only; no benchmark command was run."},
+      "cpu_user_time": {"status": "not_measured", "value": null, "unit": "seconds", "reason": "Example only; no benchmark command was run."},
+      "cpu_system_time": {"status": "not_measured", "value": null, "unit": "seconds", "reason": "Example only; no benchmark command was run."},
+      "peak_ram": {"status": "not_measured", "value": null, "unit": "GiB", "reason": "Example only; no benchmark command was run."},
+      "accelerator_time": {"status": "not_measured", "value": null, "unit": "accelerator-seconds", "reason": "No accelerator utilization sampler was attached."},
+      "peak_vram": {"status": "not_measured", "value": null, "unit": "GiB", "reason": "No accelerator-memory sampler was attached."},
+      "download_volume": {"status": "not_measured", "value": null, "unit": "GiB", "reason": "Network transfer was not instrumented."},
+      "storage_volume": {"status": "not_measured", "value": null, "unit": "GiB", "reason": "Filesystem staging volume was not instrumented."},
+      "access_lead_time": {"status": "not_measured", "value": null, "unit": "hours", "reason": "Data-access lead time was not instrumented."},
+      "access_admin_labor": {"status": "not_measured", "value": null, "unit": "hours", "reason": "Administrative labor was not instrumented."},
+      "annotation_labor": {"status": "not_measured", "value": null, "unit": "hours", "reason": "Annotation labor was not instrumented."},
+      "pathologist_labor": {"status": "not_measured", "value": null, "unit": "hours", "reason": "Pathologist labor was not instrumented."},
+      "new_tissue_cases": {"status": "not_measured", "value": null, "unit": "cases", "reason": "Tissue acquisition was not instrumented."},
+      "new_slides": {"status": "not_measured", "value": null, "unit": "slides", "reason": "Slide acquisition was not instrumented."},
+      "direct_cost": {"status": "not_measured", "value": null, "unit": "USD", "reason": "No billing record was attached."}
+    },
+    "constraints": {
+      "access_class": {"status": "not_reported", "value": null, "reason": "No access classification was attached to this example."},
+      "dataset_license": {"status": "not_reported", "value": null, "reason": "No dataset license was attached to this example."},
+      "commercial_use_allowed": {"status": "not_reported", "value": null, "reason": "Commercial-use permission was not established."},
+      "redistribution_allowed": {"status": "not_reported", "value": null, "reason": "Redistribution permission was not established."},
+      "new_tissue_required": {"status": "not_measured", "value": null, "reason": "Tissue acquisition requirements were not measured."}
+    },
+    "scope_note": "Canonical non-measurement example. It must never produce a budget recommendation."
+  }
+}

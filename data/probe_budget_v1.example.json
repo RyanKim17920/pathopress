@@ -1,0 +1,38 @@
+{
+  "schema_version": "pathopress-probe-budget-v1",
+  "scenario": "reuse_existing_labels",
+  "semantics": "Example constraints only. They do not imply that any protocol has measured burden evidence.",
+  "accepted_evidence_statuses": [
+    "measured",
+    "source_reported",
+    "configured_ceiling"
+  ],
+  "required_phases": [
+    "per_protocol_evaluation"
+  ],
+  "measurement_filter": {},
+  "additive_limits": {
+    "accelerator_time": {
+      "value": 36000,
+      "unit": "accelerator-seconds"
+    },
+    "annotation_labor": {
+      "value": 8,
+      "unit": "hours"
+    },
+    "direct_cost": {
+      "value": 500,
+      "unit": "USD"
+    }
+  },
+  "capacity_limits": {
+    "peak_vram": {
+      "value": 24,
+      "unit": "GiB"
+    }
+  },
+  "allowed_constraints": {
+    "access_class": ["open_download", "registration"],
+    "commercial_use_allowed": [true]
+  }
+}
