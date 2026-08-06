@@ -7,6 +7,8 @@ contains the true values for cells that were not held out.
 Pathology endpoints do not share a universal clinically meaningful score gap,
 so pairwise margins are explicit.  Callers may pass one scalar margin or one
 margin per evaluation column; the default is zero (all non-tied true pairs).
+This is a PathoPress reimplementation of the upstream experiment's metric
+contract, not a claim of verbatim source copying. See THIRD_PARTY_NOTICES.md.
 """
 
 from __future__ import annotations

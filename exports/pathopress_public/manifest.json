@@ -1,0 +1,89 @@
+{
+  "description": "Public PathoPress pathology benchmark score-matrix tables.",
+  "files": [
+    {
+      "bytes": 135290,
+      "path": "data/evaluations_all.csv",
+      "rows": 287,
+      "sha256": "c97d1144a2206a071496b849269543fdbeb4178c4a1ff343a0a37ffeb30b8b19"
+    },
+    {
+      "bytes": 82755,
+      "path": "data/evaluations_paper.csv",
+      "rows": 165,
+      "sha256": "894188e0baec2ded56f147c8f8bd4659d560f513d2cbef9763b1c5a19972a016"
+    },
+    {
+      "bytes": 7920,
+      "path": "data/models_all.csv",
+      "rows": 60,
+      "sha256": "b6ab0839f2f0d72ac70d76d704c8d7a364ad8c47730c1668c3ab829ada422239"
+    },
+    {
+      "bytes": 7893,
+      "path": "data/models_paper.csv",
+      "rows": 59,
+      "sha256": "bcc930b6b81c3ee2fe6a86d897a42f16083b7507487afb5ceb8568f5a04e4b55"
+    },
+    {
+      "bytes": 25175,
+      "path": "data/score_matrix_paper_wide.csv",
+      "rows": 59,
+      "sha256": "fea0e6ca7401ceff1ad0e63dbbda53419ef0108404fe1741c0bd8e0c43399728"
+    },
+    {
+      "bytes": 922506,
+      "path": "data/scores_all.csv",
+      "rows": 1976,
+      "sha256": "f68ec0a692dad3231973a120157af70e0bee9622f190133b4c08d08ee528d363"
+    },
+    {
+      "bytes": 918423,
+      "path": "data/scores_paper.csv",
+      "rows": 1967,
+      "sha256": "0989cc2294805210bfab8fdd0650c0b05186b26f144ca94754fe5fe29aa13de9"
+    },
+    {
+      "bytes": 6173,
+      "path": "provenance.json",
+      "sha256": "fa0b131bd366a637127e5b7c11164b9c6f7e5fde2a4ba4b5a05a81cef412072e"
+    },
+    {
+      "bytes": 1418,
+      "path": "LICENSES.md",
+      "sha256": "ca9bfda49b6ec0f4c6bfaa6d333c5a1318357adb10f0955e0d57d00825a76018"
+    },
+    {
+      "bytes": 1654,
+      "path": "README.md",
+      "sha256": "c77c2e66b664af9fd19e420cb2a0213ed289af0e76bb85299ef9938f1e3d775c"
+    }
+  ],
+  "inputs": {
+    "model_metadata_sha256": "a255719534391db72be2211e434fc153ca2d236fa1740552165e6c943a8018e4",
+    "provenance_sha256": "8ff33057b4bd8c572a1de9ad053194d5ee43da324a01a81e4bb9630470031050",
+    "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9",
+    "suites_sha256": "edbd5c3424613b66d6b6b14b9e11c78c357fdff30ed8ff80854f157812e5cf07",
+    "tasks_sha256": "1041706bb3d8f83e06e9acefb7c002193f1938dce90c69b2be05f005a2c63289"
+  },
+  "paper_filter": {
+    "accepted_audit_statuses": [
+      "verified",
+      "parsed_primary_source"
+    ],
+    "evaluations": 165,
+    "min_models_per_evaluation": 5,
+    "min_scores_per_model": 3,
+    "models": 59,
+    "observations": 1967
+  },
+  "rows": {
+    "evaluations_all": 287,
+    "evaluations_paper": 165,
+    "models_all": 60,
+    "models_paper": 59,
+    "scores_all": 1976,
+    "scores_paper": 1967
+  },
+  "schema_version": "pathopress-public-tables-v1"
+}

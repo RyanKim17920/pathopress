@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "matrix": {
+    "n_models": 59,
+    "n_evaluations": 165,
+    "n_observed": 1967
+  },
+  "counts": {
+    "release_quarters": {
+      "2015-Q4": 1,
+      "2020-Q4": 3,
+      "2021-Q1": 2,
+      "2021-Q2": 1,
+      "2022-Q2": 1,
+      "2022-Q4": 4,
+      "2023-Q1": 1,
+      "2023-Q2": 5,
+      "2023-Q3": 4,
+      "2023-Q4": 1,
+      "2024-Q1": 8,
+      "2024-Q2": 5,
+      "2024-Q3": 6,
+      "2024-Q4": 3,
+      "2025-Q1": 5,
+      "2025-Q2": 3,
+      "2025-Q3": 3,
+      "2025-Q4": 2,
+      "2026-Q1": 1
+    },
+    "observed_score_quarters": {
+      "2015-Q4": 9,
+      "2020-Q4": 35,
+      "2021-Q1": 32,
+      "2021-Q2": 12,
+      "2022-Q2": 3,
+      "2022-Q4": 30,
+      "2023-Q1": 16,
+      "2023-Q2": 72,
+      "2023-Q3": 184,
+      "2023-Q4": 28,
+      "2024-Q1": 150,
+      "2024-Q2": 385,
+      "2024-Q3": 382,
+      "2024-Q4": 166,
+      "2025-Q1": 221,
+      "2025-Q2": 64,
+      "2025-Q3": 48,
+      "2025-Q4": 105,
+      "2026-Q1": 25
+    },
+    "task_family": {
+      "mutation_prediction": 49,
+      "classification": 29,
+      "survival_prediction": 19,
+      "tme_characterization": 16,
+      "molecular_subtyping": 11,
+      "morphological_subtyping": 10,
+      "spatial_transcriptomics": 9,
+      "tumor_grading": 9,
+      "treatment_response": 8,
+      "representation_robustness": 3,
+      "segmentation": 2
+    },
+    "observed_family": {
+      "classification": 739,
+      "mutation_prediction": 363,
+      "spatial_transcriptomics": 234,
+      "survival_prediction": 141,
+      "tme_characterization": 113,
+      "molecular_subtyping": 81,
+      "morphological_subtyping": 74,
+      "tumor_grading": 65,
+      "representation_robustness": 60,
+      "treatment_response": 59,
+      "segmentation": 38
+    },
+    "suite_tasks": {
+      "pathobench": 122,
+      "thunder": 16,
+      "eva": 15,
+      "hest": 9,
+      "pathorob": 3
+    },
+    "score_audit_status": {
+      "parsed_primary_source": 1967
+    },
+    "task_source_domains": {
+      "arxiv.org": 122,
+      "github.com": 43
+    },
+    "n_models": 59,
+    "n_evaluations": 165,
+    "n_observed": 1967,
+    "n_release_dates": 59
+  },
+  "semantics": {
+    "release_timeline": "verified exact-model primary-source dates only",
+    "quarterly_score_coverage": "retained observed score cells grouped by verified model release quarter; not publication-quarter benchmarking volume",
+    "task_mix": "retained evaluation identities, not raw source columns",
+    "observed_by_category": "retained observed model-evaluation cells"
+  }
+}

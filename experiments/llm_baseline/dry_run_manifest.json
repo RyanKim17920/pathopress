@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "kind": "llm_baseline_dry_run_manifest",
+  "config_sha256": "316f8082878aa4067d955d4ff0375c67de7190e2ea16e03bdc9a3c2e7ea26f17",
+  "status": "prepared_unrun",
+  "headline_eligible": false,
+  "n_requests": 8,
+  "n_target_cells": 32,
+  "condition_request_counts": {
+    "matrix_named": 2,
+    "matrix_blind": 2,
+    "five_shot_named": 2,
+    "five_shot_blind": 2
+  },
+  "inputs": {
+    "data/scores.csv": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9",
+    "experiments/folds_s10_f3_bs42.json": "6363c9426ca55397548a8e4234bc22d4a22733758d0e06221140464acd0618e5",
+    "data/tasks.csv": "1041706bb3d8f83e06e9acefb7c002193f1938dce90c69b2be05f005a2c63289"
+  },
+  "artifacts": {
+    "experiments/llm_baseline/config.json": "c73f0c88ac1b68affdc63d631df5cf6ffcaa6245ed717724be350c684e876bb3",
+    "experiments/llm_baseline/requests.jsonl": "2a88265502a546865b0424acc2079dbf82558b928cbd9810798640fb5b78d50a",
+    "experiments/llm_baseline/real_run_status.json": "0419f04a4d28c814601d42964852492e92f133a49d229cb5cefe83b4ca443d37",
+    "experiments/llm_baseline/request.schema.json": "a4dfa57890ecabdcf0fddfe1902e0b3edfab2a538a2aa8879cae5c5f27fff8fd",
+    "experiments/llm_baseline/response.schema.json": "cfd8dba8f97ad5fdc4b051bbda70d61901c9074501deb711f997a919123db215"
+  }
+}

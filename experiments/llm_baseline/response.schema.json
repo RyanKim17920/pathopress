@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PathoPress provider-neutral chat response JSONL record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "request_id",
+    "request_sha256",
+    "config_sha256",
+    "backend_kind",
+    "provider",
+    "model",
+    "status",
+    "headline_eligible",
+    "response_text",
+    "response_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "backend_kind": {
+      "enum": [
+        "deterministic_mock",
+        "openai_compatible",
+        "anthropic_compatible",
+        "local_model"
+      ]
+    },
+    "provider": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string"
+    },
+    "headline_eligible": {
+      "type": "boolean"
+    },
+    "response_text": {
+      "type": "string"
+    },
+    "response_sha256": {
+      "type": "string",
+      "minLength": 64,
+      "maxLength": 64
+    }
+  }
+}

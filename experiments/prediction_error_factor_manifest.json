@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "matrix_sha256": "adbae84f7dfe406a26ab062392f6331c393496534cd0be68d56f76330dc8d2de",
+  "regeneration_command": "PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --workers 8",
+  "resume_command": "PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --workers 8",
+  "merge_only_command": "PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --merge-only",
+  "artifacts": {
+    "merged_summary": {
+      "path": "experiments/prediction_error_factors_rank1.json",
+      "tracked": true,
+      "bytes": 204083,
+      "sha256": "ad288c6c624e8cd3ec7cd798f43394a5b41ec9bd61cb9d256d51c1144300e2f6"
+    },
+    "merged_records": {
+      "path": "outputs/prediction_error_factor_records_rank1.csv",
+      "tracked": true,
+      "rows": 11535,
+      "bytes": 2569851,
+      "sha256": "73a63637685240558ce10e887e241cc3e110ddb23800660d386b7289286b6017"
+    },
+    "raw_predictions": {
+      "path": "outputs/prediction_error_factor_predictions_rank1.csv",
+      "tracked": false,
+      "ignore_rule": "outputs/prediction_error_factor_predictions_rank1.csv",
+      "rows": 279487,
+      "bytes": 30107523,
+      "sha256": "8f2bbbaed674bb1f9ecd1f590074fb83ccbfc563110793335229facf81132169"
+    },
+    "unit_cache": {
+      "path": "experiments/prediction_error_factor_shards",
+      "tracked": false,
+      "ignore_rule": "experiments/prediction_error_factor_shards/",
+      "files": 5795,
+      "active_units": 5785,
+      "inactive_preserved_files": 10,
+      "bytes": 21803672,
+      "contract": "One atomic JSON shard per deterministic hypothesis/target/seed unit; reruns validate matrix identity and skip matching shards."
+    }
+  }
+}

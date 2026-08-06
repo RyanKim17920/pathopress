@@ -45,6 +45,17 @@ REPOSITORIES = {
     "pathorob": "https://github.com/bifold-pathomics/PathoROB",
 }
 
+REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+
+
+def portable_artifact_path(path: Path) -> str:
+    """Record a repository-relative path without leaking a builder location."""
+    resolved = path.resolve()
+    try:
+        return resolved.relative_to(REPOSITORY_ROOT).as_posix()
+    except ValueError:
+        return path.name
+
 SCORE_FIELDS = [
     "model_id",
     "reported_model_alias",
@@ -1193,7 +1204,6 @@ def main() -> None:
             name: {
                 "url": url,
                 "commit": commits[name],
-                "local_path": str((args.sources / name).resolve()),
             }
             for name, url in REPOSITORIES.items()
         },
@@ -1204,7 +1214,7 @@ def main() -> None:
                 "source_archive_url": "https://export.arxiv.org/e-print/2512.14019v1",
                 "source_archive_sha256": "0c479164dfab7ac48a1e1876649ef73efe9f457e064c3ab00ee960856d35a268",
                 "source_member": "tabs/pathobench_result.tex",
-                "snapshot_path": str(args.exaone_pathobench_snapshot.resolve()),
+                "snapshot_path": portable_artifact_path(args.exaone_pathobench_snapshot),
                 "snapshot_sha256": hashlib.sha256(
                     args.exaone_pathobench_snapshot.read_bytes()
                 ).hexdigest(),
@@ -1219,7 +1229,7 @@ def main() -> None:
                 "html_sha256": "a6c7af63c1f527eba692f83b362651e0e1d96d07e303520f90cd08f34b00c92f",
                 "source_archive_url": "https://export.arxiv.org/e-print/2501.16652v1",
                 "source_archive_sha256": "3d8b3f6779b9b0eae21be12e8917bd6f0bab26e3c7943470e378383d20a1de4f",
-                "snapshot_path": str(args.threads_pathobench_snapshot.resolve()),
+                "snapshot_path": portable_artifact_path(args.threads_pathobench_snapshot),
                 "snapshot_sha256": hashlib.sha256(args.threads_pathobench_snapshot.read_bytes()).hexdigest(),
                 "reported_public_tasks": 42,
                 "reported_frozen_representations": 8,
@@ -1232,7 +1242,9 @@ def main() -> None:
                 "midnight_model_card_score_cells": len(eva_midnight_scores),
                 "selected_unique_cells": len(eva_scores),
                 "alternate_source_conflicts": len(eva_conflicts),
-                "conflict_audit_path": str((args.output / "eva_source_conflicts.csv").resolve()),
+                "conflict_audit_path": portable_artifact_path(
+                    args.output / "eva_source_conflicts.csv"
+                ),
             }
         },
         "counts": {

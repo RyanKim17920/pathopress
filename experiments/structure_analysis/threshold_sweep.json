@@ -1,0 +1,179 @@
+{
+  "description": "Iterated minimum-observation threshold sensitivity",
+  "grids": {
+    "pathology_scaled": [
+      {
+        "fill_rate": 0.20205444273240883,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 3,
+        "min_scores_per_model": 2,
+        "n_evaluations": 165,
+        "n_models": 59,
+        "n_observations": 1967
+      },
+      {
+        "fill_rate": 0.20205444273240883,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 5,
+        "min_scores_per_model": 2,
+        "n_evaluations": 165,
+        "n_models": 59,
+        "n_observations": 1967
+      },
+      {
+        "fill_rate": 0.29040247678018577,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 8,
+        "min_scores_per_model": 2,
+        "n_evaluations": 85,
+        "n_models": 57,
+        "n_observations": 1407
+      },
+      {
+        "fill_rate": 0.20205444273240883,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 3,
+        "min_scores_per_model": 3,
+        "n_evaluations": 165,
+        "n_models": 59,
+        "n_observations": 1967
+      },
+      {
+        "fill_rate": 0.20205444273240883,
+        "is_pathology_selected": true,
+        "min_models_per_evaluation": 5,
+        "min_scores_per_model": 3,
+        "n_evaluations": 165,
+        "n_models": 59,
+        "n_observations": 1967
+      },
+      {
+        "fill_rate": 0.29040247678018577,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 8,
+        "min_scores_per_model": 3,
+        "n_evaluations": 85,
+        "n_models": 57,
+        "n_observations": 1407
+      },
+      {
+        "fill_rate": 0.22287021154945683,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 3,
+        "min_scores_per_model": 5,
+        "n_evaluations": 165,
+        "n_models": 53,
+        "n_observations": 1949
+      },
+      {
+        "fill_rate": 0.22287021154945683,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 5,
+        "min_scores_per_model": 5,
+        "n_evaluations": 165,
+        "n_models": 53,
+        "n_observations": 1949
+      },
+      {
+        "fill_rate": 0.32041522491349483,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 8,
+        "min_scores_per_model": 5,
+        "n_evaluations": 85,
+        "n_models": 51,
+        "n_observations": 1389
+      }
+    ],
+    "upstream_exact": [
+      {
+        "fill_rate": 0.3338235294117647,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 8,
+        "min_scores_per_model": 10,
+        "n_evaluations": 85,
+        "n_models": 48,
+        "n_observations": 1362
+      },
+      {
+        "fill_rate": 0.5548945375878853,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 12,
+        "min_scores_per_model": 10,
+        "n_evaluations": 43,
+        "n_models": 43,
+        "n_observations": 1026
+      },
+      {
+        "fill_rate": 0.6122448979591837,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 16,
+        "min_scores_per_model": 10,
+        "n_evaluations": 35,
+        "n_models": 42,
+        "n_observations": 900
+      },
+      {
+        "fill_rate": 0.3562243502051984,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 8,
+        "min_scores_per_model": 15,
+        "n_evaluations": 85,
+        "n_models": 43,
+        "n_observations": 1302
+      },
+      {
+        "fill_rate": 0.6137112722478576,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 12,
+        "min_scores_per_model": 15,
+        "n_evaluations": 41,
+        "n_models": 37,
+        "n_observations": 931
+      },
+      {
+        "fill_rate": 0.83125,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 16,
+        "min_scores_per_model": 15,
+        "n_evaluations": 25,
+        "n_models": 32,
+        "n_observations": 665
+      },
+      {
+        "fill_rate": 0.4562091503267974,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 8,
+        "min_scores_per_model": 20,
+        "n_evaluations": 85,
+        "n_models": 27,
+        "n_observations": 1047
+      },
+      {
+        "fill_rate": 0.7660753880266076,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 12,
+        "min_scores_per_model": 20,
+        "n_evaluations": 41,
+        "n_models": 22,
+        "n_observations": 691
+      },
+      {
+        "fill_rate": 1.0,
+        "is_pathology_selected": false,
+        "min_models_per_evaluation": 16,
+        "min_scores_per_model": 20,
+        "n_evaluations": 25,
+        "n_models": 17,
+        "n_observations": 425
+      }
+    ]
+  },
+  "pathology_adaptation": "BenchPress 10/15/20 x 8/12/16 grid is retained; a 2/3/5 x 3/5/8 grid is added around PathoPress's selected 3 x 5 threshold.",
+  "schema_version": 1,
+  "unfiltered": {
+    "fill_rate": 0.20205444273240883,
+    "n_evaluations": 165,
+    "n_models": 59,
+    "n_observations": 1967
+  }
+}

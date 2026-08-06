@@ -1,57 +1,66 @@
 # PathoPress
 
-Citation-backed score-matrix completion for pathology foundation-model benchmarks.
+Citation-backed score-matrix completion for pathology foundation-model
+benchmarks, adapted from [Microsoft BenchPress](https://github.com/microsoft/benchpress).
 
-## Verdict
+## What it does
 
-The BenchPress idea is applicable to pathology, but it is a **moderate-to-hard data and validation project**, not mainly an engineering port. A registry and auditable score matrix are realistic in 2–4 weeks; a useful completion model needs roughly 6–10 weeks of extraction, protocol normalization, and retrospective validation; a defensible public release is more plausibly a 3–6 month effort. The schedule is driven by score provenance and comparability, not the matrix-factorization code.
+PathoPress does not compress pathology images or replace benchmark runners. It
+builds an auditable model × evaluation score matrix, predicts supported missing
+cells, and studies which small evaluation panels preserve score and ranking
+information. The source registry covers Patho-Bench, EVA, THUNDER, HEST, and
+PathoROB while keeping dataset identity, task identity, evaluation protocol, and
+score observation distinct.
 
-[Microsoft BenchPress](https://github.com/microsoft/benchpress) does not compress benchmark datasets or replace their runners. It collects published model × evaluation scores and predicts missing cells with calibrated low-rank matrix completion. Its paper-canonical matrix has 84 models, 133 evaluations, and 2,604 observed cells (23.3% filled). PathoPress tests whether pathology results have enough overlap and low-rank structure for the same strategy.
+The full registry contains 287 protocol rows over 145 task identities and 1,976
+reported score cells. The fixed research matrix accepts primary-source-parsed
+evidence and iteratively requires at least three scores per model and five models
+per evaluation. It retains **59 models × 165 evaluations, 1,967 reported cells,
+and 20.2054% density**. The retained columns are Patho-Bench 122, EVA 15,
+THUNDER 16, HEST 9, and PathoROB 3.
 
-## What the initial audit found
+This is a research prototype. The scores are machine-parsed from pinned primary
+sources, not dual-human-verified; normalized points mix several native metrics;
+and retrospective interpolation is not prospective clinical validation.
 
-The current inventory covers [Patho-Bench](https://github.com/mahmoodlab/patho-bench), [EVA](https://github.com/kaiko-ai/eva), [THUNDER](https://github.com/MICS-Lab/thunder), [HEST](https://github.com/mahmoodlab/HEST), and [PathoROB](https://github.com/bifold-pathomics/PathoROB).
+## Main findings
 
-- Patho-Bench: 95 tasks from 33 sources.
-- EVA: 13 canonical pathology task identities in current code; its dataset documentation shows 14 when the `PANDASmall` variant is counted separately.
-- THUNDER: 21 current task configurations (17 classification and 4 segmentation), versus 20 documented tasks and 16 datasets in the paper.
-- HEST: 9 morphology-to-gene-expression tasks.
-- PathoROB: 4 dataset configurations × 3 robustness metrics = 12 endpoints.
-- Across Patho-Bench, EVA, and THUNDER, deduplication yields **122 code-backed dataset × target × granularity identities**, or **121 using only documented tasks** and excluding THUNDER's code-present `STARC9` entry.
+- The logit, per-evaluation-standardized bias-ALS implementation matches the
+  pinned BenchPress numerical primitive to floating-point precision. Pathology
+  cross-validation selects interaction rank 1; BenchPress deploys rank 2.
+- On the shared 10-seed × 3-fold artifact, rank-1 bias ALS gives 3.005264 MAE,
+  1.603026 MedAE, and 1.609435 median fold MedAE. The column-median baseline is
+  4.092133/2.477500 MAE/MedAE.
+- The complete 7-transform × 12-method comparison ran 343/343 configurations.
+  The best MedAPE row is log BenchReg at 1.8144, but it covers only 71.0% of
+  held-out cells. Coverage is therefore part of every method result; a partial
+  regression row does not replace the full-coverage selected predictor.
+- A largest complete 32 × 16 submatrix has stable rank 1.431; its first and
+  first two components explain 69.88% and 87.57% of variance. All 165
+  evaluations have a correlation neighbor with at least five shared models;
+  median best absolute correlation is 0.9189.
+- With the all-known BenchPress denominator, greedy rank-1 scorecard MedAE is
+  1.481124 at five probes and 1.196456 at ten. Hidden-only values are 1.612112
+  and 1.539134. These are transductive reconstruction results, not estimates of
+  a new model's clinical utility.
+- OOF ranking preservation has median pairwise accuracy 0.7622/0.7954/0.8337/
+  0.9049 at normalized-score margins 0/1/2/5, and median top-set recovery
+  0.6786/0.7759/0.8133 at top fractions 10/20/30%.
+- Cross-fitted structural-support uncertainty correlates with absolute error at
+  Spearman 0.5980; its leave-fold-out 90% intervals cover 89.995% of 19,670 OOF
+  instances. The separate deploy artifact gives suite-conditioned held-out-cell
+  intervals only for supported existing rows, not genuinely unseen models.
+- A hard-rule temporal experiment predicts seven 2025 model releases using
+  strictly earlier models and 1/5/10 revealed cells across ten seeds. It is a
+  small retrospective release cohort, not external or prospective validation.
 
-Only seven exact cross-suite task overlaps were found: six patch tasks shared by EVA and THUNDER (`BACH`, `BRACS`, the selected four-class `BreakHis` task, `CRC-100K`, `MHIST`, and `PatchCamelyon`) and the full-slide PANDA ISUP task shared by Patho-Bench and EVA. These are shared task identities, not automatically interchangeable score columns: preprocessing, splits, adaptation method, and metric still have to match.
+Detailed protocol distinctions and remaining gaps are in
+[the parity note](docs/benchpress-parity.md) and
+[the full audit](docs/full-parity-audit.md).
 
-The full evidence, inventory drift, feasibility gates, roadmap, and licensing risks are in [docs/feasibility.md](docs/feasibility.md).
+## Install and quick start
 
-## Current implementation
-
-The repository contains an MVP for the numerical core:
-
-- a citation-backed CSV score loader;
-- iterative support filtering for sparse model × evaluation matrices;
-- logit transform, per-evaluation standardization, and configurable bias-decomposed alternating least squares;
-- random-cell holdout smoke validation; and
-- `audit` and `validate` CLI commands.
-
-The generated registry contains 5 suites, 287 evaluation protocols over 145
-task identities, and 1,976 citation-backed score cells. The score blocks are
-Patho-Bench 896, EVA 265, HEST 234, THUNDER 512, and PathoROB 69. The generated
-artifacts are evidence metadata, not bundled benchmark images:
-
-- [`data/suites.csv`](data/suites.csv) — suite-level scope and provenance;
-- [`data/tasks.csv`](data/tasks.csv) — complete endpoint inventory;
-- [`data/deduplication.csv`](data/deduplication.csv) — exact links and related-but-distinct tasks;
-- [`data/model_aliases.csv`](data/model_aliases.csv) — reported names to canonical model IDs;
-- [`data/scores.csv`](data/scores.csv) — measured score cells; and
-- [`data/eva_source_conflicts.csv`](data/eva_source_conflicts.csv) — 110 reconciled alternate-source EVA observations; and
-- [`data/provenance.json`](data/provenance.json) — pinned upstream revisions and generation record.
-
-Regenerate them from pinned local upstream clones with `python3 scripts/build_registry.py --sources <directory> --output data`. Generated files should be reviewed as evidence artifacts; automation does not replace source verification.
-The exact EVA, EXAONE, and THREADS numerical sources, inclusion boundaries, and
-quarantines are documented in
-[`docs/score-source-coverage.md`](docs/score-source-coverage.md).
-
-Install and run:
+The core CLI needs only the base package:
 
 ```bash
 python3 -m pip install -e .
@@ -59,127 +68,119 @@ pathopress audit --scores data/scores.csv
 pathopress validate --scores data/scores.csv
 ```
 
-The default CLI support thresholds (three evaluations per model and five models per evaluation) are intentionally permissive smoke-test defaults. They are **not** evidence that a matrix is publication-ready. A public completion model must pass the stricter gates in the feasibility report, including leave-one-model and time-aware validation, protocol audit, low-rank diagnostics, and calibrated abstention.
+Install `.[research]` before regenerating analyses or figures. This extra
+includes the compatible PyTorch dependency used by the MLP method-grid units;
+the grid records dependency failures rather than silently dropping units.
 
-The primary support filter retains 59 models × 165 evaluations and 1,967
-primary-source-parsed cells (20.2054% density). These cells are machine
-extracted from pinned official reports but have not received dual human review.
-The filter excludes the nine `reported_external` PathoROB rows from the 1,976-row
-registry.
-BenchPress-style within-model cross-validation selects rank 1 at 3.005264 MAE,
-1.603026 MedAE, and 1.609435 median fold MedAE. The matched column-median
-baseline is 4.092133/2.477500 MAE/MedAE.
-
-The stricter experiments in [`experiments/`](experiments/) reinforce the need
-for caution. Rank-1 random-cell validation is 2.834996/1.526795 MAE/MedAE, but
-hiding whole suite blocks raises it to 5.612789/3.525174. Rank 5 is best on that
-suite-block stress test at 4.952972/3.055638. Rank-1 suite-block MAE ranges from
-1.4860 for HEST to 14.4385 for PathoROB; Patho-Bench is 4.2643, EVA 8.8757, and
-THUNDER 6.3854. A single global rank or error guarantee therefore does not
-transfer uniformly across pathology endpoint families. Pooled sparse-new-model
-rank-1 error is 3.190380/1.817465.
-
-## BenchPress-style imputation and figures
-
-The repository also reproduces BenchPress's 10-seed × 3-fold within-model
-validation design and sweeps latent interaction ranks 0 through 10. Rank 1 is
-best on all three matched-fold error summaries: pooled MAE 3.005264, pooled
-MedAE 1.603026, and median-of-fold MedAE 1.609435. The task-column-median
-baseline is 4.092133/2.477500 MAE/MedAE; bias-only rank 0 is
-3.056250/1.711456 and rank 2 is 3.117610/1.632035. The primary point-estimate
-export therefore uses rank 1.
-
-The separate Soft-Impute SVD sweep used for BenchPress's published rank figure
-also selects rank 1 in both raw and logit spaces. This agreement supports rank
-1 for the current matrix, but suite-block validation still shows that a global
-low-rank fit transfers unevenly across sources. Direct comparison with
-Microsoft's standalone predictor remains an implementation-parity check, not a
-prospective performance claim.
-
-Generate the complete point-estimate table and figures with:
+The product CLI uses canonical IDs and supports CSV or JSON:
 
 ```bash
-pathopress impute --scores data/scores.csv --rank 1 --output outputs/imputations_rank1.csv
-python3 experiments/run_benchpress_style.py
-python3 experiments/run_soft_impute_rank_sweep.py
-python3 scripts/plot_benchpress_style.py
+pathopress list-models --format csv
+pathopress list-evaluations --format json
+pathopress predict \
+  --model atlas \
+  --evaluation eva.leaderboard.bach.validation \
+  --confidence --format json
+pathopress complete-model --model atlas --output atlas-missing.csv
+pathopress add-model --model my-model \
+  --known-score eva.leaderboard.bach.validation=72 \
+  --known-score eva.leaderboard.bracs.validation=68 \
+  --format json --output my-model-predictions.json
 ```
 
-The current supported matrix has 1,967 reported and 7,768 rank-1 imputed cells.
-See
-[`docs/imputation.md`](docs/imputation.md) for metric definitions, the figure
-gallery, and the distinction between a point estimate and a confidence
-interval.
+`status=observed`, `provided`, and `predicted` remain distinct. Confidence is
+hash-bound to the source scores and exact point recipe. New-model predictions
+are explicitly marked `not_applicable_new_model` for confidence because the
+calibration population contains existing model rows only.
 
-## Probe selection and benchmark informativeness
+## Reproduce the compact release
 
-PathoPress now reproduces the logic behind BenchPress's GitHub hero curve. It
-greedily selects evaluation columns that best reconstruct the fixed set of 1,967
-published cells, compares them with 10 nested random probe orders, and repeats
-selection on a 70% model-training split before isolated evaluation on the held
-out 30% of models.
-
-The faithful all-known curve falls from a 1.900-point full-matrix baseline to
-1.481124 MedAE with five probes and 1.196456 with ten. Those headline values include
-the measured probe cells as exact zero-error predictions, as BenchPress does.
-When those cells are excluded, the corresponding errors are 1.612112 and
-1.539134. Held-out-model hidden-cell MedAE is 1.951271 at five probes and
-1.879857 at ten.
-
-The exact selected probe trajectories are stored in
-[`experiments/probe_selection_results_rank1.json`](experiments/probe_selection_results_rank1.json);
-the selected sets span suites. The companion table ranks every evaluation by
-its one-probe reduction in scorecard MedAE and includes model coverage. A
-second panel reports literal per-model mean-score prediction: its all-known MAE
-is 3.203489 at five probes and 2.908513 at ten, while held-out-model MAE is
-1.684778 and 1.231976. That diagnostic is not what BenchPress calls “overall
-score prediction.”
-
-Generate the artifacts with:
+Build the shared matrix/folds, public tables, confidence artifact, and static
+site data from the repository root:
 
 ```bash
-python3 experiments/run_probe_selection.py
-python3 scripts/plot_probe_selection.py
+PYTHONPATH=src python3 scripts/build_shared_artifacts.py
+PYTHONPATH=src python3 scripts/build_public_release.py
+python3 -m http.server 8000
 ```
 
-See [`docs/benchpress-parity.md`](docs/benchpress-parity.md) for the audited
-upstream protocol, the exact meaning of informativeness, and the remaining
-work for confidence, temporal, low-cost, and pathology-family validation.
+Then open <http://localhost:8000/website/>. The site is static: lookup uses
+generated JSON, add-model completion runs in the browser, and no score is
+uploaded. See [website/README.md](website/README.md).
 
-## Data contract
+The public export at [exports/pathopress_public/](exports/pathopress_public/)
+contains all/paper model, evaluation, and score tables; a 59 × 165 wide matrix;
+sanitized provenance; license caveats; and a file-hash manifest. Load or fetch a
+mirror with `pathopress.public_data` or:
 
-PathoPress keeps four concepts distinct:
+```bash
+PYTHONPATH=src python3 scripts/download_public_release.py BASE_URL DESTINATION
+```
 
-1. **Dataset artifact** — cohort/version, access route, license, unit of observation, and sample identifiers.
-2. **Task identity** — dataset + prediction target + granularity. This is the level used to find conceptual duplicates.
-3. **Evaluation protocol** — split, label map, preprocessing, magnification, pooling/adaptation method, metric, and aggregation. This is the matrix-column identity.
-4. **Score observation** — exact model/checkpoint + protocol + value, uncertainty, source URL, and audit status. This is an observed matrix cell.
+No build or download command performs deployment or upload.
 
-Collapsing layers 2 and 3 would silently combine results that answer different experimental questions. PathoPress deduplicates the catalog while retaining protocol-specific evaluations.
+## Artifact map
 
-## Scope and non-goals
+| Layer | Primary evidence |
+|---|---|
+| Registry and deduplication | [suites](data/suites.csv), [tasks](data/tasks.csv), [deduplication](data/deduplication.csv), [scores](data/scores.csv), [provenance](data/provenance.json) |
+| Canonical substrate | [matrix/fold manifest](experiments/shared_artifacts_manifest.json), [matrix NPZ](experiments/analysis_matrix.npz), [folds](experiments/folds_s10_f3_bs42.json) |
+| Point estimates and rank | [imputations](outputs/imputations_rank1.csv), [bias-ALS CV](experiments/benchpress_style_results.json), [Soft-Impute sweep](experiments/soft_impute_rank_sweep_results.json) |
+| Full classical grid | [manifest](experiments/method_comparison/manifest.json), [results](experiments/method_comparison/results.json), [top table](experiments/method_comparison/top_methods.md), [grid figure](figures/method_comparison_grid.png) |
+| Structure | [structure manifest](experiments/structure_analysis/manifest.json), [stable rank](experiments/structure_analysis/stable_rank_results.json), [MDS coordinates](experiments/structure_analysis/mds_coordinates.csv) |
+| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [bounded exhaustive search](experiments/probe_exhaustive_rank1.json), [hero](figures/pathopress_hero_rank1.png) |
+| Ranking and time | [ranking](experiments/ranking_preservation_rank1.json), [temporal](experiments/temporal_deployment_rank1.json) |
+| Trust and error factors | [confidence](experiments/confidence_calibration_rank1.json), [deploy intervals](experiments/deployment_confidence_rank1.json), [predictability](experiments/predictability_results_rank1.json), [factor analysis](experiments/prediction_error_factors_rank1.json) |
+| Publication outputs | [table manifest](outputs/tables/manifest.json), [metadata summary](experiments/publication_metadata_summary.json), [figure gallery](figures/README.md) |
+| Product surface | [CLI](src/pathopress/cli.py), [public export](exports/pathopress_public/README.md), [static site](website/README.md) |
 
-PathoPress is intended to answer: “Given a model's measured results and similar models' results, which missing evaluation scores may be predictable, with what uncertainty, and which real benchmark should be run next?”
+Large resumable caches remain local. The 343 method NPZ shards occupy about 439
+MiB under `experiments/method_comparison/predictions/` and are narrowly ignored
+by Git; the merged manifest records their count, path, and size. Section 6 unit
+shards and its 29 MiB raw prediction CSV are also ignored, while compact merged
+records, tables, and figures remain tracked.
 
-It is not:
+## Experiments
 
-- a substitute for running the original pathology benchmarks;
-- a new clinical validation study;
-- a license to redistribute source images, labels, or gated model weights;
-- proof that a model generalizes to an unseen institution; or
-- a remedy for pretraining/evaluation leakage.
+The concise command and artifact index is [experiments/README.md](experiments/README.md).
+Core regeneration commands are:
 
-Predictions should be labeled as estimates, cite their supporting observations, carry uncertainty, and abstain when support is weak.
+```bash
+PYTHONPATH=src python3 experiments/run_method_comparison.py --prepare-folds
+# Run independent shards, then:
+PYTHONPATH=src python3 experiments/run_method_comparison.py --merge
+PYTHONPATH=src python3 experiments/run_structure_analysis.py
+PYTHONPATH=src python3 experiments/run_probe_compression.py
+PYTHONPATH=src python3 experiments/run_probe_exhaustive.py --workers 8
+PYTHONPATH=src python3 experiments/run_ranking_preservation.py
+PYTHONPATH=src python3 experiments/run_confidence_calibration.py
+PYTHONPATH=src python3 experiments/run_temporal_deployment.py
+PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --workers 8
+```
 
-## Primary sources
+Some commands are intentionally expensive or sharded; consult the experiment
+README before rerunning. The real named/blind matrix and five-shot LLM baselines
+have provider-neutral, no-network request/cache scaffolding, but no real-provider
+responses and therefore no headline-eligible results.
 
-- BenchPress: [code](https://github.com/microsoft/benchpress), [paper](https://arxiv.org/abs/2606.24020), [score matrix](https://huggingface.co/datasets/microsoft/benchpress-score-matrix)
-- Patho-Bench: [code](https://github.com/mahmoodlab/patho-bench), [task splits](https://huggingface.co/datasets/MahmoodLab/Patho-Bench), [paper](https://arxiv.org/abs/2502.06750)
-- EVA: [code](https://github.com/kaiko-ai/eva), [datasets](https://kaiko-ai.github.io/eva/main/datasets/), [paper](https://openreview.net/forum?id=FNBQOPj18N)
-- THUNDER: [code](https://github.com/MICS-Lab/thunder), [paper](https://papers.nips.cc/paper_files/paper/2025/hash/e3a2bd22ef74970b2fff74a16f806237-Abstract-Datasets_and_Benchmarks_Track.html)
-- HEST: [code and benchmark](https://github.com/mahmoodlab/HEST), [benchmark data](https://huggingface.co/datasets/MahmoodLab/hest-bench), [paper](https://arxiv.org/abs/2406.16192)
-- PathoROB: [code](https://github.com/bifold-pathomics/PathoROB), [data collection](https://huggingface.co/collections/bifold-pathomics/pathorob), [paper](https://arxiv.org/abs/2507.17845)
+## Scientific and legal boundaries
 
-## License and attribution
+Normalized points are direction-preserving display/fitting values, not a common
+clinical unit. HEST Pearson `r` maps to `50 × (r + 1)`, PathoROB RI and 0–1
+metrics map to `100 × value`, weighted kappa maps to `50 × (kappa + 1)`, and
+THUNDER's reported 0–100 F1 is unchanged. See
+[docs/imputation.md](docs/imputation.md).
 
-PathoPress code is [MIT-licensed](LICENSE). The adapted numerical method is attributed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). The factual registry and score metadata are covered by [DATA_NOTICE.md](DATA_NOTICE.md): upstream code, reported scores, model weights, and datasets retain their own licenses and access conditions. See [docs/feasibility.md](docs/feasibility.md#licensing-access-and-leakage) before redistributing any artifact.
+Random-cell and within-model folds share model/suite context. Suite-block,
+held-out-row, and temporal experiments are stronger stress tests but still use
+published retrospective evidence. Pathology pretraining/evaluation overlap,
+publication selection, protocol drift, and institutional shortcuts remain
+possible. Predictions prioritize real evaluations; they do not establish
+diagnostic safety, subgroup performance, external-site validity, or clinical
+utility.
+
+PathoPress code is [MIT-licensed](LICENSE), including attributed BenchPress
+adaptations described in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Registry facts do not relicense benchmark data, source publications, images,
+labels, or model weights; see [DATA_NOTICE.md](DATA_NOTICE.md) and the public
+export's [license notice](exports/pathopress_public/LICENSES.md).

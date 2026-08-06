@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PathoPress · Pathology benchmark completion</title>
+  <meta name="description" content="Look up reported and PathoPress-predicted pathology foundation-model benchmark scores.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#lookup">PathoPress</a>
+    <nav aria-label="Workflows">
+      <a href="#lookup">Look up a cell</a>
+      <a href="#add-model">Add a model</a>
+      <a href="../exports/pathopress_public/">Data files</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Pathology score-matrix completion</p>
+      <h1>One model. One evaluation. A provenance-aware answer.</h1>
+      <p>Reported scores stay reported. Missing cells use the selected PathoPress rank-1 completion model and show calibrated intervals only where the held-out-cell artifact applies.</p>
+    </section>
+
+    <section id="lookup" class="panel" aria-labelledby="lookup-heading">
+      <p class="step">01 / Lookup</p>
+      <h2 id="lookup-heading">Choose a supported model and evaluation</h2>
+      <div class="picker-grid">
+        <label>Model
+          <input id="model-input" list="model-options" autocomplete="off" placeholder="Search model IDs">
+          <datalist id="model-options"></datalist>
+        </label>
+        <label>Evaluation
+          <input id="evaluation-input" list="evaluation-options" autocomplete="off" placeholder="Search evaluation IDs">
+          <datalist id="evaluation-options"></datalist>
+        </label>
+      </div>
+      <article id="lookup-result" class="result-card" aria-live="polite">
+        <p>Loading generated predictor data…</p>
+      </article>
+      <details>
+        <summary>Evaluation leaderboard</summary>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Rank</th><th>Model</th><th>Score</th><th>Kind</th></tr></thead>
+          <tbody id="leaderboard-body"></tbody>
+        </table></div>
+      </details>
+    </section>
+
+    <section id="add-model" class="panel" aria-labelledby="add-heading">
+      <p class="step">02 / Add a model</p>
+      <h2 id="add-heading">Predict from scores you already know</h2>
+      <p>This calculation stays in your browser. Nothing is uploaded. New-model intervals are intentionally unavailable because the calibration population contains existing supported model rows.</p>
+      <label>New model ID
+        <input id="new-model-id" value="my-pathology-model" autocomplete="off">
+      </label>
+      <div id="known-score-rows" class="known-score-rows"></div>
+      <div class="button-row">
+        <button id="add-score-row" type="button" class="secondary">+ Add known score</button>
+        <button id="predict-new-model" type="button">Predict missing evaluations</button>
+      </div>
+      <p id="add-model-status" class="status" aria-live="polite"></p>
+      <div id="new-model-results" class="table-wrap" hidden>
+        <table>
+          <thead><tr><th>Evaluation</th><th>Suite</th><th>Score</th><th>Kind</th><th>Confidence</th></tr></thead>
+          <tbody id="new-model-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel note">
+      <h2>Interpretation</h2>
+      <p>Normalized scores place heterogeneous pathology endpoints on a common 0–100 direction-preserving scale. They are research comparison values, not clinical-performance guarantees. Open a reported score’s source before citing it.</p>
+      <p id="matrix-summary"></p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Static PathoPress research interface. No server-side prediction and no automatic contribution or upload actions. <a href="NOTICE.txt">Licenses and attribution</a>.</p>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

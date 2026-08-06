@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "config_sha256": "05c716528d71af4c7d83775f7193826fe063abff4c8cf2b6af2bd7a575fddc23",
+  "shard_index": 1,
+  "num_shards": 4,
+  "n_rows": 2,
+  "rows": [
+    {
+      "ordinal": 1,
+      "probe_indices": [
+        149,
+        151
+      ],
+      "probe_ids": [
+        "thunder.bach.linear_probing",
+        "thunder.break_his.linear_probing"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 64,
+        "n_hidden": 1903,
+        "medae": 2.1115212093512667,
+        "mae": 3.531014445414126,
+        "medape": 2.926417017253611,
+        "hidden_medae": 2.210499190394586,
+        "hidden_medape": 3.0418028993330615,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9573,
+        "pairwise_median_accuracy": 0.3717105263157895,
+        "pairwise_pooled_accuracy": 0.6405515512378565,
+        "top_fraction": 0.2,
+        "top_total_k": 463,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.23974082073434125
+      }
+    },
+    {
+      "ordinal": 5,
+      "probe_indices": [
+        151,
+        155
+      ],
+      "probe_ids": [
+        "thunder.break_his.linear_probing",
+        "thunder.mhist.linear_probing"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 64,
+        "n_hidden": 1903,
+        "medae": 2.115663077720768,
+        "mae": 3.7696158989552453,
+        "medape": 2.971780940143221,
+        "hidden_medae": 2.2369757275923092,
+        "hidden_medape": 3.115805119559684,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9723,
+        "pairwise_median_accuracy": 0.2330316742081448,
+        "pairwise_pooled_accuracy": 0.4084130412424149,
+        "top_fraction": 0.2,
+        "top_total_k": 463,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.13390928725701945
+      }
+    }
+  ]
+}

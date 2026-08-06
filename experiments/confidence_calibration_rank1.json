@@ -1,0 +1,925 @@
+{
+  "schema_version": 1,
+  "description": "BenchPress-style cross-fitted confidence calibration for pathology matrix completion.",
+  "matrix": {
+    "n_models": 59,
+    "n_evaluations": 165,
+    "n_observed": 1967,
+    "density": 0.20205444273240883
+  },
+  "configuration": {
+    "target_predictor": "logit bias ALS rank=1 regularization=0.1",
+    "n_seeds": 10,
+    "n_folds": 3,
+    "base_seed": 42,
+    "n_prediction_instances": 19670,
+    "risk_target": "log1p(abs(predicted_normalized_score - actual_normalized_score))",
+    "confidence_methods": [
+      "disagreement",
+      "structural_support",
+      "combined_risk_model"
+    ],
+    "hp_disagreement_variants": [
+      "rank1_regularization_0.01",
+      "rank1_regularization_0.1",
+      "rank1_regularization_1.0"
+    ],
+    "strong_method_variants": [
+      "bias_als_rank0",
+      "bias_als_rank2",
+      "soft_impute_logit_rank1",
+      "soft_impute_logit_rank2",
+      "soft_impute_identity_rank1",
+      "soft_impute_identity_rank2"
+    ],
+    "conformal_protocol": "leave the target point-prediction fold out when fitting the 90% scale"
+  },
+  "risk_models": {
+    "disagreement": {
+      "feature_names": [
+        "hp_delta_to_median",
+        "hp_mad",
+        "hp_p90_p10_span",
+        "hp_std",
+        "strong_delta_to_median",
+        "strong_mad",
+        "strong_p90_p10_span",
+        "strong_std"
+      ],
+      "selected_risk_model_by_fold": {
+        "0": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "1": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "2": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "3": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "4": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "5": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "6": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "7": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "8": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "9": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "10": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "11": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "12": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "13": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "14": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "15": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "16": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "17": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "18": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "19": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "20": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "21": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "22": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "23": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "24": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "25": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "26": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "27": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "28": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "29": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        }
+      }
+    },
+    "structural_support": {
+      "feature_names": [
+        "col_best_neighbor_abs_corr",
+        "col_median_score",
+        "col_obs_count",
+        "col_score_dispersion",
+        "row_best_peer_abs_corr",
+        "row_best_peer_overlap",
+        "row_median_score",
+        "row_obs_count"
+      ],
+      "selected_risk_model_by_fold": {
+        "0": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "1": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "2": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "3": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "4": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "5": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "6": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "7": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "8": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "9": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "10": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "11": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "12": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "13": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "14": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "15": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "16": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "17": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "18": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "19": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "20": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "21": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "22": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "23": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "24": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "25": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "26": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "27": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "28": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "29": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        }
+      }
+    },
+    "combined_risk_model": {
+      "feature_names": [
+        "hp_delta_to_median",
+        "hp_mad",
+        "hp_p90_p10_span",
+        "hp_std",
+        "strong_delta_to_median",
+        "strong_mad",
+        "strong_p90_p10_span",
+        "strong_std",
+        "structural_col_best_neighbor_abs_corr",
+        "structural_col_median_score",
+        "structural_col_obs_count",
+        "structural_col_score_dispersion",
+        "structural_row_best_peer_abs_corr",
+        "structural_row_best_peer_overlap",
+        "structural_row_median_score",
+        "structural_row_obs_count"
+      ],
+      "selected_risk_model_by_fold": {
+        "0": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "1": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "2": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "3": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "4": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "5": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "6": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "7": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "8": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "9": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "10": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "11": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "12": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "13": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "14": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "15": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "16": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "17": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "18": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "19": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "20": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "21": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "22": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "23": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "24": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "25": {
+          "model": "mlp",
+          "hidden_layers": [
+            16
+          ]
+        },
+        "26": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        },
+        "27": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "28": {
+          "model": "mlp",
+          "hidden_layers": [
+            64,
+            32
+          ]
+        },
+        "29": {
+          "model": "mlp",
+          "hidden_layers": [
+            32
+          ]
+        }
+      }
+    }
+  },
+  "confidence_methods": {
+    "disagreement": {
+      "spearman_uncertainty_abs_error": 0.516693215464439,
+      "risk_coverage_curve": [
+        {
+          "kept_fraction": 1.0,
+          "n": 19670,
+          "mae": 3.0052637614296196,
+          "medae": 1.6030261283019485,
+          "medape": 2.1612181227679597
+        },
+        {
+          "kept_fraction": 0.8,
+          "n": 15736,
+          "mae": 2.1603951635732477,
+          "medae": 1.2804982562667746,
+          "medape": 1.715194602141881
+        },
+        {
+          "kept_fraction": 0.6,
+          "n": 11802,
+          "mae": 1.7036993041648472,
+          "medae": 1.057407375652474,
+          "medape": 1.3708676246985825
+        },
+        {
+          "kept_fraction": 0.4,
+          "n": 7868,
+          "mae": 1.2959783533966254,
+          "medae": 0.8595229536930731,
+          "medape": 1.0850028599755108
+        },
+        {
+          "kept_fraction": 0.2,
+          "n": 3934,
+          "mae": 0.974977775172037,
+          "medae": 0.6948219371994071,
+          "medape": 0.882177078640109
+        }
+      ],
+      "uncertainty_terciles": [
+        {
+          "bin": "low_uncertainty",
+          "n": 6557,
+          "mae": 1.1768085604173324,
+          "medae": 0.799984244991478,
+          "medape": 1.0059870981549295
+        },
+        {
+          "bin": "medium_uncertainty",
+          "n": 6557,
+          "mae": 2.540574293031161,
+          "medae": 1.7208948913696531,
+          "medape": 2.3361657359923944
+        },
+        {
+          "bin": "high_uncertainty",
+          "n": 6556,
+          "mae": 5.298758208855833,
+          "medae": 3.4675315567176597,
+          "medape": 5.215880140129404
+        }
+      ],
+      "normal_90_interval": {
+        "coverage": 0.7286731062531774,
+        "median_width": 6.07919469140559,
+        "median_relative_width": 8.325186659365269,
+        "n": 19670
+      },
+      "conformal_90_interval": {
+        "coverage": 0.9000508388408744,
+        "median_width": 10.639107862418271,
+        "median_relative_width": 14.595056844312646,
+        "n": 19670
+      },
+      "conformal_90_scale_median": 2.879264166160637
+    },
+    "structural_support": {
+      "spearman_uncertainty_abs_error": 0.5980169377441162,
+      "risk_coverage_curve": [
+        {
+          "kept_fraction": 1.0,
+          "n": 19670,
+          "mae": 3.0052637614296196,
+          "medae": 1.6030261283019485,
+          "medape": 2.1612181227679597
+        },
+        {
+          "kept_fraction": 0.8,
+          "n": 15736,
+          "mae": 2.0489468396665513,
+          "medae": 1.266389079401069,
+          "medape": 1.6754094347282096
+        },
+        {
+          "kept_fraction": 0.6,
+          "n": 11802,
+          "mae": 1.4971422249987498,
+          "medae": 1.0034782141057264,
+          "medape": 1.27814366885725
+        },
+        {
+          "kept_fraction": 0.4,
+          "n": 7868,
+          "mae": 1.092544123102681,
+          "medae": 0.7883036632330587,
+          "medape": 0.9848188719717189
+        },
+        {
+          "kept_fraction": 0.2,
+          "n": 3934,
+          "mae": 0.7635854156939306,
+          "medae": 0.6069706039386347,
+          "medape": 0.7506976014994471
+        }
+      ],
+      "uncertainty_terciles": [
+        {
+          "bin": "low_uncertainty",
+          "n": 6557,
+          "mae": 0.9655493917083998,
+          "medae": 0.7114609960002838,
+          "medape": 0.8960174661972227
+        },
+        {
+          "bin": "medium_uncertainty",
+          "n": 6557,
+          "mae": 2.367358691658308,
+          "medae": 1.7808394625014614,
+          "medape": 2.3916404603377535
+        },
+        {
+          "bin": "high_uncertainty",
+          "n": 6556,
+          "mae": 5.683291623655447,
+          "medae": 3.9341019147609977,
+          "medape": 6.175888933602929
+        }
+      ],
+      "normal_90_interval": {
+        "coverage": 0.7229791560752414,
+        "median_width": 5.960367673338318,
+        "median_relative_width": 8.207328087820828,
+        "n": 19670
+      },
+      "conformal_90_interval": {
+        "coverage": 0.8999491611591256,
+        "median_width": 9.767695362433642,
+        "median_relative_width": 13.451843421592393,
+        "n": 19670
+      },
+      "conformal_90_scale_median": 2.697343358938772
+    },
+    "combined_risk_model": {
+      "spearman_uncertainty_abs_error": 0.5869772134827809,
+      "risk_coverage_curve": [
+        {
+          "kept_fraction": 1.0,
+          "n": 19670,
+          "mae": 3.0052637614296196,
+          "medae": 1.6030261283019485,
+          "medape": 2.1612181227679597
+        },
+        {
+          "kept_fraction": 0.8,
+          "n": 15736,
+          "mae": 2.0713543644561,
+          "medae": 1.271770399893306,
+          "medape": 1.682824108852024
+        },
+        {
+          "kept_fraction": 0.6,
+          "n": 11802,
+          "mae": 1.5347373348975215,
+          "medae": 1.0106514571166372,
+          "medape": 1.2875310412266918
+        },
+        {
+          "kept_fraction": 0.4,
+          "n": 7868,
+          "mae": 1.124815037501722,
+          "medae": 0.7979126631001776,
+          "medape": 0.9934040813794738
+        },
+        {
+          "kept_fraction": 0.2,
+          "n": 3934,
+          "mae": 0.7786934645998269,
+          "medae": 0.6168347345671208,
+          "medape": 0.7569708322230443
+        }
+      ],
+      "uncertainty_terciles": [
+        {
+          "bin": "low_uncertainty",
+          "n": 6557,
+          "mae": 0.9947241739341742,
+          "medae": 0.7303169531030562,
+          "medape": 0.9148840292778441
+        },
+        {
+          "bin": "medium_uncertainty",
+          "n": 6557,
+          "mae": 2.4149854299993594,
+          "medae": 1.774599468219236,
+          "medape": 2.3908827692133725
+        },
+        {
+          "bin": "high_uncertainty",
+          "n": 6556,
+          "mae": 5.606478388396651,
+          "medae": 3.867194068835765,
+          "medape": 6.096168327501984
+        }
+      ],
+      "normal_90_interval": {
+        "coverage": 0.7293848500254194,
+        "median_width": 6.061806265033233,
+        "median_relative_width": 8.38422964756846,
+        "n": 19670
+      },
+      "conformal_90_interval": {
+        "coverage": 0.9,
+        "median_width": 9.727860539624878,
+        "median_relative_width": 13.451329687450425,
+        "n": 19670
+      },
+      "conformal_90_scale_median": 2.6394117293871786
+    }
+  },
+  "input": {
+    "scores_path": "data/scores.csv",
+    "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9",
+    "cells_path": "experiments/confidence_cells_rank1.csv"
+  },
+  "runtime": {
+    "python": "3.12.3",
+    "numpy": "2.4.6",
+    "script_sha256": "0d13d9985ab055276474ef9094aa3c93481688fecd66e7ee7a4b17fad6290217"
+  },
+  "pathology_adaptations": [
+    "The target rank is 1 because pathology cross-validation selected rank 1; BenchPress uses rank 2.",
+    "BenchPress's twelve strong transform/KNN alternatives are replaced by the six full-coverage Bias ALS and Soft-Impute alternatives implemented in PathoPress.",
+    "Errors and interval widths are normalized-score points across heterogeneous pathology endpoints, not clinical utility units.",
+    "The same observed cell appears once per seed, matching BenchPress's repeated within-model fold experiment; this is not temporal or external-institution validation.",
+    "The risk models are evaluation-only cross-fits. A deploy-time confidence artifact for genuinely new cells is intentionally not trained here."
+  ]
+}

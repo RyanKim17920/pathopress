@@ -12,6 +12,15 @@ dependencies = ["numpy>=1.24"]
 
 [project.optional-dependencies]
 plots = ["matplotlib>=3.8"]
+confidence = ["scikit-learn>=1.3"]
+# Reproduces the complete research grid, including the deliberately optional
+# PyTorch MLP shard. Core matrix completion remains NumPy-only.
+research = [
+  "matplotlib>=3.8",
+  "scipy>=1.10",
+  "scikit-learn>=1.3",
+  "torch>=2.0",
+]
 
 [project.scripts]
 pathopress = "pathopress.cli:main"

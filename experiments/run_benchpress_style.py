@@ -25,6 +25,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from pathopress.completion import complete  # noqa: E402
+from pathopress.artifacts import load_fold_artifact, sha256_file  # noqa: E402
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
 
 
@@ -115,6 +116,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--n-folds", type=int, default=3)
     parser.add_argument("--base-seed", type=int, default=42)
     parser.add_argument("--workers", type=int, default=max(1, min(28, (os.cpu_count() or 2) - 1)))
+    parser.add_argument(
+        "--folds-artifact",
+        type=Path,
+        default=PROJECT_ROOT / "experiments" / "folds_s10_f3_bs42.json",
+    )
     return parser.parse_args()
 
 
@@ -135,17 +141,27 @@ def main() -> None:
     ranks = tuple(range(0, 11))
     by_rank: dict[str, dict[str, object]] = {}
     prediction_rows: list[dict[str, object]] = []
-    fold_inputs = [
-        (args.base_seed + seed_offset, fold, train, held)
-        for seed_offset in range(args.n_seeds)
-        for fold, (train, held) in enumerate(
-            make_folds(
-                matrix,
-                n_folds=args.n_folds,
-                seed=args.base_seed + seed_offset,
-            )
+    if args.folds_artifact.exists():
+        fold_inputs = load_fold_artifact(
+            args.folds_artifact, matrix, models, evaluations
         )
-    ]
+        expected_records = args.n_seeds * args.n_folds
+        if len(fold_inputs) != expected_records:
+            raise ValueError(
+                f"fold artifact has {len(fold_inputs)} records, expected {expected_records}"
+            )
+    else:
+        fold_inputs = [
+            (args.base_seed + seed_offset, fold, train, held)
+            for seed_offset in range(args.n_seeds)
+            for fold, (train, held) in enumerate(
+                make_folds(
+                    matrix,
+                    n_folds=args.n_folds,
+                    seed=args.base_seed + seed_offset,
+                )
+            )
+        ]
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
         for rank in ranks:
             pooled_actual: list[float] = []
@@ -252,6 +268,12 @@ def main() -> None:
         "input": {
             "scores_sha256": hashlib.sha256(args.scores.read_bytes()).hexdigest(),
             "predictions_path": str(args.predictions.resolve().relative_to(PROJECT_ROOT)),
+            "folds_artifact": str(args.folds_artifact.resolve().relative_to(PROJECT_ROOT))
+            if args.folds_artifact.exists()
+            else None,
+            "folds_sha256": sha256_file(args.folds_artifact)
+            if args.folds_artifact.exists()
+            else None,
         },
         "runtime": {
             "python_version": platform.python_version(),
@@ -270,7 +292,7 @@ def main() -> None:
             "Errors are normalized-score points, not a common pathology utility unit.",
             "The 10 seeds alter fold assignment; the ALS ensemble itself is optimization stabilization, not uncertainty estimation.",
             "Ranks were compared on these same folds without nested model selection.",
-            "The matrix contains only scored HEST, THUNDER, and PathoROB columns.",
+            "The matrix contains Patho-Bench, EVA, HEST, THUNDER, and PathoROB score columns.",
         ],
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

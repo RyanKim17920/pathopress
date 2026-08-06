@@ -1,0 +1,142 @@
+{
+  "schema_version": 2,
+  "description": "Read-only inventory of every completed compact PathoPress result graph. Dependencies marked ignored_cache remain local but are content-digested by the freshness checker.",
+  "experiments": [
+    {
+      "name": "shared_analysis_contract",
+      "command": "python3 scripts/build_shared_artifacts.py",
+      "inputs": ["data/scores.csv", "scripts/build_shared_artifacts.py", "src/pathopress"],
+      "artifacts": ["experiments/analysis_matrix.npz", "experiments/folds_s10_f3_bs42.json", "experiments/shared_artifacts_manifest.json"],
+      "external_calls": false
+    },
+    {
+      "name": "maintenance_dry_run",
+      "command": "python3 scripts/dry_run_experiment_set.py",
+      "inputs": ["experiments/experiment_set.json", "scripts/dry_run_experiment_set.py", "src/pathopress/maintenance.py"],
+      "artifacts": ["experiments/experiment_set_dry_run.json"],
+      "external_calls": false
+    },
+    {
+      "name": "soft_impute_rank_sweep",
+      "command": "python3 experiments/run_soft_impute_rank_sweep.py",
+      "inputs": ["data/scores.csv", "experiments/run_soft_impute_rank_sweep.py", "src/pathopress"],
+      "artifacts": ["experiments/soft_impute_rank_sweep_results.json", "figures/soft_impute_rank_sweep.png", "figures/soft_impute_rank_sweep.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "benchpress_style_validation",
+      "command": "python3 experiments/run_benchpress_style.py && python3 scripts/plot_benchpress_style.py",
+      "inputs": ["data/scores.csv", "experiments/folds_s10_f3_bs42.json", "experiments/soft_impute_rank_sweep_results.json", "experiments/run_benchpress_style.py", "scripts/plot_benchpress_style.py", "src/pathopress"],
+      "artifacts": ["experiments/benchpress_style_results.json", "experiments/benchpress_style_predictions_rank1.csv", "figures/benchpress_style_validation_rank1.png", "figures/benchpress_style_validation_rank1.pdf", "figures/matrix_completed_rank1.png", "figures/matrix_completed_rank1.pdf", "figures/matrix_observation_pattern.png", "figures/matrix_observation_pattern.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "method_comparison_grid",
+      "command": "python3 experiments/run_method_comparison.py --merge && python3 scripts/plot_method_comparison.py",
+      "inputs": ["data/scores.csv", "experiments/folds_s10_f3_bs42.json", "experiments/run_method_comparison.py", "scripts/plot_method_comparison.py", "src/pathopress"],
+      "dependencies": [{"path": "experiments/method_comparison/predictions", "role": "ignored_cache", "config": {"expected_shards": 343, "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9", "folds_sha256": "6363c9426ca55397548a8e4234bc22d4a22733758d0e06221140464acd0618e5"}}],
+      "artifacts": ["experiments/method_comparison/manifest.json", "experiments/method_comparison/results.json", "experiments/method_comparison/top_methods.csv", "experiments/method_comparison/top_methods.md", "figures/method_comparison_grid.png", "figures/method_comparison_grid.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "structure_analysis",
+      "command": "python3 experiments/run_structure_analysis.py && python3 scripts/plot_structure_analysis.py",
+      "inputs": ["data/scores.csv", "experiments/probe_compression_rank1.json", "experiments/run_structure_analysis.py", "scripts/plot_structure_analysis.py", "src/pathopress"],
+      "artifacts": ["experiments/structure_analysis", "figures/benchmark_best_neighbor_correlations.png", "figures/benchmark_best_neighbor_correlations.pdf", "figures/benchmark_correlation_mds.png", "figures/benchmark_correlation_mds.pdf", "figures/benchmark_correlation_mds_probes.png", "figures/benchmark_correlation_mds_probes.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "probe_selection",
+      "command": "python3 experiments/run_probe_selection.py && python3 scripts/plot_probe_selection.py",
+      "inputs": ["data/scores.csv", "experiments/run_probe_selection.py", "scripts/plot_probe_selection.py", "src/pathopress"],
+      "artifacts": ["experiments/probe_selection_results_rank1.json", "outputs/probe_informativeness_rank1.csv", "figures/probe_selection_rank1.png", "figures/probe_selection_rank1.pdf", "figures/probe_informativeness_rank1.png", "figures/probe_informativeness_rank1.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "probe_compression",
+      "command": "python3 experiments/run_probe_compression.py && python3 scripts/plot_probe_compression.py",
+      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v1.json", "experiments/probe_selection_results_rank1.json", "experiments/run_probe_compression.py", "scripts/plot_probe_compression.py", "src/pathopress"],
+      "artifacts": ["experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "figures/probe_compression_curves_rank1.png", "figures/probe_compression_curves_rank1.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "probe_exhaustive",
+      "command": "python3 experiments/run_probe_exhaustive.py",
+      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v1.json", "experiments/probe_compression_rank1.json", "experiments/run_probe_exhaustive.py", "src/pathopress"],
+      "dependencies": [{"path": "experiments/probe_exhaustive_shards", "role": "resume_shards"}],
+      "artifacts": ["experiments/probe_exhaustive_rank1.json"],
+      "external_calls": false
+    },
+    {
+      "name": "ranking_preservation",
+      "command": "python3 experiments/run_ranking_preservation.py && python3 scripts/plot_ranking_preservation.py",
+      "inputs": ["data/scores.csv", "experiments/benchpress_style_predictions_rank1.csv", "experiments/benchpress_style_results.json", "experiments/run_ranking_preservation.py", "scripts/plot_ranking_preservation.py", "src/pathopress"],
+      "artifacts": ["experiments/ranking_preservation_rank1.json", "outputs/ranking_preservation_pairwise_rank1.csv", "outputs/ranking_preservation_top_fraction_rank1.csv", "figures/ranking_preservation_rank1.png", "figures/ranking_preservation_rank1.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "confidence_calibration",
+      "command": "python3 experiments/run_confidence_calibration.py && python3 scripts/plot_confidence_calibration.py",
+      "inputs": ["data/scores.csv", "experiments/run_confidence_calibration.py", "scripts/plot_confidence_calibration.py", "src/pathopress"],
+      "artifacts": ["experiments/confidence_calibration_rank1.json", "experiments/confidence_cells_rank1.csv", "figures/confidence_calibration_rank1.png", "figures/confidence_calibration_rank1.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "predictability_and_error_analysis",
+      "command": "python3 experiments/run_predictability.py && python3 experiments/run_error_analysis.py && python3 scripts/plot_predictability.py && python3 scripts/plot_error_analysis.py",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "experiments/run_predictability.py", "experiments/run_error_analysis.py", "scripts/plot_predictability.py", "scripts/plot_error_analysis.py", "src/pathopress"],
+      "artifacts": ["experiments/predictability_predictions_rank1.csv", "experiments/predictability_results_rank1.json", "experiments/error_analysis_rank1.json", "figures/benchmark_predictability_rank1.png", "figures/benchmark_predictability_rank1.pdf", "figures/model_predictability_rank1.png", "figures/model_predictability_rank1.pdf", "figures/predictability_factors_rank1.png", "figures/predictability_factors_rank1.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "prediction_error_factors",
+      "command": "python3 experiments/run_prediction_error_factors.py --merge-only && python3 scripts/build_prediction_error_factor_tables.py && python3 scripts/plot_prediction_error_factors.py",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/model_metadata.csv", "data/model_release_dates.csv", "experiments/error_analysis_rank1.json", "experiments/run_prediction_error_factors.py", "scripts/build_prediction_error_factor_tables.py", "scripts/plot_prediction_error_factors.py", "src/pathopress"],
+      "dependencies": [{"path": "experiments/prediction_error_factor_shards", "role": "ignored_cache", "config": {"active_units": 5785, "matrix_sha256": "adbae84f7dfe406a26ab062392f6331c393496534cd0be68d56f76330dc8d2de"}}, {"path": "outputs/prediction_error_factor_predictions_rank1.csv", "role": "ignored_raw_cache", "config": {"rows": 279487, "matrix_sha256": "adbae84f7dfe406a26ab062392f6331c393496534cd0be68d56f76330dc8d2de"}}],
+      "artifacts": ["experiments/prediction_error_factors_rank1.json", "experiments/prediction_error_factor_manifest.json", "outputs/prediction_error_factor_records_rank1.csv", "outputs/prediction_error_factor_table_rank1.csv", "outputs/prediction_error_factor_table_appendix_rank1.csv", "figures/predictability_factors_benchmark_rank1.png", "figures/predictability_factors_benchmark_rank1.pdf", "figures/predictability_factors_model_rank1.png", "figures/predictability_factors_model_rank1.pdf", "figures/predictability_factors_benchmark_appendix_rank1.png", "figures/predictability_factors_benchmark_appendix_rank1.pdf", "figures/predictability_factors_model_appendix_rank1.png", "figures/predictability_factors_model_appendix_rank1.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "temporal_deployment",
+      "command": "python3 experiments/run_temporal_deployment.py && python3 scripts/plot_temporal_deployment.py",
+      "inputs": ["data/scores.csv", "data/model_release_dates.csv", "experiments/run_temporal_deployment.py", "scripts/plot_temporal_deployment.py", "src/pathopress"],
+      "artifacts": ["experiments/temporal_deployment_rank1.json", "outputs/temporal_deployment_raw_rank1.csv", "outputs/temporal_deployment_summary_rank1.csv", "figures/temporal_deployment_rank1.png", "figures/temporal_deployment_rank1.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "llm_baseline_contract_only",
+      "command": "python3 experiments/run_llm_baseline.py all-mock && python3 scripts/plot_llm_baseline.py",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "experiments/folds_s10_f3_bs42.json", "experiments/run_llm_baseline.py", "scripts/merge_llm_baseline_metrics.py", "scripts/plot_llm_baseline.py", "src/pathopress"],
+      "artifacts": ["experiments/llm_baseline", "figures/llm_baseline_status.png", "figures/llm_baseline_status.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "publication_tables",
+      "command": "python3 scripts/build_publication_tables.py",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/model_metadata.csv", "data/model_release_dates.csv", "data/evaluation_feasibility.csv", "experiments/structure_analysis", "scripts/build_publication_tables.py", "src/pathopress"],
+      "artifacts": ["outputs/tables"],
+      "external_calls": false
+    },
+    {
+      "name": "publication_hero",
+      "command": "python3 scripts/plot_publication_hero.py",
+      "inputs": ["experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "scripts/plot_publication_hero.py", "src/pathopress"],
+      "artifacts": ["experiments/publication_hero_summary.json", "figures/pathopress_hero_rank1.png", "figures/pathopress_hero_rank1.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "publication_metadata_overview",
+      "command": "python3 scripts/plot_metadata_overview.py",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/model_metadata.csv", "data/model_release_dates.csv", "scripts/plot_metadata_overview.py", "src/pathopress"],
+      "artifacts": ["experiments/publication_metadata_summary.json", "figures/pathopress_metadata_overview.png", "figures/pathopress_metadata_overview.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "public_export",
+      "command": "python3 scripts/build_public_release.py",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/suites.csv", "data/provenance.json", "data/model_metadata.csv", "experiments/confidence_cells_rank1.csv", "scripts/build_public_release.py", "src/pathopress"],
+      "artifacts": ["experiments/deployment_confidence_rank1.json", "exports/pathopress_public", "website/data.json"],
+      "external_calls": false
+    }
+  ]
+}

@@ -11,43 +11,35 @@
   "repositories": {
     "benchpress": {
       "url": "https://github.com/microsoft/benchpress",
-      "commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
-      "local_path": "/tmp/pathopress_sources/benchpress"
+      "commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4"
     },
     "pathobench": {
       "url": "https://github.com/mahmoodlab/Patho-Bench",
-      "commit": "660e77044640e3d7d2f1150cc6721e97454993bf",
-      "local_path": "/tmp/pathopress_sources/pathobench"
+      "commit": "660e77044640e3d7d2f1150cc6721e97454993bf"
     },
     "pathobench_hf": {
       "url": "https://huggingface.co/datasets/MahmoodLab/Patho-Bench",
-      "commit": "60fde3a9138b2fb27a163ed6f3e2cf0ef7e8f387",
-      "local_path": "/tmp/pathopress_sources/pathobench_hf"
+      "commit": "60fde3a9138b2fb27a163ed6f3e2cf0ef7e8f387"
     },
     "eva": {
       "url": "https://github.com/kaiko-ai/eva",
-      "commit": "e43e74a99b75660b0014f790f25a33dd9f11e121",
-      "local_path": "/tmp/pathopress_sources/eva"
+      "commit": "e43e74a99b75660b0014f790f25a33dd9f11e121"
     },
     "eva_midnight": {
       "url": "https://huggingface.co/kaiko-ai/midnight",
-      "commit": "adc6b15679c981cce6f9b018bbad09d16eeeda9f",
-      "local_path": "/tmp/pathopress_sources/eva_midnight"
+      "commit": "adc6b15679c981cce6f9b018bbad09d16eeeda9f"
     },
     "thunder": {
       "url": "https://github.com/MICS-Lab/thunder",
-      "commit": "3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f",
-      "local_path": "/tmp/pathopress_sources/thunder"
+      "commit": "3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f"
     },
     "hest": {
       "url": "https://github.com/mahmoodlab/HEST",
-      "commit": "3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3",
-      "local_path": "/tmp/pathopress_sources/hest"
+      "commit": "3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3"
     },
     "pathorob": {
       "url": "https://github.com/bifold-pathomics/PathoROB",
-      "commit": "6583cf0b0d902c8cc032308262fa3a3befdc0687",
-      "local_path": "/tmp/pathopress_sources/pathorob"
+      "commit": "6583cf0b0d902c8cc032308262fa3a3befdc0687"
     }
   },
   "source_reports": {
@@ -57,7 +49,7 @@
       "source_archive_url": "https://export.arxiv.org/e-print/2512.14019v1",
       "source_archive_sha256": "0c479164dfab7ac48a1e1876649ef73efe9f457e064c3ab00ee960856d35a268",
       "source_member": "tabs/pathobench_result.tex",
-      "snapshot_path": "/admin/home/ryan.kim/pathopress/source_data/exaone_path_2_5_pathobench_2512.14019v1.csv",
+      "snapshot_path": "source_data/exaone_path_2_5_pathobench_2512.14019v1.csv",
       "snapshot_sha256": "26fbce672fe4cffe73ffc7459c63309efa5984377743fb27085d4c051a59586b",
       "table": 4,
       "reported_tasks": 80,
@@ -70,7 +62,7 @@
       "html_sha256": "a6c7af63c1f527eba692f83b362651e0e1d96d07e303520f90cd08f34b00c92f",
       "source_archive_url": "https://export.arxiv.org/e-print/2501.16652v1",
       "source_archive_sha256": "3d8b3f6779b9b0eae21be12e8917bd6f0bab26e3c7943470e378383d20a1de4f",
-      "snapshot_path": "/admin/home/ryan.kim/pathopress/source_data/threads_pathobench_2501.16652v1.csv",
+      "snapshot_path": "source_data/threads_pathobench_2501.16652v1.csv",
       "snapshot_sha256": "876ad2edb815c80d0191656930a5f0a2728802361981906e4c694916dd13ff61",
       "reported_public_tasks": 42,
       "reported_frozen_representations": 8,
@@ -83,7 +75,7 @@
       "midnight_model_card_score_cells": 180,
       "selected_unique_cells": 265,
       "alternate_source_conflicts": 110,
-      "conflict_audit_path": "/admin/home/ryan.kim/pathopress/data/eva_source_conflicts.csv"
+      "conflict_audit_path": "data/eva_source_conflicts.csv"
     }
   },
   "counts": {

@@ -1,0 +1,142 @@
+{
+  "audit_notes": [
+    "No network calls are made by the generator.",
+    "EXAONE Path 2.5 Table 4 supplies 560 point estimates: seven models across 80 exact official Patho-Bench task names under the paper's shared linear-probing settings. The reported AVERAGE row is excluded because it is derived, not an independent evaluation cell.",
+    "Fifteen current Patho-Bench HF tasks are absent from EXAONE Table 4 and remain unscored; the parser requires exact task-name matches and does not impute or fuzzy-map them.",
+    "THREADS supplies 336 public Patho-Bench-v1 cells across 42 tasks and eight frozen representation pipelines. Twelve internal tasks (96 cells), supervised/fine-tuned rows, and aggregate summaries are excluded.",
+    "EVA contributes 265 selected unique leaderboard cells. The current repository wins over the older Midnight model-card report for 110 overlapping cells; every alternate value remains in eva_source_conflicts.csv and is never averaged.",
+    "HEST and THUNDER average columns are not independent evaluation cells and are excluded from scores.csv.",
+    "Score rows are machine-parsed from one reporting source each. audit_status=parsed_primary_source is prototype evidence, not independent or dual-source verification.",
+    "PathoROB external-publication rows are retained with audit_status=reported_external; PathoROB explicitly says those values were not validated by its authors.",
+    "Exact dedup groups are derived from duplicate task_identity_id values. Two broader semantic-overlap groups remain manually adjudicated and keep separate task identities.",
+    "evaluation_id is retained as a compatibility alias equal to protocol_id; protocol-specific scores are never overwritten during deduplication."
+  ],
+  "counts": {
+    "dataset_artifacts": 82,
+    "deduplication_groups": 93,
+    "deduplication_memberships": 242,
+    "eva_leaderboard_protocol_variants": 15,
+    "exact_duplicate_task_identities": 91,
+    "model_aliases": 123,
+    "pathobench_exaone_protocol_variants": 80,
+    "pathobench_metrics": {
+      "bacc": 23,
+      "cindex": 25,
+      "macro-ovr-auc": 157,
+      "weighted_kappa": 12
+    },
+    "pathobench_sample_units": {
+      "case": 189,
+      "slide": 28
+    },
+    "pathobench_task_identities": 95,
+    "pathobench_task_types": {
+      "classification": 192,
+      "survival": 25
+    },
+    "pathobench_threads_protocol_variants": 42,
+    "protocols": 287,
+    "scores": 1976,
+    "scores_by_audit_status": {
+      "parsed_primary_source": 1967,
+      "reported_external": 9
+    },
+    "scores_by_review_status": {
+      "machine_parsed_single_source": 1976
+    },
+    "scores_by_suite": {
+      "eva": 265,
+      "hest": 234,
+      "pathobench": 896,
+      "pathorob": 69,
+      "thunder": 512
+    },
+    "semantic_adjudication_groups": 2,
+    "suites": 5,
+    "task_identities": 145,
+    "tasks": 287,
+    "tasks_by_suite": {
+      "eva": 28,
+      "hest": 9,
+      "pathobench": 217,
+      "pathorob": 12,
+      "thunder": 21
+    }
+  },
+  "generator": "scripts/build_registry.py",
+  "normalization": {
+    "f1": "Scores already reported on 0-100 scale; preserved.",
+    "macro-ovr-auc/bacc/cindex/balanced_accuracy/dice": "Raw metrics in [0,1] multiplied by 100.",
+    "pearson_r": "(r + 1) * 50; logit(normalized/100) equals 2 * atanh(r), a scaled Fisher-z.",
+    "robustness_index": "Raw RI in [0,1] multiplied by 100.",
+    "weighted_kappa": "(kappa + 1) * 50, preserving the metric's mathematical [-1,1] domain on a 0-100 scale."
+  },
+  "repositories": {
+    "benchpress": {
+      "commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
+      "url": "https://github.com/microsoft/benchpress"
+    },
+    "eva": {
+      "commit": "e43e74a99b75660b0014f790f25a33dd9f11e121",
+      "url": "https://github.com/kaiko-ai/eva"
+    },
+    "eva_midnight": {
+      "commit": "adc6b15679c981cce6f9b018bbad09d16eeeda9f",
+      "url": "https://huggingface.co/kaiko-ai/midnight"
+    },
+    "hest": {
+      "commit": "3ddb5eaf5bd2a8133e0c0e8015816489a3d99dc3",
+      "url": "https://github.com/mahmoodlab/HEST"
+    },
+    "pathobench": {
+      "commit": "660e77044640e3d7d2f1150cc6721e97454993bf",
+      "url": "https://github.com/mahmoodlab/Patho-Bench"
+    },
+    "pathobench_hf": {
+      "commit": "60fde3a9138b2fb27a163ed6f3e2cf0ef7e8f387",
+      "url": "https://huggingface.co/datasets/MahmoodLab/Patho-Bench"
+    },
+    "pathorob": {
+      "commit": "6583cf0b0d902c8cc032308262fa3a3befdc0687",
+      "url": "https://github.com/bifold-pathomics/PathoROB"
+    },
+    "thunder": {
+      "commit": "3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f",
+      "url": "https://github.com/MICS-Lab/thunder"
+    }
+  },
+  "schema_version": 2,
+  "source_reports": {
+    "eva_pathology_leaderboards": {
+      "alternate_source_conflicts": 110,
+      "midnight_model_card_score_cells": 180,
+      "repository_score_cells": 195,
+      "selected_unique_cells": 265
+    },
+    "exaone_path_2_5_pathobench": {
+      "pdf_url": "https://arxiv.org/pdf/2512.14019v1",
+      "reported_models": 7,
+      "reported_tasks": 80,
+      "score_cells": 560,
+      "snapshot_sha256": "26fbce672fe4cffe73ffc7459c63309efa5984377743fb27085d4c051a59586b",
+      "source_archive_sha256": "0c479164dfab7ac48a1e1876649ef73efe9f457e064c3ab00ee960856d35a268",
+      "source_archive_url": "https://export.arxiv.org/e-print/2512.14019v1",
+      "source_member": "tabs/pathobench_result.tex",
+      "table": 4,
+      "url": "https://arxiv.org/abs/2512.14019v1"
+    },
+    "threads_pathobench_public": {
+      "excluded_internal_cells": 96,
+      "excluded_internal_tasks": 12,
+      "html_sha256": "a6c7af63c1f527eba692f83b362651e0e1d96d07e303520f90cd08f34b00c92f",
+      "html_url": "https://arxiv.org/html/2501.16652v1",
+      "reported_frozen_representations": 8,
+      "reported_public_tasks": 42,
+      "score_cells": 336,
+      "snapshot_sha256": "876ad2edb815c80d0191656930a5f0a2728802361981906e4c694916dd13ff61",
+      "source_archive_sha256": "3d8b3f6779b9b0eae21be12e8917bd6f0bab26e3c7943470e378383d20a1de4f",
+      "source_archive_url": "https://export.arxiv.org/e-print/2501.16652v1",
+      "url": "https://arxiv.org/abs/2501.16652v1"
+    }
+  }
+}

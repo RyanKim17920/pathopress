@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "config_sha256": "05c716528d71af4c7d83775f7193826fe063abff4c8cf2b6af2bd7a575fddc23",
+  "shard_index": 3,
+  "num_shards": 4,
+  "n_rows": 1,
+  "rows": [
+    {
+      "ordinal": 3,
+      "probe_indices": [
+        150,
+        151
+      ],
+      "probe_ids": [
+        "thunder.bracs.linear_probing",
+        "thunder.break_his.linear_probing"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 64,
+        "n_hidden": 1903,
+        "medae": 1.9426609826217174,
+        "mae": 3.3896825125527665,
+        "medape": 2.652908229347612,
+        "hidden_medae": 2.003084900592974,
+        "hidden_medape": 2.83134408953634,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9647,
+        "pairwise_median_accuracy": 0.3333333333333333,
+        "pairwise_pooled_accuracy": 0.63916243391728,
+        "top_fraction": 0.2,
+        "top_total_k": 463,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.2570194384449244
+      }
+    }
+  ]
+}

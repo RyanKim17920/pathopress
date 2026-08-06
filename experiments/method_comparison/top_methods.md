@@ -1,0 +1,32 @@
+| Rank | Metric | Transform | Method | Hyperparameters | Value | Coverage |
+|---:|---|---|---|---|---:|---:|
+| 1 | MedAPE | log | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.8144 | 71.0% |
+| 2 | MedAPE | identity | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.8189 | 71.1% |
+| 3 | MedAPE | asinh | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.8208 | 71.1% |
+| 4 | MedAPE | logit | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.8225 | 71.0% |
+| 5 | MedAPE | sqrt | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.8261 | 71.1% |
+| 6 | MedAPE | probit | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.8282 | 71.0% |
+| 7 | MedAPE | identity | BenchReg | `{"min_r2": 0.1, "top_k": 7}` | 1.8315 | 72.9% |
+| 8 | MedAPE | logit | BenchReg | `{"min_r2": 0.1, "top_k": 7}` | 1.8351 | 72.8% |
+| 9 | MedAPE | identity | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.8359 | 72.2% |
+| 10 | MedAPE | logit | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.8367 | 72.2% |
+| 11 | MedAPE | probit | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.8390 | 72.1% |
+| 12 | MedAPE | asinh | BenchReg | `{"min_r2": 0.3, "top_k": 5}` | 1.8394 | 69.8% |
+| 13 | MedAPE | sqrt | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.8411 | 72.2% |
+| 14 | MedAPE | asinh | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.8413 | 72.2% |
+| 15 | MedAPE | identity | BenchReg | `{"min_r2": 0.3, "top_k": 5}` | 1.8434 | 69.9% |
+| 1 | MedAE | logit | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.3436 | 71.0% |
+| 2 | MedAE | probit | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.3564 | 71.0% |
+| 3 | MedAE | sqrt | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.3639 | 71.1% |
+| 4 | MedAE | identity | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.3644 | 71.1% |
+| 5 | MedAE | probit | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.3670 | 72.1% |
+| 6 | MedAE | identity | BenchReg | `{"min_r2": 0.1, "top_k": 7}` | 1.3702 | 72.9% |
+| 7 | MedAE | asinh | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.3717 | 71.1% |
+| 8 | MedAE | asinh | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.3719 | 72.2% |
+| 9 | MedAE | logit | BenchReg | `{"min_r2": 0.1, "top_k": 7}` | 1.3720 | 72.8% |
+| 10 | MedAE | identity | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.3725 | 72.2% |
+| 11 | MedAE | asinh | BenchReg | `{"min_r2": 0.1, "top_k": 7}` | 1.3744 | 72.9% |
+| 12 | MedAE | logit | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.3748 | 72.2% |
+| 13 | MedAE | probit | BenchReg | `{"min_r2": 0.1, "top_k": 7}` | 1.3755 | 72.8% |
+| 14 | MedAE | log | BenchReg | `{"min_r2": 0.2, "top_k": 7}` | 1.3774 | 72.1% |
+| 15 | MedAE | log | BenchReg | `{"min_r2": 0.3, "top_k": 7}` | 1.3774 | 71.0% |

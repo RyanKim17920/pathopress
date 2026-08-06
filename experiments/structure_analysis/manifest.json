@@ -1,0 +1,41 @@
+{
+  "correlation": {
+    "median_best_abs_r": 0.918881,
+    "min_shared": 5,
+    "n_best_abs_r_at_least_0_85": 131,
+    "n_evaluations_with_neighbor": 165
+  },
+  "input": {
+    "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9"
+  },
+  "matrix": {
+    "n_evaluations": 165,
+    "n_models": 59,
+    "n_observed": 1967
+  },
+  "outputs": [
+    "threshold_sweep.json",
+    "threshold_sweep.tex",
+    "stable_rank_results.json",
+    "submatrix_sweep.json",
+    "submatrix_sweep.tex",
+    "pairwise_ols_stats.json",
+    "correlation_mds.npz",
+    "mds_coordinates.csv"
+  ],
+  "schema_version": 1,
+  "submatrix": {
+    "largest_shape": [
+      32,
+      16
+    ],
+    "largest_stable_rank": 1.4310462977907399,
+    "target_evaluation_counts": [
+      4,
+      7,
+      10,
+      13
+    ]
+  },
+  "upstream_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4"
+}

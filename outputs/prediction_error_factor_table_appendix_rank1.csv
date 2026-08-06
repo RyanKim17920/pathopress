@@ -1,0 +1,65 @@
+side,hypothesis,label,analysis_type,feature_or_setting,metric,estimate,p_value,n,denominator_notes
+benchmark,H1,Low-rank fit,spearman,rank2_r2,medape,-0.24818742820505973,0.0013079431025606817,165,finite feature/error pairs
+benchmark,H1,Low-rank fit,spearman,rank2_r2,medae,-0.23241524857745843,0.0026647505983027086,165,finite feature/error pairs
+benchmark,H2,Score level,spearman,median_score,medape,-0.7060293620984691,3.2916988105704833e-26,165,finite feature/error pairs
+benchmark,H2,Score level,spearman,median_score,medae,-0.5825596104190653,2.244671137596936e-16,165,finite feature/error pairs
+benchmark,H3,Score dispersion,spearman,score_std,medape,0.7274570566078061,1.852255553259971e-28,165,finite feature/error pairs
+benchmark,H3,Score dispersion,spearman,score_std,medae,0.7602890497689206,2.3548173045228159e-32,165,finite feature/error pairs
+model,H1,Encoder parameter count,spearman,log10_parameter_count,medape,0.2678342734669052,0.09925452060476914,39,models with audited nominal encoder parameter count and OOF error
+model,H1,Encoder parameter count,spearman,log10_parameter_count,medae,0.25993539695022505,0.11002330771155779,39,models with audited nominal encoder parameter count and OOF error
+model,H2,Slide-encoder model type,spearman,is_slide_model,medape,0.48271323039595343,0.0002515655405084553,53,finite feature/error pairs
+model,H2,Slide-encoder model type,spearman,is_slide_model,medae,0.48271323039595343,0.0002515655405084553,53,finite feature/error pairs
+model,H3,Score level,spearman,median_score,medape,-0.3960811195413676,0.003326247260800748,53,finite feature/error pairs
+model,H3,Score level,spearman,median_score,medae,-0.29726242817370757,0.030647140674368335,53,finite feature/error pairs
+model,H4,Low-rank fit,spearman,rank2_r2,medape,-0.14997581035316884,0.28377307598772694,53,finite feature/error pairs
+model,H4,Low-rank fit,spearman,rank2_r2,medae,-0.09393646186099017,0.5034683572214228,53,finite feature/error pairs
+benchmark,H4,Target coverage,paired_wilcoxon,0.75,medape,3.4734897900839234,6.665329531655681e-26,165,one median seed-level delta per evaluation
+benchmark,H4,Target coverage,paired_wilcoxon,0.75,medae,2.5232286087469333,1.137251169637998e-25,165,one median seed-level delta per evaluation
+benchmark,H5,Strong-neighbor presence,paired_wilcoxon,0.85,medape,0.060841008328517354,2.9529934421638183e-15,165,one median seed-level delta per evaluation
+benchmark,H5,Strong-neighbor presence,paired_wilcoxon,0.85,medae,0.04764618687380562,2.1339610778875384e-15,165,one median seed-level delta per evaluation
+benchmark,H6,Strong-neighbor support,paired_wilcoxon,0.75,medape,0.0318177751082338,3.3750346891630087e-13,165,one median seed-level delta per evaluation
+benchmark,H6,Strong-neighbor support,paired_wilcoxon,0.75,medae,0.021647722050232687,1.6697170531434182e-13,165,one median seed-level delta per evaluation
+benchmark,H7,Same-task-family evidence,paired_wilcoxon,same_task_family,medape,0.053129508247965695,0.0033600472284795488,165,one median seed-level delta per evaluation
+benchmark,H7,Same-task-family evidence,paired_wilcoxon,same_task_family,medae,0.032490005100003216,0.007314863019104906,165,one median seed-level delta per evaluation
+model,H5,Strong-peer presence,paired_wilcoxon,paired headline,medape,0.2776326827703359,1.896513760094516e-07,50,paired model denominator reported by the intervention
+model,H5,Strong-peer presence,paired_wilcoxon,paired headline,medae,0.22673547278168726,1.1611672809289167e-07,50,paired model denominator reported by the intervention
+model,H6,Strong-peer support,paired_wilcoxon,0.75,medape,0.010878749619342903,3.9702453385359604e-05,48,paired model denominator reported by the intervention
+model,H6,Strong-peer support,paired_wilcoxon,0.75,medae,0.005666748527816345,0.00013967555976535095,48,paired model denominator reported by the intervention
+model,H7,Same-provider evidence,paired_wilcoxon,paired headline,medape,0.04841685175559318,4.9225991222997064e-05,52,paired model denominator reported by the intervention
+model,H7,Same-provider evidence,paired_wilcoxon,paired headline,medae,0.005065482178100211,0.00015872583689405272,52,paired model denominator reported by the intervention
+model,H8,Observation count,paired_wilcoxon,Hide 25%,medape,-0.19431903899440606,0.001213510204354123,53,models with pooled baseline and treatment predictions
+model,H8,Observation count,paired_wilcoxon,Hide 25%,medae,-0.18314781714510175,0.0002430529681868238,53,models with pooled baseline and treatment predictions
+model,H8,Observation count,paired_wilcoxon,Hide 75%,medape,0.5485882336276897,3.395813332665069e-08,53,models with pooled baseline and treatment predictions
+model,H8,Observation count,paired_wilcoxon,Hide 75%,medae,0.4497739624222703,4.364383467168819e-08,53,models with pooled baseline and treatment predictions
+model,H9,Training-anchor recency,paired_wilcoxon,k=10; oldest minus middle,medape,0.2191616593447523,0.10546875,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=10; oldest minus middle,medae,0.17479035439721002,0.02734375,10,paired seed-level aggregate errors
+benchmark,H1-rank1,Pathology-selected low-rank fit,spearman,rank1_r2,medape,-0.3278417439157963,1.7188168865087307e-05,165,finite feature/error pairs
+benchmark,H1-rank1,Pathology-selected low-rank fit,spearman,rank1_r2,medae,-0.3065877701493335,6.198159528952071e-05,165,finite feature/error pairs
+model,H4-rank1,Pathology-selected low-rank fit,spearman,rank1_r2,medape,-0.3723592968875988,0.006038670263173566,53,finite feature/error pairs
+model,H4-rank1,Pathology-selected low-rank fit,spearman,rank1_r2,medae,-0.32970488630865985,0.015913699244627138,53,finite feature/error pairs
+benchmark,benchmark_h4,Target coverage,paired_wilcoxon,0.25,medape,0.07286838053637923,0.006865255311964739,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h4,Target coverage,paired_wilcoxon,0.25,medae,0.04840991289478325,0.003867246912287022,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h4,Target coverage,paired_wilcoxon,0.5,medape,0.32218925333450077,1.8853777283347582e-08,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h4,Target coverage,paired_wilcoxon,0.5,medae,0.22542389505566973,3.4273737242910684e-08,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h5,Strong-neighbor presence,paired_wilcoxon,0.95,medape,0.0,6.181648636880306e-08,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h5,Strong-neighbor presence,paired_wilcoxon,0.95,medae,0.0,7.908591160630716e-08,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h5,Strong-neighbor presence,paired_wilcoxon,0.9,medape,0.0,7.202868990848922e-11,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h5,Strong-neighbor presence,paired_wilcoxon,0.9,medae,0.0,4.957199439182737e-11,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h6,Strong-neighbor support,paired_wilcoxon,0.25,medape,0.004820878611718538,0.0007822399197979403,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h6,Strong-neighbor support,paired_wilcoxon,0.25,medae,0.004172502738974515,0.00025543296185246453,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h6,Strong-neighbor support,paired_wilcoxon,0.5,medape,0.02221174800561987,6.458527568627427e-09,165,dose-response setting; one median seed delta per benchmark
+benchmark,benchmark_h6,Strong-neighbor support,paired_wilcoxon,0.5,medae,0.014786198109874249,7.614797420509082e-09,165,dose-response setting; one median seed delta per benchmark
+model,model_h6,Strong-peer support,paired_wilcoxon,0.25,medape,0.0010004233577848853,0.024072644314436786,48,dose-response setting; one median seed delta per model
+model,model_h6,Strong-peer support,paired_wilcoxon,0.25,medae,0.0013854494983398524,0.00696877055073486,48,dose-response setting; one median seed delta per model
+model,model_h6,Strong-peer support,paired_wilcoxon,0.5,medape,0.00718141135718095,0.0005425056989807331,48,dose-response setting; one median seed delta per model
+model,model_h6,Strong-peer support,paired_wilcoxon,0.5,medae,0.0014929775999590333,0.00793742055222424,48,dose-response setting; one median seed delta per model
+model,H9,Training-anchor recency,paired_wilcoxon,k=1; oldest minus middle,medape,0.5156978895321578,0.037109375,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=1; oldest minus middle,medae,0.7086773317508275,0.00390625,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=3; oldest minus middle,medape,0.022036807477198828,0.625,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=3; oldest minus middle,medae,0.08905781957894554,0.130859375,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=5; oldest minus middle,medape,-0.2487077710383041,0.10546875,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=5; oldest minus middle,medae,-0.0785554844959151,0.4921875,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=8; oldest minus middle,medape,-0.02910061463788005,0.921875,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=8; oldest minus middle,medae,0.10905277231560717,0.083984375,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=15; oldest minus middle,medape,1.6493558473892325,0.001953125,10,paired seed-level aggregate errors
+model,H9,Training-anchor recency,paired_wilcoxon,k=15; oldest minus middle,medae,1.1556614121194535,0.001953125,10,paired seed-level aggregate errors

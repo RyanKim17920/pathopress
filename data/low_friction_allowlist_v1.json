@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "allowlist_id": "pathology_low_friction_proxy_v1",
+  "derivation_timing": "defined_from_protocol_metadata_before_prediction_error_analysis",
+  "semantics": "conservative low-friction feasibility proxy; not a monetary or wall-clock cost claim",
+  "rule": {
+    "sample_unit_in": [
+      "image",
+      "patch"
+    ],
+    "task_type_equals": "classification",
+    "sample_count_status_equals": "source_reported",
+    "sample_count_max_inclusive": 10000
+  },
+  "excluded_cost_fields": [
+    "dollar_cost",
+    "annotation_hours",
+    "compute_runtime"
+  ],
+  "excluded_cost_reason": "metadata_incomplete; no numeric values imputed",
+  "tasks_sha256": "1041706bb3d8f83e06e9acefb7c002193f1938dce90c69b2be05f005a2c63289",
+  "scores_sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9",
+  "n_retained_evaluations": 165,
+  "n_allowlisted": 4,
+  "evaluation_ids": [
+    "thunder.bach.linear_probing",
+    "thunder.bracs.linear_probing",
+    "thunder.break_his.linear_probing",
+    "thunder.mhist.linear_probing"
+  ]
+}

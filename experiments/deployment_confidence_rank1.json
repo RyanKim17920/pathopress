@@ -1,0 +1,49 @@
+{
+  "applicability": {
+    "existing_supported_models": true,
+    "new_model_rows": false,
+    "reason": "The calibration population contains held-out cells from supported rows, not genuinely unseen models."
+  },
+  "artifact_type": "pathopress_absolute_residual_conformal_v1",
+  "by_suite": {
+    "eva": {
+      "absolute_error_quantile": 5.4715635,
+      "n_unique_cells": 265
+    },
+    "hest": {
+      "absolute_error_quantile": 1.6696175000000002,
+      "n_unique_cells": 234
+    },
+    "pathobench": {
+      "absolute_error_quantile": 7.470046,
+      "n_unique_cells": 896
+    },
+    "pathorob": {
+      "absolute_error_quantile": 25.6849275,
+      "n_unique_cells": 60
+    },
+    "thunder": {
+      "absolute_error_quantile": 5.020682,
+      "n_unique_cells": 512
+    }
+  },
+  "calibration_cells": {
+    "n_unique_cells": 1967,
+    "sha256": "46b1dd998ee3820283544462e4d9042b220e43dda6269c7931e7cc3ee8a05743"
+  },
+  "confidence_level": 0.9,
+  "description": "Symmetric held-out-cell intervals calibrated from one median cross-fitted residual per observed model-evaluation cell.",
+  "global": {
+    "absolute_error_quantile": 6.863059,
+    "n_unique_cells": 1967
+  },
+  "predictor": {
+    "method": "logit_bias_als",
+    "rank": 1,
+    "regularization": 0.1
+  },
+  "schema_version": 1,
+  "scores": {
+    "sha256": "4d3518465869aae57b354886d0fbf974559ac3e7d38994baceb1eda5f75c76a9"
+  }
+}

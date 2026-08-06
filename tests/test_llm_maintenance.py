@@ -1,0 +1,247 @@
+from __future__ import annotations
+
+import json
+import tempfile
+import unittest
+from pathlib import Path
+
+import numpy as np
+
+from pathopress.llm_baseline import (
+    CONDITIONS,
+    build_request,
+    deterministic_mock_response,
+    evaluate_cached_responses,
+    make_config,
+    select_peer_examples,
+    validate_config,
+    validate_request,
+    validate_response,
+)
+from pathopress.maintenance import (
+    build_freshness_manifest,
+    build_result_graph_manifest,
+    check_freshness_manifest,
+    path_record,
+    validate_experiment_set,
+)
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class LlmBaselineSemanticTests(unittest.TestCase):
+    def setUp(self) -> None:
+        # Target row 0 has six visible anchors and a hidden final target.
+        self.matrix = np.array(
+            [
+                [10, 20, 30, 40, 50, 60, np.nan],
+                [11, 21, 31, 41, 51, 61, 70],
+                [60, 50, 40, 30, 20, 10, 25],
+                [12, 22, 32, 42, 52, 62, 72],
+                [15, 25, 35, 45, 55, np.nan, 75],
+                [9, 19, 29, 39, 49, 59, 68],
+            ],
+            dtype=float,
+        )
+        self.models = [f"model-{i}" for i in range(self.matrix.shape[0])]
+        self.evaluations = [f"evaluation-{j}" for j in range(self.matrix.shape[1])]
+        self.tasks = {
+            value: {"task_family": "classification", "sample_unit": "image", "metric": "accuracy"}
+            for value in self.evaluations
+        }
+        self.config = make_config(
+            scores_sha256="a" * 64,
+            folds_sha256="b" * 64,
+            models=self.models,
+            evaluations=self.evaluations,
+            fold_ids=[0],
+            cell_limit=1,
+        )
+
+    def test_config_hash_detects_semantic_drift(self) -> None:
+        validate_config(self.config)
+        changed = json.loads(json.dumps(self.config))
+        changed["min_shared"] = 4
+        with self.assertRaisesRegex(ValueError, "hash mismatch"):
+            validate_config(changed)
+
+    def test_five_shot_peers_use_visible_cells_minimum_and_stable_tie_break(self) -> None:
+        peers = select_peer_examples(self.matrix, 0, 6, n_shots=5, min_shared=5)
+        # Row 4 has only five shared values and remains eligible; all peer target
+        # scores are visible and the held target itself is never a shared anchor.
+        self.assertEqual(len(peers), 5)
+        self.assertEqual(
+            [(-row["correlation"], row["peer_index"]) for row in peers],
+            sorted((-row["correlation"], row["peer_index"]) for row in peers),
+        )
+        self.assertIn(4, [row["peer_index"] for row in peers])
+        self.assertNotIn(6, peers[0]["shared_indices"])
+        self.assertTrue(all(len(row["shared_indices"]) >= 5 for row in peers))
+
+    def test_named_and_blind_requests_preserve_numbers_but_hide_identifiers(self) -> None:
+        named = build_request(
+            config=self.config, condition="five_shot_named", fold_id=0, seed=42, fold=0,
+            batch_index=0, train=self.matrix, cells=[(0, 6)], models=self.models,
+            evaluations=self.evaluations, task_metadata=self.tasks,
+        )
+        blind = build_request(
+            config=self.config, condition="five_shot_blind", fold_id=0, seed=42, fold=0,
+            batch_index=0, train=self.matrix, cells=[(0, 6)], models=self.models,
+            evaluations=self.evaluations, task_metadata=self.tasks,
+        )
+        named_text = "\n".join(message["content"] for message in named["messages"])
+        blind_text = "\n".join(message["content"] for message in blind["messages"])
+        self.assertIn("model-0", named_text)
+        self.assertIn("evaluation-6", named_text)
+        self.assertNotIn("model-0", blind_text)
+        self.assertNotIn("evaluation-6", blind_text)
+        self.assertIn("70.000", named_text)
+        self.assertIn("70.000", blind_text)
+        validate_request(named, self.config)
+        validate_request(blind, self.config)
+
+    def test_mock_response_is_hash_bound_and_never_headline_eligible(self) -> None:
+        request = build_request(
+            config=self.config, condition="matrix_named", fold_id=0, seed=42, fold=0,
+            batch_index=0, train=self.matrix, cells=[(0, 6)], models=self.models,
+            evaluations=self.evaluations, task_metadata=self.tasks,
+        )
+        response = deterministic_mock_response(request, self.matrix, self.config)
+        validate_response(response, request, self.config)
+        self.assertFalse(response["headline_eligible"])
+        complete = self.matrix.copy()
+        complete[0, 6] = 71.0
+        metrics = evaluate_cached_responses([request], [response], complete, self.config)
+        self.assertEqual(metrics["result_status"], "mock_contract_validation_only")
+        self.assertFalse(metrics["headline_eligible"])
+
+    def test_generated_dry_run_artifacts_mark_every_real_condition_unrun(self) -> None:
+        status = json.loads((ROOT / "experiments/llm_baseline/real_run_status.json").read_text())
+        self.assertEqual(status["status"], "unrun")
+        self.assertFalse(status["headline_eligible"])
+        self.assertEqual(status["conditions"], {condition: "unrun" for condition in CONDITIONS})
+        metrics = json.loads((ROOT / "experiments/llm_baseline/mock_metrics.json").read_text())
+        self.assertEqual(metrics["result_status"], "mock_contract_validation_only")
+        self.assertFalse(metrics["headline_eligible"])
+
+
+class MaintenanceTests(unittest.TestCase):
+    def test_freshness_manifest_detects_modified_artifact(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source, artifact = root / "source.txt", root / "artifact.txt"
+            source.write_text("source")
+            artifact.write_text("artifact")
+            manifest = build_freshness_manifest(root, inputs=[source], artifacts=[artifact], kind="test")
+            self.assertEqual(check_freshness_manifest(root, manifest), [])
+            artifact.write_text("changed")
+            self.assertEqual(check_freshness_manifest(root, manifest)[0]["status"], "stale_or_modified")
+
+    def test_result_graph_hashes_directory_dependencies_and_component_edges(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "run.py").write_text("pass\n")
+            (root / "input.txt").write_text("input")
+            cache = root / "cache"
+            cache.mkdir()
+            (cache / "shard.json").write_text("{}")
+            (root / "result.json").write_text("{}")
+            experiment_set_path = root / "set.json"
+            experiment_set = {
+                "experiments": [{
+                    "name": "graph", "command": "python3 run.py",
+                    "inputs": ["input.txt"],
+                    "dependencies": [{"path": "cache", "role": "ignored_cache"}],
+                    "artifacts": ["result.json"],
+                }]
+            }
+            experiment_set_path.write_text(json.dumps(experiment_set))
+            manifest = build_result_graph_manifest(
+                root,
+                experiment_set_path=experiment_set_path,
+                experiment_set=experiment_set,
+            )
+            self.assertEqual(manifest["dependencies"]["cache"]["kind"], "directory")
+            self.assertEqual(manifest["dependencies"]["cache"]["file_count"], 1)
+            self.assertEqual(check_freshness_manifest(root, manifest), [])
+            (cache / "shard.json").write_text('{"changed": true}')
+            failures = check_freshness_manifest(root, manifest)
+            self.assertIn(
+                {"path": "cache", "status": "stale_or_modified"}, failures
+            )
+
+    def test_directory_digest_ignores_runtime_junk_but_tracks_source(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory)
+            module = source / "module.py"
+            module.write_text("VALUE = 1\n")
+            initial = path_record(source)["sha256"]
+            runtime = source / "__pycache__"
+            runtime.mkdir()
+            (runtime / "module.cpython-312.pyc").write_bytes(b"first")
+            (source / ".pytest_cache").mkdir()
+            (source / ".pytest_cache" / "state").write_text("changed")
+            (source / "writer.tmp").write_text("partial")
+            (source / "writer.lock").write_text("locked")
+            self.assertEqual(path_record(source)["sha256"], initial)
+            (runtime / "module.cpython-312.pyc").write_bytes(b"second")
+            self.assertEqual(path_record(source)["sha256"], initial)
+            module.write_text("VALUE = 2\n")
+            self.assertNotEqual(path_record(source)["sha256"], initial)
+
+    def test_experiment_set_validation_is_read_only_and_flags_missing_inputs(self) -> None:
+        ready = validate_experiment_set(
+            ROOT,
+            {"experiments": [{"name": "ok", "command": "python3 experiments/run_llm_baseline.py prepare", "inputs": ["data/scores.csv"], "external_calls": False}]},
+        )
+        self.assertEqual(ready[0]["status"], "ready")
+        blocked = validate_experiment_set(
+            ROOT,
+            {"experiments": [{"name": "missing", "command": "python3 experiments/run_llm_baseline.py prepare", "inputs": ["does-not-exist"], "external_calls": False}]},
+        )
+        self.assertEqual(blocked[0]["status"], "blocked")
+
+    def test_repository_inventory_covers_completed_result_graphs(self) -> None:
+        payload = json.loads((ROOT / "experiments/experiment_set.json").read_text())
+        self.assertEqual(payload["schema_version"], 2)
+        results = validate_experiment_set(ROOT, payload)
+        self.assertTrue(all(row["status"] == "ready" for row in results), results)
+        names = {row["name"] for row in results}
+        self.assertTrue({
+            "method_comparison_grid", "structure_analysis", "probe_exhaustive",
+            "ranking_preservation", "confidence_calibration",
+            "predictability_and_error_analysis", "prediction_error_factors",
+            "temporal_deployment", "llm_baseline_contract_only",
+            "publication_tables", "publication_hero",
+            "publication_metadata_overview", "public_export",
+        }.issubset(names))
+        by_name = {row["name"]: row for row in results}
+        self.assertGreater(by_name["method_comparison_grid"]["declared_dependencies"], 0)
+        self.assertGreater(by_name["prediction_error_factors"]["declared_dependencies"], 0)
+        self.assertTrue(all(row["declared_artifacts"] > 0 for row in results))
+
+        ignored = [
+            dependency
+            for experiment in payload["experiments"]
+            for dependency in experiment.get("dependencies", [])
+            if isinstance(dependency, dict) and dependency.get("role", "").startswith("ignored")
+        ]
+        self.assertIn("content-digested", payload["description"])
+        self.assertEqual(len(ignored), 3)
+        self.assertTrue(all(dependency.get("config") for dependency in ignored))
+
+        manifest = json.loads(
+            (ROOT / "experiments/artifact_freshness_manifest.json").read_text()
+        )
+        self.assertEqual(manifest["schema_version"], 2)
+        for dependency in ignored:
+            record = manifest["dependencies"][dependency["path"]]
+            self.assertRegex(record["sha256"], r"^[0-9a-f]{64}$")
+            self.assertGreater(record["bytes"], 0)
+            if record["kind"] == "directory":
+                self.assertGreater(record["file_count"], 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

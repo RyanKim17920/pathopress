@@ -1,0 +1,473 @@
+{
+  "schema_version": 1,
+  "config_sha256": "51ad39f28fe28a9d04f953b09626257223fda1868b6e8238345882bb1618c08e",
+  "shard_index": 3,
+  "num_shards": 4,
+  "n_rows": 16,
+  "rows": [
+    {
+      "ordinal": 3,
+      "probe_indices": [
+        159,
+        156
+      ],
+      "probe_ids": [
+        "thunder.spider_skin.linear_probing",
+        "thunder.patch_camelyon.linear_probing"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 64,
+        "n_hidden": 1903,
+        "medae": 1.6680531167355355,
+        "mae": 3.303557497102504,
+        "medape": 2.346740766188993,
+        "hidden_medae": 1.7715795513385686,
+        "hidden_medape": 2.483029139518333,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9736,
+        "pairwise_median_accuracy": 0.35294117647058826,
+        "pairwise_pooled_accuracy": 0.6774856203779787,
+        "top_fraction": 0.2,
+        "top_total_k": 463,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.27645788336933047
+      }
+    },
+    {
+      "ordinal": 7,
+      "probe_indices": [
+        159,
+        23
+      ],
+      "probe_ids": [
+        "thunder.spider_skin.linear_probing",
+        "hest.skcm.gene_expression"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 58,
+        "n_hidden": 1909,
+        "medae": 1.6610592989870838,
+        "mae": 3.302343297368859,
+        "medape": 2.251104128938683,
+        "hidden_medae": 1.7235405930042589,
+        "hidden_medape": 2.401698016329737,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9880,
+        "pairwise_median_accuracy": 0.375,
+        "pairwise_pooled_accuracy": 0.7017206477732794,
+        "top_fraction": 0.2,
+        "top_total_k": 464,
+        "top_median_recovery": 0.25,
+        "top_pooled_recovery": 0.3275862068965517
+      }
+    },
+    {
+      "ordinal": 11,
+      "probe_indices": [
+        163,
+        157
+      ],
+      "probe_ids": [
+        "thunder.tcga_uniform.linear_probing",
+        "thunder.spider_breast.linear_probing"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 64,
+        "n_hidden": 1903,
+        "medae": 1.704383450562851,
+        "mae": 3.2831457020357164,
+        "medape": 2.33485153549741,
+        "hidden_medae": 1.7808934439322144,
+        "hidden_medape": 2.468327208888297,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9661,
+        "pairwise_median_accuracy": 0.31414473684210525,
+        "pairwise_pooled_accuracy": 0.655108166856433,
+        "top_fraction": 0.2,
+        "top_total_k": 463,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.28077753779697623
+      }
+    },
+    {
+      "ordinal": 15,
+      "probe_indices": [
+        163,
+        22
+      ],
+      "probe_ids": [
+        "thunder.tcga_uniform.linear_probing",
+        "hest.read.gene_expression"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 58,
+        "n_hidden": 1909,
+        "medae": 1.7129768408710788,
+        "mae": 3.319838207466476,
+        "medape": 2.3226179977075536,
+        "hidden_medae": 1.7957822746022742,
+        "hidden_medape": 2.4069734879255704,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9879,
+        "pairwise_median_accuracy": 0.3333333333333333,
+        "pairwise_pooled_accuracy": 0.6645409454398219,
+        "top_fraction": 0.2,
+        "top_total_k": 464,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.28663793103448276
+      }
+    },
+    {
+      "ordinal": 19,
+      "probe_indices": [
+        163,
+        10
+      ],
+      "probe_ids": [
+        "thunder.tcga_uniform.linear_probing",
+        "eva.leaderboard.panda_small.test"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 51,
+        "n_hidden": 1916,
+        "medae": 1.739157735152375,
+        "mae": 3.1786150634020536,
+        "medape": 2.368026302425757,
+        "hidden_medae": 1.8263219882957635,
+        "hidden_medape": 2.4830888360847077,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9923,
+        "pairwise_median_accuracy": 0.3076923076923077,
+        "pairwise_pooled_accuracy": 0.6755013604756626,
+        "top_fraction": 0.2,
+        "top_total_k": 466,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.27253218884120173
+      }
+    },
+    {
+      "ordinal": 23,
+      "probe_indices": [
+        157,
+        3
+      ],
+      "probe_ids": [
+        "thunder.spider_breast.linear_probing",
+        "eva.leaderboard.camelyon16_small.test"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 51,
+        "n_hidden": 1916,
+        "medae": 1.643061461902576,
+        "mae": 3.218724717522003,
+        "medape": 2.209023341879461,
+        "hidden_medae": 1.7115137743205473,
+        "hidden_medape": 2.3347102055024047,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9967,
+        "pairwise_median_accuracy": 0.31414473684210525,
+        "pairwise_pooled_accuracy": 0.7070332095916525,
+        "top_fraction": 0.2,
+        "top_total_k": 466,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.2532188841201717
+      }
+    },
+    {
+      "ordinal": 27,
+      "probe_indices": [
+        157,
+        147
+      ],
+      "probe_ids": [
+        "thunder.spider_breast.linear_probing",
+        "pathorob.tcga_2x2.robustness_index"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 52,
+        "n_hidden": 1915,
+        "medae": 1.6730219786989693,
+        "mae": 3.0738991362770895,
+        "medape": 2.317177291818288,
+        "hidden_medae": 1.7417319494395969,
+        "hidden_medape": 2.4062496141963234,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9920,
+        "pairwise_median_accuracy": 0.3333333333333333,
+        "pairwise_pooled_accuracy": 0.6957661290322581,
+        "top_fraction": 0.2,
+        "top_total_k": 466,
+        "top_median_recovery": 0.14285714285714285,
+        "top_pooled_recovery": 0.2918454935622318
+      }
+    },
+    {
+      "ordinal": 31,
+      "probe_indices": [
+        154,
+        3
+      ],
+      "probe_ids": [
+        "thunder.esca.linear_probing",
+        "eva.leaderboard.camelyon16_small.test"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 51,
+        "n_hidden": 1916,
+        "medae": 1.7655661986301823,
+        "mae": 3.2339383937791033,
+        "medape": 2.389078572297125,
+        "hidden_medae": 1.8259715858879773,
+        "hidden_medape": 2.4804779627678566,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9901,
+        "pairwise_median_accuracy": 0.31009615384615385,
+        "pairwise_pooled_accuracy": 0.7170992829007171,
+        "top_fraction": 0.2,
+        "top_total_k": 466,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.296137339055794
+      }
+    },
+    {
+      "ordinal": 35,
+      "probe_indices": [
+        154,
+        147
+      ],
+      "probe_ids": [
+        "thunder.esca.linear_probing",
+        "pathorob.tcga_2x2.robustness_index"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 52,
+        "n_hidden": 1915,
+        "medae": 1.8133624450440635,
+        "mae": 3.137489586979265,
+        "medape": 2.445453669328733,
+        "hidden_medae": 1.8996471044670642,
+        "hidden_medape": 2.576047346289615,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9854,
+        "pairwise_median_accuracy": 0.3333333333333333,
+        "pairwise_pooled_accuracy": 0.7091536431905825,
+        "top_fraction": 0.2,
+        "top_total_k": 466,
+        "top_median_recovery": 0.25,
+        "top_pooled_recovery": 0.34334763948497854
+      }
+    },
+    {
+      "ordinal": 39,
+      "probe_indices": [
+        156,
+        22
+      ],
+      "probe_ids": [
+        "thunder.patch_camelyon.linear_probing",
+        "hest.read.gene_expression"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 58,
+        "n_hidden": 1909,
+        "medae": 1.7045153734398824,
+        "mae": 3.360783537706399,
+        "medape": 2.3341591081316717,
+        "hidden_medae": 1.8116614604559658,
+        "hidden_medape": 2.462101067667127,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 9965,
+        "pairwise_median_accuracy": 0.33974358974358976,
+        "pairwise_pooled_accuracy": 0.6934269944806823,
+        "top_fraction": 0.2,
+        "top_total_k": 464,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.2801724137931034
+      }
+    },
+    {
+      "ordinal": 43,
+      "probe_indices": [
+        156,
+        10
+      ],
+      "probe_ids": [
+        "thunder.patch_camelyon.linear_probing",
+        "eva.leaderboard.panda_small.test"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 51,
+        "n_hidden": 1916,
+        "medae": 1.703401831918086,
+        "mae": 3.1938272181853273,
+        "medape": 2.3021440753911144,
+        "hidden_medae": 1.7442512128957475,
+        "hidden_medape": 2.422710599474343,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 10009,
+        "pairwise_median_accuracy": 0.3333333333333333,
+        "pairwise_pooled_accuracy": 0.7074632830452593,
+        "top_fraction": 0.2,
+        "top_total_k": 466,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.24248927038626608
+      }
+    },
+    {
+      "ordinal": 47,
+      "probe_indices": [
+        3,
+        23
+      ],
+      "probe_ids": [
+        "eva.leaderboard.camelyon16_small.test",
+        "hest.skcm.gene_expression"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 45,
+        "n_hidden": 1922,
+        "medae": 1.9200352069313809,
+        "mae": 3.676161654040871,
+        "medape": 2.6542794122056974,
+        "hidden_medae": 1.9982095440088372,
+        "hidden_medape": 2.7348221032199804,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 10128,
+        "pairwise_median_accuracy": 0.3021739130434783,
+        "pairwise_pooled_accuracy": 0.5425552922590837,
+        "top_fraction": 0.2,
+        "top_total_k": 467,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.291220556745182
+      }
+    },
+    {
+      "ordinal": 51,
+      "probe_indices": [
+        22,
+        17
+      ],
+      "probe_ids": [
+        "hest.read.gene_expression",
+        "hest.idc.gene_expression"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 52,
+        "n_hidden": 1915,
+        "medae": 2.0151506228414604,
+        "mae": 3.763431568135338,
+        "medape": 2.8006008016676676,
+        "hidden_medae": 2.1103112666013573,
+        "hidden_medape": 2.9656860716280673,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 10167,
+        "pairwise_median_accuracy": 0.3618181818181818,
+        "pairwise_pooled_accuracy": 0.5490311793055965,
+        "top_fraction": 0.2,
+        "top_total_k": 465,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.31827956989247314
+      }
+    },
+    {
+      "ordinal": 55,
+      "probe_indices": [
+        22,
+        13
+      ],
+      "probe_ids": [
+        "hest.read.gene_expression",
+        "eva.leaderboard.patch_camelyon.validation"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 41,
+        "n_hidden": 1926,
+        "medae": 2.0438746698273818,
+        "mae": 3.8092728789395593,
+        "medape": 2.853742858850526,
+        "hidden_medae": 2.110541340362513,
+        "hidden_medape": 2.9635618713043264,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 10256,
+        "pairwise_median_accuracy": 0.3333333333333333,
+        "pairwise_pooled_accuracy": 0.5605499219968799,
+        "top_fraction": 0.2,
+        "top_total_k": 468,
+        "top_median_recovery": 0.16666666666666666,
+        "top_pooled_recovery": 0.30982905982905984
+      }
+    },
+    {
+      "ordinal": 59,
+      "probe_indices": [
+        17,
+        13
+      ],
+      "probe_ids": [
+        "hest.idc.gene_expression",
+        "eva.leaderboard.patch_camelyon.validation"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 41,
+        "n_hidden": 1926,
+        "medae": 2.1542410639330853,
+        "mae": 3.8526778403605393,
+        "medape": 3.0246805111530617,
+        "hidden_medae": 2.241936418919259,
+        "hidden_medape": 3.1395236625876617,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 10257,
+        "pairwise_median_accuracy": 0.3550420168067227,
+        "pairwise_pooled_accuracy": 0.5505508433265087,
+        "top_fraction": 0.2,
+        "top_total_k": 468,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.2799145299145299
+      }
+    },
+    {
+      "ordinal": 63,
+      "probe_indices": [
+        147,
+        10
+      ],
+      "probe_ids": [
+        "pathorob.tcga_2x2.robustness_index",
+        "eva.leaderboard.panda_small.test"
+      ],
+      "metrics": {
+        "n_target": 1967,
+        "n_revealed": 39,
+        "n_hidden": 1928,
+        "medae": 2.047763189208979,
+        "mae": 3.4953696451066634,
+        "medape": 2.8407816357274625,
+        "hidden_medae": 2.118186333334428,
+        "hidden_medape": 2.939058350482199,
+        "pairwise_margin": 2.0,
+        "pairwise_n_pairs": 10182,
+        "pairwise_median_accuracy": 0.29705882352941176,
+        "pairwise_pooled_accuracy": 0.4777057552543705,
+        "top_fraction": 0.2,
+        "top_total_k": 469,
+        "top_median_recovery": 0.0,
+        "top_pooled_recovery": 0.18763326226012794
+      }
+    }
+  ]
+}
