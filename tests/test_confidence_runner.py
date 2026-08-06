@@ -59,6 +59,25 @@ class ConfidenceRunnerContractTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "test_j"):
             RUNNER._assert_aligned(reference, candidate, "invalid")
 
+    def test_strong_rows_use_maximum_attainable_coverage(self) -> None:
+        completed = []
+        results = {}
+        for index in range(14):
+            coverage = 0.998 if index < 13 else 0.90
+            row = {
+                "shard_id": f"s{index}", "status": "completed",
+                "transform": f"t{index}", "method": f"m{index}",
+                "hp": {}, "coverage": coverage,
+                "medape_median": float(index),
+            }
+            completed.append(row)
+            results.setdefault(row["transform"], {})[row["method"]] = dict(row)
+        selected = RUNNER._strong_rows(
+            results, {row["shard_id"]: row for row in completed}
+        )
+        self.assertEqual(len(selected), 12)
+        self.assertTrue(all(row["coverage"] == 0.998 for row in selected))
+
 
 if __name__ == "__main__":
     unittest.main()

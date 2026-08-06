@@ -47,7 +47,11 @@ def main() -> int:
     ax.set_title("B  Coverage–width", loc="left", fontweight="bold")
 
     ax = axes[1, 0]
-    suite_rows = metrics["by_suite"]
+    all_suite_rows = metrics["by_suite"]
+    suite_rows = {
+        name: row for name, row in all_suite_rows.items()
+        if row["interval_coverage"] is not None
+    }
     suites = list(suite_rows)
     coverage = [100 * suite_rows[name]["interval_coverage"] for name in suites]
     bars = ax.bar(suites, coverage, color="#4c9f9b")
@@ -57,7 +61,9 @@ def main() -> int:
     ax.set_ylim(0, 102)
     ax.tick_params(axis="x", rotation=20)
     ax.set(ylabel="Empirical held-out coverage (%)")
-    ax.set_title("C  Coverage by suite", loc="left", fontweight="bold")
+    n_undefined = len(all_suite_rows) - len(suite_rows)
+    suffix = f" ({n_undefined} unsupported omitted)" if n_undefined else ""
+    ax.set_title("C  Coverage by suite" + suffix, loc="left", fontweight="bold")
 
     ax = axes[1, 1]
     entries = [item for evaluation in payload["by_evaluation"].values() for item in evaluation["by_k"].values()]

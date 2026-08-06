@@ -97,7 +97,7 @@ def _matching_row(rows: list[dict[str, Any]], spec: dict[str, Any]) -> dict[str,
 
 
 def _strong_rows(results: dict[str, Any], rows_by_id: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
-    """Exact upstream selection: best-HP rows, sorted by MedAPE, full coverage."""
+    """Upstream selection over the maximum attainable fold coverage."""
 
     candidates: list[dict[str, Any]] = []
     for transform, methods in results.items():
@@ -105,14 +105,22 @@ def _strong_rows(results: dict[str, Any], rows_by_id: dict[str, dict[str, Any]])
             row = rows_by_id.get(str(payload.get("shard_id")))
             if row is None:
                 raise ValueError(f"results row missing from validated manifest: {payload.get('shard_id')}")
-            if row.get("coverage", 0.0) < 0.999:
-                continue
             if transform == TARGET_SPEC["transform"] and method == TARGET_SPEC["method"]:
                 continue
             candidates.append(row)
-    selected = sorted(candidates, key=lambda row: float(row["medape_median"]))[:12]
+    if not candidates:
+        raise ValueError("method results contain no alternative confidence generators")
+    attainable = max(float(row.get("coverage", 0.0)) for row in candidates)
+    full_attainable = [
+        row for row in candidates
+        if abs(float(row.get("coverage", 0.0)) - attainable) <= 1e-12
+    ]
+    selected = sorted(full_attainable, key=lambda row: float(row["medape_median"]))[:12]
     if len(selected) != 12:
-        raise ValueError(f"need 12 full-coverage strong alternatives, found {len(selected)}")
+        raise ValueError(
+            f"need 12 maximum-attainable-coverage strong alternatives, found {len(selected)} "
+            f"at coverage={attainable:.12f}"
+        )
     return selected
 
 
@@ -248,14 +256,32 @@ def main() -> None:
         matrix=matrix, models=models, evaluations=evaluations, scores=args.scores,
         folds_path=args.folds, method_dir=args.method_dir,
     )
-    fold_ids = reference["fold_id"].astype(int)
-    rows = reference["test_i"].astype(int)
-    columns = reference["test_j"].astype(int)
-    actual = reference["actual"].astype(float)
-    predicted = reference["predicted"].astype(float)
+    structural_features = _structural_features(reference, folds)
+    target_supported = np.isfinite(reference["predicted"].astype(float))
+    generator_masks = [
+        *[np.isfinite(values) for values in hp_stack],
+        *[np.isfinite(values) for values in strong_stack],
+    ]
+    if any(not np.array_equal(target_supported, mask) for mask in generator_masks):
+        raise ValueError("maximum-attainable confidence generators disagree on predictable cells")
+    structural_supported = np.logical_and.reduce(
+        [np.isfinite(values) for values in structural_features.values()]
+    )
+    supported = target_supported & structural_supported
+    n_prediction_instances_total = int(len(target_supported))
+    n_unidentifiable_instances = int((~supported).sum())
+    fold_ids = reference["fold_id"].astype(int)[supported]
+    rows = reference["test_i"].astype(int)[supported]
+    columns = reference["test_j"].astype(int)[supported]
+    actual = reference["actual"].astype(float)[supported]
+    predicted = reference["predicted"].astype(float)[supported]
+    hp_stack = hp_stack[:, supported]
+    strong_stack = strong_stack[:, supported]
+    structural_features = {
+        name: values[supported] for name, values in structural_features.items()
+    }
     hp_features = stack_features(hp_stack, predicted)
     strong_features = stack_features(strong_stack, predicted)
-    structural_features = _structural_features(reference, folds)
     all_features = confidence_feature_sets(hp_features, strong_features, structural_features)
 
     uncertainties: dict[str, np.ndarray] = {}
@@ -375,6 +401,9 @@ def main() -> None:
             "target_predictor": "logit bias ALS rank=1 regularization=0.1",
             "fold_protocol": FOLD_PROTOCOL,
             "n_prediction_instances": len(actual),
+            "n_prediction_instances_total": n_prediction_instances_total,
+            "n_unidentifiable_fold_instances_excluded": n_unidentifiable_instances,
+            "attainable_prediction_coverage": len(actual) / n_prediction_instances_total,
             "risk_target": "log1p(abs(predicted_normalized_score - actual_normalized_score))",
             "confidence_methods": list(METHODS),
             "raw_disagreement_diagnostics": list(RAW_DISAGREEMENT_METHODS),
@@ -384,7 +413,7 @@ def main() -> None:
             ],
             "hp_disagreement_variants": hp_audit,
             "strong_method_variants": strong_audit,
-            "strong_method_selection": "top 12 full-coverage best-HP transform/method rows by Section-4 fold-median MedAPE, excluding the target transform/method",
+            "strong_method_selection": "top 12 maximum-attainable-coverage best-HP transform/method rows by Section-4 fold-median MedAPE, excluding the target transform/method",
             "structural_feature_count": len(structural_features),
             "structural_features": sorted(structural_features),
             "conformal_protocol": "leave the target point-prediction fold out when fitting the 90% scale",
@@ -411,6 +440,7 @@ def main() -> None:
         "pathology_adaptations": [
             "Pathology-selected rank 1 replaces upstream rank 2 while preserving the exact target family, transform, lambda, folds, feature definitions, risk-model grid, and calibration logic.",
             "The twelve strong generators are pathology's own top full-coverage Section-4 alternatives under the exact upstream selection rule.",
+            "Fold instances whose benchmark column has no remaining training observations are excluded from confidence fitting; all selected generators share the same predictable-cell mask.",
             "Errors, interval widths, and the ten-point trust event use the shared normalized pathology 0-100 scale, not clinical utility units.",
             "Each observed cell appears once per seed, matching BenchPress's repeated within-model fold experiment; this is not external-institution validation.",
         ],

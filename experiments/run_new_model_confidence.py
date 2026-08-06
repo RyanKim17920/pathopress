@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import sys
 from concurrent.futures import ProcessPoolExecutor
@@ -29,6 +30,17 @@ from pathopress.new_model_confidence import (  # noqa: E402
     build_new_model_confidence_artifact,
 )
 from pathopress.prediction import load_prediction_dataset  # noqa: E402
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _display_path(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path.resolve())
 
 
 def _simulate_job(job: tuple[np.ndarray, list[str], list[str], dict[str, str], int, int, int]):
@@ -124,6 +136,13 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     dataset = load_prediction_dataset(args.scores)
+    temporal_payload = json.loads(args.temporal.read_text(encoding="utf-8"))
+    temporal_scores_hash = temporal_payload.get("input", {}).get("scores_sha256")
+    if temporal_scores_hash != _sha256(args.scores):
+        raise ValueError(
+            "temporal deployment score hash does not match new-model confidence scores: "
+            f"{temporal_scores_hash} != {_sha256(args.scores)}"
+        )
     suite_by_evaluation = {}
     for score in dataset.scores:
         suite_by_evaluation.setdefault(score.evaluation_id, score.suite_id)
@@ -153,10 +172,13 @@ def main() -> int:
         records.extend(_temporal_rows(args.temporal, suite_by_evaluation))
     artifact, audited = build_new_model_confidence_artifact(records, args.scores)
     artifact["inputs"] = {
-        "temporal_path": str(args.temporal.relative_to(ROOT)),
-        "temporal_sha256": __import__("hashlib").sha256(args.temporal.read_bytes()).hexdigest(),
+        "scores_path": _display_path(args.scores),
+        "scores_sha256": _sha256(args.scores),
+        "temporal_path": _display_path(args.temporal),
+        "temporal_sha256": _sha256(args.temporal),
         "probe_seeds": args.probe_seeds,
         "simulation_jobs": len(jobs),
+        "script_sha256": _sha256(Path(__file__)),
     }
 
     args.raw_output.parent.mkdir(parents=True, exist_ok=True)
@@ -173,8 +195,8 @@ def main() -> int:
         writer.writeheader()
         writer.writerows({field: row.get(field, "") for field in fields} for row in audited)
     artifact["raw_predictions"] = {
-        "path": str(args.raw_output.relative_to(ROOT)),
-        "sha256": __import__("hashlib").sha256(args.raw_output.read_bytes()).hexdigest(),
+        "path": _display_path(args.raw_output),
+        "sha256": _sha256(args.raw_output),
         "rows": len(audited),
     }
     args.output.write_text(json.dumps(artifact, indent=2, sort_keys=True) + "\n", encoding="utf-8")
