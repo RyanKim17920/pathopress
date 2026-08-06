@@ -126,7 +126,7 @@ exhaustive over all 168 evaluations.
 | Prospective validation | High | preregistered newer models and external institutions not used during selection |
 | Family/site leakage analysis | High | stronger canonical family, pretraining, cohort, and institution metadata |
 | Confidence for unseen rows | High | calibration designed around genuinely new models, with abstention |
-| Real LLM baselines | Low engineering, nonzero unknown cost | execute the complete 1,990-request pack for four named/blind conditions; current runner has no network client |
+| Real LLM baselines | Low engineering, nonzero unknown cost | execute the complete 1,990-request pack for four named/blind conditions; the gated OpenAI Batch adapter is prepared but unrun, so genuine responses and cost remain pending |
 | Hosted release/maintenance | Moderate, ongoing | deployment, versioned snapshots, CI freshness, review/contribution workflow |
 
 The real LLM baseline is not a scientific blocker: upstream treats it as an

@@ -74,7 +74,7 @@ density. Its immutable contract is:
 | Public dataset export | [export README](../exports/pathopress_public/README.md), [manifest](../exports/pathopress_public/manifest.json) | Engineering analogue | All/paper/wide CSVs, sanitized provenance, licenses, hashes, loader/downloader; no upload |
 | Static website | [site README](../website/README.md) | Engineering analogue | Browser-side exact rank-1 recipe, no server submission/analytics; not deployed here |
 | Maintenance contract | [freshness manifest](../experiments/artifact_freshness_manifest.json), [dry run](../experiments/experiment_set_dry_run.json), [automated score-review ledger](../data/score_review_ledger.csv) | Engineering analogue | Hash/freshness and smoke checks exist; the evidence-bounded ledger records `automated_agent_review` and does not claim human review |
-| Zero-shot matrix and five-shot LLM baselines | [protocol/config/status](llm-baseline.md) | **Prepared, unrun** | All 30 folds, 1,990 requests, 81,080 targets; no provider client or real responses; separate smoke mock is contract-only |
+| Zero-shot matrix and five-shot LLM baselines | [protocol/config/status](llm-baseline.md) | **Prepared, unrun** | All 30 folds, 1,990 requests, 81,080 targets; gated OpenAI Batch adapter prepared but not run; genuine responses and cost remain pending; separate smoke mock is contract-only |
 
 ## Exactness boundaries
 
