@@ -60,6 +60,18 @@ class TransformTests(unittest.TestCase):
         second = predict_scores(self.matrix, "logit", "Benchmark Mean", {})
         np.testing.assert_allclose(first, second)
 
+    def test_unidentifiable_fold_column_is_reported_as_noncoverage(self) -> None:
+        training = self.matrix.copy()
+        training[:, 2] = np.nan
+        for method, hyperparameters in (
+            ("Soft-Impute", {"rank": 1}),
+            ("Benchmark Mean", {}),
+        ):
+            with self.subTest(method=method):
+                predicted = predict_scores(training, "identity", method, hyperparameters)
+                self.assertTrue(np.isnan(predicted[:, 2]).all())
+                self.assertTrue(np.isfinite(predicted[:, :2]).all())
+
 
 class CompleterTests(unittest.TestCase):
     def setUp(self) -> None:

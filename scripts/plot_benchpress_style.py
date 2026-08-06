@@ -42,6 +42,15 @@ SUITE_COLORS = {
     "hest": MAGENTA,
     "thunder": BLUE,
     "pathorob": TEAL,
+    "hoptimus1_report": GREEN,
+}
+SUITE_LABELS = {
+    "pathobench": "PATHO-BENCH",
+    "eva": "EVA",
+    "thunder": "THUNDER",
+    "hoptimus1_report": "H-OPT1",
+    "hest": "HEST",
+    "pathorob": "PATHOROB",
 }
 
 
@@ -83,7 +92,14 @@ def load_matrix(scores_path: Path):
 
 def matrix_order(matrix, models, evaluations, metadata):
     row_order = np.argsort(-np.sum(np.isfinite(matrix), axis=1), kind="stable")
-    suite_rank = {"pathobench": 0, "eva": 1, "thunder": 2, "hest": 3, "pathorob": 4}
+    suite_rank = {
+        "pathobench": 0,
+        "eva": 1,
+        "thunder": 2,
+        "hoptimus1_report": 3,
+        "hest": 4,
+        "pathorob": 5,
+    }
     col_order = np.asarray(
         sorted(
             range(len(evaluations)),
@@ -112,7 +128,11 @@ def suite_groups(ordered_evaluations, metadata) -> list[tuple[str, int, int]]:
 
 def suite_legend_handles(groups: list[tuple[str, int, int]]) -> list[Patch]:
     return [
-        Patch(facecolor=SUITE_COLORS.get(suite, GRAY), edgecolor="none", label=suite.upper())
+        Patch(
+            facecolor=SUITE_COLORS.get(suite, GRAY),
+            edgecolor="none",
+            label=SUITE_LABELS.get(suite, suite.upper()),
+        )
         for suite, _, _ in groups
     ]
 
@@ -120,7 +140,7 @@ def suite_legend_handles(groups: list[tuple[str, int, int]]) -> list[Patch]:
 def add_suite_axis(ax, ordered_evaluations, metadata) -> list[tuple[str, int, int]]:
     groups = suite_groups(ordered_evaluations, metadata)
     # Narrow pathology suites can occupy only a handful of pixels in this
-    # 168-column matrix. A shared color legend is legible; centered suite-name
+    # Wide matrix. A shared color legend is legible; centered suite-name
     # ticks are not, so the band carries the grouping and the legend names it.
     ax.set_xticks([])
     for suite, start, end in groups:
@@ -228,13 +248,28 @@ def plot_validation(results_path: Path, predictions_path: Path, output_dir: Path
     ax = axes[0, 1]
     suites = sorted(
         result["by_rank"][str(prediction_rank)]["by_suite"],
-        key=lambda suite: {"pathobench": 0, "eva": 1, "thunder": 2, "hest": 3, "pathorob": 4}.get(suite, 99),
+        key=lambda suite: {
+            "pathobench": 0,
+            "eva": 1,
+            "thunder": 2,
+            "hoptimus1_report": 3,
+            "hest": 4,
+            "pathorob": 5,
+        }.get(suite, 99),
     )
     for suite in suites:
         rows = [row for row in predictions if row["suite_id"] == suite]
         actual = np.asarray([float(row["actual_normalized_score"]) for row in rows])
         predicted = np.asarray([float(row["predicted_normalized_score"]) for row in rows])
-        ax.scatter(actual, predicted, s=9, alpha=0.18, color=SUITE_COLORS[suite], label=suite.upper(), edgecolors="none")
+        ax.scatter(
+            actual,
+            predicted,
+            s=9,
+            alpha=0.18,
+            color=SUITE_COLORS[suite],
+            label=SUITE_LABELS.get(suite, suite.upper()),
+            edgecolors="none",
+        )
     low, high = 0, 100
     ax.plot([low, high], [low, high], color=CHARCOAL, ls="--", lw=1.2)
     ax.set_xlim(35, 100)
@@ -253,7 +288,7 @@ def plot_validation(results_path: Path, predictions_path: Path, output_dir: Path
     ax.bar(x - width / 2, mae, width, color=[SUITE_COLORS[s] for s in suites], alpha=0.6, label="MAE")
     ax.bar(x + width / 2, medae, width, color=[SUITE_COLORS[s] for s in suites], label="MedAE")
     ax.set_xticks(x)
-    ax.set_xticklabels([s.upper() for s in suites])
+    ax.set_xticklabels([SUITE_LABELS.get(s, s.upper()) for s in suites])
     ax.set_ylabel("Absolute error (normalized points)")
     ax.set_title("C  Error varies by benchmark suite")
     ax.legend(frameon=False)

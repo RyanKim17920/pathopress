@@ -525,6 +525,14 @@ def predict_scores(
 ) -> np.ndarray:
     """Run one exact transform/completer pipeline and return raw-scale scores."""
     normalized, state = apply_transform(training, transform)
+    # Within-model folds can remove every observation from an exceptionally
+    # sparse benchmark column.  Such a column is not identifiable in that
+    # fold: exclude it from the numerical solver and restore it as NaN so the
+    # evaluation layer records honest non-coverage instead of contaminating
+    # SVD/MLP inputs with an all-NaN feature.
+    supported = np.isfinite(normalized).any(axis=0)
     kwargs = {key: value for key, value in hyperparameters.items() if key != "sensitivity"}
-    completed = COMPLETERS[method](normalized, **kwargs)
+    completed = np.full_like(normalized, np.nan)
+    if supported.any():
+        completed[:, supported] = COMPLETERS[method](normalized[:, supported], **kwargs)
     return invert_transform(completed, training, transform, state)

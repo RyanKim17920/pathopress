@@ -8,18 +8,18 @@
   },
   "matrix": {
     "path": "experiments/analysis_matrix.npz",
-    "sha256": "962939288e440758fee3998a9517ab24c325b30f0ad0632221ea1aac75a1e31c",
+    "sha256": "fc11fb7cac9c72e01e30c1d97bc701545e514b1546793c15c543ff5870c74a76",
     "shape": [
       59,
-      168
+      187
     ],
-    "n_observed": 2027,
-    "density": 0.204499596448749,
-    "observed_triples_sha256": "9cae16b58da34c3389adc91a8e17fa1d01f06426498d7d1d3c19ea593455ad68"
+    "n_observed": 2122,
+    "density": 0.19233209462521525,
+    "observed_triples_sha256": "f178b73960a21cc20b2914f1671a290dd1dbc038006044b62b2157e2a22c37cd"
   },
   "folds": {
     "path": "experiments/folds_s10_f3_bs42.json",
-    "sha256": "f6cb9f7d68d7b3c7d3b4ca1aeacce935a19be2bf4e5e4b4e38f79a8baf690713",
+    "sha256": "418ed9ddef661f39ad31bc804cdb3213de3ef46c8520cc3a98db9e6c1a9c813f",
     "n_seeds": 10,
     "n_folds": 3,
     "base_seed": 42,
@@ -27,6 +27,6 @@
   },
   "source": {
     "scores_path": "data/scores.csv",
-    "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c"
+    "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448"
   }
 }

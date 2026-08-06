@@ -11,8 +11,8 @@ MedAE          = median absolute error
 MedAPE         = median absolute percentage error
 ```
 
-A MedAE of 1.647585 means that half of the matched-CV predictions are within
-1.647585 normalized points. It is not a confidence interval, clinical error,
+A MedAE of 1.609006 means that half of the matched-CV predictions are within
+1.609006 normalized points. It is not a confidence interval, clinical error,
 or universal accuracy percentage.
 
 ## Native metric mappings
@@ -38,29 +38,35 @@ biases, so “rank 1” is not a claim that the observed raw matrix has exact
 algebraic rank one.
 
 The canonical fold artifact assigns every observed cell to one of three folds
-for seeds 42–51. Every one of 2,027 cells is tested once per seed, yielding
-20,270 out-of-fold predictions.
+for seeds 42–51. Across 2,122 observed cells and ten seeds, the supported-fold
+adapter yields 21,181 out-of-fold predictions; 39 held targets occur in a
+column with no remaining training observation and are recorded as unsupported
+rather than imputed.
 
 | Method/rank | Pooled MAE | Pooled MedAE |
 |---|---:|---:|
-| Column median | 4.275274 | 2.500000 |
-| Bias-only rank 0 | 3.360017 | 1.787446 |
-| Bias ALS rank 1 | **3.222008** | **1.647585** |
-| Bias ALS rank 2 | 3.341028 | 1.700758 |
+| Column median | 4.151756 | 2.400000 |
+| Bias-only rank 0 | 3.284259 | 1.724449 |
+| Bias ALS rank 1 | **3.134532** | **1.609006** |
+| Bias ALS rank 2 | 3.265505 | 1.640863 |
 
-The median of the 30 rank-1 fold MedAEs is 1.662339. Its errors are within one,
-three, five, and ten points for 35.1801%, 68.1944%, 81.0705%, and 93.6112% of
-instances. Raw and logit Soft-Impute rank sweeps also choose rank 1.
+The median of the 30 rank-1 fold MedAEs is 1.608566. Its errors are within one,
+three, five, and ten points for 35.9898%, 69.1469%, 81.9366%, and 93.8577% of
+instances. Raw and logit Soft-Impute sweeps independently choose rank 1. At
+rank 1 their pooled MAE/MedAE values are 3.378152/1.793787 in raw space and
+3.344836/1.737833 in logit space.
 
 This choice is protocol-specific. In a harder leave-one-suite-block-out test,
-rank 1 gives 5.688229 MAE and 3.537207 MedAE, while error improves through
-tested rank 6 at 5.093822/3.175723. This adverse shift sensitivity is why rank
-1 is a matched-completion product choice, not a universal pathology rank claim.
+rank 1 gives 5.788534 MAE and 3.599615 MedAE on 1,051 supported predictions,
+while error improves through tested rank 6 at 5.099363/3.203260. Another 95
+suite-block targets are unsupported because their columns become empty. This
+adverse shift sensitivity is why rank 1 is a matched-completion product choice,
+not a universal pathology rank claim.
 
 ## Completed matrix
 
 [The imputation table](../outputs/imputations_rank1.csv) contains one row for
-every supported model/evaluation pair: 2,027 reported values and 7,885 point
+every supported model/evaluation pair: 2,122 reported values and 8,911 point
 estimates. `status=observed` cells are preserved exactly; `status=imputed` cells
 are estimates. Rank-2 differences are sensitivity diagnostics, not intervals.
 Catalog-only evaluations with no retained observations cannot be completed
