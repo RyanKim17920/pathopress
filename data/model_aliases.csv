@@ -6,6 +6,7 @@ CHIEF,chief-slide,pathobench,https://arxiv.org/html/2501.16652v1#S0.T37,Frozen r
 Ciga,ciga,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 CLIP-B,clip-b,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VLM; alias parsed from current per-dataset linear-probe table.
 CLIP-L,clip-l,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VLM; alias parsed from current per-dataset linear-probe table.
+CONCH,conch,conch_primary,https://www.nature.com/articles/s41591-024-02856-4,Exact versioned component alias from the selected Wave E primary-paper row.
 CONCH v1,conch,hest,https://huggingface.co/MahmoodLab/conch,Alias and optional checkpoint URL parsed from the current HEST results table.
 CONCH,conch,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 Conch,conch,pathorob,https://github.com/bifold-pathomics/PathoROB/blob/6583cf0b0d902c8cc032308262fa3a3befdc0687/README.md,Alias parsed from the PathoROB-computed RI table.
@@ -14,6 +15,7 @@ CONCH v1.5,conch-1.5,hest,https://huggingface.co/MahmoodLab/conchv1_5,Alias and 
 CONCHv1.5 Mean Pooling,conch-1.5,pathobench,https://arxiv.org/html/2501.16652v1#S0.T37,Frozen representation row in THREADS Extended Data. Patch-encoder mean-pooling and slide-encoder rows have deliberately distinct model IDs.
 CONCHv1.5,conch-1.5,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 CONCH 1.5,conch-1.5,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VLM; alias parsed from current per-dataset linear-probe table.
+CONCHv1.5,conch-1.5,titan_patch_encoder,https://www.nature.com/articles/s41591-025-03982-3,Exact versioned component alias from the selected Wave E primary-paper row.
 CTransPath,ctranspath,hest,https://huggingface.co/datasets/MahmoodLab/hest-bench/tree/main/fm_v1/ctranspath,Alias and optional checkpoint URL parsed from the current HEST results table.
 CTransPath,ctranspath,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 DINOv2-B,dinov2-b,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
@@ -25,25 +27,37 @@ DINOv3-L,dinov3-l,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2c
 DINOv3-S,dinov3-s,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
 EXAONE Path 2.5,exaone-path-2.5-slide,pathobench,https://arxiv.org/pdf/2512.14019v1,Model column in EXAONE Path 2.5 Table 4; all columns use the paper's shared linear-probing settings. H-optimus-0 and UNI2-h use mean pooling as explicitly reported.
 GenBio-PathFM,genbio-pathfm,hest,https://huggingface.co/genbio-ai/genbio-pathfm,Alias and optional checkpoint URL parsed from the current HEST results table.
-GenBio-PathFM,genbio-pathfm,pathorob,https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1.full.pdf,External-publication value is unvalidated by PathoROB authors.
+GenBio-PathFM,genbio-pathfm,pathorob,https://genbio.ai/papers/genbio-pathfm.pdf,Exact component alias from the selected official Group B source row.
 GenBio-PFM,genbio-pathfm,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+GenBio-PathFM,genbio-pathfm,thunder,https://genbio.ai/papers/genbio-pathfm.pdf,Exact component alias from the selected official Group B source row.
+GPFM,gpfm,gpfm_primary,https://www.nature.com/articles/s41551-025-01488-4,Exact model/checkpoint alias from a selected Wave F primary-paper row.
 GPFM,gpfm,hest,https://huggingface.co/majiabo/GPFM,Alias and optional checkpoint URL parsed from the current HEST results table.
 H-Optimus-0,h-optimus-0,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 bioptimus_h_optimus_0,h-optimus-0,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 H-Optimus-0,h-optimus-0,hest,https://huggingface.co/bioptimus/H-optimus-0,Alias and optional checkpoint URL parsed from the current HEST results table.
+H-optimus-0,h-optimus-0,hest,https://arxiv.org/abs/2408.00738,Exact model and embedding-recipe row in the Virchow2 paper.
+H-optimus-0,h-optimus-0,hoptimus1_report,https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1,Exact model row in the first-party H-optimus-1 benchmark report.
 H-optimus-0,h-optimus-0,pathobench,https://arxiv.org/pdf/2512.14019v1,Model column in EXAONE Path 2.5 Table 4; all columns use the paper's shared linear-probing settings. H-optimus-0 and UNI2-h use mean pooling as explicitly reported.
 H-optimus-0,h-optimus-0,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 H-OPT-0,h-optimus-0,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+H-optimus-0,h-optimus-0,virchow2_paper,https://arxiv.org/abs/2408.00738,Exact model and embedding-recipe row in the Virchow2 paper.
 H-Optimus-1,h-optimus-1,hest,https://huggingface.co/bioptimus/H-optimus-1,Alias and optional checkpoint URL parsed from the current HEST results table.
+H-optimus-1,h-optimus-1,hest,https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1,Exact model row in the first-party H-optimus-1 benchmark report.
+H-optimus-1,h-optimus-1,hoptimus1_report,https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1,Exact model row in the first-party H-optimus-1 benchmark report.
 H-optimus-1,h-optimus-1,pathorob,https://www.biorxiv.org/content/10.64898/2026.03.17.712534v1.full.pdf,External-publication value is unvalidated by PathoROB authors.
 H-OPT-1,h-optimus-1,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
-H0-mini,h0-mini,hest,https://huggingface.co/bioptimus/H0-mini,Alias and optional checkpoint URL parsed from the current HEST results table.
+H0-mini,h0-mini,eva,https://arxiv.org/abs/2501.16239v3,Exact model row in a pinned official paper or repository report.
+H0-mini,h0-mini,hest,https://arxiv.org/abs/2501.16239v3,Exact model row in a pinned official paper or repository report.
 H0-mini,h0-mini,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
+H0-Mini,h0-mini,plism,https://github.com/owkin/plism-benchmark/blob/5ec9511893af993f6faa099f093d1924b291aed2/README.md,Exact model row in a pinned official paper or repository report.
+H0-mini,h0-mini,plism,https://arxiv.org/abs/2501.16239v3,Exact model row in a pinned official paper or repository report.
 H0-mini,h0-mini,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Hibou-B,hibou-b,hibou_primary,https://arxiv.org/abs/2406.05074,Exact model/checkpoint alias from a selected Wave F primary-paper row.
 HIBOU-B,hibou-b,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
 Hibou-L,hibou-l,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 histai_hibou_l,hibou-l,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 Hibou-L,hibou-l,hest,https://huggingface.co/histai/hibou-L,Alias and optional checkpoint URL parsed from the current HEST results table.
+Hibou-L,hibou-l,hibou_primary,https://arxiv.org/abs/2406.05074,Exact model/checkpoint alias from a selected Wave F primary-paper row.
 HIBOU-L,hibou-l,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
 HIPT,hipt,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 kaiko_vitb16,kaiko-vit-b-16,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
@@ -66,26 +80,31 @@ KEEP,keep,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb
 Lunit,lunit-vit-s-16,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 lunit_vits16,lunit-vit-s-16,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 Lunit ViT-S/8,lunit-vit-s-8,hest,https://huggingface.co/1aurent/vit_small_patch8_224.lunit_dino,Alias and optional checkpoint URL parsed from the current HEST results table.
-Midnight-12k,midnight,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
+Midnight-12k,midnight,eva,https://papers.miccai.org/miccai-2025/paper/4651_paper.pdf,Exact component alias from the selected official Group B source row.
 kaiko_midnight_12k,midnight,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 Midnight-12k,midnight,hest,https://huggingface.co/kaiko-ai/midnight,Alias and optional checkpoint URL parsed from the current HEST results table.
 MIDNIGHT,midnight,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
-Midnight-92k,midnight-92k,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
+Midnight-92k,midnight-92k,eva,https://papers.miccai.org/miccai-2025/paper/4651_paper.pdf,Exact component alias from the selected official Group B source row.
 Midnight-92k/392,midnight-92k-392,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 MUSK,musk,hest,https://huggingface.co/xiangjx/musk,Alias and optional checkpoint URL parsed from the current HEST results table.
+MUSK,musk,musk_primary,https://www.nature.com/articles/s41586-024-08378-w,Exact model/checkpoint alias from a selected Wave F primary-paper row.
 MUSK,musk,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 MUSK,musk,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VLM; alias parsed from current per-dataset linear-probe table.
+OpenMidnight (Ours),openmidnight,eva,https://sophont.med/blog/openmidnight,Exact component alias from the selected official Group B source row.
 OpenMidnight,openmidnight,hest,https://huggingface.co/SophontAI/OpenMidnight,Alias and optional checkpoint URL parsed from the current HEST results table.
 O-Midnight,openmidnight,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
 Phikon,phikon,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 owkin_phikon,phikon,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 Phikon,phikon,hest,https://huggingface.co/owkin/phikon,Alias and optional checkpoint URL parsed from the current HEST results table.
 Phikon,phikon,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
+Phikon,phikon,phikon_primary,https://www.medrxiv.org/content/10.1101/2023.07.21.23292757v3,Exact versioned component alias from the selected Wave E primary-paper row.
+Phikon,phikon,phikon_v2_external,https://arxiv.org/abs/2409.09173v1,Exact versioned component alias from the selected Wave E primary-paper row.
 PHIKON,phikon,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
 Phikon-v2,phikon-v2,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 owkin_phikon_v2,phikon-v2,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 Phikon-v2,phikon-v2,hest,https://huggingface.co/owkin/phikon-v2,Alias and optional checkpoint URL parsed from the current HEST results table.
 Phikon-v2,phikon-v2,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
+Phikon-v2,phikon-v2,phikon_v2_external,https://arxiv.org/abs/2409.09173v1,Exact versioned component alias from the selected Wave E primary-paper row.
 PHIKON2,phikon-v2,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
 PLIP,plip,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VLM; alias parsed from current per-dataset linear-probe table.
 PRISM,prism-slide,pathobench,https://arxiv.org/html/2501.16652v1#S0.T37,Frozen representation row in THREADS Extended Data. Patch-encoder mean-pooling and slide-encoder rows have deliberately distinct model IDs.
@@ -103,26 +122,45 @@ RetCCL,retccl,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias 
 RudolfV,rudolfv,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 Threads,threads-slide,pathobench,https://arxiv.org/html/2501.16652v1#S0.T37,Frozen representation row in THREADS Extended Data. Patch-encoder mean-pooling and slide-encoder rows have deliberately distinct model IDs.
 TITAN,titan-slide,pathobench,https://arxiv.org/pdf/2512.14019v1,Model column in EXAONE Path 2.5 Table 4; all columns use the paper's shared linear-probing settings. H-optimus-0 and UNI2-h use mean pooling as explicitly reported.
+TITAN vision-language,titan-slide,titan_paper,https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41591-025-03982-3/MediaObjects/41591_2025_3982_MOESM1_ESM.pdf,Exact component and protocol label from the official primary paper.
+TITAN-V vision-only,titan-v-slide,titan_paper,https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41591-025-03982-3/MediaObjects/41591_2025_3982_MOESM1_ESM.pdf,Exact component and protocol label from the official primary paper.
 UNI,uni,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 mahmood_uni,uni,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
-UNI,uni,hest,https://huggingface.co/MahmoodLab/UNI,Alias and optional checkpoint URL parsed from the current HEST results table.
+UNI,uni,hest,https://arxiv.org/abs/2408.00738,Exact model and embedding-recipe row in the Virchow2 paper.
+UNI,uni,hoptimus1_report,https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1,Exact model row in the first-party H-optimus-1 benchmark report.
 UNI,uni,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 UNI,uni,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+UNI,uni,uni_paper,https://arxiv.org/abs/2308.15474,Exact UNI row in the primary-paper supplementary task tables.
+UNI,uni,virchow2_paper,https://arxiv.org/abs/2408.00738,Exact model and embedding-recipe row in the Virchow2 paper.
 UNI-2,uni2-h,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
+UNI2-h,uni2-h,eva,https://arxiv.org/abs/2501.16239v3,Exact model row in a pinned official paper or repository report.
 mahmood_uni2_h,uni2-h,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
-UNI2-h,uni2-h,hest,https://huggingface.co/MahmoodLab/UNI2-h,Alias and optional checkpoint URL parsed from the current HEST results table.
+UNI2-h,uni2-h,hest,https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1,Exact model row in the first-party H-optimus-1 benchmark report.
+UNI2-h,uni2-h,hoptimus1_report,https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1,Exact model row in the first-party H-optimus-1 benchmark report.
 UNI2-h,uni2-h,pathobench,https://arxiv.org/pdf/2512.14019v1,Model column in EXAONE Path 2.5 Table 4; all columns use the paper's shared linear-probing settings. H-optimus-0 and UNI2-h use mean pooling as explicitly reported.
 UNI-2h,uni2-h,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 UNI2-h,uni2-h,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
+UNI2-h,uni2-h,plism,https://github.com/owkin/plism-benchmark/blob/5ec9511893af993f6faa099f093d1924b291aed2/README.md,Exact model row in a pinned official paper or repository report.
 UNI2-H,uni2-h,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
-Virchow,virchow,hest,https://huggingface.co/paige-ai/Virchow,Alias and optional checkpoint URL parsed from the current HEST results table.
+UNI2-h,uni2-h,uni2_benchmark,https://github.com/mahmoodlab/UNI/blob/42715efc11722a496e0a67f3369505a8f277206c/README.md,Exact model row in a pinned official paper or repository report.
+Virchow,virchow,hest,https://arxiv.org/abs/2408.00738,Exact model and embedding-recipe row in the Virchow2 paper.
 Virchow Mean Pooling,virchow,pathobench,https://arxiv.org/html/2501.16652v1#S0.T37,Frozen representation row in THREADS Extended Data. Patch-encoder mean-pooling and slide-encoder rows have deliberately distinct model IDs.
 Virchow,virchow,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 VIRCHOW,virchow,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Virchow,virchow,virchow2_paper,https://arxiv.org/abs/2408.00738,Exact model and embedding-recipe row in the Virchow2 paper.
+Virchow CLS+Mean,virchow,virchow2g_paper,https://arxiv.org/pdf/2408.00738,Exact component and protocol label from the official primary paper.
+Virchow CLS-Only,virchow,virchow2g_paper,https://arxiv.org/pdf/2408.00738,Exact component and protocol label from the official primary paper.
+Virchow,virchow,virchow_paper,https://arxiv.org/abs/2309.07778,Exact Virchow primary-paper model row under the frozen CLS+Mean linear-probe protocol.
 Virchow2,virchow-2,eva,https://huggingface.co/kaiko-ai/midnight/blob/adc6b15679c981cce6f9b018bbad09d16eeeda9f/README.md,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
 paige_virchow2,virchow-2,eva,https://github.com/kaiko-ai/eva/blob/e43e74a99b75660b0014f790f25a33dd9f11e121/tools/data/leaderboards/pathology.csv,Reported EVA leaderboard alias mapped by the source-specific exact alias table.
-Virchow2,virchow-2,hest,https://huggingface.co/paige-ai/Virchow2,Alias and optional checkpoint URL parsed from the current HEST results table.
+Virchow2,virchow-2,hest,https://arxiv.org/abs/2408.00738,Exact model and embedding-recipe row in the Virchow2 paper.
+Virchow2,virchow-2,hoptimus1_report,https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1,Exact model row in the first-party H-optimus-1 benchmark report.
 Virchow2,virchow-2,pathorob,https://www.nature.com/articles/s41467-026-73923-2,Alias in the canonical PathoROB Nature Source Data workbook.
 VIRCHOW2,virchow-2,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Histopathology; type=VM; alias parsed from current per-dataset linear-probe table.
+Virchow2,virchow-2,virchow2_paper,https://arxiv.org/abs/2408.00738,Exact model and embedding-recipe row in the Virchow2 paper.
+Virchow2 CLS+Mean,virchow-2,virchow2g_paper,https://arxiv.org/pdf/2408.00738,Exact component and protocol label from the official primary paper.
+Virchow2 CLS-Only,virchow-2,virchow2g_paper,https://arxiv.org/pdf/2408.00738,Exact component and protocol label from the official primary paper.
+Virchow2G CLS+Mean,virchow-2g,virchow2g_paper,https://arxiv.org/pdf/2408.00738,Exact component and protocol label from the official primary paper.
+Virchow2G CLS-Only,virchow-2g,virchow2g_paper,https://arxiv.org/pdf/2408.00738,Exact component and protocol label from the official primary paper.
 ViT-B,vit-b,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.
 ViT-L,vit-l,thunder,https://github.com/MICS-Lab/thunder/blob/3d1cc9513fb2cfd8c4afb0d7bb9f5c4f6b69117f/docs/leaderboards.md,Domain=Natural-image; type=VM; alias parsed from current per-dataset linear-probe table.

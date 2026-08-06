@@ -24,11 +24,14 @@ def _inputs():
 def test_review_ledger_has_exact_score_coverage_and_preserves_boundaries():
     scores, tasks, dedup, ledger = _inputs()
     summary = validate_ledger(scores, tasks, dedup, ledger)
-    assert summary["score_rows"] == 2076
-    assert summary["retained_primary_rows"] == 2027
-    assert summary["analysis_ineligible_apd_rows"] == 40
-    assert summary["reported_external_rows"] == 9
-    assert summary["locator_reachable_rows"] == 2076
+    audit_counts = Counter(row["audit_status"] for row in scores)
+    assert summary["score_rows"] == len(scores) == len(ledger)
+    assert summary["retained_primary_rows"] == audit_counts["parsed_primary_source"]
+    assert summary["analysis_ineligible_rows"] == audit_counts[
+        "parsed_primary_source_analysis_ineligible"
+    ]
+    assert summary["reported_external_rows"] == audit_counts["reported_external"]
+    assert summary["locator_reachable_rows"] == len(scores)
     assert {row["reviewer_type"] for row in ledger} == {"automated_agent_review"}
     assert not any("human" in row["reviewer_type"] for row in ledger)
 
@@ -37,7 +40,7 @@ def test_review_summary_and_all_pinned_evidence_hashes_are_self_contained():
     summary = json.loads((DATA / "score_review_summary.json").read_text())
     ledger = DATA / "score_review_ledger.csv"
     assert summary["ledger_sha256"] == sha256_path(ledger)
-    assert len(summary["source_files"]) == 8
+    assert set(summary["source_files"]) == {row["evidence_path"] for row in _inputs()[3]}
     for relative, digest in summary["source_files"].items():
         source = ROOT / relative
         assert source.is_file()

@@ -1,0 +1,43 @@
+{
+  "schema_version": 2,
+  "allowlist_id": "pathology_low_friction_pipeline_proxy_legacy25_v2",
+  "derivation_timing": "frozen before the Wave D/F registry expansion",
+  "semantics": "longitudinal comparison set only; superseded for current-data searches by the refreshed top-25 set",
+  "selection": "explicit legacy evaluation identities, retained without retroactive reselection",
+  "cost_fields": {
+    "dollar_cost": "not_reported_no_numeric_cost_invented",
+    "annotation_hours": "metadata_incomplete",
+    "compute_runtime": "metadata_incomplete"
+  },
+  "tasks_sha256": "0c9f711767a51fee2563c7617b15a15a0244dac19207f33317580bc67ce21209",
+  "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
+  "n_retained_evaluations": 187,
+  "n_allowlisted": 25,
+  "evaluation_ids": [
+    "eva.leaderboard.bach.validation",
+    "eva.leaderboard.bracs.validation",
+    "eva.leaderboard.breakhis.validation",
+    "eva.leaderboard.crc.validation",
+    "eva.leaderboard.gleason_arvaniti.validation",
+    "eva.leaderboard.mhist.test",
+    "eva.leaderboard.patch_camelyon.test",
+    "eva.leaderboard.patch_camelyon.validation",
+    "eva.leaderboard.patch_camelyon_10shot.test",
+    "thunder.bach.linear_probing",
+    "thunder.bracs.linear_probing",
+    "thunder.break_his.linear_probing",
+    "thunder.ccrcc.linear_probing",
+    "thunder.crc.linear_probing",
+    "thunder.esca.linear_probing",
+    "thunder.mhist.linear_probing",
+    "thunder.patch_camelyon.linear_probing",
+    "thunder.spider_breast.linear_probing",
+    "thunder.spider_colorectal.linear_probing",
+    "thunder.spider_skin.linear_probing",
+    "thunder.spider_thorax.linear_probing",
+    "thunder.tcga_crc_msi.linear_probing",
+    "thunder.tcga_tils.linear_probing",
+    "thunder.tcga_uniform.linear_probing",
+    "thunder.wilds.linear_probing"
+  ]
+}

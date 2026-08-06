@@ -14,9 +14,9 @@ new-institution shifts.
 
 PathoPress currently provides:
 
-- a five-suite registry with 292 protocols over 147 task identities;
-- 2,076 reported score rows, of which 2,027 form a fixed 59 × 168 research
-  matrix at 20.4500% density;
+- a 20-suite evidence registry with 1,638 protocols over 394 task identities;
+- 4,013 reported score rows, of which 2,122 form a fixed 59 × 187 research
+  matrix at 19.2332% density;
 - a hash-bound matrix and ten-seed, three-fold artifact;
 - direct numerical parity for the BenchPress point completer and core classical
   methods;
@@ -60,6 +60,11 @@ The audited registry covers:
 | THUNDER | classification/segmentation configurations | [GitHub](https://github.com/MICS-Lab/thunder) |
 | HEST | morphology-to-expression tasks | [GitHub](https://github.com/mahmoodlab/HEST) |
 | PathoROB | robustness endpoints | [GitHub](https://github.com/bifold-pathomics/PathoROB) |
+| H0-mini / UNI2-h companions | EVA, HEST, PLISM, and UNI-repository evaluations | pinned paper and repository snapshots |
+| Virchow2-family / TITAN | tile, slide, survival, zero-shot, and retrieval protocols | pinned primary-paper extracts |
+| H-Optimus-1 / Virchow2 / Virchow / UNI | report- and paper-specific frozen-feature protocols | pinned first-party reports and papers |
+| CONCH / Phikon families | patch- and slide-level primary-paper protocols | pinned primary-paper extracts |
+| Hibou / MUSK / GPFM | public frozen-feature protocols | pinned papers and publisher workbooks |
 
 Among Patho-Bench, EVA, and THUNDER, a conservative dataset × target ×
 granularity key finds 122 code-backed task identities and only seven exact
@@ -72,25 +77,26 @@ The machine-readable evidence is in [tasks.csv](../data/tasks.csv),
 [deduplication.csv](../data/deduplication.csv), and
 [provenance.json](../data/provenance.json). Score extraction and exclusions are
 documented in [score-source-coverage.md](score-source-coverage.md). The score
-pool contains Patho-Bench 896, EVA 265, HEST 234, THUNDER 512, and PathoROB 169
-rows. Forty signed APD rows remain in the raw registry but are analysis-ineligible
-because the source defines no bounded common-scale mapping; nine
+pool contains 4,013 rows across the 20 source suites. Its largest blocks are
+Patho-Bench 896, TITAN paper 629, THUNDER 524, HEST 377, EVA 317, TITAN patch
+encoder 297, and UNI paper 227. Forty-six signed APD rows and six public rows
+without a source-specified endpoint metric remain in the raw registry but are
+analysis-ineligible because no bounded common-scale mapping can be justified; nine
 `reported_external` rows are also excluded from the fixed paper matrix.
 
 ## Does the matrix support completion?
 
 Yes, retrospectively, with material heterogeneity.
 
-- Matched rank-1 bias ALS: 3.222008 MAE / 1.647585 MedAE versus column median
-  4.275274/2.500000 over 20,270 OOF predictions.
-- A largest complete 32 × 16 block has stable rank 1.431; its first one/two
-  components explain 69.88%/87.57% of variance.
-- All 168 retained evaluations have a neighbor sharing at least five models;
-  the median best absolute correlation is 0.916362.
-- Random-cell rank 1 is 3.050584/1.603529, but leave-one-suite-block-out rank 1
-  degrades to 5.688229/3.537207 and improves through tested rank 6 at
-  5.093822/3.175723.
-- Sparse-new-model rank 1 is 3.503746/1.894207 over 5,046 prediction instances.
+- Matched rank-1 bias ALS: 3.134532 MAE / 1.609006 MedAE versus column median
+  4.151756/2.400000 over 21,181 OOF predictions.
+- Random-cell rank 1 is 2.937385/1.568476 over 4,240 predictions.
+- Leave-one-suite-block-out rank 1 degrades to 5.788534/3.599615 and improves
+  through tested rank 6 at 5.099363/3.203260; 95 column targets lack training
+  support and are reported as unsupported rather than silently scored.
+- Sparse-new-model rank 1 is 3.285791/1.753653 over 5,331 prediction instances.
+- The existing complete-submatrix/correlation structure artifact predates the
+  187-column registry expansion and must be regenerated before reuse.
 
 The result is useful structure, not one universal low-dimensional pathology
 ability. Suite-block missingness, author-selected evaluations, model-family
@@ -115,7 +121,8 @@ annotation, tissue, and licensing audits. Exact choose-five plans cover 53,130
 pre-error and 142,506 error-informed combinations. Both searches are complete:
 their certified MedAE optima are 1.485944 and 1.427339, respectively. This does
 not turn the 25-task proxy into measured cost, and neither result is globally
-exhaustive over all 168 evaluations.
+exhaustive over the legacy 168-column snapshot. The current 187-column probe
+artifacts must be regenerated before those values are used as current results.
 
 ## What remains difficult
 

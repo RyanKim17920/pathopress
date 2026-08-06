@@ -2,57 +2,71 @@
   "schema_version": 2,
   "allowlist_id": "pathology_low_friction_pipeline_proxy_top25_v2",
   "derivation_timing": "defined_from_protocol_metadata_before_prediction_error_analysis",
-  "semantics": "low-friction input/label pipeline proxy aligned to the upstream 25-candidate budget; not a monetary, compute, sample-count, or wall-clock cost claim",
+  "semantics": "refreshed low-friction input/label pipeline proxy aligned to the upstream 25-candidate budget; not a monetary, compute, annotation, or wall-clock cost claim",
   "rule": {
-    "sample_unit_in": [
-      "image",
-      "patch"
+    "candidate_eligibility": {
+      "sample_unit_in": [
+        "image",
+        "patch"
+      ],
+      "task_type_equals": "classification"
+    },
+    "selection": "select one protocol per deduplicated task_identity_id first, then fill remaining slots with protocol variants",
+    "pre_error_tie_break": [
+      "source-reported sample count before missing sample count",
+      "lower source-reported sample count",
+      "image before patch sample unit",
+      "lexicographic evaluation_id"
     ],
-    "task_type_equals": "classification"
+    "prediction_error_used": false
   },
   "upstream_contract_alignment": {
     "benchpress_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
     "upstream_user_cheap_current_matrix_candidates": 25,
+    "pathology_pipeline_eligible_candidates": 29,
+    "pathology_eligible_task_identities": 17,
     "pathology_candidates": 25,
     "candidate_count_match": true,
     "semantic_adaptation": "BenchPress's user-provided cheap list is replaced by a deterministic pathology protocol proxy; candidate count and search budgets match, cost semantics do not."
   },
-  "excluded_cost_fields": [
-    "dollar_cost",
-    "annotation_hours",
-    "compute_runtime"
-  ],
-  "excluded_cost_reason": "metadata_incomplete; no numeric values imputed; dataset size is not used in v2",
+  "cost_fields": {
+    "dollar_cost": "not_reported_no_numeric_cost_invented",
+    "annotation_hours": "metadata_incomplete",
+    "compute_runtime": "metadata_incomplete"
+  },
+  "cost_field_note": "No missing monetary, labor, compute, or runtime value is imputed. Source-reported sample count is used only as a deterministic pre-error burden proxy and is not called cost.",
   "large_dataset_warning": "Some selected evaluations have hundreds of thousands of samples; low-friction describes pipeline shape and existing labels only.",
-  "tasks_sha256": "15a7704c29bd65b6737988129f020c08fcd42223ad422116a03368ebaa1c6ee6",
-  "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
-  "n_retained_evaluations": 168,
+  "tasks_sha256": "0c9f711767a51fee2563c7617b15a15a0244dac19207f33317580bc67ce21209",
+  "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
+  "n_retained_evaluations": 187,
   "n_allowlisted": 25,
+  "n_identity_representatives": 17,
+  "n_variant_fill": 8,
   "evaluation_ids": [
+    "thunder.bach.linear_probing",
+    "thunder.break_his.linear_probing",
+    "hoptimus1report2025.mhist.linear_probe_top1",
+    "thunder.bracs.linear_probing",
+    "thunder.ccrcc.linear_probing",
+    "thunder.tcga_crc_msi.linear_probing",
+    "thunder.spider_colorectal.linear_probing",
+    "thunder.spider_thorax.linear_probing",
+    "thunder.spider_breast.linear_probing",
+    "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+    "thunder.spider_skin.linear_probing",
+    "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+    "thunder.tcga_tils.linear_probing",
+    "thunder.patch_camelyon.linear_probing",
+    "thunder.esca.linear_probing",
+    "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+    "eva.leaderboard.gleason_arvaniti.validation",
+    "thunder.mhist.linear_probing",
+    "thunder.crc.linear_probing",
+    "thunder.tcga_uniform.linear_probing",
+    "thunder.wilds.linear_probing",
     "eva.leaderboard.bach.validation",
     "eva.leaderboard.bracs.validation",
     "eva.leaderboard.breakhis.validation",
-    "eva.leaderboard.crc.validation",
-    "eva.leaderboard.gleason_arvaniti.validation",
-    "eva.leaderboard.mhist.test",
-    "eva.leaderboard.patch_camelyon.test",
-    "eva.leaderboard.patch_camelyon.validation",
-    "eva.leaderboard.patch_camelyon_10shot.test",
-    "thunder.bach.linear_probing",
-    "thunder.bracs.linear_probing",
-    "thunder.break_his.linear_probing",
-    "thunder.ccrcc.linear_probing",
-    "thunder.crc.linear_probing",
-    "thunder.esca.linear_probing",
-    "thunder.mhist.linear_probing",
-    "thunder.patch_camelyon.linear_probing",
-    "thunder.spider_breast.linear_probing",
-    "thunder.spider_colorectal.linear_probing",
-    "thunder.spider_skin.linear_probing",
-    "thunder.spider_thorax.linear_probing",
-    "thunder.tcga_crc_msi.linear_probing",
-    "thunder.tcga_tils.linear_probing",
-    "thunder.tcga_uniform.linear_probing",
-    "thunder.wilds.linear_probing"
+    "eva.leaderboard.crc.validation"
   ]
 }

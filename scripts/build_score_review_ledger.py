@@ -42,6 +42,23 @@ SOURCE_SPECS = {
     "arxiv:2512.14019v1": ("paper_snapshot", "source_data/exaone_path_2_5_pathobench_2512.14019v1.csv", "arxiv:2512.14019v1"),
     "arxiv:2501.16652v1": ("paper_snapshot", "source_data/threads_pathobench_2501.16652v1.csv", "arxiv:2501.16652v1"),
     "PMC13260997.1": ("paper_snapshot", "source_data/pathorob_nature2026_and_repo_examples.csv", "PMC13260997.1"),
+    "arxiv:2501.16239v3": ("paper_snapshot", "source_data/h0mini_uni2h_official_scores_2025.csv", "arxiv:2501.16239v3"),
+    "git:5ec9511893af993f6faa099f093d1924b291aed2": ("repository_snapshot", "source_data/h0mini_uni2h_official_scores_2025.csv", "git:5ec9511893af993f6faa099f093d1924b291aed2"),
+    "git:42715efc11722a496e0a67f3369505a8f277206c": ("repository_snapshot", "source_data/h0mini_uni2h_official_scores_2025.csv", "git:42715efc11722a496e0a67f3369505a8f277206c"),
+    "official PDF@": ("paper_snapshot", "source_data/virchow2g_gigapath_titan_official_scores_2024_2025.csv", "official-primary-pdfs"),
+    "official Bioptimus report@": ("first_party_report_snapshot", "source_data/wave_d_hoptimus1_official_report_2025.csv", "bioptimus-report-2025"),
+    "arxiv:2408.00738 source@": ("paper_snapshot", "source_data/wave_d_virchow2_paper_2408.00738.csv", "arxiv:2408.00738"),
+    "arxiv:2309.07778 source@": ("paper_snapshot", "source_data/wave_d_virchow_paper_2309.07778.csv", "arxiv:2309.07778"),
+    "arxiv:2308.15474 source@": ("paper_snapshot", "source_data/wave_d_uni_paper_2308.15474.csv", "arxiv:2308.15474"),
+    "group-b:genbio_pathfm_official_2026.csv@": ("paper_snapshot", "source_data/genbio_pathfm_official_2026.csv", "genbio-pathfm-2026"),
+    "group-b:midnight_miccai2025_official_scores.csv@": ("paper_snapshot", "source_data/midnight_miccai2025_official_scores.csv", "miccai-2025-4651"),
+    "group-b:openmidnight_technical_report_2025.csv@": ("first_party_report_snapshot", "source_data/openmidnight_technical_report_2025.csv", "sophont-tr-2025-001"),
+    "wave-e:conch_official_scores_2024.csv@": ("paper_snapshot", "source_data/conch_official_scores_2024.csv", "conch-nature-medicine-2024"),
+    "wave-e:conch15_titan_official_scores_2025.csv@": ("paper_snapshot", "source_data/conch15_titan_official_scores_2025.csv", "titan-nature-medicine-2025"),
+    "wave-e:phikon_family_official_scores_2023_2024.csv@": ("paper_snapshot", "source_data/phikon_family_official_scores_2023_2024.csv", "phikon-family-primary-papers"),
+    "wave-f:hibou_official_scores_2024.csv@": ("paper_snapshot", "source_data/hibou_official_scores_2024.csv", "arxiv:2406.05074v1"),
+    "wave-f:musk_official_scores_2025.csv@": ("paper_snapshot", "source_data/musk_official_scores_2025.csv", "nature-638-2025"),
+    "wave-f:gpfm_official_scores_2025.csv@": ("paper_snapshot", "source_data/gpfm_official_scores_2025.csv", "nature-biomedical-engineering-2025"),
 }
 
 PINNED_SOURCE_DESTINATIONS = {
@@ -88,7 +105,41 @@ def expected_rows(sources: Path, tasks: list[dict[str, str]], provenance: dict) 
     eva_card = parse_midnight_scores(sources / "eva_midnight", commits["eva_midnight"])
     eva, _ = merge_eva_scores(eva_repo, eva_card)
     eva_rows = [row.registry_row("2026-08-05") for row in eva]
-    return [*exaone, *threads, *eva_rows, *hest, *thunder, *pathorob, *nature]
+    h0mini_uni2h, _ = registry.build_h0mini_uni2h_scores(
+        ROOT / "source_data/h0mini_uni2h_official_scores_2025.csv"
+    )
+    group_c, _ = registry.build_group_c_scores(
+        ROOT / "source_data/virchow2g_gigapath_titan_official_scores_2024_2025.csv"
+    )
+    wave_d_hoptimus, _ = registry.build_wave_d_hoptimus_scores(
+        ROOT / "source_data/wave_d_hoptimus1_official_report_2025.csv"
+    )
+    wave_d_virchow2, _ = registry.build_wave_d_virchow2_scores(
+        ROOT / "source_data/wave_d_virchow2_paper_2408.00738.csv"
+    )
+    wave_d_virchow, _ = registry.build_wave_d_virchow_scores(
+        ROOT / "source_data/wave_d_virchow_paper_2309.07778.csv"
+    )
+    wave_d_uni, _ = registry.build_wave_d_uni_scores(
+        ROOT / "source_data/wave_d_uni_paper_2308.15474.csv"
+    )
+    group_b, _ = registry.build_group_b_scores([
+        ROOT / "source_data/genbio_pathfm_official_2026.csv",
+        ROOT / "source_data/midnight_miccai2025_official_scores.csv",
+        ROOT / "source_data/openmidnight_technical_report_2025.csv",
+    ])
+    wave_e, _ = registry.build_wave_e_scores([
+        ROOT / "source_data/conch_official_scores_2024.csv",
+        ROOT / "source_data/conch15_titan_official_scores_2025.csv",
+        ROOT / "source_data/phikon_family_official_scores_2023_2024.csv",
+        ROOT / "source_data/ctranspath_official_evidence_2022_2024.csv",
+    ])
+    wave_f, _ = registry.build_wave_f_scores([
+        ROOT / "source_data/hibou_official_scores_2024.csv",
+        ROOT / "source_data/musk_official_scores_2025.csv",
+        ROOT / "source_data/gpfm_official_scores_2025.csv",
+    ])
+    return [*exaone, *threads, *eva_rows, *hest, *thunder, *pathorob, *nature, *h0mini_uni2h, *group_c, *wave_d_hoptimus, *wave_d_virchow2, *wave_d_virchow, *wave_d_uni, *group_b, *wave_e, *wave_f]
 
 
 def main() -> None:
@@ -142,8 +193,12 @@ def main() -> None:
         elif audit == "parsed_primary_source_analysis_ineligible":
             outcome = "source_locator_crosschecked" if groups else "source_locator_validated"
             eligible = "true"
-            canonical = "retain_analysis_ineligible_apd"
-            reason = "Pinned source value and protocol validated; APD remains outside the bounded normalized matrix by contract."
+            if score["metric"] == "average_performance_drop_percent":
+                canonical = "retain_analysis_ineligible_apd"
+                reason = "Pinned source value and protocol validated; APD remains outside the bounded normalized matrix by contract."
+            else:
+                canonical = "retain_analysis_ineligible_public_metric_unspecified"
+                reason = "Pinned public leaf value and protocol validated; the source does not name an endpoint-specific metric, so no bounded normalization is inferred."
         else:
             outcome = "source_locator_crosschecked" if groups else "source_locator_validated"
             eligible = "true"

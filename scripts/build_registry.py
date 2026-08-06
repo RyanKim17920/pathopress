@@ -25,12 +25,88 @@ try:
         parse_repository_scores as parse_eva_repository_scores,
         required_additional_protocols,
     )
+    from evidence.h0mini_uni2h_scores import (
+        build_protocols as build_h0mini_uni2h_protocols,
+        build_scores as build_h0mini_uni2h_scores,
+        load_evidence as load_h0mini_uni2h_evidence,
+    )
+    from evidence.group_c_official_scores import (
+        build_protocols as build_group_c_protocols,
+        build_scores as build_group_c_scores,
+        load_group_c_official_scores,
+    )
+    from evidence.wave_d_hoptimus_report import (
+        build_protocols as build_wave_d_hoptimus_protocols,
+        build_scores as build_wave_d_hoptimus_scores,
+    )
+    from evidence.wave_d_virchow2_paper import (
+        build_protocols as build_wave_d_virchow2_protocols,
+        build_scores as build_wave_d_virchow2_scores,
+    )
+    from evidence.wave_d_virchow_paper import (
+        build_protocols as build_wave_d_virchow_protocols,
+        build_scores as build_wave_d_virchow_scores,
+    )
+    from evidence.wave_d_uni_paper import (
+        build_protocols as build_wave_d_uni_protocols,
+        build_scores as build_wave_d_uni_scores,
+    )
+    from evidence.group_b_official_scores import (
+        build_protocols as build_group_b_protocols,
+        build_scores as build_group_b_scores,
+    )
+    from evidence.wave_e_official_scores import (
+        build_protocols as build_wave_e_protocols,
+        build_scores as build_wave_e_scores,
+    )
+    from evidence.wave_f_official_scores import (
+        build_protocols as build_wave_f_protocols,
+        build_scores as build_wave_f_scores,
+    )
 except ModuleNotFoundError:  # imported as scripts.build_registry in tests/tools
     from scripts.evidence.eva_scores import (
         merge_scores as merge_eva_scores,
         parse_midnight_scores,
         parse_repository_scores as parse_eva_repository_scores,
         required_additional_protocols,
+    )
+    from scripts.evidence.h0mini_uni2h_scores import (
+        build_protocols as build_h0mini_uni2h_protocols,
+        build_scores as build_h0mini_uni2h_scores,
+        load_evidence as load_h0mini_uni2h_evidence,
+    )
+    from scripts.evidence.group_c_official_scores import (
+        build_protocols as build_group_c_protocols,
+        build_scores as build_group_c_scores,
+        load_group_c_official_scores,
+    )
+    from scripts.evidence.wave_d_hoptimus_report import (
+        build_protocols as build_wave_d_hoptimus_protocols,
+        build_scores as build_wave_d_hoptimus_scores,
+    )
+    from scripts.evidence.wave_d_virchow2_paper import (
+        build_protocols as build_wave_d_virchow2_protocols,
+        build_scores as build_wave_d_virchow2_scores,
+    )
+    from scripts.evidence.wave_d_virchow_paper import (
+        build_protocols as build_wave_d_virchow_protocols,
+        build_scores as build_wave_d_virchow_scores,
+    )
+    from scripts.evidence.wave_d_uni_paper import (
+        build_protocols as build_wave_d_uni_protocols,
+        build_scores as build_wave_d_uni_scores,
+    )
+    from scripts.evidence.group_b_official_scores import (
+        build_protocols as build_group_b_protocols,
+        build_scores as build_group_b_scores,
+    )
+    from scripts.evidence.wave_e_official_scores import (
+        build_protocols as build_wave_e_protocols,
+        build_scores as build_wave_e_scores,
+    )
+    from scripts.evidence.wave_f_official_scores import (
+        build_protocols as build_wave_f_protocols,
+        build_scores as build_wave_f_scores,
     )
 
 
@@ -1161,6 +1237,28 @@ def build_dedup(tasks: list[dict[str, object]]) -> list[dict[str, object]]:
                 "pathobench.threads2025.",
                 "eva.leaderboard.",
                 "pathorob.nature2026.",
+                "eva.h0mini2025.",
+                "hest.h0mini2025.",
+                "plism.repo2025.",
+                "virchow2g2024.",
+                "titan2025.",
+                "hest.hoptimus1report2025.",
+                "hest.virchow2paper2024.",
+                "virchow2paper2024.",
+                "virchowpaper2023.",
+                "unipaper2023.",
+                "thunder.genbio2026.",
+                "pathorob.genbio2026.",
+                "eva.miccai2025.",
+                "eva.openmidnight_tr2025.",
+                "conch.natmed2024.",
+                "conch15.titan2025.",
+                "phikon.",
+                "phikon-v2.",
+                "hibou-b.hibou2024.",
+                "hibou-l.hibou2024.",
+                "musk.nature2025.",
+                "gpfm.nbe2025.",
             ))
             for member in members
         )
@@ -1178,16 +1276,47 @@ def build_dedup(tasks: list[dict[str, object]]) -> list[dict[str, object]]:
         identity for identity, members in duplicates.items()
         if any(member.startswith("pathorob.nature2026.") for member in members)
     }
+    h0mini_variant_identities = {
+        identity for identity, members in duplicates.items()
+        if any(member.startswith(("eva.h0mini2025.", "hest.h0mini2025.", "plism.repo2025.")) for member in members)
+    }
+    group_c_variant_identities = {
+        identity for identity, members in duplicates.items()
+        if any(member.startswith(("virchow2g2024.", "titan2025.")) for member in members)
+    }
+    wave_d_variant_identities = {
+        identity for identity, members in duplicates.items()
+        if any(member.startswith(("hest.hoptimus1report2025.", "hest.virchow2paper2024.", "virchow2paper2024.", "virchowpaper2023.", "unipaper2023.")) for member in members)
+    }
+    group_b_variant_identities = {
+        identity for identity, members in duplicates.items()
+        if any(member.startswith(("thunder.genbio2026.", "pathorob.genbio2026.", "eva.miccai2025.", "eva.openmidnight_tr2025.")) for member in members)
+    }
+    wave_e_variant_identities = {
+        identity for identity, members in duplicates.items()
+        if any(member.startswith(("conch.natmed2024.", "conch15.titan2025.", "phikon.", "phikon-v2.")) for member in members)
+    }
+    wave_f_variant_identities = {
+        identity for identity, members in duplicates.items()
+        if any(member.startswith(("hibou-b.hibou2024.", "hibou-l.hibou2024.", "musk.nature2025.", "gpfm.nbe2025.")) for member in members)
+    }
     if (
         set(duplicates) != expected_duplicate_identities
         or len(pathobench_variant_identities) != 80
         or len(eva_variant_identities) != 11
         or len(pathorob_variant_identities) != 3
+        or len(h0mini_variant_identities) != 20
+        or len(group_c_variant_identities) != 64
+        or len(wave_d_variant_identities) != 45
+        or len(group_b_variant_identities) != 20
+        or len(wave_e_variant_identities) != 75
+        or len(wave_f_variant_identities) != 47
     ):
         raise ValueError(
             "exact duplicate task identity audit failed: "
             f"pathobench_variants={len(pathobench_variant_identities)}, "
-            f"eva_variants={len(eva_variant_identities)}, duplicates={duplicates}"
+            f"eva_variants={len(eva_variant_identities)}, "
+            f"wave_f_variants={len(wave_f_variant_identities)}, duplicates={duplicates}"
         )
 
     rows = []
@@ -1195,7 +1324,7 @@ def build_dedup(tasks: list[dict[str, object]]) -> list[dict[str, object]]:
         canonical = next(
             (
                 member for member in members
-                if not member.startswith(("pathobench.exaone2025.", "pathobench.threads2025.", "eva.leaderboard.", "pathorob.nature2026."))
+                if not member.startswith(("pathobench.exaone2025.", "pathobench.threads2025.", "eva.leaderboard.", "pathorob.nature2026.", "eva.h0mini2025.", "hest.h0mini2025.", "plism.repo2025.", "virchow2g2024.", "titan2025.", "hest.hoptimus1report2025.", "hest.virchow2paper2024.", "virchow2paper2024.", "virchowpaper2023.", "unipaper2023.", "thunder.genbio2026.", "pathorob.genbio2026.", "eva.miccai2025.", "eva.openmidnight_tr2025.", "conch.natmed2024.", "conch15.titan2025.", "phikon.", "phikon-v2.", "hibou-b.hibou2024.", "hibou-l.hibou2024.", "musk.nature2025.", "gpfm.nbe2025."))
             ),
             members[0],
         )
@@ -1257,6 +1386,46 @@ def main() -> None:
         default=Path(__file__).resolve().parents[1]
         / "source_data/pathorob_nature2026_and_repo_examples.csv",
     )
+    parser.add_argument(
+        "--h0mini-uni2h-snapshot",
+        type=Path,
+        default=Path(__file__).resolve().parents[1]
+        / "source_data/h0mini_uni2h_official_scores_2025.csv",
+    )
+    parser.add_argument(
+        "--group-c-official-snapshot",
+        type=Path,
+        default=Path(__file__).resolve().parents[1]
+        / "source_data/virchow2g_gigapath_titan_official_scores_2024_2025.csv",
+    )
+    parser.add_argument(
+        "--wave-d-hoptimus-snapshot", type=Path,
+        default=Path(__file__).resolve().parents[1] / "source_data/wave_d_hoptimus1_official_report_2025.csv",
+    )
+    parser.add_argument(
+        "--wave-d-virchow2-snapshot", type=Path,
+        default=Path(__file__).resolve().parents[1] / "source_data/wave_d_virchow2_paper_2408.00738.csv",
+    )
+    parser.add_argument(
+        "--wave-d-virchow-snapshot", type=Path,
+        default=Path(__file__).resolve().parents[1] / "source_data/wave_d_virchow_paper_2309.07778.csv",
+    )
+    parser.add_argument(
+        "--wave-d-uni-snapshot", type=Path,
+        default=Path(__file__).resolve().parents[1] / "source_data/wave_d_uni_paper_2308.15474.csv",
+    )
+    parser.add_argument(
+        "--group-b-snapshot-dir", type=Path,
+        default=Path(__file__).resolve().parents[1] / "source_data",
+    )
+    parser.add_argument(
+        "--wave-e-snapshot-dir", type=Path,
+        default=Path(__file__).resolve().parents[1] / "source_data",
+    )
+    parser.add_argument(
+        "--wave-f-snapshot-dir", type=Path,
+        default=Path(__file__).resolve().parents[1] / "source_data",
+    )
     args = parser.parse_args()
 
     commits = {name: git(args.sources / name, "rev-parse", "HEAD") for name in REPOSITORIES}
@@ -1272,30 +1441,95 @@ def main() -> None:
     tasks.extend(build_exaone_pathobench_protocols(args.exaone_pathobench_snapshot, tasks))
     tasks.extend(build_threads_pathobench_protocols(args.threads_pathobench_snapshot, tasks))
     tasks.extend(build_eva_leaderboard_protocols(args.sources / "eva", commits["eva"], tasks))
-    expected = {"pathobench": 217, "eva": 28, "thunder": 21, "hest": 9, "pathorob": 17}
+    tasks.extend(build_h0mini_uni2h_protocols(args.h0mini_uni2h_snapshot, tasks))
+    tasks.extend(build_group_c_protocols(args.group_c_official_snapshot))
+    tasks.extend(build_wave_d_hoptimus_protocols(args.wave_d_hoptimus_snapshot, tasks))
+    tasks.extend(build_wave_d_virchow2_protocols(args.wave_d_virchow2_snapshot, tasks))
+    tasks.extend(build_wave_d_virchow_protocols(args.wave_d_virchow_snapshot))
+    tasks.extend(build_wave_d_uni_protocols(args.wave_d_uni_snapshot, tasks))
+    group_b_paths = [args.group_b_snapshot_dir / name for name in (
+        "genbio_pathfm_official_2026.csv", "midnight_miccai2025_official_scores.csv",
+        "openmidnight_technical_report_2025.csv",
+    )]
+    wave_e_paths = [args.wave_e_snapshot_dir / name for name in (
+        "conch_official_scores_2024.csv", "conch15_titan_official_scores_2025.csv",
+        "phikon_family_official_scores_2023_2024.csv", "ctranspath_official_evidence_2022_2024.csv",
+    )]
+    wave_f_paths = [args.wave_f_snapshot_dir / name for name in (
+        "hibou_official_scores_2024.csv", "musk_official_scores_2025.csv",
+        "gpfm_official_scores_2025.csv",
+    )]
+    tasks.extend(build_group_b_protocols(group_b_paths, tasks))
+    tasks.extend(build_wave_e_protocols(wave_e_paths, tasks, args.group_c_official_snapshot))
+    tasks.extend(build_wave_f_protocols(wave_f_paths, tasks))
+    expected = {
+        "pathobench": 217, "eva": 60, "thunder": 33, "hest": 45,
+        "pathorob": 26, "plism": 10, "uni2_benchmark": 6,
+        "virchow2g_paper": 36, "titan_paper": 333,
+        "hoptimus1_report": 10, "virchow2_paper": 18, "virchow_paper": 15,
+        "uni_paper": 227,
+        "conch_primary": 77, "titan_patch_encoder": 297,
+        "phikon_primary": 25, "phikon_v2_external": 18,
+        "hibou_primary": 18, "musk_primary": 68, "gpfm_primary": 99,
+    }
     actual = {suite: sum(row["suite_id"] == suite for row in tasks) for suite in expected}
     if actual != expected:
         raise ValueError(f"task inventory mismatch: {actual}")
 
     suite_protocols = {
         "pathobench": "95 public WSI task identities plus 80 EXAONE-2025 and 42 THREADS-2025 explicitly versioned result protocols.",
-        "eva": "Thirteen canonical offline configs plus 15 split- and reduced-data-specific leaderboard protocols.",
-        "thunder": "All code-backed dataset configs represented by a primary linear-probe or segmentation endpoint.",
+        "eva": "Canonical offline/leaderboard protocols plus exact Midnight CLS+Mean and OpenMidnight CLS-only report variants.",
+        "thunder": "Code-backed dataset configs plus exact GenBio-PathFM frozen kNN/F1 report variants.",
         "hest": "PCA-256 plus ridge regression morphology-to-gene-expression benchmark; Pearson r.",
-        "pathorob": "Twelve generic endpoint-catalog rows plus five canonical Nature-2026 score protocols: aggregate APD-ID/APD-OOD and clustering on Camelyon, TCGA 4x4, and Tolkach ESCA.",
+        "pathorob": "Generic/Nature protocols plus GenBio-PathFM dataset-specific balanced-accuracy and raw-only APD-ID/APD-OOD variants.",
+        "plism": "Six H0-mini-paper context-specific protocols plus four refreshed official-repository leaderboard protocols; versions remain distinct.",
+        "uni2_benchmark": "Six public leaf benchmark cells from the official UNI repository; raw-registry-only because the source does not name endpoint-specific metrics.",
+        "virchow2g_paper": "Official Virchow2-family Tables 2-3; Virchow2G, Virchow2 and Virchow comparator cells preserve CLS/CLS+Mean linear probes and random-forest HEST.",
+        "titan_paper": "Official TITAN/TITAN-V public morphology, grading, molecular, survival, full/few/zero-shot, slide-retrieval, and cross-modal retrieval protocols remain separate.",
+        "hoptimus1_report": "First-party Bioptimus frozen-feature report; six clearly public slide cohorts and four public tile tasks, with nonpublic/access-ambiguous cohorts quarantined.",
+        "virchow2_paper": "Virchow2 primary-paper public tile linear probes and HCC spatial-transcriptomics protocols; CLS-only and CLS+Mean remain distinct.",
+        "virchow_paper": "Virchow primary-paper public frozen CLS+Mean tile linear probes; accuracy, balanced accuracy, and weighted F1 remain distinct protocols.",
+        "uni_paper": "Exhaustive UNI primary-paper public frozen-feature leaves: patch linear/KNN/retrieval, slide ABMIL, and MI-SimpleShot; resolution, stain-normalization, cohort, K, and metric variants remain distinct.",
+        "conch_primary": "CONCH v1 public primary-paper zero-shot, frozen supervised, retrieval, and segmentation leaves; prompt/probe variants remain distinct.",
+        "titan_patch_encoder": "CONCHv1.5 public comparator leaves from TITAN tables; logistic, SimpleShot, kNN, ABMIL, few-shot, and retrieval protocols remain distinct.",
+        "phikon_primary": "Phikon public primary-paper frozen tile and ABMIL leaves.",
+        "phikon_v2_external": "Phikon and Phikon-v2 public external-cohort comparison leaves; component versions remain distinct.",
+        "hibou_primary": "Hibou-B and Hibou-L public frozen tile linear-probe and slide attention-pooling leaves; checkpoint families remain distinct.",
+        "musk_primary": "MUSK public zero-shot retrieval/classification, 10-shot, linear-probe, biomarker, and prognosis leaves; task-fine-tuned, controlled, and aggregate rows are excluded.",
+        "gpfm_primary": "GPFM public frozen-feature WSI classification, survival, ROI classification, and nearest-neighbour retrieval leaves; metrics and protocols remain distinct.",
     }
-    suite_names = {"pathobench": "Patho-Bench", "eva": "EVA", "thunder": "THUNDER", "hest": "HEST-Benchmark", "pathorob": "PathoROB"}
-    suite_repo = {"pathobench": "pathobench_hf", "eva": "eva", "thunder": "thunder", "hest": "hest", "pathorob": "pathorob"}
+    suite_names = {"pathobench": "Patho-Bench", "eva": "EVA", "thunder": "THUNDER", "hest": "HEST-Benchmark", "pathorob": "PathoROB", "plism": "PLISM robustness benchmark", "uni2_benchmark": "Official UNI 2 benchmark report", "virchow2g_paper": "Virchow2G primary-paper benchmarks", "titan_paper": "TITAN primary-paper benchmarks", "hoptimus1_report": "H-optimus-1 official benchmark report", "virchow2_paper": "Virchow2 primary-paper benchmarks", "virchow_paper": "Virchow primary-paper benchmarks", "uni_paper": "UNI primary-paper benchmarks", "conch_primary": "CONCH primary-paper benchmarks", "titan_patch_encoder": "CONCHv1.5 TITAN-paper benchmarks", "phikon_primary": "Phikon primary-paper benchmarks", "phikon_v2_external": "Phikon-v2 external-cohort benchmarks", "hibou_primary": "Hibou primary-paper benchmarks", "musk_primary": "MUSK primary-paper benchmarks", "gpfm_primary": "GPFM primary-paper benchmarks"}
+    suite_references = {
+        "pathobench": REPOSITORIES["pathobench_hf"] + f"/tree/{commits['pathobench_hf']}",
+        "eva": REPOSITORIES["eva"] + f"/tree/{commits['eva']}",
+        "thunder": REPOSITORIES["thunder"] + f"/tree/{commits['thunder']}",
+        "hest": REPOSITORIES["hest"] + f"/tree/{commits['hest']}",
+        "pathorob": REPOSITORIES["pathorob"] + f"/tree/{commits['pathorob']}",
+        "plism": "https://github.com/owkin/plism-benchmark/tree/5ec9511893af993f6faa099f093d1924b291aed2",
+        "uni2_benchmark": "https://github.com/mahmoodlab/UNI/tree/42715efc11722a496e0a67f3369505a8f277206c",
+        "virchow2g_paper": "https://arxiv.org/abs/2408.00738",
+        "titan_paper": "https://www.nature.com/articles/s41591-025-03982-3",
+        "hoptimus1_report": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+        "virchow2_paper": "https://arxiv.org/abs/2408.00738",
+        "virchow_paper": "https://arxiv.org/abs/2309.07778",
+        "uni_paper": "https://arxiv.org/abs/2308.15474",
+        "conch_primary": "https://www.nature.com/articles/s41591-024-02856-4",
+        "titan_patch_encoder": "https://www.nature.com/articles/s41591-025-03982-3",
+        "phikon_primary": "https://www.medrxiv.org/content/10.1101/2023.07.21.23292757v3",
+        "phikon_v2_external": "https://arxiv.org/abs/2409.09173v1",
+        "hibou_primary": "https://arxiv.org/abs/2406.05074",
+        "musk_primary": "https://www.nature.com/articles/s41586-024-08378-w",
+        "gpfm_primary": "https://www.nature.com/articles/s41551-025-01488-4",
+    }
     suites = []
     for suite, count in expected.items():
-        repo_key = suite_repo[suite]
         suites.append(
             {
                 "suite_id": suite,
                 "name": suite_names[suite],
                 "scope": "pathology foundation-model evaluation",
                 "task_count": count,
-                "reference_url": REPOSITORIES[repo_key] + (f"/tree/{commits[repo_key]}"),
+                "reference_url": suite_references[suite],
                 "protocol": suite_protocols[suite],
                 "audit_notes": "Inventory generated from a pinned upstream source snapshot; see provenance.json.",
             }
@@ -1323,9 +1557,25 @@ def main() -> None:
         eva_repository_scores, eva_midnight_scores
     )
     eva_scores = [row.registry_row("2026-08-05") for row in eva_selected]
+    h0mini_uni2h_scores, h0mini_uni2h_aliases = build_h0mini_uni2h_scores(
+        args.h0mini_uni2h_snapshot
+    )
+    group_c_scores, group_c_aliases = build_group_c_scores(args.group_c_official_snapshot)
+    wave_d_hoptimus_scores, wave_d_hoptimus_aliases = build_wave_d_hoptimus_scores(args.wave_d_hoptimus_snapshot)
+    wave_d_virchow2_scores, wave_d_virchow2_aliases = build_wave_d_virchow2_scores(args.wave_d_virchow2_snapshot)
+    wave_d_virchow_scores, wave_d_virchow_aliases = build_wave_d_virchow_scores(args.wave_d_virchow_snapshot)
+    wave_d_uni_scores, wave_d_uni_aliases = build_wave_d_uni_scores(args.wave_d_uni_snapshot)
+    group_b_scores, group_b_aliases = build_group_b_scores(group_b_paths)
+    wave_e_scores, wave_e_aliases = build_wave_e_scores(wave_e_paths)
+    wave_f_scores, wave_f_aliases = build_wave_f_scores(wave_f_paths)
     scores = (
         pathobench_scores + threads_scores + eva_scores
         + hest_scores + thunder_scores + pathorob_scores + pathorob_nature_scores
+        + h0mini_uni2h_scores
+        + group_c_scores
+        + wave_d_hoptimus_scores + wave_d_virchow2_scores + wave_d_virchow_scores
+        + wave_d_uni_scores
+        + group_b_scores + wave_e_scores + wave_f_scores
     )
     for row in scores:
         allowed_blank = (
@@ -1354,6 +1604,11 @@ def main() -> None:
     aliases = (
         pathobench_aliases + threads_aliases + eva_aliases
         + hest_aliases + thunder_aliases + pathorob_aliases + pathorob_nature_aliases
+        + h0mini_uni2h_aliases
+        + group_c_aliases
+        + wave_d_hoptimus_aliases + wave_d_virchow2_aliases + wave_d_virchow_aliases
+        + wave_d_uni_aliases
+        + group_b_aliases + wave_e_aliases + wave_f_aliases
     )
     aliases = sorted(
         {(row["suite_id"], row["alias"]): row for row in aliases}.values(),
@@ -1383,6 +1638,12 @@ def main() -> None:
             "pearson_r": "(r + 1) * 50; logit(normalized/100) equals 2 * atanh(r), a scaled Fisher-z.",
             "clustering_score": "PathoROB declares an approximately [-1,1] domain; canonical Nature-2026 means use (score + 1) * 50.",
             "average_performance_drop_percent": "No common-scale normalization. Raw signed percent is preserved exactly with normalized_score blank and audit_status=parsed_primary_source_analysis_ineligible. Zero is the no-drop reference; the paper states that increasingly negative values are worse and describes higher/closer-to-zero as better, but defines no bounded domain.",
+            "cosine_similarity/top10_accuracy": "Raw PLISM metrics in [0,1] multiplied by 100.",
+            "accuracy/balanced_accuracy/weighted_f1/auroc/top-k/KNN/retrieval accuracy": "Raw metrics in [0,1] multiplied by 100.",
+            "*_percent/f1_score": "Source-reported 0-100 percentages are preserved; the metric suffix records the source unit.",
+            "cohen_kappa/quadratic_weighted_kappa": "Primary-paper fractions multiplied by 100, matching the TITAN/CONCH reporting contract; legacy weighted_kappa retains its separate affine contract.",
+            "c_index/recall/precision/mean_recall/recall_at_k": "Raw metrics in [0,1] multiplied by 100.",
+            "reported_performance_score": "No normalization: the official UNI repository does not name endpoint-specific metrics. Public leaf values remain raw-registry-only with audit_status=parsed_primary_source_analysis_ineligible.",
         },
         "repositories": {
             name: {
@@ -1443,7 +1704,94 @@ def main() -> None:
                 "published_clustering_protocols": 3,
                 "published_clustering_cells": 60,
                 "repository_example_cells_quarantined": 22,
-            }
+            },
+            "h0mini_uni2h_official": {
+                "paper_url": "https://arxiv.org/abs/2501.16239v3",
+                "paper_source_archive_url": "https://export.arxiv.org/e-print/2501.16239v3",
+                "paper_source_archive_sha256": "222798059c15b554528d61f8caa04de8fcc2d5cc23997607dc25d851282a6f08",
+                "plism_repository_url": "https://github.com/owkin/plism-benchmark/tree/5ec9511893af993f6faa099f093d1924b291aed2",
+                "uni_repository_url": "https://github.com/mahmoodlab/UNI/tree/42715efc11722a496e0a67f3369505a8f277206c",
+                "uni2h_model_card_revision": "d517a8dd47902dd7c308b3c36f63bce47e7b9a43",
+                "h0mini_model_card_revision": "5b5cc0505d19ae558270045eb0df8c34df4d9609",
+                "snapshot_path": portable_artifact_path(args.h0mini_uni2h_snapshot),
+                "snapshot_sha256": hashlib.sha256(args.h0mini_uni2h_snapshot.read_bytes()).hexdigest(),
+                "snapshot_cells": len(load_h0mini_uni2h_evidence(args.h0mini_uni2h_snapshot)),
+                "public_leaf_cells": len(h0mini_uni2h_scores),
+                "derived_aggregate_cells_excluded": 7,
+                "private_or_internal_cells_quarantined": 19,
+            },
+            "wave_d_hoptimus1_official": {
+                "url": "https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1",
+                "html_sha256": "a46ad75f2194ac2700eedfde6cef0edde5b56ff59438fa724cf53e4adc997bf3",
+                "hoptimus1_model_card_revision": "43e14486f058782912d63d22ce27e2f1252eaf9e55ae8e2fd8ed416444dbc45e",
+                "hoptimus0_model_card_revision": "a9110f5bb0de4a0d82796e0baee3658834245819a3e8651c38abf53c49d4077c",
+                "snapshot_path": portable_artifact_path(args.wave_d_hoptimus_snapshot),
+                "snapshot_sha256": hashlib.sha256(args.wave_d_hoptimus_snapshot.read_bytes()).hexdigest(),
+                "snapshot_cells": 170,
+                "public_leaf_cells": 95,
+                "private_internal_or_access_ambiguous_cells_quarantined": 60,
+                "derived_aggregate_cells_excluded": 15,
+            },
+            "wave_d_virchow2_official": {
+                "url": "https://arxiv.org/abs/2408.00738",
+                "source_archive_url": "https://export.arxiv.org/e-print/2408.00738",
+                "source_archive_sha256": "1ee7317aa683b5c948f0c9b6e3fc588fd3a95c7f0a3db39d71511268db1f3fda",
+                "snapshot_path": portable_artifact_path(args.wave_d_virchow2_snapshot),
+                "snapshot_sha256": hashlib.sha256(args.wave_d_virchow2_snapshot.read_bytes()).hexdigest(),
+                "snapshot_cells": 192,
+                "public_leaf_cells": 144,
+                "internal_cells_quarantined": 24,
+                "derived_aggregate_cells_excluded": 24,
+            },
+            "wave_d_virchow_official": {
+                "url": "https://arxiv.org/abs/2309.07778",
+                "source_archive_url": "https://export.arxiv.org/e-print/2309.07778",
+                "source_archive_sha256": "b2c31918a05d22534f38e35c5fc2cf3704439f7eb30af637dfd1e698373ba6b0",
+                "snapshot_path": portable_artifact_path(args.wave_d_virchow_snapshot),
+                "snapshot_sha256": hashlib.sha256(args.wave_d_virchow_snapshot.read_bytes()).hexdigest(),
+                "snapshot_cells": 21,
+                "public_leaf_cells": 15,
+                "internal_or_nonpublic_cells_quarantined": 6,
+            },
+            "wave_d_uni_official": {
+                "url": "https://arxiv.org/abs/2308.15474",
+                "source_archive_url": "https://export.arxiv.org/e-print/2308.15474",
+                "source_archive_sha256": "26da25ced22b205570f480c3a562af31ed74bdaf679455f30cbcaa5dfdad4e60",
+                "snapshot_path": portable_artifact_path(args.wave_d_uni_snapshot),
+                "snapshot_sha256": hashlib.sha256(args.wave_d_uni_snapshot.read_bytes()).hexdigest(),
+                "active_uni_result_rows": 83,
+                "expanded_metric_leaf_cells": 277,
+                "public_frozen_feature_leaf_cells": 227,
+                "finetuned_cells_quarantined": 24,
+                "internal_cells_quarantined": 23,
+                "derived_aggregate_cells_excluded": 3,
+            },
+            "group_b_official": {
+                "snapshot_paths": [portable_artifact_path(path) for path in group_b_paths],
+                "snapshot_sha256": {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in group_b_paths},
+                "snapshot_cells": 107,
+                "public_analysis_eligible_cells": 51,
+                "public_analysis_ineligible_apd_cells": 6,
+                "duplicate_alternate_cells_excluded": 12,
+                "fine_tuned_aggregate_or_conflict_cells_excluded": 38,
+            },
+            "wave_e_official": {
+                "snapshot_paths": [portable_artifact_path(path) for path in wave_e_paths],
+                "snapshot_sha256": {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in wave_e_paths},
+                "public_primary_leaf_cells": 417,
+                "private_internal_cells_excluded": 144,
+                "fine_tuned_cells_excluded": 23,
+                "secondary_only_ctranspath_cells_excluded": 50,
+            },
+            "wave_f_official": {
+                "snapshot_paths": [portable_artifact_path(path) for path in wave_f_paths],
+                "snapshot_sha256": {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in wave_f_paths},
+                "snapshot_cells": 397,
+                "public_primary_leaf_cells": 185,
+                "private_or_controlled_cells_excluded": 79,
+                "fine_tuned_cells_excluded": 72,
+                "aggregate_or_ablation_cells_excluded": 61,
+            },
         },
         "counts": {
             "suites": len(suites),
@@ -1461,7 +1809,7 @@ def main() -> None:
             "eva_leaderboard_protocol_variants": sum(str(row["evaluation_id"]).startswith("eva.leaderboard.") for row in tasks),
             "model_aliases": len(aliases),
             "scores": len(scores),
-            "scores_by_suite": {suite: sum(row["suite_id"] == suite for row in scores) for suite in ("pathobench", "eva", "hest", "thunder", "pathorob")},
+            "scores_by_suite": {suite: sum(row["suite_id"] == suite for row in scores) for suite in expected},
             "scores_by_audit_status": {
                 status: sum(row["audit_status"] == status for row in scores)
                 for status in sorted({str(row["audit_status"]) for row in scores})
@@ -1483,6 +1831,9 @@ def main() -> None:
             "PathoROB external-publication rows are retained with audit_status=reported_external; PathoROB explicitly says those values were not validated by its authors.",
             "PathoROB Nature Source Data contributes 100 canonical primary-source means across 20 models: 40 aggregate APD-ID/APD-OOD cells and 60 clustering cells over three explicit dataset protocols. The 22 pinned-repository example results are preserved only in the evidence snapshot because their two-model values differ slightly from the paper.",
             "Canonical PathoROB clustering scores enter the factor matrix after the source-declared approximately [-1,1] affine normalization. Canonical APD values remain in the raw registry with exact signed percent values but no normalized_score; they are analysis-ineligible because neither the source nor project policy defines a non-arbitrary bounded normalization.",
+            "H0-mini arXiv v3 contributes 46 public leaf cells (23 each for H0-mini and UNI2-h): 16 EVA, 18 HEST, and 12 PLISM. Seven paper/repository aggregate cells are excluded and 19 private/internal cells are quarantined in the evidence snapshot.",
+            "The pinned PLISM repository contributes eight refreshed public leaf cells under four repository-version protocols. They are never merged with the earlier H0-mini paper values; three top-10 protocols share task identities only.",
+            "The official UNI repository contributes six public UNI2-h leaf cells. They remain raw-registry-only because its benchmark table does not state the endpoint-specific metric; no metric or bounded normalization is inferred.",
             "Exact dedup groups are derived from duplicate task_identity_id values. Two broader semantic-overlap groups remain manually adjudicated and keep separate task identities.",
             "evaluation_id is retained as a compatibility alias equal to protocol_id; protocol-specific scores are never overwritten during deduplication.",
         ],

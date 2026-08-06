@@ -1,6 +1,6 @@
 # Automated score provenance review
 
-`data/score_review_ledger.csv` is a one-row-per-score audit trail for all 2,076
+`data/score_review_ledger.csv` is a one-row-per-score audit trail for all 4,013
 registry rows. It is an automated review, not a human review: every row fixes
 `reviewer_type=automated_agent_review` and records the deterministic review time,
 pinned evidence file and SHA-256, source locator, checks, canonical-setting
@@ -32,9 +32,11 @@ that a live web URL was contacted or remains online.
 
 The ledger is evidence-bounded and cannot promote a row into analysis:
 
-- 2,027 bounded, normalized primary-source cells remain retained;
-- 40 PathoROB APD cells remain
+- 3,952 bounded, normalized primary-source cells remain retained;
+- 46 APD cells remain
   `parsed_primary_source_analysis_ineligible`, with no invented normalization;
+- 6 public cells whose source does not specify an endpoint metric remain
+  analysis-ineligible, with no inferred metric or normalization;
 - 9 values transcribed by PathoROB from external publications remain
   `reported_external` and `promotion_eligible=false`.
 
@@ -58,8 +60,8 @@ python3 scripts/validate_score_review_ledger.py
 pytest -q tests/test_score_review.py
 ```
 
-The validator enforces exact 2,076-row coverage, immutable evidence hashes,
+The validator enforces exact 4,013-row coverage, immutable evidence hashes,
 automated-only reviewer identity, duplicate-group membership, promotion rules,
-and preservation of the 2,027/40/9 eligibility boundary. Aggregate counts and
+and preservation of the 3,952/52/9 eligibility boundary. Aggregate counts and
 the ledger hash are in `data/score_review_summary.json`; the row contract is in
 `data/score_review_ledger.schema.json`.

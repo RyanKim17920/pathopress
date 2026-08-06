@@ -156,14 +156,14 @@ def validate_ledger(
         raw = float(score["value"])
         normalized = score["normalized_score"]
         metric = score["metric"]
-        if metric in {"macro_ovr_auc", "bacc", "cindex", "balanced_accuracy", "dice", "robustness_index"}:
+        if metric in {"macro_ovr_auc", "bacc", "cindex", "balanced_accuracy", "dice", "robustness_index", "cosine_similarity", "top10_accuracy", "accuracy", "weighted_f1", "auroc", "top1_accuracy", "one_nn_balanced_accuracy", "one_nn_weighted_f1", "twenty_nn_balanced_accuracy", "twenty_nn_weighted_f1", "retrieval_accuracy_at_1", "retrieval_accuracy_at_3", "retrieval_accuracy_at_5", "retrieval_majority_vote_accuracy_at_5", "c_index", "precision", "recall", "recall_at_1", "recall_at_5", "recall_at_10", "mean_recall", "top3_accuracy", "top5_accuracy", "majority_vote_at3_accuracy", "majority_vote_at5_accuracy", "cohen_kappa", "quadratic_weighted_kappa"}:
             expected_normalized = raw * 100.0
         elif metric in {"weighted_kappa", "pearson_r", "clustering_score"}:
             expected_normalized = (raw + 1.0) * 50.0
-        elif metric == "f1":
-            expected_normalized = raw
-        elif metric == "average_performance_drop_percent":
+        elif metric in {"average_performance_drop_percent", "reported_performance_score"}:
             expected_normalized = None
+        elif metric in {"f1", "f1_score"} or metric.endswith("_percent"):
+            expected_normalized = raw
         else:
             expected_normalized = float(normalized) if normalized else None
         if expected_normalized is None:
@@ -179,8 +179,13 @@ def validate_ledger(
             if review["review_outcome"] != expected or review["promotion_eligible"] != "true":
                 errors.append(f"{key}: incorrect primary-source outcome")
         if score["audit_status"] == "parsed_primary_source_analysis_ineligible":
-            if review["canonical_setting_decision"] != "retain_analysis_ineligible_apd":
-                errors.append(f"{key}: APD eligibility changed")
+            expected_decision = (
+                "retain_analysis_ineligible_apd"
+                if metric == "average_performance_drop_percent"
+                else "retain_analysis_ineligible_public_metric_unspecified"
+            )
+            if review["canonical_setting_decision"] != expected_decision:
+                errors.append(f"{key}: analysis eligibility changed")
         elif score["audit_status"] == "reported_external":
             if review["canonical_setting_decision"] != "retain_reported_external_only":
                 errors.append(f"{key}: external eligibility changed")
@@ -199,7 +204,17 @@ def validate_ledger(
         "reviewed_at": REVIEWED_AT,
         "score_rows": len(scores),
         "retained_primary_rows": audit_counts["parsed_primary_source"],
-        "analysis_ineligible_apd_rows": audit_counts["parsed_primary_source_analysis_ineligible"],
+        "analysis_ineligible_rows": audit_counts["parsed_primary_source_analysis_ineligible"],
+        "analysis_ineligible_apd_rows": sum(
+            row["audit_status"] == "parsed_primary_source_analysis_ineligible"
+            and row["metric"] == "average_performance_drop_percent"
+            for row in scores
+        ),
+        "analysis_ineligible_metric_unspecified_rows": sum(
+            row["audit_status"] == "parsed_primary_source_analysis_ineligible"
+            and row["metric"] == "reported_performance_score"
+            for row in scores
+        ),
         "reported_external_rows": audit_counts["reported_external"],
         "locator_reachable_rows": sum(row["source_locator_reachable"] == "true" for row in ledger),
         "review_outcomes": dict(sorted(counts.items())),

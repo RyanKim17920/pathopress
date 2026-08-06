@@ -109,7 +109,7 @@ class PathoROBScoreEvidenceTests(unittest.TestCase):
             "pathorob.nature2026.tcga_4x4.clustering_score",
             "pathorob.nature2026.tolkach_esca.clustering_score",
         ])
-        self.assertEqual((len(models), len(evaluations), int((matrix == matrix).sum())), (59, 168, 2027))
+        self.assertEqual((len(models), len(evaluations), int((matrix == matrix).sum())), (59, 187, 2122))
 
 
 if __name__ == "__main__":
