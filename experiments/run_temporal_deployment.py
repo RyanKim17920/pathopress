@@ -5,7 +5,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
+import platform
 import sys
 from datetime import date
 from pathlib import Path
@@ -32,6 +34,17 @@ MIN_OBSERVED_SCORES = 20
 K_VALUES = (1, 5, 10)
 N_SEEDS = 10
 BASE_SEED = 42
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def _display_path(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path.resolve())
 
 
 def main() -> None:
@@ -164,6 +177,17 @@ def main() -> None:
             "aggregation": "medians across seed-level MedAE and MedAPE",
             "target_model_ids": targets,
         },
+        "input": {
+            "scores_path": _display_path(args.scores),
+            "scores_sha256": _sha256(args.scores),
+            "release_metadata_path": _display_path(args.metadata),
+            "release_metadata_sha256": _sha256(args.metadata),
+        },
+        "runtime": {
+            "python": platform.python_version(),
+            "numpy": np.__version__,
+            "script_sha256": _sha256(Path(__file__)),
+        },
         "landmarks": [
             {
                 "target_model_id": target,
@@ -178,9 +202,6 @@ def main() -> None:
         "summary_by_target_k_seed": units,
         "raw_predictions": raw_predictions,
     }
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
-
     args.raw_csv.parent.mkdir(parents=True, exist_ok=True)
     with args.raw_csv.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(
@@ -194,6 +215,17 @@ def main() -> None:
         )
         writer.writeheader()
         writer.writerows(summary_rows)
+
+    payload["outputs"] = {
+        "raw_csv_path": _display_path(args.raw_csv),
+        "raw_csv_sha256": _sha256(args.raw_csv),
+        "raw_csv_rows": len(raw_predictions),
+        "summary_csv_path": _display_path(args.summary_csv),
+        "summary_csv_sha256": _sha256(args.summary_csv),
+        "summary_csv_rows": len(summary_rows),
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
     print(f"targets={targets}")
     print(f"units={len(units)} raw_predictions={len(raw_predictions)}")
