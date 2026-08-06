@@ -2,12 +2,12 @@
   "dataset_id": "pathopress/pathopress-score-matrix",
   "exporter": {
     "implementation": "pathopress.public_data.build_public_export",
-    "implementation_sha256": "8e401c08c4e28db2aa28f8d2d20525fad1eb11a712df56ad78b6bcad3cd3e56c",
+    "implementation_sha256": "8a9a15066dac027c490422c7445d38ec117a05b6b397d28e2083d62a553cfed3",
     "pandas_used": false,
     "pandas_version": null,
     "parquet_backend": "pyarrow",
     "pyarrow_version": "25.0.0",
-    "uv_lock_sha256": "eb5882fefc2124a854f3ab830e6671aa807cd8465c1a5fff4ac6fdaabcd8822a"
+    "uv_lock_sha256": "404440988573e17d0a64671af23a331a54469500889b8da84edde4e082a25700"
   },
   "files": [
     "data/benchmarks.csv",
@@ -37,19 +37,19 @@
   ],
   "paper_matrix": {
     "b_threshold": 5,
-    "benchmarks": 168,
-    "fill_rate": 0.204499596448749,
+    "benchmarks": 187,
+    "fill_rate": 0.19233209462521525,
     "m_threshold": 3,
     "models": 59,
-    "observations": 2027
+    "observations": 2122
   },
   "parquet_written": true,
   "pathopress_manifest_schema": "pathopress-public-tables-v1",
   "rows": {
-    "benchmarks": 292,
-    "models": 60,
-    "scores_all": 2076,
-    "scores_paper": 2027
+    "benchmarks": 1638,
+    "models": 62,
+    "scores_all": 4013,
+    "scores_paper": 2122
   },
   "schema_version": "public-table-export-v1",
   "upstream": {

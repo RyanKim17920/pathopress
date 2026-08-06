@@ -27,7 +27,8 @@ async function loadData() {
       throw new Error(`Invalid ${key} matrix dimensions`);
     }
   }
-  if (!data.new_model_confidence || data.new_model_confidence.artifact_type !== "pathopress_new_model_group_conformal_v1") {
+  if (data.new_model_confidence !== null &&
+      data.new_model_confidence.artifact_type !== "pathopress_new_model_group_conformal_v1") {
     throw new Error("Missing or unsupported new-model confidence artifact");
   }
   return data;
@@ -44,11 +45,35 @@ async function loadStarterSets(data) {
     if (payload.matrix_scores_sha256 !== data.meta.scores_sha256) {
       throw new Error("Starter sets were built for a different score matrix");
     }
+    if (payload.status === "pending_exact_probe_artifact") {
+      const siteAllowlists = data.meta.feasibility_allowlists ?? {};
+      for (const [name, item] of Object.entries(payload.feasibility_allowlists ?? {})) {
+        if (item.sha256 !== siteAllowlists[name]?.sha256) {
+          throw new Error(`Pending starter metadata has a stale ${name} allowlist`);
+        }
+      }
+      return { unavailable: payload.reason, status: payload.status };
+    }
+    if (!data.meta.probe_compression_sha256 ||
+        payload.probe_compression_sha256 !== data.meta.probe_compression_sha256) {
+      throw new Error("Starter sets were built from a different probe-compression artifact");
+    }
+    if (!Number.isInteger(payload.probe_count) || payload.probe_count < 1 ||
+        !Number.isInteger(payload.default_visible_count) ||
+        payload.default_visible_count < 1 ||
+        payload.default_visible_count > payload.probe_count) {
+      throw new Error("Starter sets declare an invalid probe count");
+    }
     for (const key of ["unrestricted", "feasibility"]) {
       if (!Array.isArray(payload.sets?.[key]?.evaluation_ids)) {
         throw new Error(`Missing ${key} starter set`);
       }
-      if (payload.sets[key].evaluation_ids.some(id => !data.evaluations.some(item => item.evaluation_id === id))) {
+      const evaluationIds = payload.sets[key].evaluation_ids;
+      if (evaluationIds.length !== payload.probe_count ||
+          new Set(evaluationIds).size !== payload.probe_count) {
+        throw new Error(`${key} starter set must contain ${payload.probe_count} unique evaluations`);
+      }
+      if (evaluationIds.some(id => !data.evaluations.some(item => item.evaluation_id === id))) {
         throw new Error(`${key} starter set contains unsupported evaluations`);
       }
     }
@@ -287,6 +312,9 @@ function inverseLogit(value) { return 100 / (1 + Math.exp(-value)); }
 
 function newModelInterval(prediction, evaluation, knownIndexes) {
   const artifact = state.data.new_model_confidence;
+  if (!artifact) {
+    return { status: "abstained", reason: "new-model confidence artifact not included" };
+  }
   const supported = artifact.supported_probe_counts.filter(value => value <= knownIndexes.length);
   if (!supported.length) return { status: "abstained", reason: "at least one known score is required" };
   const k = Math.max(...supported);
@@ -415,8 +443,13 @@ async function predictNewModel() {
           : `abstained (${escapeHtml(result.reason)})`;
       })()}</td></tr>`).join("");
     document.getElementById("new-model-results").hidden = false;
-    const calibrationK = Math.max(...state.data.new_model_confidence.supported_probe_counts.filter(value => value <= known.size));
-    status.textContent = `${known.size} known score${known.size === 1 ? "" : "s"}; ${prediction.length - known.size} missing evaluations completed with the conservative k=${calibrationK} confidence bucket. Empirical intervals are retrospective, not clinical guarantees. Nothing was uploaded.`;
+    const confidence = state.data.new_model_confidence;
+    if (confidence) {
+      const calibrationK = Math.max(...confidence.supported_probe_counts.filter(value => value <= known.size));
+      status.textContent = `${known.size} known score${known.size === 1 ? "" : "s"}; ${prediction.length - known.size} missing evaluations completed with the conservative k=${calibrationK} confidence bucket. Empirical intervals are retrospective, not clinical guarantees. Nothing was uploaded.`;
+    } else {
+      status.textContent = `${known.size} known score${known.size === 1 ? "" : "s"}; ${prediction.length - known.size} missing evaluations completed locally. Confidence intervals are unavailable in this registry-only build. Nothing was uploaded.`;
+    }
   } catch (error) {
     status.textContent = error.message;
   } finally { button.disabled = false; }

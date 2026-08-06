@@ -751,11 +751,35 @@ def build_website_data(
     tasks_path: str | Path,
     model_metadata_path: str | Path,
     output_path: str | Path,
+    probe_compression_path: str | Path | None = None,
     confidence_artifact_path: str | Path | None = None,
     new_model_confidence_artifact_path: str | Path | None = None,
+    feasibility_allowlist_paths: Mapping[str, str | Path] | None = None,
     min_scores_per_model: int = 3,
     min_models_per_evaluation: int = 5,
 ) -> dict[str, object]:
+    scores_path = Path(scores_path)
+    scores_sha256 = sha256_file(scores_path)
+    probe_compression_sha256 = None
+    if probe_compression_path is not None:
+        probe_compression_path = Path(probe_compression_path)
+        probe_compression = json.loads(
+            probe_compression_path.read_text(encoding="utf-8")
+        )
+        if probe_compression.get("configuration", {}).get("scores_sha256") != scores_sha256:
+            raise ValueError("probe-compression artifact does not match website score matrix")
+        probe_compression_sha256 = sha256_file(probe_compression_path)
+    feasibility_allowlists = {}
+    for name, value in sorted((feasibility_allowlist_paths or {}).items()):
+        path = Path(value)
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        evaluation_ids = payload.get("evaluation_ids", [])
+        if not isinstance(evaluation_ids, list):
+            raise ValueError(f"feasibility allowlist {name!r} lacks evaluation_ids")
+        feasibility_allowlists[name] = {
+            "sha256": sha256_file(path),
+            "evaluation_count": len(evaluation_ids),
+        }
     dataset = load_prediction_dataset(
         scores_path,
         min_scores_per_model=min_scores_per_model,
@@ -860,7 +884,9 @@ def build_website_data(
             "models": len(dataset.models),
             "evaluations": len(dataset.evaluations),
             "observations": int(np.isfinite(dataset.matrix).sum()),
-            "scores_sha256": sha256_file(scores_path),
+            "scores_sha256": scores_sha256,
+            "probe_compression_sha256": probe_compression_sha256,
+            "feasibility_allowlists": feasibility_allowlists,
             "confidence": (
                 "90% hybrid-risk conformal intervals plus calibrated P(abs error <= 10 normalized points); unsupported cells abstain"
                 if confidence is not None

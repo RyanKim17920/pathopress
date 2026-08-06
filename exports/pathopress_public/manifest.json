@@ -3,178 +3,178 @@
   "description": "Public PathoPress pathology benchmark score-matrix tables.",
   "exporter": {
     "implementation": "pathopress.public_data.build_public_export",
-    "implementation_sha256": "8e401c08c4e28db2aa28f8d2d20525fad1eb11a712df56ad78b6bcad3cd3e56c",
+    "implementation_sha256": "8a9a15066dac027c490422c7445d38ec117a05b6b397d28e2083d62a553cfed3",
     "pandas_used": false,
     "pandas_version": null,
     "parquet_backend": "pyarrow",
     "pyarrow_version": "25.0.0",
-    "uv_lock_sha256": "eb5882fefc2124a854f3ab830e6671aa807cd8465c1a5fff4ac6fdaabcd8822a"
+    "uv_lock_sha256": "404440988573e17d0a64671af23a331a54469500889b8da84edde4e082a25700"
   },
   "files": [
     {
-      "bytes": 138293,
+      "bytes": 708898,
       "path": "data/benchmarks.csv",
-      "rows": 292,
-      "sha256": "4de5cf15d7da23d2fa3dc749d81e344a687499ff917f88fdb0c985e5b2198e65"
+      "rows": 1638,
+      "sha256": "2d6cc27f7cccad377eaaf32cb05da9ff7ea0f3be666dd1885a6c9d9bfa88275e"
     },
     {
-      "bytes": 16989,
+      "bytes": 45428,
       "path": "data/benchmarks.parquet",
-      "rows": 292,
-      "sha256": "ea640cf8d077ae1705a3f1da0deaaf66a37a9493c2e4f02f5480ad1700954d09"
+      "rows": 1638,
+      "sha256": "75eda281c6d04cf698df1d082b1482dd0298ed245c623aa8312cc971d8d232f3"
     },
     {
-      "bytes": 138293,
+      "bytes": 708898,
       "path": "data/evaluations_all.csv",
-      "rows": 292,
-      "sha256": "4de5cf15d7da23d2fa3dc749d81e344a687499ff917f88fdb0c985e5b2198e65"
+      "rows": 1638,
+      "sha256": "2d6cc27f7cccad377eaaf32cb05da9ff7ea0f3be666dd1885a6c9d9bfa88275e"
     },
     {
-      "bytes": 16989,
+      "bytes": 45428,
       "path": "data/evaluations_all.parquet",
-      "rows": 292,
-      "sha256": "ea640cf8d077ae1705a3f1da0deaaf66a37a9493c2e4f02f5480ad1700954d09"
+      "rows": 1638,
+      "sha256": "75eda281c6d04cf698df1d082b1482dd0298ed245c623aa8312cc971d8d232f3"
     },
     {
-      "bytes": 84213,
+      "bytes": 92295,
       "path": "data/evaluations_paper.csv",
-      "rows": 168,
-      "sha256": "3e93eaa1d0d0e79c7c452472dc283da449b27aee9351f315f8722041bffa67a5"
+      "rows": 187,
+      "sha256": "84456e50052772810545543967eebc5d849019fabddaf930ab27ff87b810295f"
     },
     {
-      "bytes": 12872,
+      "bytes": 13740,
       "path": "data/evaluations_paper.parquet",
-      "rows": 168,
-      "sha256": "26c69496cdaff9299056f356537b220afcad6e5153546871a5d1b4ac5ef778e6"
+      "rows": 187,
+      "sha256": "4f6616c2907170dddeafbb59a8e7d11713a7983751a020dfe34c7c078466a1eb"
     },
     {
-      "bytes": 7920,
+      "bytes": 8424,
       "path": "data/models.csv",
-      "rows": 60,
-      "sha256": "ed8d0d6ea5ff4c2808b1835837848ad91c6775bfe3f73dea1d15e689cb5fe096"
+      "rows": 62,
+      "sha256": "b3b2b62c0b780e5edccde83168ddf44a817a9c6dc0cc5bf051d4b44e0b261316"
     },
     {
-      "bytes": 5512,
+      "bytes": 5880,
       "path": "data/models.parquet",
-      "rows": 60,
-      "sha256": "422427e776fc6ebc0bcc26513873e91712ef3cd6ae445c19b52d63c3c631d4a7"
+      "rows": 62,
+      "sha256": "993abd2a75ee51dbdf08d509674a1fee4b1da0063e3f458abdc306ca56e86619"
     },
     {
-      "bytes": 7920,
+      "bytes": 8424,
       "path": "data/models_all.csv",
-      "rows": 60,
-      "sha256": "ed8d0d6ea5ff4c2808b1835837848ad91c6775bfe3f73dea1d15e689cb5fe096"
+      "rows": 62,
+      "sha256": "b3b2b62c0b780e5edccde83168ddf44a817a9c6dc0cc5bf051d4b44e0b261316"
     },
     {
-      "bytes": 5512,
+      "bytes": 5880,
       "path": "data/models_all.parquet",
-      "rows": 60,
-      "sha256": "422427e776fc6ebc0bcc26513873e91712ef3cd6ae445c19b52d63c3c631d4a7"
+      "rows": 62,
+      "sha256": "993abd2a75ee51dbdf08d509674a1fee4b1da0063e3f458abdc306ca56e86619"
     },
     {
-      "bytes": 7893,
+      "bytes": 8321,
       "path": "data/models_paper.csv",
       "rows": 59,
-      "sha256": "86e6a38bfeee7af86911129c842a88300faa782a185a26a00dd36042c39f899a"
+      "sha256": "144ca38b3dc496fac4b4cd4fc75aff91f5ee889654c50be36fbcbea1e036f73e"
     },
     {
-      "bytes": 5465,
+      "bytes": 5780,
       "path": "data/models_paper.parquet",
       "rows": 59,
-      "sha256": "966b8711decda56db744beb62ddb63a90889df5b57a3531c7ff69ba70790c91a"
+      "sha256": "1f085d13904e1a3b0ebd6433240ed914f8f17bf5ed26f6706018754c8e3cee5e"
     },
     {
-      "bytes": 25905,
+      "bytes": 28333,
       "path": "data/score_matrix_paper_wide.csv",
       "rows": 59,
-      "sha256": "bb12a78929367920a6594a23252412f0b84ca8f4e9a0acd43ea9fe5bc9af702f"
+      "sha256": "fbb91789344e91c44279a14cf85d0f07b441526f26d5ff9eb3d1051848abdb57"
     },
     {
-      "bytes": 77378,
+      "bytes": 85656,
       "path": "data/score_matrix_paper_wide.parquet",
       "rows": 59,
-      "sha256": "7fff88b0fa5b3a3530ae3bde6b9d3293ce304581fa33d7ed4fe5aa5aaef98903"
+      "sha256": "07310d781cbc9ff6733c5fa2c59a2589ba190c5cb1d8329535661f97882a4df6"
     },
     {
-      "bytes": 973710,
+      "bytes": 2024833,
       "path": "data/scores_all.csv",
-      "rows": 2076,
-      "sha256": "87ed1056f959f866cbd08ae0775605d9c36a6b99f44a893b6b9fc59d74e32a8d"
+      "rows": 4013,
+      "sha256": "f7473ab4be9ac1b26324df10126fffc840420d1843242cc2b0d698acadaabd70"
     },
     {
-      "bytes": 38358,
+      "bytes": 76450,
       "path": "data/scores_all.parquet",
-      "rows": 2076,
-      "sha256": "3e9e75971a387bafbcf44f9ef69b4c0451d4566727e42e7b2773bd86bec077b0"
+      "rows": 4013,
+      "sha256": "72ff1f0f32bfa8cb000037284a0ef5dc5fde9c04c5cce5d88cea3e592a71934b"
     },
     {
-      "bytes": 947831,
+      "bytes": 989074,
       "path": "data/scores_paper.csv",
-      "rows": 2027,
-      "sha256": "e61032013e08f82018a8d1917ae9e916fb000f018253959fecfc2c0ffe15e806"
+      "rows": 2122,
+      "sha256": "2b2a69f53b9ace25c8a8b312e0d0855253e1a98e282bc0fe5256379e63fa8c55"
     },
     {
-      "bytes": 36827,
+      "bytes": 38817,
       "path": "data/scores_paper.parquet",
-      "rows": 2027,
-      "sha256": "49b8816d0e4ffda6f9fd02e44b2492c67c0209eaa141dca4d16875605e26fe7a"
+      "rows": 2122,
+      "sha256": "b218983a88b5ee072df3b794ac7ac05ef76d7972e3ea120fd3e46be5a88f6a41"
     },
     {
-      "bytes": 8112,
+      "bytes": 15651,
       "path": "provenance.json",
-      "sha256": "60afb3f735ab882a9140b68a881555fb8275f53a91f8b849a8f01e39ac44c7e1"
+      "sha256": "aba2fb1952530c511428ab9b9111d8570fd2c2e9cb2751ea5aa3e8d13cbe6b5f"
     },
     {
-      "bytes": 39162,
+      "bytes": 42092,
       "path": "schema.json",
-      "sha256": "a29bcca939f5826c90b0626282ce7e130cd82124e9c3c99b009ebbfba700edc4"
+      "sha256": "a4bfc08fee57e6d9f2f665b4d8ba3e703d48782348eea0bbb8aa4bc30284ce68"
     },
     {
-      "bytes": 1948,
+      "bytes": 1951,
       "path": "metadata.json",
-      "sha256": "63be3fe4fb030c00bc39bd0ea534156a04cd490e7db66e3386b1f45a5eca0bdc"
+      "sha256": "bea825b3cc12f04f6094f58366432f0d0bdd9e41a919fadffc1f5ed5e162fa39"
     },
     {
-      "bytes": 1418,
+      "bytes": 2965,
       "path": "LICENSES.md",
-      "sha256": "ca9bfda49b6ec0f4c6bfaa6d333c5a1318357adb10f0955e0d57d00825a76018"
+      "sha256": "b14652f3332ab7573f9ab5418c37d3db310afaf7335e326cf38cb0aec9aa9120"
     },
     {
-      "bytes": 2354,
+      "bytes": 2355,
       "path": "README.md",
-      "sha256": "e7e14357765801597b72115087cb912c8c739251b4ee8ca0929a991d6a7c66b1"
+      "sha256": "ce68498f629d7ff6e20a9c5556f542153270fdc886759164842533bd93c46f3a"
     }
   ],
   "hf_table_schema_version": "pathopress-hf-table-schema-v1",
   "inputs": {
-    "exporter_implementation_sha256": "8e401c08c4e28db2aa28f8d2d20525fad1eb11a712df56ad78b6bcad3cd3e56c",
-    "model_metadata_sha256": "a255719534391db72be2211e434fc153ca2d236fa1740552165e6c943a8018e4",
-    "provenance_sha256": "07e288ccdf5a9d27b004e25f31ba156d258efd8b0940990510b46f04b2cd6737",
-    "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
-    "suites_sha256": "ac7141e2855891b8bf081bbc06af3ce602e023778d3317ed6ef980eb7b329c8a",
-    "tasks_sha256": "21f51e78071dbd453eb2afb48ae866718d4c9f3c790e6da2f6fb39e4065be431",
-    "uv_lock_sha256": "eb5882fefc2124a854f3ab830e6671aa807cd8465c1a5fff4ac6fdaabcd8822a"
+    "exporter_implementation_sha256": "8a9a15066dac027c490422c7445d38ec117a05b6b397d28e2083d62a553cfed3",
+    "model_metadata_sha256": "10ff121ee4d5be607e601c82ff9225686075147f16d8c61b0cf37160a51524f4",
+    "provenance_sha256": "7843d0ac84d4837bd864c1cf5da97d13f6a87c6fd2065b65e053f35238dd4668",
+    "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
+    "suites_sha256": "879f842af930b31bbd1f5116fd357b22f2552be2b33459ec0ce3c49bb9270194",
+    "tasks_sha256": "0c9f711767a51fee2563c7617b15a15a0244dac19207f33317580bc67ce21209",
+    "uv_lock_sha256": "404440988573e17d0a64671af23a331a54469500889b8da84edde4e082a25700"
   },
   "paper_filter": {
     "accepted_audit_statuses": [
       "verified",
       "parsed_primary_source"
     ],
-    "evaluations": 168,
+    "evaluations": 187,
     "min_models_per_evaluation": 5,
     "min_scores_per_model": 3,
     "models": 59,
-    "observations": 2027
+    "observations": 2122
   },
   "parquet_written": true,
   "pinned_benchpress_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
   "rows": {
-    "evaluations_all": 292,
-    "evaluations_paper": 168,
-    "models_all": 60,
+    "evaluations_all": 1638,
+    "evaluations_paper": 187,
+    "models_all": 62,
     "models_paper": 59,
-    "scores_all": 2076,
-    "scores_paper": 2027
+    "scores_all": 4013,
+    "scores_paper": 2122
   },
   "schema_version": "pathopress-public-tables-v1"
 }

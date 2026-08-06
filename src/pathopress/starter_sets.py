@@ -49,6 +49,7 @@ def build_starter_sets(
         "matrix_scores_sha256": probe["configuration"]["scores_sha256"],
         "probe_compression_sha256": _sha256(probe_path),
         "feasibility_allowlist_sha256": _sha256(allowlist_path),
+        "probe_count": count,
         "default_visible_count": min(5, count),
         "sets": {
             "unrestricted": {
@@ -65,4 +66,37 @@ def build_starter_sets(
                 "evaluation_ids": feasibility,
             },
         },
+    }
+
+
+def build_pending_starter_sets(
+    scores_path: str | Path,
+    feasibility_allowlist_paths: dict[str, str | Path],
+) -> dict[str, Any]:
+    """Build a current, explicit placeholder without using probe results."""
+
+    allowlists = {}
+    for name, value in sorted(feasibility_allowlist_paths.items()):
+        path = Path(value)
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        evaluation_ids = payload.get("evaluation_ids", [])
+        if not isinstance(evaluation_ids, list):
+            raise ValueError(f"feasibility allowlist {name!r} lacks evaluation_ids")
+        allowlists[name] = {
+            "sha256": _sha256(path),
+            "evaluation_count": len(evaluation_ids),
+        }
+    return {
+        "schema_version": STARTER_SET_SCHEMA,
+        "status": "pending_exact_probe_artifact",
+        "reason": (
+            "No current hash-bound probe-compression artifact was included in "
+            "this registry-only site build."
+        ),
+        "matrix_scores_sha256": _sha256(Path(scores_path)),
+        "probe_compression_sha256": None,
+        "feasibility_allowlists": allowlists,
+        "probe_count": 0,
+        "default_visible_count": 0,
+        "sets": {},
     }

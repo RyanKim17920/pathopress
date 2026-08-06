@@ -27,8 +27,8 @@ in model-by-evaluation form. CSV and deterministic Parquet mirrors are included.
 
 | Table layer | Models | Evaluations | Score rows |
 |---|---:|---:|---:|
-| Full registry | 60 | 292 | 2076 |
-| Fixed paper matrix | 59 | 168 | 2027 |
+| Full registry | 62 | 1638 | 4013 |
+| Fixed paper matrix | 59 | 187 | 2122 |
 
 The paper filter accepts `verified` and `parsed_primary_source` evidence and
 iteratively requires at least three scores per model and five models per

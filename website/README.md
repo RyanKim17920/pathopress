@@ -23,9 +23,10 @@ are current:
 PYTHONPATH=src python3 scripts/build_website_starter_sets.py
 ```
 
-The browser refuses starter sets whose score-matrix hash differs from
-`data.json`. The feasibility button remains explicitly labeled as a pipeline
-proxy, not measured monetary or runtime cost. Both starter buttons only prefill
+The browser refuses starter sets whose score-matrix or probe-compression hash
+differs from `data.json`, and requires the declared number of unique supported
+evaluations in each trajectory. The feasibility button remains explicitly
+labeled as a pipeline proxy, not measured monetary or runtime cost. Both starter buttons only prefill
 evaluation identities; users supply their own normalized scores, after which
 the existing local completion and unseen-model interval logic is used.
 
@@ -48,6 +49,18 @@ Regenerate the data before serving:
 ```bash
 PYTHONPATH=src python3 scripts/build_public_release.py
 ```
+
+To rebuild only the current pathology registry, matrix predictions, and public
+tables while probe/confidence experiments are still pending, use:
+
+```bash
+PYTHONPATH=src python3 scripts/build_public_release.py --core-only
+PYTHONPATH=src python3 scripts/build_website_starter_sets.py --pending
+```
+
+This mode records the current versioned feasibility-allowlist hashes and makes
+the optional starter/confidence UI explicitly unavailable; it never embeds a
+stale probe or calibration artifact.
 
 Serve from the repository root so both the site and relative data links resolve:
 

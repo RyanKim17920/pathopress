@@ -1,12 +1,12 @@
 {
   "exporter": {
     "implementation": "pathopress.public_data.build_public_export",
-    "implementation_sha256": "8e401c08c4e28db2aa28f8d2d20525fad1eb11a712df56ad78b6bcad3cd3e56c",
+    "implementation_sha256": "8a9a15066dac027c490422c7445d38ec117a05b6b397d28e2083d62a553cfed3",
     "pandas_used": false,
     "pandas_version": null,
     "parquet_backend": "pyarrow",
     "pyarrow_version": "25.0.0",
-    "uv_lock_sha256": "eb5882fefc2124a854f3ab830e6671aa807cd8465c1a5fff4ac6fdaabcd8822a"
+    "uv_lock_sha256": "404440988573e17d0a64671af23a331a54469500889b8da84edde4e082a25700"
   },
   "pathology_adaptation": "BenchPress benchmark_id maps to PathoPress evaluation_id; normalized_score preserves direction on a 0-100 fit scale.",
   "schema_version": "pathopress-hf-table-schema-v1",
@@ -549,6 +549,51 @@
         },
         {
           "logical_type": "float64",
+          "name": "hest.hoptimus1report2025.ccrcc.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.hoptimus1report2025.coad.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.hoptimus1report2025.idc.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.hoptimus1report2025.lung.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.hoptimus1report2025.lymph_idc.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.hoptimus1report2025.paad.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.hoptimus1report2025.prad.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.hoptimus1report2025.read.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hest.hoptimus1report2025.skcm.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
           "name": "hest.idc.gene_expression",
           "nullable": true
         },
@@ -580,6 +625,56 @@
         {
           "logical_type": "float64",
           "name": "hest.skcm.gene_expression",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.kras_crc.cptac_coad.abmil_auc",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.meta_bc.camelyon16_test.abmil_auc",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.mhist.linear_probe_top1",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.msi_crc.cptac_coad.abmil_auc",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.msi_crc.paip2020.abmil_auc",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.msi_gc.tcga_stad_test.abmil_auc",
+          "nullable": true
+        },
+        {
+          "logical_type": "float64",
+          "name": "hoptimus1report2025.tcga_uniform.linear_probe_top1",
           "nullable": true
         },
         {

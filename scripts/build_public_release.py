@@ -48,21 +48,46 @@ def main() -> int:
         default=ROOT / "experiments" / "new_model_confidence_rank1.json",
     )
     parser.add_argument(
+        "--probe-compression",
+        type=Path,
+        default=ROOT / "experiments" / "probe_compression_rank1.json",
+    )
+    parser.add_argument(
         "--export-dir", type=Path, default=ROOT / "exports" / "pathopress_public"
     )
     parser.add_argument(
         "--website-data", type=Path, default=ROOT / "website" / "data.json"
     )
+    parser.add_argument(
+        "--core-only", action="store_true",
+        help=(
+            "Build registry/matrix exports without probe or confidence artifacts; "
+            "the static site exposes those optional features as pending."
+        ),
+    )
+    parser.add_argument(
+        "--allowlist-legacy25", type=Path,
+        default=ROOT / "data" / "low_friction_allowlist_v2_legacy25.json",
+    )
+    parser.add_argument(
+        "--allowlist-top25", type=Path,
+        default=ROOT / "data" / "low_friction_allowlist_v2_top25.json",
+    )
+    parser.add_argument(
+        "--allowlist-pipeline-all", type=Path,
+        default=ROOT / "data" / "low_friction_pipeline_eligible_v2_all.json",
+    )
     args = parser.parse_args()
 
-    confidence = build_deployment_confidence_artifact(
-        args.confidence_cells, args.scores,
-        confidence_calibration_path=args.confidence_calibration,
-    )
-    args.confidence_output.parent.mkdir(parents=True, exist_ok=True)
-    args.confidence_output.write_text(
-        json.dumps(confidence, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    if not args.core_only:
+        confidence = build_deployment_confidence_artifact(
+            args.confidence_cells, args.scores,
+            confidence_calibration_path=args.confidence_calibration,
+        )
+        args.confidence_output.parent.mkdir(parents=True, exist_ok=True)
+        args.confidence_output.write_text(
+            json.dumps(confidence, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
     manifest = build_public_export(
         scores_path=args.scores,
         tasks_path=args.tasks,
@@ -76,10 +101,21 @@ def main() -> int:
         tasks_path=args.tasks,
         model_metadata_path=args.model_metadata,
         output_path=args.website_data,
-        confidence_artifact_path=args.confidence_output,
-        new_model_confidence_artifact_path=args.new_model_confidence,
+        probe_compression_path=None if args.core_only else args.probe_compression,
+        confidence_artifact_path=None if args.core_only else args.confidence_output,
+        new_model_confidence_artifact_path=(
+            None if args.core_only else args.new_model_confidence
+        ),
+        feasibility_allowlist_paths={
+            "legacy25": args.allowlist_legacy25,
+            "top25": args.allowlist_top25,
+            "pipeline_eligible_all": args.allowlist_pipeline_all,
+        },
     )
-    print(f"confidence={args.confidence_output}")
+    print(
+        "confidence=omitted (core-only)"
+        if args.core_only else f"confidence={args.confidence_output}"
+    )
     print(f"export={args.export_dir}")
     print(
         "paper_matrix="

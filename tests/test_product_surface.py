@@ -27,6 +27,7 @@ from pathopress.prediction import (
 from pathopress.new_model_confidence import build_new_model_confidence_artifact
 from pathopress.public_data import (
     build_public_export,
+    build_website_data,
     download_public_export,
     load_public_export,
 )
@@ -280,6 +281,22 @@ class PredictionProductTests(ProductFixture):
 
 
 class PublicExportTests(ProductFixture):
+    def test_website_build_rejects_probe_artifact_for_another_matrix(self) -> None:
+        probe = self.root / "stale_probe.json"
+        probe.write_text(json.dumps({
+            "configuration": {"scores_sha256": "0" * 64},
+        }), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "does not match website score matrix"):
+            build_website_data(
+                scores_path=self.scores,
+                tasks_path=self.tasks,
+                model_metadata_path=self.models,
+                output_path=self.root / "website.json",
+                probe_compression_path=probe,
+                min_scores_per_model=2,
+                min_models_per_evaluation=2,
+            )
+
     def _build(self, directory: str) -> Path:
         out = self.root / directory
         build_public_export(
@@ -370,7 +387,7 @@ class StaticWebsiteTests(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         data = json.loads((root / "website" / "data.json").read_text())
         self.assertEqual(data["schema_version"], "pathopress-static-predictor-v1")
-        self.assertEqual((len(data["models"]), len(data["evaluations"])), (59, 168))
+        self.assertEqual((len(data["models"]), len(data["evaluations"])), (59, 187))
         self.assertTrue(any(value is None for row in data["observed"] for value in row))
         for i, row in enumerate(data["observed"]):
             for j, value in enumerate(row):
@@ -382,6 +399,21 @@ class StaticWebsiteTests(unittest.TestCase):
         self.assertIn("function renderMatrixBrowser", javascript)
         self.assertIn("function setupStarterSets", javascript)
         self.assertIn('fetch("starter_sets.json")', javascript)
+        self.assertIsNone(data["meta"]["probe_compression_sha256"])
+        self.assertIsNone(data["meta"]["confidence"])
+        self.assertIsNone(data["meta"]["new_model_confidence"])
+        self.assertIsNone(data["new_model_confidence"])
+        starter_sets = json.loads((root / "website" / "starter_sets.json").read_text())
+        self.assertEqual(starter_sets["status"], "pending_exact_probe_artifact")
+        self.assertEqual(starter_sets["matrix_scores_sha256"], data["meta"]["scores_sha256"])
+        self.assertEqual(
+            starter_sets["feasibility_allowlists"],
+            data["meta"]["feasibility_allowlists"],
+        )
+        self.assertEqual(starter_sets["probe_count"], 0)
+        self.assertEqual(starter_sets["sets"], {})
+        self.assertIn("different probe-compression artifact", javascript)
+        self.assertIn("unique evaluations", javascript)
         self.assertIn("pending_exact_probe_artifact", javascript)
         self.assertIn("Pending final probe artifact", javascript)
         self.assertIn("trust_probabilities", javascript)
@@ -394,25 +426,16 @@ class StaticWebsiteTests(unittest.TestCase):
         self.assertIn('id="use-feasibility-starter"', html)
 
         missing_cells = 0
-        calibrated_trust = 0
         for i, row in enumerate(data["observed"]):
             for j, value in enumerate(row):
                 if value is None:
                     missing_cells += 1
-                    self.assertIsNotNone(data["prediction_intervals"][i][j])
-                    self.assertEqual(
-                        data["trust_probability_status"][i][j],
-                        "calibrated_existing_model",
-                    )
-                    probability = data["trust_probabilities"][i][j]
-                    self.assertIsNotNone(probability)
-                    self.assertGreaterEqual(probability, 0.0)
-                    self.assertLessEqual(probability, 1.0)
-                    calibrated_trust += 1
+                    self.assertIsNone(data["prediction_intervals"][i][j])
+                    self.assertIsNone(data["trust_probability_status"][i][j])
+                    self.assertIsNone(data["trust_probabilities"][i][j])
                 else:
                     self.assertIsNone(data["trust_probabilities"][i][j])
-        self.assertEqual(missing_cells, 7885)
-        self.assertEqual(calibrated_trust, missing_cells)
+        self.assertEqual(missing_cells, 8911)
 
     def test_site_assets_serve_over_plain_http(self) -> None:
         root = Path(__file__).resolve().parents[1]
@@ -434,7 +457,7 @@ class StaticWebsiteTests(unittest.TestCase):
         with urlopen(base + "/website/") as response:
             self.assertIn(b"PathoPress", response.read())
         with urlopen(base + "/website/data.json") as response:
-            self.assertEqual(json.load(response)["meta"]["observations"], 2027)
+            self.assertEqual(json.load(response)["meta"]["observations"], 2122)
 
 
 if __name__ == "__main__":
