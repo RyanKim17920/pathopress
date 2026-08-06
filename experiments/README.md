@@ -84,32 +84,47 @@ correlation 0.918881. Publication CSV/Markdown/LaTeX tables are under
 ```bash
 PYTHONPATH=src python3 experiments/run_probe_selection.py
 PYTHONPATH=src python3 experiments/run_probe_compression.py
-PYTHONPATH=src python3 experiments/run_probe_exhaustive.py --workers 8
+PYTHONPATH=src python3 experiments/build_probe_pruning.py
+# One independently resumable cheap25 residue (repeat W=0..9, S=0..7):
+PYTHONPATH=src python3 experiments/run_probe_exhaustive.py run-shard --candidate-allowlist data/low_friction_allowlist_v2_top25.json --k 5 --metric medae --num-waves 10 --wave-index 0 --num-shards 8 --shard-index 0 --workers 8 --out-dir experiments/probe_exhaustive_runs/cheap25_medae_k5
+PYTHONPATH=src python3 experiments/run_probe_exhaustive.py merge --out-dir experiments/probe_exhaustive_runs/cheap25_medae_k5
 PYTHONPATH=src python3 experiments/run_ranking_preservation.py
 python3 scripts/plot_probe_compression.py
 python3 scripts/plot_ranking_preservation.py
+python3 scripts/plot_benchpress_style_hero.py
+python3 scripts/plot_probe_dual_objective.py
 ```
 
 - [Legacy selection](probe_selection_results_rank1.json) preserves the direct
   all-known/held-out comparison.
-- [Compression](probe_compression_rank1.json) adds any-evaluation, pre-error
-  low-friction proxy, MedAE/MedAPE, nested random, held-out-row, pruned, and
-  ranking-aware tracks through tractable bounds.
-- [Exhaustive search](probe_exhaustive_rank1.json) enumerates every subset of
-  the four-item pre-error allowlist for `k=1..4` and all 66 `k=2` subsets of a
-  12-candidate error-informed space. “Exhaustive” applies only to these declared
-  spaces, not all subsets of 165 evaluations.
+- The compression runner uses any-evaluation and 25-task pre-error proxy
+  candidates, MedAE/MedAPE, nested random, held-out rows, and exact upstream
+  margin-5 ranking budgets through `k=10`. The checked-in compression JSON is
+  the completed regenerated artifact, including 10×10 random ranking baselines.
+  Its `curves.*.pairwise_margin=2` values are ancillary score-reconstruction
+  diagnostics; only `ranking_aware` is the dedicated margin-5 ranking objective.
+- [Top-30 pruning](probe_pruning_rank1_top30.json) uses all ten source MedAE
+  greedy contexts and exact normalized-rank aggregation.
+- [Exhaustive status](probe_exhaustive_execution_status.json) declares the exact
+  `C(25,5)=53,130` and `C(30,5)=142,506` plans. They are configured but unrun;
+  the older [81-combination artifact](probe_exhaustive_rank1.json) is retained
+  only as a historical bounded diagnostic.
 - [Ranking](ranking_preservation_rank1.json) reports pairwise accuracy at
   margins 0/1/2/5 and top-set recovery at 10/20/30% from OOF predictions.
 
 All-known greedy MedAE is 1.481124/1.196456 at five/ten probes; hidden-only is
-1.612112/1.539134. The four-item feasibility allowlist is a protocol-metadata
-proxy, not measured compute, access, or licensing cost.
+1.612112/1.539134. The 25-task feasibility allowlist is an input/label pipeline
+proxy, not measured compute, access, or licensing cost. The faithful
+[BenchPress-style summary](benchpress_style_hero_summary.json) separates exact
+masking/search budgets, the pathology rank-1 adaptation, and exhaustive plans
+that remain unrun. The [dual-objective table](../outputs/probe_dual_objective_rank1.csv)
+reports model-average prediction error without pretending it was optimized.
 
 ## Confidence, time, and error factors
 
 ```bash
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
+PYTHONPATH=src python3 experiments/run_new_model_confidence.py
 PYTHONPATH=src python3 experiments/run_temporal_deployment.py
 PYTHONPATH=src python3 experiments/run_predictability.py
 PYTHONPATH=src python3 experiments/run_error_analysis.py
@@ -125,6 +140,10 @@ python3 scripts/build_prediction_error_factor_tables.py
 - [Deployment intervals](deployment_confidence_rank1.json) are separately
   suite-calibrated for existing supported rows. They do not cover genuinely
   new models.
+- [Unseen-model confidence](new_model_confidence_rank1.json) and its
+  [30,182-row audit](new_model_confidence_predictions_rank1.csv) use only
+  leave-one-model-out sparse-probe and temporal residuals. Nested target-group
+  exclusion prevents hidden-score leakage; unsupported contexts abstain.
 - [Temporal deployment](temporal_deployment_rank1.json) evaluates seven
   verified 2025 targets using strictly earlier models and 1/5/10 revealed
   scores over ten seeds. This is a small retrospective cohort.
@@ -161,6 +180,8 @@ explicitly `headline_eligible=false` and are not scientific comparisons.
 PYTHONPATH=src python3 scripts/build_publication_tables.py
 python3 scripts/plot_publication_hero.py
 python3 scripts/plot_metadata_overview.py
+python3 scripts/build_evaluation_cost_evidence.py
+python3 scripts/plot_evaluation_cost_evidence.py
 PYTHONPATH=src python3 scripts/build_public_release.py
 ```
 
@@ -169,6 +190,11 @@ experiment artifacts. The public build produces a hash-verified all/paper/wide
 export and `website/data.json`; it performs no upload or deployment. See the
 [figure gallery](../figures/README.md), [export README](../exports/pathopress_public/README.md),
 and [static-site README](../website/README.md).
+
+The [cost-evidence registry](../data/evaluation_cost_evidence.json) and
+[audit note](../docs/evaluation-cost-evidence.md) cover all 165 retained
+protocols. They preserve source configuration/count evidence and explicit
+missingness; they do not impute a numeric evaluation cost.
 
 ## Verification
 

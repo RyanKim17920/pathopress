@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "status": "configured_not_executed",
+  "upstream_reference_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
+  "scientific_protocol": "all_known_probe_bruteforce_v1",
+  "pathology_adaptation": "Exact masking, k=5, candidate counts, combination budgets, residue assignment, chunk/resume, and strict merge contracts; pathology evaluation IDs and the declared rank-1 completion method replace the upstream LLM matrix and rank-2 predictor.",
+  "measured_throughput": {
+    "date_utc": "2026-08-06",
+    "candidate_space": "data/low_friction_allowlist_v2_top25.json",
+    "k": 5,
+    "workers": 20,
+    "chunk_size": 20,
+    "completed_combinations": 20,
+    "runner_elapsed_seconds": 5.0,
+    "outer_elapsed_seconds": 5.31,
+    "effective_process_cpu_utilization_percent": 1447,
+    "effective_combinations_per_second": 3.7665,
+    "command_output_location": "ephemeral /tmp smoke run; raw chunks intentionally not committed",
+    "interpretation": "A tiny warmup measures process-level throughput but is not a scheduler or long-run guarantee."
+  },
+  "runs": [
+    {
+      "name": "pathology_pipeline_proxy_25_choose_5",
+      "candidate_allowlist": "data/low_friction_allowlist_v2_top25.json",
+      "candidate_semantics": "pre-error low-friction input/label pipeline proxy, not measured cheapness",
+      "config": "experiments/probe_exhaustive_runs/cheap25_medae_k5/config.json",
+      "candidate_count": 25,
+      "k": 5,
+      "combination_count": 53130,
+      "num_waves": 10,
+      "num_shards": 8,
+      "expected_chunks_at_256": 240,
+      "projected_single_host_wall_hours_at_smoke_rate": 3.92,
+      "projected_cpu_hours_at_2_7_seconds_per_combination": 39.85,
+      "complete": false,
+      "merged_summary": null,
+      "reason_not_launched": "The measured full run is multi-hour on this host. The exact 80-residue plan is ready for bounded parallel scheduling; no smaller result is substituted."
+    },
+    {
+      "name": "pathology_error_informed_pruned_30_choose_5",
+      "candidate_allowlist": "data/error_informed_probe_allowlist_rank1_top30.json",
+      "candidate_semantics": "error-informed aggregate rank over all 10 source MedAE greedy steps",
+      "config": "experiments/probe_exhaustive_runs/pruned30_medae_k5/config.json",
+      "candidate_count": 30,
+      "k": 5,
+      "combination_count": 142506,
+      "num_waves": 20,
+      "num_shards": 1,
+      "expected_chunks_at_256": 560,
+      "projected_single_host_wall_hours_at_smoke_rate": 10.51,
+      "projected_cpu_hours_at_2_7_seconds_per_combination": 106.88,
+      "complete": false,
+      "merged_summary": null,
+      "reason_not_launched": "The measured full run is substantially beyond the bounded local execution budget. The exact 20-residue plan is ready; no k=2/top-12 proxy is presented as equivalent."
+    }
+  ]
+}

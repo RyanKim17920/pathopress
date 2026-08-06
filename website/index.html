@@ -52,7 +52,7 @@
     <section id="add-model" class="panel" aria-labelledby="add-heading">
       <p class="step">02 / Add a model</p>
       <h2 id="add-heading">Predict from scores you already know</h2>
-      <p>This calculation stays in your browser. Nothing is uploaded. New-model intervals are intentionally unavailable because the calibration population contains existing supported model rows.</p>
+      <p>This calculation stays in your browser. Nothing is uploaded. Missing scores receive group-balanced empirical 90% intervals calibrated only from leave-one-model-out sparse-probe and temporal-release residuals at k=1, 3, 5, or 10. Unsupported evaluation contexts abstain. These are retrospective uncertainty estimates, not clinical guarantees.</p>
       <label>New model ID
         <input id="new-model-id" value="my-pathology-model" autocomplete="off">
       </label>

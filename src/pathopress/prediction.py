@@ -1,9 +1,9 @@
 """User-facing prediction and deploy-time confidence contracts.
 
 The point predictor is PathoPress's selected pathology adaptation of BenchPress:
-logit + per-evaluation z-score + bias ALS, rank 1 and lambda 0.1.  Confidence
-intervals are loaded from a separate, hash-bound artifact and deliberately do
-not apply to a genuinely new model row.
+logit + per-evaluation z-score + bias ALS, rank 1 and lambda 0.1. Existing-row
+and genuinely unseen-row intervals use separate hash-bound calibration
+artifacts; see :mod:`pathopress.new_model_confidence` for the latter.
 """
 
 from __future__ import annotations

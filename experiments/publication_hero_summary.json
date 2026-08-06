@@ -47,12 +47,12 @@
     "medape": 10
   },
   "allowlist_curve_lengths": {
-    "medae": 4,
-    "medape": 4
+    "medae": 10,
+    "medape": 10
   },
   "pathology_adaptations": [
     "rank-1 completion selected by pathology validation rather than upstream rank-2",
-    "low-friction curve uses a pre-error protocol-metadata proxy, not measured cost",
-    "ranking continuation uses separately labelled error-informed pruning; unrestricted ranking is exact at k=1"
+    "25-candidate low-friction curve uses a pre-error input/label pipeline proxy, not measured cost",
+    "ranking-aware any/allowlist curves use exact upstream margin-5 budgets through k=10"
   ]
 }

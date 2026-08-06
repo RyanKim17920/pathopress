@@ -24,6 +24,7 @@ from pathopress.maintenance import (
     check_freshness_manifest,
     path_record,
     validate_experiment_set,
+    validate_probe_compression_semantics,
 )
 
 
@@ -127,6 +128,53 @@ class LlmBaselineSemanticTests(unittest.TestCase):
 
 
 class MaintenanceTests(unittest.TestCase):
+    def test_probe_semantics_reject_hash_fresh_legacy_margin(self) -> None:
+        self.assertEqual(validate_probe_compression_semantics(ROOT), [])
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "experiments").mkdir()
+            (root / "data").mkdir()
+            (root / "data/scores.csv").write_bytes((ROOT / "data/scores.csv").read_bytes())
+            (root / "data/low_friction_allowlist_v2_top25.json").write_bytes(
+                (ROOT / "data/low_friction_allowlist_v2_top25.json").read_bytes()
+            )
+            artifact = json.loads((ROOT / "experiments/probe_compression_rank1.json").read_text())
+            artifact["configuration"]["ranking_margin"] = 2.0
+            (root / "experiments/probe_compression_rank1.json").write_text(json.dumps(artifact))
+            failures = validate_probe_compression_semantics(root)
+            self.assertIn("expected_margin5", {row["status"] for row in failures})
+            artifact["configuration"]["ranking_margin"] = 5.0
+            artifact["ranking_aware"]["legacy_diagnostic"] = {}
+            (root / "experiments/probe_compression_rank1.json").write_text(json.dumps(artifact))
+            failures = validate_probe_compression_semantics(root)
+            self.assertIn(
+                "ranking_schema_must_contain_only_current_candidate_universes",
+                {row["status"] for row in failures},
+            )
+            artifact["ranking_aware"].pop("legacy_diagnostic")
+            artifact["pruning"]["keep_count"] = 29
+            (root / "experiments/probe_compression_rank1.json").write_text(json.dumps(artifact))
+            failures = validate_probe_compression_semantics(root)
+            self.assertIn(
+                "expected_pruning_keep_count30", {row["status"] for row in failures}
+            )
+            artifact["pruning"]["keep_count"] = 30
+            artifact["pruning"]["source_steps_used"] = 9
+            (root / "experiments/probe_compression_rank1.json").write_text(json.dumps(artifact))
+            failures = validate_probe_compression_semantics(root)
+            self.assertIn(
+                "expected_pruning_source_steps_used10",
+                {row["status"] for row in failures},
+            )
+            artifact["pruning"]["source_steps_used"] = 10
+            artifact["curves"]["any_candidate"]["all_known_greedy_medae"][0]["k"] = 0
+            (root / "experiments/probe_compression_rank1.json").write_text(json.dumps(artifact))
+            failures = validate_probe_compression_semantics(root)
+            self.assertIn(
+                "any_candidate_all_known_greedy_medae_requires_exact_k1_10",
+                {row["status"] for row in failures},
+            )
+
     def test_freshness_manifest_detects_modified_artifact(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -14,6 +14,10 @@ import numpy as np
 from .completion import validate
 from .imputation import build_imputation_rows, write_imputations
 from .matrix import filter_matrix, load_scores, make_matrix
+from .new_model_confidence import (
+    calibrated_new_model_interval,
+    load_new_model_confidence_artifact,
+)
 from .prediction import (
     DEFAULT_RANK,
     DEFAULT_REGULARIZATION,
@@ -240,14 +244,35 @@ def _product_rows(
             )
         except ValueError as exc:
             parser.error(str(exc))
+        new_model_confidence = None
+        if args.confidence:
+            try:
+                new_model_confidence = load_new_model_confidence_artifact(
+                    args.new_model_confidence_artifact,
+                    args.scores,
+                    rank=args.rank,
+                    regularization=args.regularization,
+                )
+            except (OSError, ValueError, json.JSONDecodeError) as exc:
+                parser.error(str(exc))
+        known_suites = [_metadata(dataset, evaluation)[0] for evaluation in known]
         rows = []
         for column, evaluation in enumerate(dataset.evaluations):
             is_known = evaluation in known
             if is_known and not args.include_observed:
                 continue
             suite, metric = _metadata(dataset, evaluation)
-            rows.append(
-                _prediction_row(
+            confidence_result = None
+            if args.confidence and not is_known:
+                assert new_model_confidence is not None
+                confidence_result = calibrated_new_model_interval(
+                    float(predicted[column]),
+                    evaluation,
+                    suite,
+                    known_suites,
+                    new_model_confidence,
+                )
+            output_row = _prediction_row(
                     model=args.model,
                     evaluation=evaluation,
                     suite=suite,
@@ -257,14 +282,19 @@ def _product_rows(
                     status="provided" if is_known else "predicted",
                     confidence=None,
                     confidence_status=(
-                        "not_applicable_new_model"
-                        if args.confidence and not is_known
+                        str(confidence_result["confidence_status"])
+                        if confidence_result is not None
                         else "not_applicable_provided"
                         if args.confidence
                         else "not_requested"
                     ),
                 )
-            )
+            if confidence_result is not None:
+                output_row.update({
+                    key: round(value, 6) if isinstance(value, float) else value
+                    for key, value in confidence_result.items()
+                })
+            rows.append(output_row)
         return rows
     raise AssertionError(args.command)
 
@@ -310,6 +340,12 @@ def main() -> None:
         "--confidence-artifact",
         type=Path,
         default=Path("experiments/deployment_confidence_rank1.json"),
+    )
+    parser.add_argument(
+        "--new-model-confidence-artifact",
+        type=Path,
+        default=Path("experiments/new_model_confidence_rank1.json"),
+        help="Group-conformal artifact for add-model confidence",
     )
     args = parser.parse_args()
     if args.rank < 0:

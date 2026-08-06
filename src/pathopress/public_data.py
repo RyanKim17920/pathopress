@@ -25,6 +25,7 @@ from .prediction import (
     load_prediction_dataset,
     sha256_file,
 )
+from .new_model_confidence import load_new_model_confidence_artifact
 
 
 PUBLIC_SCHEMA_VERSION = "pathopress-public-tables-v1"
@@ -475,6 +476,7 @@ def build_website_data(
     model_metadata_path: str | Path,
     output_path: str | Path,
     confidence_artifact_path: str | Path | None = None,
+    new_model_confidence_artifact_path: str | Path | None = None,
     min_scores_per_model: int = 3,
     min_models_per_evaluation: int = 5,
 ) -> dict[str, object]:
@@ -499,6 +501,20 @@ def build_website_data(
             rank=DEFAULT_RANK,
             regularization=DEFAULT_REGULARIZATION,
         )
+    new_model_confidence = None
+    if new_model_confidence_artifact_path is not None:
+        loaded_new_model_confidence = load_new_model_confidence_artifact(
+            new_model_confidence_artifact_path,
+            scores_path,
+            rank=DEFAULT_RANK,
+            regularization=DEFAULT_REGULARIZATION,
+        )
+        # The browser needs deploy lookups and empirical summaries, but not the
+        # verbose cross-fit group membership audit retained in the JSON artifact.
+        new_model_confidence = {
+            key: value for key, value in loaded_new_model_confidence.items()
+            if key != "crossfit_group_audit"
+        }
     observed: list[list[float | None]] = []
     predictions: list[list[float]] = []
     sources: list[list[dict[str, str] | None]] = []
@@ -540,6 +556,7 @@ def build_website_data(
         "predictions": predictions,
         "sources": sources,
         "prediction_intervals": intervals,
+        "new_model_confidence": new_model_confidence,
         "meta": {
             "point_method": "logit + evaluation z-score + bias ALS rank=1 lambda=0.1",
             "models": len(dataset.models),
@@ -551,7 +568,11 @@ def build_website_data(
                 if confidence is not None
                 else None
             ),
-            "new_model_confidence": "not applicable; calibration does not contain unseen model rows",
+            "new_model_confidence": (
+                "group-balanced empirical 90% intervals from leave-one-model-out sparse-probe and temporal residuals; unsupported columns abstain"
+                if new_model_confidence is not None
+                else None
+            ),
         },
     }
     _json_write(Path(output_path), payload)

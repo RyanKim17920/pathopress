@@ -16,6 +16,7 @@ from pathopress.maintenance import (  # noqa: E402
     build_freshness_manifest,
     build_result_graph_manifest,
     check_freshness_manifest,
+    validate_probe_compression_semantics,
 )
 
 
@@ -47,12 +48,19 @@ def main() -> None:
                 experiment_set=experiment_set,
                 kind=args.kind,
             )
+        semantic_failures = validate_probe_compression_semantics(ROOT)
+        if semantic_failures:
+            raise ValueError(
+                "refusing to snapshot semantically stale probe artifact: "
+                + json.dumps(semantic_failures, sort_keys=True)
+            )
         args.manifest.parent.mkdir(parents=True, exist_ok=True)
         args.manifest.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
         print(f"wrote {args.manifest}")
         return
     payload = json.loads(args.manifest.read_text(encoding="utf-8"))
     failures = check_freshness_manifest(ROOT, payload)
+    failures.extend(validate_probe_compression_semantics(ROOT))
     if failures:
         print(json.dumps({"status": "stale", "failures": failures}, indent=2))
         raise SystemExit(1)

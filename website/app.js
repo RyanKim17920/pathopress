@@ -27,6 +27,9 @@ async function loadData() {
       throw new Error(`Invalid ${key} matrix dimensions`);
     }
   }
+  if (!data.new_model_confidence || data.new_model_confidence.artifact_type !== "pathopress_new_model_group_conformal_v1") {
+    throw new Error("Missing or unsupported new-model confidence artifact");
+  }
   return data;
 }
 
@@ -170,6 +173,39 @@ function logitPercent(value) {
 }
 function inverseLogit(value) { return 100 / (1 + Math.exp(-value)); }
 
+function newModelInterval(prediction, evaluation, knownIndexes) {
+  const artifact = state.data.new_model_confidence;
+  const supported = artifact.supported_probe_counts.filter(value => value <= knownIndexes.length);
+  if (!supported.length) return { status: "abstained", reason: "at least one known score is required" };
+  const k = Math.max(...supported);
+  const entry = artifact.by_evaluation[evaluation.evaluation_id];
+  const evaluationRisk = entry?.suite_id === evaluation.suite_id ? entry.by_k?.[String(k)] : null;
+  if (!evaluationRisk?.supported) {
+    return { status: "abstained", k, reason: "unsupported column: too few distinct calibration models" };
+  }
+  const sameSuite = knownIndexes.some(index => state.data.evaluations[index].suite_id === evaluation.suite_id);
+  const choices = [
+    ["evaluation+suite_same_probe", "suite_same_probe", `${k}|${evaluation.suite_id}|${sameSuite}`],
+    ["evaluation+suite", "suite", `${k}|${evaluation.suite_id}`],
+    ["evaluation+global_k", "global_k", String(k)]
+  ];
+  let context = null, scope = null;
+  for (const [candidateScope, section, key] of choices) {
+    const candidate = artifact.context_risk[section]?.[key];
+    if (candidate?.supported) { context = candidate; scope = candidateScope; break; }
+  }
+  const scale = artifact.conformal_scale_by_k[String(k)]?.scale;
+  if (!context || !Number.isFinite(scale)) return { status: "abstained", k, reason: "unsupported calibration context" };
+  const risk = .5 * evaluationRisk.risk_median + .5 * context.risk_median;
+  const radius = risk * scale;
+  return {
+    status: "calibrated", k, risk, scope,
+    lower: Math.max(0, prediction - radius), upper: Math.min(100, prediction + radius),
+    evaluationModels: evaluationRisk.n_models, evaluationPredictions: evaluationRisk.n_predictions,
+    contextModels: context.n_models, contextPredictions: context.n_predictions
+  };
+}
+
 function completeRank1(rawMatrix) {
   const nRows = rawMatrix.length, nColumns = rawMatrix[0].length;
   const observed = rawMatrix.map(row => row.map(Number.isFinite));
@@ -256,12 +292,19 @@ async function predictNewModel() {
     known.forEach((value, index) => { newRow[index] = value; });
     matrix.push(newRow);
     const prediction = completeRank1(matrix).at(-1);
+    const knownIndexes = [...known.keys()];
     document.getElementById("new-model-body").innerHTML = state.data.evaluations.map((evaluation, index) => `
       <tr><td>${escapeHtml(evaluation.evaluation_id)}</td><td>${escapeHtml(evaluation.suite_id)}</td>
       <td>${scoreText(prediction[index])}</td><td>${known.has(index) ? "provided" : "predicted"}</td>
-      <td>${known.has(index) ? "not applicable" : "unavailable for new rows"}</td></tr>`).join("");
+      <td>${known.has(index) ? "not applicable" : (() => {
+        const result = newModelInterval(prediction[index], evaluation, knownIndexes);
+        return result.status === "calibrated"
+          ? `${scoreText(result.lower)}–${scoreText(result.upper)} (empirical 90%; k=${result.k}; risk ${result.risk.toFixed(2)}; ${result.scope}; eval ${result.evaluationModels} groups/${result.evaluationPredictions} predictions; context ${result.contextModels} groups/${result.contextPredictions} predictions)`
+          : `abstained (${escapeHtml(result.reason)})`;
+      })()}</td></tr>`).join("");
     document.getElementById("new-model-results").hidden = false;
-    status.textContent = `${known.size} known score${known.size === 1 ? "" : "s"}; ${prediction.length - known.size} missing evaluations completed. Nothing was uploaded.`;
+    const calibrationK = Math.max(...state.data.new_model_confidence.supported_probe_counts.filter(value => value <= known.size));
+    status.textContent = `${known.size} known score${known.size === 1 ? "" : "s"}; ${prediction.length - known.size} missing evaluations completed with the conservative k=${calibrationK} confidence bucket. Empirical intervals are retrospective, not clinical guarantees. Nothing was uploaded.`;
   } catch (error) {
     status.textContent = error.message;
   } finally { button.disabled = false; }

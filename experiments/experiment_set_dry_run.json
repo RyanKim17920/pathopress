@@ -3,10 +3,10 @@
   "status": "ready",
   "execution": "none_dry_run_only",
   "summary": {
-    "components": 19,
-    "declared_inputs": 104,
-    "declared_dependencies": 4,
-    "declared_artifacts": 88,
+    "components": 21,
+    "declared_inputs": 118,
+    "declared_dependencies": 3,
+    "declared_artifacts": 108,
     "external_call_components": 0
   },
   "experiments": [
@@ -121,9 +121,9 @@
       "missing_inputs": [],
       "missing_dependencies": [],
       "missing_artifacts": [],
-      "declared_inputs": 5,
-      "declared_dependencies": 1,
-      "declared_artifacts": 1,
+      "declared_inputs": 6,
+      "declared_dependencies": 0,
+      "declared_artifacts": 5,
       "external_calls": false,
       "dry_run_only": true
     },
@@ -148,6 +148,19 @@
       "missing_dependencies": [],
       "missing_artifacts": [],
       "declared_inputs": 4,
+      "declared_dependencies": 0,
+      "declared_artifacts": 4,
+      "external_calls": false,
+      "dry_run_only": true
+    },
+    {
+      "name": "new_model_confidence",
+      "status": "ready",
+      "scripts_present": true,
+      "missing_inputs": [],
+      "missing_dependencies": [],
+      "missing_artifacts": [],
+      "declared_inputs": 5,
       "declared_dependencies": 0,
       "declared_artifacts": 4,
       "external_calls": false,
@@ -206,6 +219,19 @@
       "dry_run_only": true
     },
     {
+      "name": "evaluation_cost_evidence",
+      "status": "ready",
+      "scripts_present": true,
+      "missing_inputs": [],
+      "missing_dependencies": [],
+      "missing_artifacts": [],
+      "declared_inputs": 4,
+      "declared_dependencies": 0,
+      "declared_artifacts": 4,
+      "external_calls": false,
+      "dry_run_only": true
+    },
+    {
       "name": "publication_tables",
       "status": "ready",
       "scripts_present": true,
@@ -225,9 +251,9 @@
       "missing_inputs": [],
       "missing_dependencies": [],
       "missing_artifacts": [],
-      "declared_inputs": 4,
+      "declared_inputs": 7,
       "declared_dependencies": 0,
-      "declared_artifacts": 3,
+      "declared_artifacts": 11,
       "external_calls": false,
       "dry_run_only": true
     },
@@ -251,7 +277,7 @@
       "missing_inputs": [],
       "missing_dependencies": [],
       "missing_artifacts": [],
-      "declared_inputs": 8,
+      "declared_inputs": 9,
       "declared_dependencies": 0,
       "declared_artifacts": 3,
       "external_calls": false,

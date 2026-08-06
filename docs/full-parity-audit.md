@@ -58,18 +58,19 @@ density. Its immutable contract is:
 | Broad method grid | [manifest](../experiments/method_comparison/manifest.json), [results](../experiments/method_comparison/results.json) | Exact core methods; expanded grid | 343/343 units versus upstream 329; partial-coverage winners require coverage caveat |
 | Threshold and complete-submatrix SVD | [structure manifest](../experiments/structure_analysis/manifest.json), [tables](../outputs/tables/manifest.json) | Pathology-adapted | Largest complete block 32 × 16; stable rank 1.431046 |
 | Correlation and MDS | [pairwise stats](../experiments/structure_analysis/pairwise_ols_stats.json), [coordinates](../experiments/structure_analysis/mds_coordinates.csv) | Pathology-adapted | All 165 columns have a neighbor at `min_shared=5` |
-| All-known and held-out score probes | [selection](../experiments/probe_selection_results_rank1.json), [compression](../experiments/probe_compression_rank1.json) | Pathology-adapted, **bounded** | Any/proxy-feasible, MedAE/MedAPE, random, held-out, pruned, and ranking tracks; unrestricted curves capped at `k=10` |
-| Low-cost probes | [feasibility data](../data/evaluation_feasibility.csv), [allowlist](../data/low_friction_allowlist_v1.json) | Pathology-adapted proxy | Four protocols selected before errors by metadata; cost is not measured |
-| Exhaustive subsets | [merged result](../experiments/probe_exhaustive_rank1.json) | **Bounded exact search** | All subsets of four-item allowlist for `k=1..4`; all 66 `k=2` subsets of 12-item pruned set, not 165-column global search |
+| All-known and held-out score probes | [selection](../experiments/probe_selection_results_rank1.json), [compression](../experiments/probe_compression_rank1.json), [faithful hero](../figures/pathopress_benchpress_hero_rank1.png) | Pathology-adapted, **bounded** | Any/proxy-feasible, MedAE/MedAPE, random, held-out, and ranking tracks; current curves complete through `k=10` |
+| Feasibility-proxy probes | [feasibility data](../data/evaluation_feasibility.csv), [25-task allowlist](../data/low_friction_allowlist_v2_top25.json) | Pathology-adapted proxy; upstream candidate-count match | Exactly 25 image/patch classification protocols selected before errors; this describes pipeline shape, not measured cost |
+| Exhaustive subsets | [execution status](../experiments/probe_exhaustive_execution_status.json), [runner](../experiments/run_probe_exhaustive.py) | **Exact contract, configured/unrun** | Exact `C(25,5)=53,130` and error-informed `C(30,5)=142,506` plans; measured projections are 3.92 and 10.51 single-host hours, so no narrower result is substituted |
 | Ranking preservation | [JSON](../experiments/ranking_preservation_rank1.json), [CSVs](../outputs/ranking_preservation_pairwise_rank1.csv) | Pathology-adapted | Same 0/1/2/5 margins and 10/20/30% fractions; normalized margins have endpoint-specific native meanings |
-| Ranking-aware probes | [compression result](../experiments/probe_compression_rank1.json) | Pathology-adapted, bounded | Implemented within declared candidate/probe limits |
+| Ranking-aware probes | [result](../experiments/probe_compression_rank1.json), [runner](../experiments/run_probe_compression.py), [figure](../figures/pathopress_benchpress_ranking_rank1.png) | Exact objective/budget contract; pathology rank adaptation | Completed margin-5 pairwise objective for any/25-task candidates through `k=10`, all-known plus 70/30 holdout and 10×10 random baseline |
+| Model-average probe usefulness | [table](../outputs/probe_dual_objective_rank1.csv), [figure](../figures/probe_dual_objective_rank1.png) | Pathology-adapted diagnostic | Reports median error in model-average observed score for scorecard-MedAE-selected sets; evaluation-only, not a second greedy objective |
 | Confidence calibration | [JSON](../experiments/confidence_calibration_rank1.json), [cells](../experiments/confidence_cells_rank1.csv) | Pathology-adapted | Cross-fitted risk/conformal pipeline; six full-coverage ALS/Soft-Impute variants are narrower than upstream top-12 diversity |
-| Deployment intervals | [deployment artifact](../experiments/deployment_confidence_rank1.json) | Engineering analogue | Suite-calibrated for supported existing rows only; not new-model or external-site calibration |
+| Deployment intervals | [existing-row artifact](../experiments/deployment_confidence_rank1.json), [unseen-model artifact](../experiments/new_model_confidence_rank1.json), [method](new-model-confidence.md) | Pathology-adapted engineering analogue | Separate populations: existing-cell OOF residuals versus nested leave-model-out sparse-probe plus temporal residuals; unsupported new-row columns abstain |
 | Temporal deployment | [JSON](../experiments/temporal_deployment_rank1.json), [raw CSV](../outputs/temporal_deployment_raw_rank1.csv) | Pathology-adapted | Hard prior-release rule; only seven retrospective 2025 targets |
 | Per-column/model predictability | [JSON](../experiments/predictability_results_rank1.json), [raw CSV](../experiments/predictability_predictions_rank1.csv) | Pathology-adapted | 9,605 predictions, 165 evaluation and 53 model summaries |
 | Benchmark/model error factors | [factor JSON](../experiments/prediction_error_factors_rank1.json), [manifest](../experiments/prediction_error_factor_manifest.json) | Pathology-adapted | Nine intervention groups; metadata-dependent denominators and correlational interpretation |
 | Publication tables/figures | [table manifest](../outputs/tables/manifest.json), [gallery](../figures/README.md) | Engineering analogue | Deterministic result-first generation |
-| Prediction CLI | [`cli.py`](../src/pathopress/cli.py) | Engineering analogue | List, lookup, completion, add-model, CSV/JSON, existing-row confidence |
+| Prediction CLI | [`cli.py`](../src/pathopress/cli.py) | Engineering analogue | List, lookup, completion, add-model, CSV/JSON, existing-row and unseen-model confidence with explicit abstention |
 | Public dataset export | [export README](../exports/pathopress_public/README.md), [manifest](../exports/pathopress_public/manifest.json) | Engineering analogue | All/paper/wide CSVs, sanitized provenance, licenses, hashes, loader/downloader; no upload |
 | Static website | [site README](../website/README.md) | Engineering analogue | Browser-side exact rank-1 recipe, no server submission/analytics; not deployed here |
 | Maintenance contract | [freshness manifest](../experiments/artifact_freshness_manifest.json), [dry run](../experiments/experiment_set_dry_run.json) | Engineering analogue | Hash/freshness and smoke checks exist; living score review remains human work |
@@ -93,14 +94,17 @@ for product predictions rather than selecting a partial method on error alone.
 ## Tractability and cache boundaries
 
 Some upstream-style experiments are computationally combinatorial. PathoPress
-makes the bounds explicit:
+now preserves the upstream candidate-count and `k=5` contracts instead of
+silently narrowing them:
 
-- unrestricted greedy probe selection stops at ten probes;
-- exact all-known enumeration covers 15 nonempty subsets of the four-item
-  pre-error allowlist;
-- the separate pruned enumeration covers all 66 two-probe subsets of 12
-  error-informed candidates;
-- neither result implies global exhaustive search across 165 columns.
+- unrestricted and 25-candidate greedy selection stop at the upstream ten probes;
+- all ten MedAE greedy contexts generate the error-informed top-30 allowlist;
+- exact plans contain `C(25,5)=53,130` and `C(30,5)=142,506` combinations;
+- the runner has independently schedulable residues, gzip raw-prediction chunks,
+  validated resume, and complete-by-default merge;
+- a measured 20-worker smoke projected 3.92 and 10.51 single-host hours, so both
+  release configs are honestly marked unrun. The older 81-combination artifact
+  remains historical evidence only, not an equivalent result.
 
 Large prediction-first caches are reproducibility intermediates, not compact
 release assets. `experiments/method_comparison/predictions/` contains 343 NPZ
@@ -118,9 +122,11 @@ instances with median width 9.7677 normalized points. Retaining the lowest-risk
 20% reduces MedAE to 0.606970.
 
 This is retrospective selective prediction. The confidence ensemble is less
-diverse than BenchPress's upstream stack, and the deployment intervals are not
-validated for a new model row. The CLI/site explicitly return no interval for
-new-model completion.
+diverse than BenchPress's upstream stack. A separate unseen-model artifact uses
+30,182 nested leave-model-out/temporal predictions and obtains 94.77% empirical
+held-out coverage at nominal 90%, with 14.32-point median width. This closes the
+product gap without claiming prospective, distribution-free, or clinical
+coverage; unsupported evaluation contexts abstain.
 
 Temporal results enforce that every training model predates its target, but
 target eligibility yields only seven 2025 models. It is evidence against simple
@@ -137,14 +143,12 @@ retrospective interventions, not causal claims.
    feasibility proxy, not runtime/compute/access/tissue/license measurement.
 3. **Prospective and external validation:** no preregistered future model or
    external institution cohort has been evaluated.
-4. **New-model confidence:** existing-row residual calibration is not a valid
-   interval guarantee for a genuinely unseen model.
-5. **Dual human review/living maintenance:** accepted rows are parsed from
+4. **Dual human review/living maintenance:** accepted rows are parsed from
    primary sources but have not all received two independent human reviews.
-6. **Hosted deployment/upload:** the export and site are local static assets;
+5. **Hosted deployment/upload:** the export and site are local static assets;
    no Hugging Face upload, GitHub Pages publication, or other deployment occurs
    from the build scripts.
-7. **Globally exhaustive probe search:** intentionally not attempted because
+6. **Globally exhaustive probe search:** intentionally not attempted because
    the 165-column subset space is intractable.
 
 ## Reproduction and verification

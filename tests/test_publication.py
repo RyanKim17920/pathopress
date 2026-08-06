@@ -59,10 +59,29 @@ class PublicationDataTests(unittest.TestCase):
 
     def test_generated_publication_summaries_and_inventories_are_consistent(self) -> None:
         hero = json.loads((ROOT / "experiments/publication_hero_summary.json").read_text())
+        benchpress_hero = json.loads(
+            (ROOT / "experiments/benchpress_style_hero_summary.json").read_text()
+        )
         metadata = json.loads((ROOT / "experiments/publication_metadata_summary.json").read_text())
         manifest = json.loads((ROOT / "outputs/tables/manifest.json").read_text())
         self.assertEqual(hero["unrestricted_curve_lengths"], {"medae": 10, "medape": 10})
-        self.assertEqual(hero["allowlist_curve_lengths"], {"medae": 4, "medape": 4})
+        self.assertEqual(hero["allowlist_curve_lengths"], {"medae": 10, "medape": 10})
+        self.assertNotIn("legacy", json.dumps(hero).lower())
+        self.assertEqual(
+            benchpress_hero["contract_status"],
+            {
+                "masking_and_k_budget": "exact",
+                "rank_and_domain": "pathology_adapted",
+                "exhaustive_25C5_30C5": "configured_unrun",
+            },
+        )
+        self.assertEqual(len(benchpress_hero["examples"]), 4)
+        with (ROOT / "outputs/probe_dual_objective_rank1.csv").open(
+            newline="", encoding="utf-8"
+        ) as handle:
+            dual = list(csv.DictReader(handle))
+        self.assertEqual(len(dual), 20)
+        self.assertTrue(all(row["selection_objective"] == "scorecard_medae" for row in dual))
         self.assertEqual(metadata["matrix"], {"n_models": 59, "n_evaluations": 165, "n_observed": 1967})
         self.assertEqual(manifest["tables"]["model_inventory"], 59)
         self.assertEqual(manifest["tables"]["evaluation_inventory"], 165)

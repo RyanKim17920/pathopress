@@ -37,6 +37,11 @@ def main() -> int:
         default=ROOT / "experiments" / "deployment_confidence_rank1.json",
     )
     parser.add_argument(
+        "--new-model-confidence",
+        type=Path,
+        default=ROOT / "experiments" / "new_model_confidence_rank1.json",
+    )
+    parser.add_argument(
         "--export-dir", type=Path, default=ROOT / "exports" / "pathopress_public"
     )
     parser.add_argument(
@@ -65,6 +70,7 @@ def main() -> int:
         model_metadata_path=args.model_metadata,
         output_path=args.website_data,
         confidence_artifact_path=args.confidence_output,
+        new_model_confidence_artifact_path=args.new_model_confidence,
     )
     print(f"confidence={args.confidence_output}")
     print(f"export={args.export_dir}")

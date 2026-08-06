@@ -104,12 +104,13 @@ Those protocols answer different questions. The all-known curve is
 transductive and includes exact revealed cells. Held-out-model validation is
 closer to deployment but still chooses from published retrospective rows.
 
-The current four-protocol “low-friction” allowlist is a reproducible pre-error
-metadata rule, not a measured cost model. A defensible practical panel still
-needs runtime, GPU/memory, sample acquisition, staining, annotation, tissue,
-licensing, and runner-reproducibility audits. Exhaustive results are exact only
-for the declared four-item allowlist and a 12-candidate pruned `k=2` space, not
-all subsets of 165 evaluations.
+The v2 25-protocol “low-friction” allowlist is a reproducible pre-error
+input/label pipeline rule, not a measured cost model. It matches BenchPress's
+candidate count while adapting the task identities to pathology. A defensible
+practical panel still needs runtime, GPU/memory, sample acquisition, staining,
+annotation, tissue, and licensing audits. Exact choose-five plans cover 53,130
+pre-error and 142,506 error-informed combinations, but are marked unrun after a
+measured smoke projected 3.92 and 10.51 single-host hours.
 
 ## What remains difficult
 
@@ -154,7 +155,9 @@ PYTHONPATH=src python3 scripts/build_shared_artifacts.py
 PYTHONPATH=src python3 experiments/run_benchpress_style.py
 PYTHONPATH=src python3 experiments/run_structure_analysis.py
 PYTHONPATH=src python3 experiments/run_probe_compression.py
-PYTHONPATH=src python3 experiments/run_probe_exhaustive.py --workers 8
+PYTHONPATH=src python3 experiments/build_probe_pruning.py
+# See experiments/README.md for the independent run-shard loops.
+PYTHONPATH=src python3 experiments/run_probe_exhaustive.py merge --out-dir experiments/probe_exhaustive_runs/cheap25_medae_k5
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
 PYTHONPATH=src python3 experiments/run_temporal_deployment.py
 ```

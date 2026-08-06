@@ -22,7 +22,6 @@ from pathopress.publication import hero_target_cells, select_hero_target  # noqa
 
 BLUE = "#1368CE"
 RED = "#D1495B"
-GOLD = "#D89C1D"
 
 
 def _random_band(rows: list[dict], metric: str) -> tuple[list[int], list[float], list[float], list[float]]:
@@ -129,14 +128,20 @@ def main() -> None:
     ax_avg.legend(frameon=False, fontsize=8)
 
     ax_rank = fig.add_subplot(grid[2, 3:])
-    for mode, color, label in (("error_informed_pruned", GOLD, "Error-informed pruned"), ("pre_error_low_friction_allowlist", RED, "Pre-error feasibility proxy")):
-        rank = payload["ranking_aware"][mode]
-        pair = rank["pairwise_margin_error"]
-        top = rank["top_fraction_error"]
-        ax_rank.plot([row["k"] for row in pair], [row["selection_metrics"]["pairwise_median_accuracy"] for row in pair], color=color, marker="o", label=f"{label}: pairwise Δ≥2")
-        ax_rank.plot([row["k"] for row in top], [row["selection_metrics"]["top_median_recovery"] for row in top], color=color, marker="s", linestyle="--", label=f"{label}: top 20%")
-    exact = payload["ranking_aware"]["any_candidate_exact_k1"]
-    ax_rank.scatter([1], [exact["pairwise_margin_error"][0]["selection_metrics"]["pairwise_median_accuracy"]], color=BLUE, marker="*", s=105, zorder=5, label="Any evaluation exact k=1")
+    for mode, color, label in (
+        ("any_candidate", BLUE, "Any evaluation"),
+        ("pre_error_low_friction_allowlist", RED, "25-task pipeline proxy"),
+    ):
+        rows = payload["ranking_aware"][mode]["all_known_greedy"]
+        if len(rows) != 10 or float(payload["ranking_aware"][mode].get("margin", -1)) != 5:
+            raise ValueError(f"publication hero requires current margin-5 k=1..10 ranking data for {mode}")
+        ax_rank.plot(
+            [row["k"] for row in rows],
+            [row["selection_metrics"]["pairwise_median_accuracy"] for row in rows],
+            color=color,
+            marker="o",
+            label=f"{label}: pairwise Δ≥5",
+        )
     ax_rank.set_ylim(-.03, 1.03)
     ax_rank.set_xlabel("Measured evaluations (k)")
     ax_rank.set_ylabel("Median evaluation-level recovery")
@@ -161,15 +166,15 @@ def main() -> None:
         },
         "pathology_adaptations": [
             "rank-1 completion selected by pathology validation rather than upstream rank-2",
-            "low-friction curve uses a pre-error protocol-metadata proxy, not measured cost",
-            "ranking continuation uses separately labelled error-informed pruning; unrestricted ranking is exact at k=1",
+            "25-candidate low-friction curve uses a pre-error input/label pipeline proxy, not measured cost",
+            "ranking-aware any/allowlist curves use exact upstream margin-5 budgets through k=10",
         ],
     }
     args.summary_output.parent.mkdir(parents=True, exist_ok=True)
     args.summary_output.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 
     fig.suptitle("PathoPress: compressing pathology foundation-model evaluation", fontsize=17, fontweight="bold", y=.995)
-    fig.text(.5, .012, "Pinned BenchPress all-known masking; rank-1 pathology completion. Feasibility is a metadata proxy, not measured monetary cost; pruned ranking curves are error-informed.", ha="center", fontsize=8.3)
+    fig.text(.5, .012, "Pinned BenchPress masking and probe-search contracts; rank-1 pathology completion. The 25-task feasibility set is a pipeline proxy, not measured monetary cost.", ha="center", fontsize=8.3)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     for suffix in ("png", "pdf"):
         fig.savefig(args.output.with_suffix(f".{suffix}"), dpi=220, bbox_inches="tight")

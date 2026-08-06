@@ -64,27 +64,43 @@ at ten; hidden-only values are 1.612112 and 1.539134. The held-out-row protocol
 selects probes on training models and evaluates each validation model in
 isolation; its hidden-cell MedAE is 1.951271 and 1.879857 at five and ten.
 
-The expanded [compression artifact](../experiments/probe_compression_rank1.json)
-adds:
+The compression runner now implements:
 
-- any-evaluation and four-evaluation pre-error feasibility tracks;
+- any-evaluation and 25-evaluation pre-error pipeline-proxy tracks;
 - MedAE and MedAPE objectives;
 - nested random orders;
-- held-out-model and ranking-aware objectives; and
-- a separately labeled error-informed pruned search.
+- held-out-model and margin-5 ranking-aware objectives through `k=10`; and
+- all-ten-step aggregate-rank pruning to an error-informed 30 candidates.
 
-The pre-error allowlist contains only THUNDER BACH, BRACS, BreakHis, and MHIST.
-It is generated from protocol metadata—image/patch classification with reported
-sample count at most 10,000—and is only a low-friction proxy. It does not measure
-runtime, compute, tissue access, label burden, or licensing cost.
+Metric names require one important scope distinction. The `pairwise_margin=2`
+values nested inside ordinary `curves` are ancillary ordering diagnostics
+computed alongside score reconstruction; they do not select those MedAE/MedAPE
+probe sets and are not the ranking result. The dedicated `ranking_aware`
+trajectories are selected and evaluated with the pinned margin of 5 normalized
+points. The artifact records both margins and this distinction explicitly.
 
-Exact subset enumeration is deliberately bounded. The
-[exhaustive artifact](../experiments/probe_exhaustive_rank1.json) covers every
-subset of the four-item pre-error allowlist for `k=1..4` and all 66 `k=2`
-subsets of a 12-candidate error-informed pruned set. It is exact within those
-declared spaces, not exhaustive across all 165 evaluations. Unrestricted greedy
-curves stop at ten because each candidate evaluation requires completing every
-target row.
+The upstream-shaped [pathology hero](../figures/pathopress_benchpress_hero_rank1.png)
+reconstructs the four target examples and overall score-prediction panel; the
+[ranking panel](../figures/pathopress_benchpress_ranking_rank1.png) shows the
+random and greedy margin-5 trajectories. At `k=10`, unrestricted all-known
+pairwise accuracy is 0.9155, versus 0.3333 for the 25-task feasibility proxy.
+The [dual-objective table](../outputs/probe_dual_objective_rank1.csv) also asks
+how well those scorecard-selected probes predict each model's average observed
+score. It reports that quantity separately and does not imply it was optimized.
+
+The v2 pre-error allowlist contains the 25 retained image/patch classification
+evaluations. This exactly matches the pinned upstream candidate count, but not
+its task identities or cost semantics. It is only a low-friction input/label
+pipeline proxy; several datasets are large, and it does not measure runtime,
+compute, tissue access, annotation labor, or licensing cost.
+
+The [exhaustive execution status](../experiments/probe_exhaustive_execution_status.json)
+binds the upstream-equivalent plans: `C(25,5)=53,130` for the pre-error proxy and
+`C(30,5)=142,506` after error-informed pruning. The operational runner matches
+the wave/shard residue, gzip chunk, raw-prediction, validated-resume, and strict
+merge contracts. A measured 20-worker smoke projects 3.92 and 10.51 single-host
+hours, so both are configured but unrun; no `k=2` or top-12 substitute is called
+equivalent. The older bounded artifact remains a clearly historical diagnostic.
 
 ## Other parity layers
 

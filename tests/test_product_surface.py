@@ -22,6 +22,7 @@ from pathopress.prediction import (
     parse_known_scores,
     predict_new_model,
 )
+from pathopress.new_model_confidence import build_new_model_confidence_artifact
 from pathopress.public_data import (
     build_public_export,
     download_public_export,
@@ -197,15 +198,32 @@ class PredictionProductTests(ProductFixture):
         evaluations = json.loads(self._cli("list-evaluations"))
         cell = json.loads(self._cli("predict", "--model", "m1", "--evaluation", "e3"))
         completed = json.loads(self._cli("complete-model", "--model", "m1"))
-        added = json.loads(
-            self._cli("add-model", "--model", "new", "--known-score", "e1=30,e2=40", "--confidence")
+        records = []
+        for index, model in enumerate(("m1", "m2", "m3", "m4")):
+            for evaluation in ("e1", "e2", "e3"):
+                records.append({
+                    "target_model_id": model, "evaluation_id": evaluation,
+                    "suite_id": "suite", "k": 1, "source": "leave_one_model_out_probe",
+                    "actual": 50.0, "predicted": 51.0 + index,
+                    "absolute_error": 1.0 + index, "same_suite_probe_count": 1,
+                })
+        artifact, _ = build_new_model_confidence_artifact(
+            records, self.scores, min_evaluation_models=3, min_context_models=3
         )
+        artifact_path = self.root / "new_model_confidence.json"
+        artifact_path.write_text(json.dumps(artifact), encoding="utf-8")
+        added = json.loads(self._cli(
+            "add-model", "--model", "new", "--known-score", "e1=30,e2=40", "--confidence",
+            "--new-model-confidence-artifact", str(artifact_path),
+        ))
         self.assertEqual(len(models), 4)
         self.assertEqual(len(evaluations), 3)
         self.assertEqual(cell[0]["status"], "predicted")
         self.assertEqual(len(completed), 1)
         self.assertEqual(len(added), 1)
-        self.assertEqual(added[0]["confidence_status"], "not_applicable_new_model")
+        self.assertEqual(added[0]["confidence_status"], "calibrated_new_model")
+        self.assertIn("lower_90", added[0])
+        self.assertEqual(added[0]["calibration_k"], 1)
 
 
 class PublicExportTests(ProductFixture):

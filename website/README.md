@@ -6,16 +6,18 @@ This directory is a static, no-backend interface for two PathoPress workflows:
 - append a new model from one or more known normalized scores and run the selected rank-1 bias-ALS recipe entirely in the browser.
 
 Generated `data.json` contains the fixed 59-model × 165-evaluation paper matrix,
-1,967 reported cells, rank-1 estimates, source links, and applicable existing-row
-intervals. The browser implementation uses the same logit, per-evaluation
+1,967 reported cells, rank-1 estimates, source links, existing-row intervals,
+and the compact unseen-model confidence lookup. The browser implementation uses the same logit, per-evaluation
 standardization, ridge `0.1`, 40 ALS iterations, and seeded ten-start recipe as
 the Python predictor. Automated parity tests compare its new-row results with
 Python output.
 
-New-model confidence is deliberately marked unavailable. The deploy-time interval
-artifact was calibrated on held-out cells from existing supported model rows, not
-on genuinely unseen models. Intervals are normalized-score uncertainty
-diagnostics, not clinical guarantees.
+New-model intervals use a separate group-balanced artifact built only from
+leave-one-model-out sparse-probe and temporal-release residuals at k=1/3/5/10.
+The UI shows its risk, fallback scope, model-group/prediction counts, and an
+explicit abstention for unsupported columns. Its 94.77% held-out coverage at a
+nominal 90% level is a retrospective empirical result, not a prospective,
+distribution-free, or clinical guarantee.
 
 Regenerate the data before serving:
 

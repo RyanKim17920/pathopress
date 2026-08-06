@@ -12,6 +12,9 @@ The fixed research matrix is 59 models × 165 protocol-level evaluations with
 | Figure | What it shows | Source artifact |
 |---|---|---|
 | [PathoPress hero](pathopress_hero_rank1.png) | observation/completion, probe compression, ranking, and uncertainty summary | [`publication_hero_summary.json`](../experiments/publication_hero_summary.json) |
+| [BenchPress-style pathology hero](pathopress_benchpress_hero_rank1.png) | four target-cell examples plus random, most-predictive, and 25-task scorecard trajectories | [`benchpress_style_hero_summary.json`](../experiments/benchpress_style_hero_summary.json) |
+| [BenchPress-style ranking](pathopress_benchpress_ranking_rank1.png) | random and greedy margin-5 pairwise recovery through ten probes | [`probe_compression_rank1.json`](../experiments/probe_compression_rank1.json) |
+| [Dual probe objective](probe_dual_objective_rank1.png) | scorecard MedAE and separately evaluated model-average MedAE for the same selected sets | [`probe_dual_objective_rank1.csv`](../outputs/probe_dual_objective_rank1.csv) |
 | [Observation matrix](matrix_observation_pattern.png) | reported versus missing cells | [`analysis_matrix.npz`](../experiments/analysis_matrix.npz) |
 | [Completed matrix](matrix_completed_rank1.png) | reported values and translucent rank-1 estimates | [`imputations_rank1.csv`](../outputs/imputations_rank1.csv) |
 | [Matched validation](benchpress_style_validation_rank1.png) | rank sweep, OOF parity, suite errors, error distribution | [`benchpress_style_results.json`](../experiments/benchpress_style_results.json) |
@@ -20,8 +23,10 @@ The fixed research matrix is 59 models × 165 protocol-level evaluations with
 | [Probe compression](probe_compression_curves_rank1.png) | any/proxy-feasible/random/held-out/pruned/ranking tracks | [`probe_compression_rank1.json`](../experiments/probe_compression_rank1.json) |
 | [Ranking preservation](ranking_preservation_rank1.png) | pairwise margins and top-fraction recovery | [`ranking_preservation_rank1.json`](../experiments/ranking_preservation_rank1.json) |
 | [Confidence calibration](confidence_calibration_rank1.png) | risk correlation, retention, strata, conformal intervals | [`confidence_calibration_rank1.json`](../experiments/confidence_calibration_rank1.json) |
+| [Unseen-model confidence](new_model_confidence_rank1.png) | empirical risk–coverage, coverage–width, suite coverage, abstention support | [`new_model_confidence_rank1.json`](../experiments/new_model_confidence_rank1.json) |
 | [Temporal deployment](temporal_deployment_rank1.png) | seven 2025 target releases with prior-only training | [`temporal_deployment_rank1.json`](../experiments/temporal_deployment_rank1.json) |
 | [Metadata overview](pathopress_metadata_overview.png) | release/source/category coverage and inventory | [`publication_metadata_summary.json`](../experiments/publication_metadata_summary.json) |
+| [Evaluation cost evidence](evaluation_cost_evidence_coverage.png) | source coverage, missingness, and explicitly non-monetary pre-error feasibility strata | [`evaluation_cost_evidence.json`](../data/evaluation_cost_evidence.json) |
 
 Matched rank-1 error is 3.005264 MAE / 1.603026 MedAE. All-known greedy
 scorecard MedAE is 1.481124 and 1.196456 at five and ten probes; hidden-only is
@@ -42,9 +47,10 @@ not clinical accuracy or confidence intervals.
 - [One-probe informativeness](probe_informativeness_rank1.png): first-step
   greedy utility with observed-model coverage.
 
-The pre-error feasibility curve uses a four-protocol metadata allowlist; it is
-not measured cost. Exhaustive subset claims apply only to that four-item space
-and a separate 12-candidate `k=2` pruned space.
+The current pre-error feasibility curve uses 25 image/patch classification
+protocols selected without outcome errors. It is not measured cost. Greedy and
+random curves are complete through `k=10`; exact `C(25,5)` and `C(30,5)`
+exhaustive plans are configured but remain unrun.
 
 ## Predictability and error factors
 
@@ -81,11 +87,15 @@ python3 scripts/plot_structure_analysis.py
 python3 scripts/plot_probe_compression.py
 python3 scripts/plot_ranking_preservation.py
 python3 scripts/plot_confidence_calibration.py
+python3 scripts/plot_new_model_confidence.py
 python3 scripts/plot_temporal_deployment.py
 python3 scripts/plot_prediction_error_factors.py
 python3 scripts/plot_publication_hero.py
+python3 scripts/plot_benchpress_style_hero.py
+python3 scripts/plot_probe_dual_objective.py
 python3 scripts/plot_metadata_overview.py
 python3 scripts/plot_llm_baseline.py
+python3 scripts/plot_evaluation_cost_evidence.py
 ```
 
 The exact experiment commands and local-cache boundaries are in

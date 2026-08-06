@@ -186,6 +186,85 @@ def check_freshness_manifest(root: Path, manifest: dict[str, Any]) -> list[dict[
     return failures
 
 
+def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
+    """Reject hash-fresh but semantically obsolete public probe artifacts."""
+    artifact_path = root / "experiments/probe_compression_rank1.json"
+    scores_path = root / "data/scores.csv"
+    allowlist_path = root / "data/low_friction_allowlist_v2_top25.json"
+    for path in (artifact_path, scores_path, allowlist_path):
+        if not path.is_file():
+            return [{"path": str(path.relative_to(root)), "status": "missing"}]
+    try:
+        payload = json.loads(artifact_path.read_text(encoding="utf-8"))
+        config = payload["configuration"]
+        pruning = payload["pruning"]
+        curves = payload["curves"]
+        ranking = payload["ranking_aware"]
+    except (KeyError, TypeError, json.JSONDecodeError) as exc:
+        return [{"path": str(artifact_path.relative_to(root)), "status": f"invalid_schema:{exc}"}]
+    failures: list[dict[str, str]] = []
+
+    def require(condition: bool, status: str) -> None:
+        if not condition:
+            failures.append({"path": str(artifact_path.relative_to(root)), "status": status})
+
+    require(config.get("scores_sha256") == file_sha256(scores_path), "score_hash_semantic_mismatch")
+    require(config.get("allowlist_sha256") == file_sha256(allowlist_path), "allowlist_hash_semantic_mismatch")
+    require(config.get("prediction_rank") == 1, "expected_pathology_rank1")
+    require(float(config.get("ranking_margin", -1)) == 5.0, "expected_margin5")
+    require(
+        float(config.get("score_curve_pairwise_diagnostic_margin", -1)) == 2.0,
+        "expected_ancillary_score_curve_pairwise_diagnostic_margin2",
+    )
+    require(
+        "ancillary diagnostics only" in config.get("score_curve_pairwise_diagnostic_semantics", ""),
+        "score_curve_pairwise_diagnostic_semantics_missing",
+    )
+    require(config.get("medape_epsilon") == 1e-6, "expected_medape_epsilon_1e-6")
+    require(pruning.get("keep_count") == 30, "expected_pruning_keep_count30")
+    require(pruning.get("source_steps_used") == 10, "expected_pruning_source_steps_used10")
+    require(len(pruning.get("evaluation_ids", [])) == 30, "expected_30_pruned_evaluation_ids")
+
+    exact_k = list(range(1, 11))
+
+    def has_exact_k(rows: list[dict[str, Any]]) -> bool:
+        return [row.get("k") for row in rows] == exact_k
+
+    def has_exact_random_grid(rows: list[dict[str, Any]]) -> bool:
+        return len(rows) == 100 and all(
+            [row.get("k") for row in rows if row.get("repeat") == repeat] == exact_k
+            for repeat in range(10)
+        )
+
+    expected_candidates = {"any_candidate": 165, "pre_error_low_friction_allowlist": 25}
+    for mode, expected in expected_candidates.items():
+        curve = curves.get(mode, {})
+        rank = ranking.get(mode, {})
+        require(len(curve.get("candidate_ids", [])) == expected, f"{mode}_candidate_count_{expected}")
+        for key in (
+            "all_known_greedy_medae", "heldout_greedy_medae",
+            "all_known_greedy_medape", "heldout_greedy_medape",
+        ):
+            require(has_exact_k(curve.get(key, [])), f"{mode}_{key}_requires_exact_k1_10")
+        for key in ("all_known_random", "heldout_random"):
+            require(
+                has_exact_random_grid(curve.get(key, [])),
+                f"{mode}_{key}_requires_exact_10x_k1_10",
+            )
+        require(rank.get("margin") == 5.0, f"{mode}_ranking_margin5")
+        require(has_exact_k(rank.get("all_known_greedy", [])), f"{mode}_ranking_all_known_exact_k1_10")
+        require(has_exact_k(rank.get("heldout_greedy", [])), f"{mode}_ranking_holdout_exact_k1_10")
+        require(
+            has_exact_random_grid(rank.get("all_known_random", [])),
+            f"{mode}_ranking_random_exact_10x_k1_10",
+        )
+    require(
+        set(ranking) == set(expected_candidates),
+        "ranking_schema_must_contain_only_current_candidate_universes",
+    )
+    return failures
+
+
 def validate_experiment_set(root: Path, payload: dict[str, Any]) -> list[dict[str, Any]]:
     """Validate commands and inputs without executing experiments."""
 

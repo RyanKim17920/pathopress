@@ -90,15 +90,21 @@ MedAE from 1.603026 to 0.606970.
 Those figures measure retrospective selective prediction. The six-predictor
 stack consists of full-coverage ALS and Soft-Impute variants and is narrower
 than BenchPress's top-12 diverse stack. It does not establish calibration for a
-genuinely new model, institution, patient population, or endpoint.
+new institution, patient population, or endpoint.
 
 [Deployment confidence](../experiments/deployment_confidence_rank1.json) is a
 separate, hash-bound lookup artifact. It collapses OOF residuals to one value
 per unique observed cell and conditions intervals by suite. Empirical
 containment on supported rows is approximately 0.902–0.916 across the five
-suites. The CLI and website therefore expose intervals only for existing
-supported model rows; new-model predictions return
-`not_applicable_new_model`.
+suites and applies only to existing supported rows.
+
+[Unseen-model confidence](new-model-confidence.md) is calibrated separately
+from 30,182 genuinely hidden sparse-row and temporal predictions. Its nested
+leave-target-model-out evaluation obtains 94.77% empirical coverage at nominal
+90% and 14.32-point median width. The CLI and website expose the risk, interval,
+probe bucket, fallback scope, and calibration group counts, or deterministically
+abstain for unsupported columns. This remains retrospective and is not a
+clinical or future-domain coverage guarantee.
 
 ## Probe and ranking validation
 

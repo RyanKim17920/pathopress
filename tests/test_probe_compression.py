@@ -6,11 +6,14 @@ import unittest
 import numpy as np
 
 from pathopress.probe_compression import (
+    ProbePredictions,
+    SCORE_RECONSTRUCTION_PAIRWISE_DIAGNOSTIC_MARGIN,
     candidate_prefixes,
     merge_shards,
     objective_value,
     predict_all_known,
     predict_heldout_models,
+    rank_prune_trajectory,
     score_predictions,
     sharded_combinations,
 )
@@ -37,6 +40,21 @@ class ProbeCompressionTests(unittest.TestCase):
         self.assertEqual(metrics["n_revealed"], 4)
         self.assertGreaterEqual(float(metrics["medae"]), 0)
         self.assertGreaterEqual(float(metrics["medape"]), 0)
+        self.assertEqual(
+            metrics["pairwise_margin"],
+            SCORE_RECONSTRUCTION_PAIRWISE_DIAGNOSTIC_MARGIN,
+        )
+
+    def test_medape_excludes_targets_at_or_below_pinned_epsilon(self) -> None:
+        actual = np.array([[1e-7, 10.0], [1e-6, 20.0]])
+        predicted = np.array([[1.0, 11.0], [2.0, 22.0]])
+        target = np.ones_like(actual, dtype=bool)
+        result = ProbePredictions(
+            (), actual, predicted, target, np.zeros_like(target), target
+        )
+        metrics = score_predictions(result)
+        self.assertAlmostEqual(float(metrics["medape"]), 10.0)
+        self.assertAlmostEqual(float(metrics["hidden_medape"]), 10.0)
 
     def test_heldout_target_is_not_visible_in_context(self) -> None:
         result = predict_heldout_models(MATRIX, [0], [3], [0, 1, 2], rank=1)
@@ -57,6 +75,36 @@ class ProbeCompressionTests(unittest.TestCase):
             1 - float(metrics["top_median_recovery"]),
         )
 
+    def test_ranking_scope_matches_upstream_probe_denominators(self) -> None:
+        actual = np.array([[100.0], [90.0], [80.0], [70.0]])
+        predicted = np.array([[100.0], [90.0], [70.0], [80.0]])
+        target = np.ones_like(actual, dtype=bool)
+        revealed = np.array([[True], [True], [False], [False]])
+        heldout = target & ~revealed
+        result = ProbePredictions(
+            (0,), actual, predicted, target, revealed, heldout
+        )
+
+        legacy = score_predictions(result, pairwise_margin=5.0)
+        all_target = score_predictions(
+            result, pairwise_margin=5.0, ranking_scope="all_target"
+        )
+        hidden_only = score_predictions(
+            result, pairwise_margin=5.0, ranking_scope="hidden_only"
+        )
+
+        self.assertEqual(legacy["pairwise_n_pairs"], 5)
+        self.assertAlmostEqual(float(legacy["pairwise_median_accuracy"]), 4 / 5)
+        self.assertEqual(all_target["pairwise_n_pairs"], 6)
+        self.assertAlmostEqual(float(all_target["pairwise_median_accuracy"]), 5 / 6)
+        self.assertEqual(hidden_only["pairwise_n_pairs"], 1)
+        self.assertEqual(float(hidden_only["pairwise_median_accuracy"]), 0.0)
+
+    def test_ranking_scope_rejects_unknown_value(self) -> None:
+        result = predict_all_known(MATRIX, [0], rank=1)
+        with self.assertRaisesRegex(ValueError, "ranking_scope"):
+            score_predictions(result, ranking_scope="probeish")
+
     def test_candidate_prefixes_are_nested_and_candidate_restricted(self) -> None:
         prefixes = candidate_prefixes([2, 5, 9], max_probes=3, repeats=2, seed=42)
         self.assertEqual(len(prefixes), 2)
@@ -64,6 +112,37 @@ class ProbeCompressionTests(unittest.TestCase):
             self.assertEqual(repeat[0], repeat[1][:1])
             self.assertEqual(repeat[1], repeat[2][:2])
             self.assertEqual(set(repeat[-1]), {2, 5, 9})
+
+    def test_rank_pruning_uses_all_steps_normalized_rank_and_id_ties(self) -> None:
+        trajectory = [
+            {
+                "step": 1,
+                "added_evaluation_id": "b",
+                "candidate_results": [
+                    {"evaluation_id": "b", "parity_medae": 1.0},
+                    {"evaluation_id": "a", "parity_medae": 1.0},
+                    {"evaluation_id": "c", "parity_medae": 3.0},
+                ],
+            },
+            {
+                "step": 2,
+                "added_evaluation_id": "c",
+                "candidate_results": [
+                    {"evaluation_id": "a", "parity_medae": 4.0},
+                    {"evaluation_id": "c", "parity_medae": 2.0},
+                ],
+            },
+        ]
+        result = rank_prune_trajectory(
+            trajectory,
+            ["a", "b", "c"],
+            keep_count=1,
+            score_key="parity_medae",
+        )
+        self.assertEqual(result["source_steps_used"], 2)
+        self.assertEqual(result["ranked_steps"][0]["ranks"][0]["candidate_id"], "a")
+        self.assertEqual(result["kept_ids"], ["a"])
+        self.assertEqual(result["by_candidate"]["b"]["n_ranked_steps"], 1)
 
     def test_shards_match_exact_combination_space_and_merge_checks_completeness(self) -> None:
         candidates = [0, 1, 2, 3, 4]

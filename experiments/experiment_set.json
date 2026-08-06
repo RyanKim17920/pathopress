@@ -55,16 +55,16 @@
     {
       "name": "probe_compression",
       "command": "python3 experiments/run_probe_compression.py && python3 scripts/plot_probe_compression.py",
-      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v1.json", "experiments/probe_selection_results_rank1.json", "experiments/run_probe_compression.py", "scripts/plot_probe_compression.py", "src/pathopress"],
+      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/probe_selection_results_rank1.json", "experiments/run_probe_compression.py", "scripts/plot_probe_compression.py", "src/pathopress"],
       "artifacts": ["experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "figures/probe_compression_curves_rank1.png", "figures/probe_compression_curves_rank1.pdf"],
       "external_calls": false
     },
     {
       "name": "probe_exhaustive",
-      "command": "python3 experiments/run_probe_exhaustive.py",
-      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v1.json", "experiments/probe_compression_rank1.json", "experiments/run_probe_exhaustive.py", "src/pathopress"],
-      "dependencies": [{"path": "experiments/probe_exhaustive_shards", "role": "resume_shards"}],
-      "artifacts": ["experiments/probe_exhaustive_rank1.json"],
+      "command": "python3 experiments/build_probe_pruning.py && python3 experiments/run_probe_exhaustive.py --help",
+      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/probe_selection_results_rank1.json", "experiments/build_probe_pruning.py", "experiments/run_probe_exhaustive.py", "src/pathopress"],
+      "dependencies": [],
+      "artifacts": ["experiments/probe_pruning_rank1_top30.json", "data/error_informed_probe_allowlist_rank1_top30.json", "experiments/probe_exhaustive_execution_status.json", "experiments/probe_exhaustive_runs/cheap25_medae_k5/config.json", "experiments/probe_exhaustive_runs/pruned30_medae_k5/config.json"],
       "external_calls": false
     },
     {
@@ -79,6 +79,13 @@
       "command": "python3 experiments/run_confidence_calibration.py && python3 scripts/plot_confidence_calibration.py",
       "inputs": ["data/scores.csv", "experiments/run_confidence_calibration.py", "scripts/plot_confidence_calibration.py", "src/pathopress"],
       "artifacts": ["experiments/confidence_calibration_rank1.json", "experiments/confidence_cells_rank1.csv", "figures/confidence_calibration_rank1.png", "figures/confidence_calibration_rank1.pdf"],
+      "external_calls": false
+    },
+    {
+      "name": "new_model_confidence",
+      "command": "python3 experiments/run_new_model_confidence.py && python3 scripts/plot_new_model_confidence.py",
+      "inputs": ["data/scores.csv", "experiments/temporal_deployment_rank1.json", "experiments/run_new_model_confidence.py", "scripts/plot_new_model_confidence.py", "src/pathopress"],
+      "artifacts": ["experiments/new_model_confidence_rank1.json", "experiments/new_model_confidence_predictions_rank1.csv", "figures/new_model_confidence_rank1.png", "figures/new_model_confidence_rank1.pdf"],
       "external_calls": false
     },
     {
@@ -111,6 +118,13 @@
       "external_calls": false
     },
     {
+      "name": "evaluation_cost_evidence",
+      "command": "python3 scripts/build_evaluation_cost_evidence.py && python3 scripts/plot_evaluation_cost_evidence.py",
+      "inputs": ["data/scores.csv", "data/tasks.csv", "scripts/build_evaluation_cost_evidence.py", "scripts/plot_evaluation_cost_evidence.py"],
+      "artifacts": ["data/evaluation_cost_evidence.json", "data/evaluation_cost_evidence.csv", "figures/evaluation_cost_evidence_coverage.png", "figures/evaluation_cost_evidence_coverage.pdf"],
+      "external_calls": false
+    },
+    {
       "name": "publication_tables",
       "command": "python3 scripts/build_publication_tables.py",
       "inputs": ["data/scores.csv", "data/tasks.csv", "data/model_metadata.csv", "data/model_release_dates.csv", "data/evaluation_feasibility.csv", "experiments/structure_analysis", "scripts/build_publication_tables.py", "src/pathopress"],
@@ -119,9 +133,9 @@
     },
     {
       "name": "publication_hero",
-      "command": "python3 scripts/plot_publication_hero.py",
-      "inputs": ["experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "scripts/plot_publication_hero.py", "src/pathopress"],
-      "artifacts": ["experiments/publication_hero_summary.json", "figures/pathopress_hero_rank1.png", "figures/pathopress_hero_rank1.pdf"],
+      "command": "python3 scripts/plot_publication_hero.py && python3 scripts/plot_benchpress_style_hero.py && python3 scripts/plot_probe_dual_objective.py",
+      "inputs": ["data/scores.csv", "experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "scripts/plot_publication_hero.py", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py", "src/pathopress"],
+      "artifacts": ["experiments/publication_hero_summary.json", "experiments/benchpress_style_hero_summary.json", "outputs/probe_dual_objective_rank1.csv", "figures/pathopress_hero_rank1.png", "figures/pathopress_hero_rank1.pdf", "figures/pathopress_benchpress_hero_rank1.png", "figures/pathopress_benchpress_hero_rank1.pdf", "figures/pathopress_benchpress_ranking_rank1.png", "figures/pathopress_benchpress_ranking_rank1.pdf", "figures/probe_dual_objective_rank1.png", "figures/probe_dual_objective_rank1.pdf"],
       "external_calls": false
     },
     {
@@ -134,7 +148,7 @@
     {
       "name": "public_export",
       "command": "python3 scripts/build_public_release.py",
-      "inputs": ["data/scores.csv", "data/tasks.csv", "data/suites.csv", "data/provenance.json", "data/model_metadata.csv", "experiments/confidence_cells_rank1.csv", "scripts/build_public_release.py", "src/pathopress"],
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/suites.csv", "data/provenance.json", "data/model_metadata.csv", "experiments/confidence_cells_rank1.csv", "experiments/new_model_confidence_rank1.json", "scripts/build_public_release.py", "src/pathopress"],
       "artifacts": ["experiments/deployment_confidence_rank1.json", "exports/pathopress_public", "website/data.json"],
       "external_calls": false
     }

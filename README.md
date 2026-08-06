@@ -43,13 +43,22 @@ and retrospective interpolation is not prospective clinical validation.
   1.481124 at five probes and 1.196456 at ten. Hidden-only values are 1.612112
   and 1.539134. These are transductive reconstruction results, not estimates of
   a new model's clinical utility.
+- The margin-5 ranking-aware greedy trajectory reaches 0.7929 pairwise accuracy
+  at five unrestricted probes and 0.9155 at ten. The 25-task pipeline-feasibility
+  proxy plateaus at 0.3333 all-known accuracy; it is not a measured cost set.
+  Exact `C(25,5)`/`C(30,5)` exhaustive optima remain configured but unrun.
+- For the same scorecard-selected probes, median error in each model's average
+  observed score falls from 1.7232 at one probe to 0.8956 at ten unrestricted
+  probes and 0.7007 for the 25-task proxy. This is a separately evaluated
+  usefulness measure, not the greedy selection objective.
 - OOF ranking preservation has median pairwise accuracy 0.7622/0.7954/0.8337/
   0.9049 at normalized-score margins 0/1/2/5, and median top-set recovery
   0.6786/0.7759/0.8133 at top fractions 10/20/30%.
 - Cross-fitted structural-support uncertainty correlates with absolute error at
   Spearman 0.5980; its leave-fold-out 90% intervals cover 89.995% of 19,670 OOF
-  instances. The separate deploy artifact gives suite-conditioned held-out-cell
-  intervals only for supported existing rows, not genuinely unseen models.
+  instances. A separate unseen-model artifact uses 30,182 nested
+  leave-model-out/temporal predictions; its nominal-90% empirical coverage is
+  94.77% with 14.32-point median width, and unsupported columns abstain.
 - A hard-rule temporal experiment predicts seven 2025 model releases using
   strictly earlier models and 1/5/10 revealed cells across ten seeds. It is a
   small retrospective release cohort, not external or prospective validation.
@@ -89,9 +98,11 @@ pathopress add-model --model my-model \
 ```
 
 `status=observed`, `provided`, and `predicted` remain distinct. Confidence is
-hash-bound to the source scores and exact point recipe. New-model predictions
-are explicitly marked `not_applicable_new_model` for confidence because the
-calibration population contains existing model rows only.
+hash-bound to the source scores and exact point recipe. Existing-row intervals
+and unseen-model intervals use separate calibration populations. New-model
+output reports the conservative k bucket, risk, interval, fallback scope,
+calibration group/prediction counts, or an explicit unsupported-context
+abstention. These are retrospective empirical intervals, not clinical guarantees.
 
 ## Reproduce the compact release
 
@@ -128,9 +139,10 @@ No build or download command performs deployment or upload.
 | Point estimates and rank | [imputations](outputs/imputations_rank1.csv), [bias-ALS CV](experiments/benchpress_style_results.json), [Soft-Impute sweep](experiments/soft_impute_rank_sweep_results.json) |
 | Full classical grid | [manifest](experiments/method_comparison/manifest.json), [results](experiments/method_comparison/results.json), [top table](experiments/method_comparison/top_methods.md), [grid figure](figures/method_comparison_grid.png) |
 | Structure | [structure manifest](experiments/structure_analysis/manifest.json), [stable rank](experiments/structure_analysis/stable_rank_results.json), [MDS coordinates](experiments/structure_analysis/mds_coordinates.csv) |
-| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [bounded exhaustive search](experiments/probe_exhaustive_rank1.json), [hero](figures/pathopress_hero_rank1.png) |
+| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [exact-search status](experiments/probe_exhaustive_execution_status.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [ranking curve](figures/pathopress_benchpress_ranking_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
+| Cost and feasibility evidence | [source-backed registry](data/evaluation_cost_evidence.json), [flat audit](data/evaluation_cost_evidence.csv), [audit note](docs/evaluation-cost-evidence.md), [coverage figure](figures/evaluation_cost_evidence_coverage.png) |
 | Ranking and time | [ranking](experiments/ranking_preservation_rank1.json), [temporal](experiments/temporal_deployment_rank1.json) |
-| Trust and error factors | [confidence](experiments/confidence_calibration_rank1.json), [deploy intervals](experiments/deployment_confidence_rank1.json), [predictability](experiments/predictability_results_rank1.json), [factor analysis](experiments/prediction_error_factors_rank1.json) |
+| Trust and error factors | [confidence](experiments/confidence_calibration_rank1.json), [existing-row intervals](experiments/deployment_confidence_rank1.json), [unseen-model intervals](experiments/new_model_confidence_rank1.json), [new-model method](docs/new-model-confidence.md), [predictability](experiments/predictability_results_rank1.json), [factor analysis](experiments/prediction_error_factors_rank1.json) |
 | Publication outputs | [table manifest](outputs/tables/manifest.json), [metadata summary](experiments/publication_metadata_summary.json), [figure gallery](figures/README.md) |
 | Product surface | [CLI](src/pathopress/cli.py), [public export](exports/pathopress_public/README.md), [static site](website/README.md) |
 
@@ -151,11 +163,18 @@ PYTHONPATH=src python3 experiments/run_method_comparison.py --prepare-folds
 PYTHONPATH=src python3 experiments/run_method_comparison.py --merge
 PYTHONPATH=src python3 experiments/run_structure_analysis.py
 PYTHONPATH=src python3 experiments/run_probe_compression.py
-PYTHONPATH=src python3 experiments/run_probe_exhaustive.py --workers 8
+PYTHONPATH=src python3 experiments/build_probe_pruning.py
+# Run the documented wave/shard jobs, then strict merge; see experiments/README.md.
+PYTHONPATH=src python3 experiments/run_probe_exhaustive.py merge --out-dir experiments/probe_exhaustive_runs/cheap25_medae_k5
 PYTHONPATH=src python3 experiments/run_ranking_preservation.py
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
+PYTHONPATH=src python3 experiments/run_new_model_confidence.py
 PYTHONPATH=src python3 experiments/run_temporal_deployment.py
 PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --workers 8
+python3 scripts/build_evaluation_cost_evidence.py
+python3 scripts/plot_evaluation_cost_evidence.py
+python3 scripts/plot_benchpress_style_hero.py
+python3 scripts/plot_probe_dual_objective.py
 ```
 
 Some commands are intentionally expensive or sharded; consult the experiment
@@ -170,6 +189,11 @@ clinical unit. HEST Pearson `r` maps to `50 × (r + 1)`, PathoROB RI and 0–1
 metrics map to `100 × value`, weighted kappa maps to `50 × (kappa + 1)`, and
 THUNDER's reported 0–100 F1 is unchanged. See
 [docs/imputation.md](docs/imputation.md).
+
+The cost-evidence audit finds no directly reported observed runtime, hardware
+make/model, annotation hours, or dollar cost for any of the 165 retained
+protocols. Its pre-error feasibility strata are auditable metadata proxies,
+not a numeric cost curve; see [the evidence note](docs/evaluation-cost-evidence.md).
 
 Random-cell and within-model folds share model/suite context. Suite-block,
 held-out-row, and temporal experiments are stronger stress tests but still use

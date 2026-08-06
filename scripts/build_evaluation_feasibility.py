@@ -23,6 +23,7 @@ from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E
 
 
 ALLOWLIST_ID = "pathology_low_friction_proxy_v1"
+ALLOWLIST_V2_ID = "pathology_low_friction_pipeline_proxy_top25_v2"
 MAX_SAMPLES = 10_000
 
 
@@ -51,6 +52,7 @@ def main() -> None:
     scores_path = ROOT / "data/scores.csv"
     output_path = ROOT / "data/evaluation_feasibility.csv"
     allowlist_path = ROOT / "data/low_friction_allowlist_v1.json"
+    allowlist_v2_path = ROOT / "data/low_friction_allowlist_v2_top25.json"
 
     scores = load_scores(scores_path)
     matrix, models, evaluations = make_matrix(scores)
@@ -70,9 +72,11 @@ def main() -> None:
         "annotation_hours", "annotation_hours_status", "dollar_cost",
         "dollar_cost_status", "reference_url", "audit_status",
         "allowlist_id", "allowlisted", "allowlist_decision_reason",
+        "allowlist_v2_id", "allowlisted_v2", "allowlist_v2_decision_reason",
     ]
     output_path.parent.mkdir(parents=True, exist_ok=True)
     selected: list[str] = []
+    selected_v2: list[str] = []
     with output_path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
@@ -102,6 +106,17 @@ def main() -> None:
                 reason = "sample_count_metadata_incomplete"
             else:
                 reason = "source_reported_n_gt_10000"
+            allowed_v2 = (
+                row["sample_unit"] in {"image", "patch"}
+                and row["task_type"] == "classification"
+            )
+            if allowed_v2:
+                selected_v2.append(evaluation_id)
+                reason_v2 = "direct_image_or_patch_pipeline_with_existing_class_labels"
+            elif row["sample_unit"] not in {"image", "patch"}:
+                reason_v2 = "requires_non_image_patch_sample_unit"
+            else:
+                reason_v2 = "not_classification"
             writer.writerow({
                 "evaluation_id": evaluation_id,
                 "suite_id": row["suite_id"],
@@ -126,6 +141,9 @@ def main() -> None:
                 "allowlist_id": ALLOWLIST_ID,
                 "allowlisted": str(allowed).lower(),
                 "allowlist_decision_reason": reason,
+                "allowlist_v2_id": ALLOWLIST_V2_ID,
+                "allowlisted_v2": str(allowed_v2).lower(),
+                "allowlist_v2_decision_reason": reason_v2,
             })
 
     allowlist = {
@@ -148,7 +166,45 @@ def main() -> None:
         "evaluation_ids": selected,
     }
     allowlist_path.write_text(json.dumps(allowlist, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({"n_retained": len(evaluations), "n_allowlisted": len(selected), "ids": selected}, indent=2))
+    allowlist_v2 = {
+        "schema_version": 2,
+        "allowlist_id": ALLOWLIST_V2_ID,
+        "derivation_timing": "defined_from_protocol_metadata_before_prediction_error_analysis",
+        "semantics": "low-friction input/label pipeline proxy aligned to the upstream 25-candidate budget; not a monetary, compute, sample-count, or wall-clock cost claim",
+        "rule": {
+            "sample_unit_in": ["image", "patch"],
+            "task_type_equals": "classification",
+        },
+        "upstream_contract_alignment": {
+            "benchpress_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
+            "upstream_user_cheap_current_matrix_candidates": 25,
+            "pathology_candidates": len(selected_v2),
+            "candidate_count_match": len(selected_v2) == 25,
+            "semantic_adaptation": "BenchPress's user-provided cheap list is replaced by a deterministic pathology protocol proxy; candidate count and search budgets match, cost semantics do not.",
+        },
+        "excluded_cost_fields": ["dollar_cost", "annotation_hours", "compute_runtime"],
+        "excluded_cost_reason": "metadata_incomplete; no numeric values imputed; dataset size is not used in v2",
+        "large_dataset_warning": "Some selected evaluations have hundreds of thousands of samples; low-friction describes pipeline shape and existing labels only.",
+        "tasks_sha256": hashlib.sha256(tasks_path.read_bytes()).hexdigest(),
+        "scores_sha256": hashlib.sha256(scores_path.read_bytes()).hexdigest(),
+        "n_retained_evaluations": len(evaluations),
+        "n_allowlisted": len(selected_v2),
+        "evaluation_ids": selected_v2,
+    }
+    if len(selected_v2) != 25:
+        raise ValueError(
+            "v2 candidate budget no longer matches the pinned upstream 25-candidate "
+            f"contract: found {len(selected_v2)}"
+        )
+    allowlist_v2_path.write_text(
+        json.dumps(allowlist_v2, indent=2) + "\n", encoding="utf-8"
+    )
+    print(json.dumps({
+        "n_retained": len(evaluations),
+        "n_allowlisted_v1": len(selected),
+        "n_allowlisted_v2": len(selected_v2),
+        "v2_ids": selected_v2,
+    }, indent=2))
 
 
 if __name__ == "__main__":

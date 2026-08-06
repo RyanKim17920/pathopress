@@ -7,4 +7,5 @@ build/
 *.egg-info/
 experiments/method_comparison/predictions/*.npz
 experiments/prediction_error_factor_shards/
+experiments/probe_exhaustive_runs/*/shards/
 outputs/prediction_error_factor_predictions_rank1.csv
