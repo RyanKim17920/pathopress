@@ -12,7 +12,9 @@ The machine-readable records are in
 with a flat audit view in
 [`data/evaluation_cost_evidence.csv`](../data/evaluation_cost_evidence.csv).
 The [coverage figure](../figures/evaluation_cost_evidence_coverage.png) shows
-what is and is not known.
+direct versus contextual evidence and states the unsupported numeric-cost
+conclusion explicitly. It intentionally does not repeat the same coverage as a
+suite heatmap or display feasibility strata as though they were cost tiers.
 
 ## Evidence policy
 
@@ -31,6 +33,63 @@ The registry follows the rules in Microsoft BenchPress's pinned
 
 No numeric values are imputed. Sample count is never treated as money,
 runtime, compute, or annotation labor.
+
+## Measured-burden infrastructure
+
+The source registry describes what publications and benchmark repositories
+say. A separate [measurement schema](../data/evaluation_burden_measurements.schema.json)
+now defines what a controlled local run must record. Receipts are keyed by
+model revision, evaluation identity, run-configuration hash, hardware
+identity, and cache scope. They also carry an artifact group and one of four
+non-overlapping phases:
+
+1. shared dataset/artifact setup, charged once per artifact group;
+2. per-model feature extraction;
+3. per-protocol head fitting; and
+4. per-protocol evaluation.
+
+The [artifact grouping rules](../data/evaluation_artifact_cost_groups.csv)
+prevent validation/test or protocol variants from repeatedly charging the same
+dataset download and staging work. The
+[budget profiles](../data/evaluation_budget_profiles.json) are deliberately
+templates: users must provide the actual limits and access policy. There is no
+built-in conversion between GPU time, labor, storage, tissue, and dollars.
+
+Every resource fact uses one of `measured`, `source_reported`,
+`configured_ceiling`, `not_applicable`, `not_measured`, `not_reported`, or
+`inaccessible`. The latter four states carry `null`, never numeric zero.
+Unknown dimensions fail closed only when a selected budget constrains that
+dimension; otherwise they remain visible in measurement-coverage reporting.
+
+The telemetry wrapper currently measures wall time, child CPU time, and peak
+child resident memory using the local operating system. It leaves accelerator
+time, VRAM, data transfer/storage, access lead time/labor,
+annotation/pathologist labor, tissue/slides, access and license constraints,
+and direct dollars explicitly unmeasured until dedicated instrumentation or
+billing evidence is attached. A receipt can be collected as:
+
+```bash
+python3 scripts/run_burden_telemetry.py \
+  --model-revision MODEL@REVISION \
+  --evaluation-id EVALUATION_ID \
+  --artifact-group-id SUITE.dataset.DATASET_ID \
+  --phase per_protocol_evaluation \
+  --hardware-id HOST_OR_CLUSTER_ID \
+  --cache-scope warm \
+  --run-config path/to/config.yaml \
+  --output measurements/receipt.json \
+  -- command --and its --arguments
+```
+
+The runner invokes the command directly without a shell, writes atomically,
+refuses to overwrite a receipt unless `--force` is explicit, and propagates the
+child exit code after preserving failed-run telemetry.
+
+Audited receipts feed the independent
+[budget-constrained probe selector](budgeted-probe-selection.md). The checked-in
+[preflight artifact](../experiments/budgeted_probe_selection_rank1.json) binds
+the current 59 × 187 matrix and records `insufficient_cost_coverage`; it contains
+no selected set or numeric cost frontier.
 
 ## What the sources support
 
@@ -137,10 +196,14 @@ are included.
 ```bash
 python3 scripts/build_evaluation_cost_evidence.py
 python3 scripts/plot_evaluation_cost_evidence.py
-PYTHONPATH=src python3 -m unittest tests.test_evaluation_cost_evidence -v
+PYTHONPATH=src python3 -m unittest \
+  tests.test_evaluation_cost_evidence \
+  tests.test_burden_telemetry -v
 ```
 
 The tests verify exact 187-protocol coverage, source resolution for every
 non-null fact, explicit missingness, raw THUNDER/PathoROB numbers, separation
 of software and dataset licenses, zero invented numeric costs, and byte-stable
-CSV plus semantically stable JSON regeneration.
+CSV plus semantically stable JSON regeneration. Telemetry tests additionally
+verify the full status vocabulary, phase/key contract, null unknowns, shared
+artifact grouping, non-numeric budget templates, and overwrite protection.

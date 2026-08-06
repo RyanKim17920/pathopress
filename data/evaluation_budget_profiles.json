@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "semantics": "Budget templates over measured resources. They contain no default exchange rates, imputed costs, or claim that missing values are zero.",
+  "missingness_policy": {
+    "allowed_statuses": [
+      "measured",
+      "source_reported",
+      "configured_ceiling",
+      "not_applicable",
+      "not_measured",
+      "not_reported",
+      "inaccessible"
+    ],
+    "unknown_is_zero": false,
+    "hard_constraint_rule": "fail_closed_only_for_dimensions_constrained_by_the_selected_profile",
+    "unconstrained_dimension_rule": "retain_unknown_and_report_measurement_coverage",
+    "scalarization_rule": "no built-in scalar; any exchange rates or weights must be supplied and reported by the user"
+  },
+  "cost_accounting": {
+    "shared_artifact_setup": "charge once for each artifact_group_id in the selected panel",
+    "per_model_feature_extraction": "charge once for each model_revision and artifact_group_id",
+    "per_protocol_head_fit": "charge for each selected model_revision and evaluation_id",
+    "per_protocol_evaluation": "charge for each selected model_revision and evaluation_id"
+  },
+  "profiles": [
+    {
+      "profile_id": "measured_compute_template",
+      "description": "User-supplied wall-time, accelerator-time, memory, and storage limits over measured receipts.",
+      "activation": "requires_user_budget_values",
+      "required_status": "measured",
+      "budget_units": {
+        "wall_time": "seconds",
+        "accelerator_time": "accelerator-seconds",
+        "peak_vram": "GiB",
+        "peak_ram": "GiB",
+        "storage_volume": "GiB"
+      },
+      "budget_values": null
+    },
+    {
+      "profile_id": "open_reuse_template",
+      "description": "Hard access/license filter for reuse of existing labeled artifacts, followed by user-supplied measured compute limits.",
+      "activation": "requires_user_access_policy_and_budget_values",
+      "required_access_fields": [
+        "access_class",
+        "dataset_license",
+        "commercial_use_allowed",
+        "redistribution_allowed"
+      ],
+      "allowed_access_classes": null,
+      "budget_values": null
+    },
+    {
+      "profile_id": "full_acquisition_template",
+      "description": "Includes new tissue, slides, annotation/pathologist labor, and direct billed cost; no protocol is eligible until constrained fields are measured or explicitly not applicable.",
+      "activation": "requires_user_budget_values",
+      "required_status": "measured_or_not_applicable",
+      "budget_units": {
+        "new_tissue_cases": "cases",
+        "new_slides": "slides",
+        "annotation_labor": "hours",
+        "pathologist_labor": "hours",
+        "direct_cost": "USD"
+      },
+      "budget_values": null
+    }
+  ]
+}

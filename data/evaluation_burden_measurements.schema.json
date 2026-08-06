@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pathopress.local/schemas/evaluation-burden-measurements-v1.json",
+  "title": "PathoPress evaluation burden measurement receipt",
+  "description": "One provenance-bound execution receipt. Unknown resource values are null with an explicit non-measured status; they are never encoded as zero.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "schema_path", "measurement"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "schema_path": {"const": "data/evaluation_burden_measurements.schema.json"},
+    "measurement": {"$ref": "#/$defs/measurement"}
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "status": {
+      "enum": [
+        "measured",
+        "source_reported",
+        "configured_ceiling",
+        "not_applicable",
+        "not_measured",
+        "not_reported",
+        "inaccessible"
+      ]
+    },
+    "resource_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "value", "unit"],
+      "properties": {
+        "status": {"$ref": "#/$defs/status"},
+        "value": {"type": ["number", "integer", "string", "boolean", "null"]},
+        "unit": {"type": "string", "minLength": 1},
+        "measurement_method": {"type": "string", "minLength": 1},
+        "source_url": {"type": "string", "format": "uri"},
+        "source_locator": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "measured"}}},
+          "then": {
+            "properties": {"value": {"type": ["number", "integer"]}},
+            "required": ["measurement_method"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["not_applicable", "not_measured", "not_reported", "inaccessible"]
+              }
+            }
+          },
+          "then": {
+            "properties": {"value": {"type": "null"}},
+            "required": ["reason"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {"enum": ["source_reported", "configured_ceiling"]}
+            }
+          },
+          "then": {"required": ["source_url", "source_locator"]}
+        }
+      ]
+    },
+    "categorical_fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "value"],
+      "properties": {
+        "status": {"$ref": "#/$defs/status"},
+        "value": {"type": ["string", "boolean", "null"]},
+        "measurement_method": {"type": "string", "minLength": 1},
+        "source_url": {"type": "string", "format": "uri"},
+        "source_locator": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"status": {"const": "measured"}}},
+          "then": {
+            "properties": {"value": {"type": ["string", "boolean"]}},
+            "required": ["measurement_method"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": ["not_applicable", "not_measured", "not_reported", "inaccessible"]
+              }
+            }
+          },
+          "then": {
+            "properties": {"value": {"type": "null"}},
+            "required": ["reason"]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {"enum": ["source_reported", "configured_ceiling"]}
+            }
+          },
+          "then": {"required": ["source_url", "source_locator"]}
+        }
+      ]
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "measurement_id",
+        "model_revision",
+        "evaluation_id",
+        "run_config_hash",
+        "hardware_id",
+        "cache_scope",
+        "artifact_group_id",
+        "phase",
+        "execution_status",
+        "exit_code",
+        "started_at",
+        "completed_at",
+        "command_sha256",
+        "command",
+        "run_config_path",
+        "host",
+        "resources",
+        "constraints",
+        "scope_note"
+      ],
+      "properties": {
+        "measurement_id": {"$ref": "#/$defs/sha256"},
+        "model_revision": {"type": ["string", "null"]},
+        "evaluation_id": {"type": ["string", "null"]},
+        "run_config_hash": {"$ref": "#/$defs/sha256"},
+        "hardware_id": {"type": "string", "minLength": 1},
+        "cache_scope": {"enum": ["cold", "warm", "mixed", "not_applicable"]},
+        "artifact_group_id": {"type": "string", "minLength": 1},
+        "phase": {
+          "enum": [
+            "shared_artifact_setup",
+            "per_model_feature_extraction",
+            "per_protocol_head_fit",
+            "per_protocol_evaluation"
+          ]
+        },
+        "execution_status": {"enum": ["completed", "failed"]},
+        "exit_code": {"type": "integer"},
+        "started_at": {"type": "string", "format": "date-time"},
+        "completed_at": {"type": "string", "format": "date-time"},
+        "command_sha256": {"$ref": "#/$defs/sha256"},
+        "command": {
+          "type": ["array", "null"],
+          "items": {"type": "string"}
+        },
+        "run_config_path": {"type": ["string", "null"]},
+        "host": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["hostname", "platform", "python", "cpu_count"],
+          "properties": {
+            "hostname": {"type": "string"},
+            "platform": {"type": "string"},
+            "python": {"type": "string"},
+            "cpu_count": {"type": ["integer", "null"], "minimum": 1}
+          }
+        },
+        "resources": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "wall_time",
+            "cpu_user_time",
+            "cpu_system_time",
+            "peak_ram",
+            "accelerator_time",
+            "peak_vram",
+            "download_volume",
+            "storage_volume",
+            "access_lead_time",
+            "access_admin_labor",
+            "annotation_labor",
+            "pathologist_labor",
+            "new_tissue_cases",
+            "new_slides",
+            "direct_cost"
+          ],
+          "properties": {
+            "wall_time": {"$ref": "#/$defs/resource_fact"},
+            "cpu_user_time": {"$ref": "#/$defs/resource_fact"},
+            "cpu_system_time": {"$ref": "#/$defs/resource_fact"},
+            "peak_ram": {"$ref": "#/$defs/resource_fact"},
+            "accelerator_time": {"$ref": "#/$defs/resource_fact"},
+            "peak_vram": {"$ref": "#/$defs/resource_fact"},
+            "download_volume": {"$ref": "#/$defs/resource_fact"},
+            "storage_volume": {"$ref": "#/$defs/resource_fact"},
+            "access_lead_time": {"$ref": "#/$defs/resource_fact"},
+            "access_admin_labor": {"$ref": "#/$defs/resource_fact"},
+            "annotation_labor": {"$ref": "#/$defs/resource_fact"},
+            "pathologist_labor": {"$ref": "#/$defs/resource_fact"},
+            "new_tissue_cases": {"$ref": "#/$defs/resource_fact"},
+            "new_slides": {"$ref": "#/$defs/resource_fact"},
+            "direct_cost": {"$ref": "#/$defs/resource_fact"}
+          }
+        },
+        "constraints": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "access_class",
+            "dataset_license",
+            "commercial_use_allowed",
+            "redistribution_allowed",
+            "new_tissue_required"
+          ],
+          "properties": {
+            "access_class": {"$ref": "#/$defs/categorical_fact"},
+            "dataset_license": {"$ref": "#/$defs/categorical_fact"},
+            "commercial_use_allowed": {"$ref": "#/$defs/categorical_fact"},
+            "redistribution_allowed": {"$ref": "#/$defs/categorical_fact"},
+            "new_tissue_required": {"$ref": "#/$defs/categorical_fact"}
+          }
+        },
+        "scope_note": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"phase": {"const": "shared_artifact_setup"}}},
+          "then": {
+            "properties": {
+              "model_revision": {"type": "null"},
+              "evaluation_id": {"type": ["string", "null"]}
+            }
+          },
+          "else": {
+            "properties": {
+              "model_revision": {"type": "string", "minLength": 1},
+              "evaluation_id": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      ]
+    }
+  }
+}

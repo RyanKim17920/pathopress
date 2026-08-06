@@ -55,7 +55,19 @@ class EvaluationCostEvidenceTests(unittest.TestCase):
 
         copy = load_cost_plot_module().denominator_copy(total)
         self.assertEqual(copy["coverage_title"], f"A. Evidence coverage (n={total:,})")
+        self.assertEqual(copy["callout_title"], "B. Numeric burden curve")
+        self.assertEqual(copy["callout_headline"], "NOT MEASURABLE YET")
         self.assertIn(f"0/{total:,}", copy["missingness_footer"])
+
+    def test_cost_figure_does_not_present_proxy_tiers_or_a_suite_heatmap(self) -> None:
+        module = load_cost_plot_module()
+        self.assertFalse(hasattr(module, "TIER_LABELS"))
+        source = (ROOT / "scripts/plot_evaluation_cost_evidence.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertNotIn("Pre-error feasibility strata", source)
+        self.assertNotIn("Any source-backed evidence by suite", source)
+        self.assertIn("Unknown values remain unknown, never zero", source)
 
     def test_every_reported_fact_has_a_resolvable_source_and_locator(self) -> None:
         source_ids = {source["source_id"] for source in self.payload["sources"]}
