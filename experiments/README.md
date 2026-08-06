@@ -7,18 +7,19 @@ before regenerating analyses:
 python3 -m pip install -e '.[research]'
 ```
 
-The fixed substrate is 59 models × 168 protocol-level evaluations with 2,027
-observations (20.4500% density). The accepted source rows are Patho-Bench 896,
-EVA 265, HEST 234, THUNDER 512, and PathoROB 120. The registry additionally
-retains 40 analysis-ineligible signed APD rows and nine external-report rows,
-for 169 PathoROB rows and 2,076 total rows.
+The fixed substrate is 59 models × 187 protocol-level evaluations with 2,122
+observations (19.2332% density). The source registry contains 4,013 score rows:
+3,952 retained primary rows, 52 analysis-ineligible rows, and nine reported-
+external rows. The supported analysis columns span Patho-Bench (122), EVA (15),
+THUNDER (16), H-Optimus-1 report (10), HEST (18), and PathoROB (6).
 
 ## Shared substrate and selected predictor
 
 ```bash
 PYTHONPATH=src python3 scripts/build_shared_artifacts.py
 PYTHONPATH=src python3 experiments/run_benchpress_style.py
-PYTHONPATH=src python3 experiments/run_soft_impute_rank_sweep.py
+PYTHONPATH=src python3 experiments/run_soft_impute_rank_sweep.py \
+  --workers 8 --blas-threads 1
 PYTHONPATH=src python3 experiments/run_validation.py
 ```
 
@@ -26,15 +27,23 @@ PYTHONPATH=src python3 experiments/run_validation.py
   and [folds](folds_s10_f3_bs42.json) fix ordered identities, filters, hashes,
   and ten seeds × three folds.
 - [matched CV](benchpress_style_results.json) selects rank-1 bias ALS at
-  3.222008 MAE / 1.647585 MedAE over 20,270 predictions; column median is
-  4.275274/2.500000.
+  3.134532 MAE / 1.609006 MedAE over 21,181 supported predictions; column
+  median is 4.151756/2.400000. Thirty-nine held targets whose columns become
+  empty in-fold are explicitly recorded as unsupported.
 - [Soft-Impute](soft_impute_rank_sweep_results.json) reproduces the separate
-  raw/logit rank-discovery algorithm; both tracks choose rank 1.
+  raw/logit rank-discovery algorithm; both tracks choose rank 1. Its 600
+  transform/rank/fold jobs checkpoint atomically under the ignored
+  `soft_impute_rank_sweep_checkpoints/` directory and resume by default.
+  Checkpoint identities bind score, ordered matrix, folds, numerical config,
+  and implementation hashes; `--merge-only` verifies and merges a complete
+  compatible cache without fitting. Keep `--blas-threads 1` when using
+  multiple workers to avoid BLAS oversubscription.
 - [pathology stress tests](results.json) give rank-1 random-cell
-  3.050584/1.603529, suite-block 5.688229/3.537207, and pooled sparse-new-model
-  3.503746/1.894207 MAE/MedAE. In the tested rank-1-through-6 sweep, suite-block
-  prefers rank 6 at 5.093822/3.175723; sparse-new-model also has its lowest
-  tested pair at rank 6, 3.351160/1.873395.
+  2.937385/1.568476, suite-block 5.788534/3.599615, and pooled sparse-new-model
+  3.285791/1.753653 MAE/MedAE. In the tested rank-1-through-6 sweep, suite-block
+  prefers rank 6 at 5.099363/3.203260. Sparse-new-model rank 1 has the best MAE;
+  rank 6 has a marginally lower MedAE (1.751528 versus 1.753653). These are
+  stress diagnostics, not the primary matched-CV rank selector.
 
 ## Classical method comparison
 
@@ -86,11 +95,49 @@ correlation 0.916362. Publication CSV/Markdown/LaTeX tables are under
 PYTHONPATH=src python3 experiments/run_probe_selection.py
 PYTHONPATH=src python3 experiments/run_probe_compression.py
 PYTHONPATH=src python3 experiments/build_probe_pruning.py
-# Validate all 800 exact-search chunks, merged order, and scalar top candidates:
-PYTHONPATH=src python3 experiments/validate_probe_exhaustive_chunks.py
-PYTHONPATH=src python3 experiments/validate_probe_exhaustive_merged.py
-PYTHONPATH=src python3 experiments/validate_probe_exhaustive_top.py
-PYTHONPATH=src python3 experiments/build_probe_exhaustive_summary.py
+# For a newly generated schema-v2 matrix, first run all declared residues with
+# run_probe_exhaustive_v2.py. Then certify the two explicit run directories:
+# Replace NEW_SCORE_SHA12 in both values with the first 12 hex characters of
+# the refreshed data/scores.csv SHA-256 before running these commands.
+CHEAP_RUN=experiments/probe_exhaustive_runs/cheap25_medae_k5_mNEW_SCORE_SHA12
+PRUNED_RUN=experiments/probe_exhaustive_runs/pruned30_medae_k5_mNEW_SCORE_SHA12
+PYTHONPATH=src:experiments python3 experiments/verify_fast_rank1.py
+FAST_LIBRARY=$(python3 -c 'import json; print(json.load(open("experiments/probe_exhaustive_fast_equivalence_v2.json"))["inputs"]["library_path"])')
+for wave in $(seq 0 9); do
+  for shard in $(seq 0 7); do
+    PYTHONPATH=src:experiments python3 experiments/run_probe_exhaustive_v2.py run-shard \
+      --candidate-allowlist data/low_friction_allowlist_v2_top25.json \
+      --k 5 --metric medae --num-waves 10 --wave-index "$wave" \
+      --num-shards 8 --shard-index "$shard" \
+      --fast-library "$FAST_LIBRARY" \
+      --fast-equivalence experiments/probe_exhaustive_fast_equivalence_v2.json \
+      --out-dir "$CHEAP_RUN"
+  done
+done
+for wave in $(seq 0 19); do
+  PYTHONPATH=src:experiments python3 experiments/run_probe_exhaustive_v2.py run-shard \
+    --candidate-allowlist data/error_informed_probe_allowlist_rank1_top30.json \
+    --k 5 --metric medae --num-waves 20 --wave-index "$wave" \
+    --num-shards 1 --shard-index 0 \
+    --fast-library "$FAST_LIBRARY" \
+    --fast-equivalence experiments/probe_exhaustive_fast_equivalence_v2.json \
+    --out-dir "$PRUNED_RUN"
+done
+PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_chunks.py \
+  "$CHEAP_RUN" "$PRUNED_RUN"
+PYTHONPATH=src:experiments python3 experiments/run_probe_exhaustive_v2.py merge \
+  --out-dir "$CHEAP_RUN" --top-n 1001 \
+  --integrity-manifest experiments/probe_exhaustive_integrity_manifest.json
+PYTHONPATH=src:experiments python3 experiments/run_probe_exhaustive_v2.py merge \
+  --out-dir "$PRUNED_RUN" --top-n 1001 \
+  --integrity-manifest experiments/probe_exhaustive_integrity_manifest.json
+PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_merged.py \
+  "$CHEAP_RUN" "$PRUNED_RUN"
+PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_top.py \
+  "$CHEAP_RUN" "$PRUNED_RUN"
+PYTHONPATH=src:experiments python3 experiments/build_probe_exhaustive_summary.py \
+  --cheap-run "$CHEAP_RUN" --pruned-run "$PRUNED_RUN" \
+  --fast-equivalence experiments/probe_exhaustive_fast_equivalence_v2.json
 PYTHONPATH=src python3 experiments/run_ranking_preservation.py
 python3 scripts/plot_probe_compression.py
 python3 scripts/plot_ranking_preservation.py
@@ -133,6 +180,26 @@ python3 scripts/plot_probe_dual_objective.py
   lifetime of one reusable worker pool. Regenerate the host-bound evidence with
   `PYTHONPATH=src:experiments python3 experiments/verify_fast_rank1.py` before
   starting a new v2 native run.
+- The three validators default to schema v2 and require explicit run
+  directories. To re-audit the frozen release's legacy-v1 directories, pass
+  `--runner-version legacy`, the legacy equivalence file, and the preserved
+  `/tmp/libpathopress_fast_rank1.so` library to the chunk validator. Legacy
+  mode is audit-only; do not use it to create or resume a new search.
+
+  ```bash
+  LEGACY_CHEAP=experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91
+  LEGACY_PRUNED=experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91
+  PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_chunks.py \
+    --runner-version legacy --library /tmp/libpathopress_fast_rank1.so \
+    --equivalence experiments/probe_exhaustive_fast_equivalence.json \
+    "$LEGACY_CHEAP" "$LEGACY_PRUNED"
+  PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_merged.py \
+    --runner-version legacy "$LEGACY_CHEAP" "$LEGACY_PRUNED"
+  PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_top.py \
+    --runner-version legacy \
+    --equivalence experiments/probe_exhaustive_fast_equivalence.json \
+    "$LEGACY_CHEAP" "$LEGACY_PRUNED"
+  ```
 - [Ranking](ranking_preservation_rank1.json) reports pairwise accuracy at
   margins 0/1/2/5 and top-set recovery at 10/20/30% from OOF predictions.
 
@@ -185,34 +252,6 @@ python3 scripts/build_prediction_error_factor_tables.py
 The factor experiment's 6,030 local unit-cache files (~22 MiB) and 289,681-row
 raw prediction CSV (~30 MiB) are Git-ignored. The manifest, merged records,
 tables, and figures remain tracked.
-
-## LLM baseline contract
-
-```bash
-PYTHONPATH=src python3 experiments/run_llm_baseline.py prepare --scope full
-PYTHONPATH=src python3 experiments/run_llm_baseline.py preflight --scope full
-PYTHONPATH=src python3 experiments/run_llm_baseline.py all-mock --scope smoke
-# After an authorized external provider creates raw provider-neutral JSONL:
-PYTHONPATH=src python3 experiments/run_llm_baseline.py import-real --scope full \
-  --raw-responses /path/to/provider_responses.jsonl
-```
-
-The full pack contains 1,990 requests and 81,080 target predictions across all
-30 folds: named/blind full-matrix zero-shot and named/blind five-shot. It is
-stored as 20 deterministic gzip JSONL shards with compressed and canonical
-uncompressed hashes. The separate four-request [smoke fixture](llm_baseline_smoke/)
-is explicitly `headline_eligible=false`. The provider-neutral runner implements
-no provider client and reads no credentials. The separate dry-run-first
-[`run_openai_batch.py`](run_openai_batch.py) adapter can materialize the fixed
-20-file Chat Batch payload locally; API writes require an approved capacity/cost
-contract plus `--submit`, `--authorize-paid-run`,
-`--acknowledge-estimated-cost-uncertainty`, and `OPENAI_API_KEY`, which is never
-persisted. The cost limit is an estimated planning ceiling, not a
-provider-enforced billing cap. The hash-bound offline preflight reports
-best/base/worst token envelopes, exact transport sizes, explicit-limit checks,
-and a human approval gate; no cost is computed without an exactly matching
-explicit pricing profile. External billed cost remains unknown. See the
-[protocol and import contract](../docs/llm-baseline.md).
 
 ## Publication and product artifacts
 

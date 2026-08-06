@@ -114,13 +114,6 @@
       "external_calls": false
     },
     {
-      "name": "llm_baseline_contract_only",
-      "command": "python3 experiments/run_llm_baseline.py prepare --scope full && python3 experiments/run_llm_baseline.py all-mock --scope smoke && python3 scripts/plot_llm_baseline.py",
-      "inputs": ["data/scores.csv", "data/tasks.csv", "experiments/folds_s10_f3_bs42.json", "experiments/benchpress_style_results.json", "experiments/run_llm_baseline.py", "scripts/merge_llm_baseline_metrics.py", "scripts/plot_llm_baseline.py", "src/pathopress"],
-      "artifacts": ["experiments/llm_baseline", "experiments/llm_baseline_smoke", "figures/llm_baseline_status.png", "figures/llm_baseline_status.pdf"],
-      "external_calls": false
-    },
-    {
       "name": "evaluation_cost_evidence",
       "command": "python3 scripts/build_evaluation_cost_evidence.py && python3 scripts/plot_evaluation_cost_evidence.py",
       "inputs": ["data/scores.csv", "data/tasks.csv", "scripts/build_evaluation_cost_evidence.py", "scripts/plot_evaluation_cost_evidence.py"],

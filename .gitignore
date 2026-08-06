@@ -17,15 +17,8 @@ build/
 *.egg-info/
 experiments/fast_rank1
 experiments/method_comparison/predictions/*.npz
+experiments/method_comparison_m*/predictions/*.npz
 experiments/prediction_error_factor_shards/
+experiments/soft_impute_rank_sweep_checkpoints/
 experiments/probe_exhaustive_runs/*/shards/
-experiments/llm_baseline*/real_responses*.jsonl
-experiments/llm_baseline*/raw_*responses*.jsonl
-experiments/llm_baseline*/raw-provider-responses*.jsonl
-experiments/llm_baseline*/provider_responses*.jsonl
-experiments/llm_baseline*/provider_receipt*.json
-experiments/llm_baseline*/provider_receipts/
-experiments/llm_baseline*/receipts/
-experiments/llm_baseline/openai_batch/*
-!experiments/llm_baseline/openai_batch/preflight.json
 outputs/prediction_error_factor_predictions_rank1.csv

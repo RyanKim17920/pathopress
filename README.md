@@ -8,16 +8,17 @@ benchmarks, adapted from [Microsoft BenchPress](https://github.com/microsoft/ben
 PathoPress does not compress pathology images or replace benchmark runners. It
 builds an auditable model × evaluation score matrix, predicts supported missing
 cells, and studies which small evaluation panels preserve score and ranking
-information. The source registry covers Patho-Bench, EVA, THUNDER, HEST, and
-PathoROB while keeping dataset identity, task identity, evaluation protocol, and
-score observation distinct.
+information. The source registry covers 20 paper/report/repository suites,
+including Patho-Bench, EVA, THUNDER, HEST, PathoROB, and H-Optimus-1, while
+keeping dataset identity, task identity, evaluation protocol, and score
+observation distinct.
 
-The full registry contains 292 protocol rows over 147 task identities and 2,076
-reported score cells. The fixed research matrix accepts primary-source-parsed
+The full registry contains 1,638 protocol rows over 394 task identities and
+4,013 reported score rows. The fixed research matrix accepts primary-source-parsed
 evidence and iteratively requires at least three scores per model and five models
-per evaluation. It retains **59 models × 168 evaluations, 2,027 reported cells,
-and 20.4500% density**. The retained columns are Patho-Bench 122, EVA 15,
-THUNDER 16, HEST 9, and PathoROB 6.
+per evaluation. It retains **59 models × 187 evaluations, 2,122 reported cells,
+and 19.2332% density**. The retained columns are Patho-Bench 122, EVA 15,
+THUNDER 16, H-Optimus-1 report 10, HEST 18, and PathoROB 6.
 
 This is a research prototype. The scores are machine-parsed from pinned primary
 sources, not dual-human-verified; normalized points mix several native metrics;
@@ -28,17 +29,18 @@ and retrospective interpolation is not prospective clinical validation.
 - The logit, per-evaluation-standardized bias-ALS implementation matches the
   pinned BenchPress numerical primitive to floating-point precision. Pathology
   cross-validation selects interaction rank 1; BenchPress deploys rank 2.
-- On the shared 10-seed × 3-fold artifact, rank-1 bias ALS gives 3.222008 MAE,
-  1.647585 MedAE, and 1.662339 median fold MedAE. The column-median baseline is
-  4.275274/2.500000 MAE/MedAE.
+- On the shared 10-seed × 3-fold artifact, rank-1 bias ALS gives 3.134532 MAE,
+  1.609006 MedAE, and 1.608566 median fold MedAE over 21,181 supported
+  predictions. The column-median baseline is 4.151756/2.400000 MAE/MedAE.
+  Both raw and logit Soft-Impute sweeps independently select rank 1.
 - The complete 7-transform × 12-method comparison ran 343/343 configurations.
   The best MedAPE row is logit BenchReg at 1.9077, but it covers only 71.9% of
   held-out cells. Coverage is therefore part of every method result; a partial
   regression row does not replace the full-coverage selected predictor.
-- A largest complete 32 × 16 submatrix has stable rank 1.431; its first and
-  first two components explain 69.88% and 87.57% of variance. All 168
-  evaluations have a correlation neighbor with at least five shared models;
-  median best absolute correlation is 0.9164.
+- The previous 168-column snapshot's largest complete 32 × 16 submatrix had
+  stable rank 1.431, with 69.88%/87.57% variance explained by one/two
+  components. Structure artifacts must be regenerated before those statistics
+  are applied to the current 187-column matrix.
 - With the all-known BenchPress denominator, greedy rank-1 scorecard MedAE is
   1.474879 at five probes and 1.270529 at ten. Hidden-only values are 1.637639
   and 1.538607. These are transductive reconstruction results, not estimates of
@@ -48,7 +50,8 @@ and retrospective interpolation is not prospective clinical validation.
   proxy plateaus at 0.3333 all-known accuracy; it is not a measured cost set.
   The exact MedAE searches are complete: the 25-task proxy optimum is 1.485944
   and the error-informed 30-task optimum is 1.427339 at five probes. These are
-  exact only within their declared candidate universes, not over all 168 tasks.
+  exact only within their declared candidate universes and predate the current
+  187-column refresh.
 - For the same scorecard-selected probes, median error in each model's average
   observed score falls from 1.7065 at one probe to 0.8471 at ten unrestricted
   probes and 0.7120 for the 25-task proxy. This is a separately evaluated
@@ -127,8 +130,9 @@ generated JSON, add-model completion runs in the browser, and no score is
 uploaded. See [website/README.md](website/README.md).
 
 The public export at [exports/pathopress_public/](exports/pathopress_public/)
-contains all/paper model, evaluation, and score tables; a 59 × 168 wide matrix;
-sanitized provenance; license caveats; and a file-hash manifest. Load or fetch a
+contains all/paper model, evaluation, and score tables. Its checked-in wide
+matrix predates the current 59 × 187 analysis refresh. It also includes
+sanitized provenance, license caveats, and a file-hash manifest. Load or fetch a
 mirror with `pathopress.public_data` or:
 
 ```bash
@@ -172,11 +176,27 @@ PYTHONPATH=src python3 experiments/run_method_comparison.py --merge
 PYTHONPATH=src python3 experiments/run_structure_analysis.py
 PYTHONPATH=src python3 experiments/run_probe_compression.py
 PYTHONPATH=src python3 experiments/build_probe_pruning.py
-# Exact raw chunks are already complete; validate and rebuild the compact summary.
-PYTHONPATH=src python3 experiments/validate_probe_exhaustive_chunks.py
-PYTHONPATH=src python3 experiments/validate_probe_exhaustive_merged.py
-PYTHONPATH=src python3 experiments/validate_probe_exhaustive_top.py
-PYTHONPATH=src python3 experiments/build_probe_exhaustive_summary.py
+# New matrices require new schema-v2 run directories and a full exact rerun.
+# Replace NEW_SCORE_SHA12 after the registry/matrix refresh.
+CHEAP_RUN=experiments/probe_exhaustive_runs/cheap25_medae_k5_mNEW_SCORE_SHA12
+PRUNED_RUN=experiments/probe_exhaustive_runs/pruned30_medae_k5_mNEW_SCORE_SHA12
+PYTHONPATH=src:experiments python3 experiments/verify_fast_rank1.py
+# Run all declared v2 cheap/pruned residues before these certification steps.
+PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_chunks.py \
+  "$CHEAP_RUN" "$PRUNED_RUN"
+PYTHONPATH=src:experiments python3 experiments/run_probe_exhaustive_v2.py merge \
+  --out-dir "$CHEAP_RUN" --top-n 1001 \
+  --integrity-manifest experiments/probe_exhaustive_integrity_manifest.json
+PYTHONPATH=src:experiments python3 experiments/run_probe_exhaustive_v2.py merge \
+  --out-dir "$PRUNED_RUN" --top-n 1001 \
+  --integrity-manifest experiments/probe_exhaustive_integrity_manifest.json
+PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_merged.py \
+  "$CHEAP_RUN" "$PRUNED_RUN"
+PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_top.py \
+  "$CHEAP_RUN" "$PRUNED_RUN"
+PYTHONPATH=src:experiments python3 experiments/build_probe_exhaustive_summary.py \
+  --cheap-run "$CHEAP_RUN" --pruned-run "$PRUNED_RUN" \
+  --fast-equivalence experiments/probe_exhaustive_fast_equivalence_v2.json
 PYTHONPATH=src python3 experiments/run_ranking_preservation.py
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
 PYTHONPATH=src python3 experiments/run_new_model_confidence.py
@@ -189,16 +209,7 @@ python3 scripts/plot_probe_dual_objective.py
 ```
 
 Some commands are intentionally expensive or sharded; consult the experiment
-README before rerunning. The [LLM protocol](docs/llm-baseline.md) now has a
-complete 30-fold provider-neutral pack: 1,990 requests and 81,080 target
-predictions across named/blind zero-shot matrix completion and five-shot
-prediction. No genuine responses exist, so cost is unknown and there is no
-headline-eligible LLM result. A hash-bound offline preflight now inventories
-the complete pack and reports 19.5M / 26.1M / 110.1M best/base/worst total-token
-planning scenarios under its documented model-agnostic heuristic; it does not
-invent a tokenizer or price. The literal upstream `gpt-5.5` Chat Completions
-alias contract and a separately labelled controlled snapshot adaptation are
-documented in the [LLM protocol](docs/llm-baseline.md).
+README before rerunning.
 
 The final `59×168` public tables can be rebuilt and locally validated in the
 pinned BenchPress Hugging Face maintenance layout without uploading anything:

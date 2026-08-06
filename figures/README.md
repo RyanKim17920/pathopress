@@ -4,8 +4,8 @@ Figures are result-first: plotting scripts read committed compact JSON/CSV/NPZ
 artifacts and do not implicitly rerun expensive experiments. PNGs are review
 assets; matching PDFs are publication/vector assets.
 
-The fixed research matrix is 59 models × 168 protocol-level evaluations with
-2,027 observed cells (20.4500% density) and 7,885 rank-1 point estimates.
+The fixed research matrix is 59 models × 187 protocol-level evaluations with
+2,122 observed cells (19.2332% density) and 8,911 rank-1 point estimates.
 
 ## Main figures
 
@@ -36,7 +36,7 @@ five separately named BenchPress-analogue pathology assets:
 upstream denominators; provenance uses pathology-native primary-paper/report
 and official-repository categories.
 
-Matched rank-1 error is 3.222008 MAE / 1.647585 MedAE. All-known greedy
+Matched rank-1 error is 3.134532 MAE / 1.609006 MedAE. All-known greedy
 scorecard MedAE is 1.474879 and 1.270529 at five and ten probes; hidden-only is
 1.637639 and 1.538607. These are normalized-score retrospective quantities,
 not clinical accuracy or confidence intervals.
@@ -50,8 +50,8 @@ not clinical accuracy or confidence intervals.
   [probe-overlay MDS](benchmark_correlation_mds_probes.png): classical MDS of
   the pairwise correlation-distance representation.
 - [Legacy probe selection](probe_selection_rank1.png): direct upstream-style
-  all-known and isolated held-out-model scorecard curves plus literal-average
-  diagnostic.
+  all-known and isolated held-out-model scorecard curves plus median absolute
+  model-row-average error, explicitly separated by protocol.
 - [One-probe informativeness](probe_informativeness_rank1.png): first-step
   greedy utility with observed-model coverage.
 
@@ -80,13 +80,6 @@ Factor associations are correlational and use variable-specific denominators.
 For example, parameter count is present for 42 of 59 model-error rows; provider
 and family are present for 57/59.
 
-## LLM status figure
-
-[LLM baseline status](llm_baseline_status.png) is a status/contract figure, not
-a result comparison. All four real named/blind zero-shot matrix and five-shot conditions
-remain `unrun`. Deterministic mock metrics only validate request, response, and
-merge plumbing and are not headline eligible.
-
 ## Regeneration
 
 Install the research dependencies first; the extra includes PyTorch for the
@@ -107,7 +100,6 @@ python3 scripts/plot_publication_hero.py
 python3 scripts/plot_benchpress_style_hero.py
 python3 scripts/plot_probe_dual_objective.py
 python3 scripts/plot_metadata_overview.py
-python3 scripts/plot_llm_baseline.py
 python3 scripts/plot_evaluation_cost_evidence.py
 ```
 

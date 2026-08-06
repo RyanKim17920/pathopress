@@ -17,7 +17,7 @@ It is not accurate to call the repository 100% identical to BenchPress.
 Pathology uses different native metric mappings, selects rank 1 instead of the
 upstream deployed rank 2, bounds expensive
 probe enumeration, substitutes a metadata feasibility proxy for measured cost,
-has no hosted deployment/upload, and has not run the real LLM baselines.
+and has no hosted deployment/upload.
 
 ## Status vocabulary
 
@@ -33,16 +33,16 @@ has no hosted deployment/upload, and has not run the real LLM baselines.
 
 ## Canonical evidence
 
-The registry contains 292 protocols over 147 task identities and 2,076 score
-rows across Patho-Bench, EVA, HEST, THUNDER, and PathoROB. The fixed paper
-matrix retains 59 models × 168 evaluations and 2,027 observed cells at 20.4500%
+The registry contains 1,638 protocols over 394 task identities and 4,013 score
+rows across 20 source suites. The fixed paper matrix retains 59 models × 187
+evaluations and 2,122 observed cells at 19.2332%
 density. Its immutable contract is:
 
-- source score SHA-256 `f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c`;
+- source score SHA-256 `2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448`;
 - [matrix artifact](../experiments/analysis_matrix.npz), SHA-256
-  `962939288e440758fee3998a9517ab24c325b30f0ad0632221ea1aac75a1e31c`;
+  `fc11fb7cac9c72e01e30c1d97bc701545e514b1546793c15c543ff5870c74a76`;
 - [fold artifact](../experiments/folds_s10_f3_bs42.json), SHA-256
-  `f6cb9f7d68d7b3c7d3b4ca1aeacce935a19be2bf4e5e4b4e38f79a8baf690713`;
+  `418ed9ddef661f39ad31bc804cdb3213de3ef46c8520cc3a98db9e6c1a9c813f`;
 - [shared manifest](../experiments/shared_artifacts_manifest.json), which fixes
   accepted statuses, thresholds, ordering, shape, counts, and hashes.
 
@@ -53,11 +53,11 @@ density. Its immutable contract is:
 | Canonical score matrix and folds | [manifest](../experiments/shared_artifacts_manifest.json), matrix NPZ, folds JSON | Pathology-adapted | Protocol columns and permissive 3/5 support thresholds reflect domain sparsity |
 | Point predictor | [`completion.py`](../src/pathopress/completion.py), [`verify_benchpress_parity.py`](../scripts/verify_benchpress_parity.py) | **Exact algorithmic parity**, parameterized by rank | Max difference ~`1.07e-13` rank 1, `0` rank 2; pathology selects rank 1 |
 | Transform/method primitives | [`verify_method_comparison_parity.py`](../scripts/verify_method_comparison_parity.py) | **Exact algorithmic parity** | Seven transforms and core classical methods match reference fixtures to floating-point precision |
-| Matched 10×3 fold CV | [CV result](../experiments/benchpress_style_results.json) | Exact split contract; pathology-adapted reporting | 20,270 predictions; rank-1 MAE/MedAE 3.222008/1.647585 |
+| Matched 10×3 fold CV | [CV result](../experiments/benchpress_style_results.json) | Exact split contract; pathology-adapted reporting | 21,181 supported predictions; rank-1 MAE/MedAE 3.134532/1.609006; 39 unsupported column targets recorded |
 | Raw/logit Soft-Impute rank sweep | [rank sweep](../experiments/soft_impute_rank_sweep_results.json) | Exact algorithm; pathology-adapted result | Both tracks select rank 1 |
 | Broad method grid | [manifest](../experiments/method_comparison/manifest.json), [results](../experiments/method_comparison/results.json) | Exact core methods; expanded grid | 343/343 units versus upstream 329; partial-coverage winners require coverage caveat |
 | Threshold and complete-submatrix SVD | [structure manifest](../experiments/structure_analysis/manifest.json), [tables](../outputs/tables/manifest.json) | Pathology-adapted | Largest complete block 32 × 16; stable rank 1.431046 |
-| Correlation and MDS | [pairwise stats](../experiments/structure_analysis/pairwise_ols_stats.json), [coordinates](../experiments/structure_analysis/mds_coordinates.csv) | Pathology-adapted | All 168 columns have a neighbor at `min_shared=5` |
+| Correlation and MDS | [pairwise stats](../experiments/structure_analysis/pairwise_ols_stats.json), [coordinates](../experiments/structure_analysis/mds_coordinates.csv) | Pathology-adapted | Existing structure artifact predates the 187-column refresh and must be regenerated before reuse |
 | All-known and held-out score probes | [selection](../experiments/probe_selection_results_rank1.json), [compression](../experiments/probe_compression_rank1.json), [faithful hero](../figures/pathopress_benchpress_hero_rank1.png) | Pathology-adapted, **bounded** | Any/proxy-feasible, MedAE/MedAPE, random, held-out, and ranking tracks; current curves complete through `k=10` |
 | Feasibility-proxy probes | [feasibility data](../data/evaluation_feasibility.csv), [25-task allowlist](../data/low_friction_allowlist_v2_top25.json) | Pathology-adapted proxy; upstream candidate-count match | Exactly 25 image/patch classification protocols selected before errors; this describes pipeline shape, not measured cost |
 | Exhaustive subsets | [execution status](../experiments/probe_exhaustive_execution_status.json), [compact result](../experiments/probe_exhaustive_rank1.json), [integrity audit](../experiments/probe_exhaustive_integrity_manifest.json) | **Exact within declared candidate universes, complete** | All `C(25,5)=53,130` pre-error-proxy and `C(30,5)=142,506` error-informed combinations executed; 800 chunks and 195,636 records validated, merged ordering reconstructed, winners scalar-certified |
@@ -74,7 +74,6 @@ density. Its immutable contract is:
 | Public dataset export | [export README](../exports/pathopress_public/README.md), [manifest](../exports/pathopress_public/manifest.json) | Engineering analogue | All/paper/wide CSVs, sanitized provenance, licenses, hashes, loader/downloader; no upload |
 | Static website | [site README](../website/README.md) | Engineering analogue | Browser-side exact rank-1 recipe, no server submission/analytics; not deployed here |
 | Maintenance contract | [freshness manifest](../experiments/artifact_freshness_manifest.json), [dry run](../experiments/experiment_set_dry_run.json), [automated score-review ledger](../data/score_review_ledger.csv) | Engineering analogue | Hash/freshness and smoke checks exist; the evidence-bounded ledger records `automated_agent_review` and does not claim human review |
-| Zero-shot matrix and five-shot LLM baselines | [protocol/config/status](llm-baseline.md) | **Prepared, unrun** | All 30 folds, 1,990 requests, 81,080 targets; gated OpenAI Batch adapter prepared but not run; genuine responses and cost remain pending; separate smoke mock is contract-only |
 
 ## Exactness boundaries
 
@@ -142,18 +141,16 @@ retrospective interventions, not causal claims.
 
 ## Genuinely incomplete items
 
-1. **Real LLM comparison:** all named/blind zero-shot matrix and five-shot real-provider
-   conditions are `unrun`. Deterministic mock metrics are not headline eligible.
-2. **Measured evaluation cost:** the current allowlist is a pre-error metadata
+1. **Measured evaluation cost:** the current allowlist is a pre-error metadata
    feasibility proxy, not runtime/compute/access/tissue/license measurement.
-3. **Prospective and external validation:** no preregistered future model or
+2. **Prospective and external validation:** no preregistered future model or
    external institution cohort has been evaluated.
-4. **Dual human review/living maintenance:** accepted rows are parsed from
+3. **Dual human review/living maintenance:** accepted rows are parsed from
    primary sources but have not all received two independent human reviews.
-5. **Hosted deployment/upload:** the export and site are local static assets;
+4. **Hosted deployment/upload:** the export and site are local static assets;
    no Hugging Face upload, GitHub Pages publication, or other deployment occurs
    from the build scripts.
-6. **Globally exhaustive probe search over all 168 evaluations:** intentionally not attempted because
+5. **Globally exhaustive probe search over all 168 evaluations:** intentionally not attempted because
    the 168-column subset space is intractable.
 
 ## Reproduction and verification

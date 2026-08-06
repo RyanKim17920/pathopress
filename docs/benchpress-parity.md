@@ -27,26 +27,28 @@ PYTHONPATH=src python3 scripts/verify_method_comparison_parity.py \
 
 The algorithm is exact *when given the same normalized matrix and rank*.
 PathoPress selects interaction rank 1 from pathology cross-validation, while
-BenchPress's deployed LLM predictor uses rank 2. PathoPress also maps native
+BenchPress deploys rank 2. PathoPress also maps native
 pathology metrics to a direction-preserving 0–100 fitting scale; those mappings
 are domain adaptations, not upstream semantics.
 
 ## Shared experimental substrate
 
-The fixed paper matrix has 59 models, 168 protocol-level evaluations, 2,027
-observations, and 20.4500% density. It draws from Patho-Bench (122 retained
-evaluations), EVA (15), THUNDER (16), HEST (9), and PathoROB (6). All experiments
+The fixed paper matrix has 59 models, 187 protocol-level evaluations, 2,122
+observations, and 19.2332% density. It draws from Patho-Bench (122 retained
+evaluations), EVA (15), THUNDER (16), H-Optimus-1 report (10), HEST (18), and
+PathoROB (6). All experiments
 can consume the same ordered matrix and ten-seed, three-fold split contract:
 
 - [shared manifest](../experiments/shared_artifacts_manifest.json)
 - [matrix NPZ](../experiments/analysis_matrix.npz)
 - [fold assignments](../experiments/folds_s10_f3_bs42.json)
 
-The matched rank-1 fold result is 3.222008 MAE and 1.647585 MedAE over 20,270
-predictions; the column-median baseline is 4.275274/2.500000. Random-cell,
+The matched rank-1 fold result is 3.134532 MAE and 1.609006 MedAE over 21,181
+supported predictions; the column-median baseline is 4.151756/2.400000. Random-cell,
 suite-block, and sparse-new-model tests are additional pathology stress tests,
 not substitutes for the matched upstream fold protocol. Suite-block rank 1 is
-5.688229/3.537207 and improves through tested rank 6, demonstrating that the
+5.788534/3.599615 and improves through tested rank 6 at 5.099363/3.203260,
+demonstrating that the
 selected rank and error depend on the deployment question.
 
 ## What benchmark “compression” means
@@ -118,7 +120,6 @@ therefore establishes numerical backend compatibility, not generator attribution
 | Temporal deployment | [temporal results](../experiments/temporal_deployment_rank1.json) | Adapted, retrospective seven-model cohort |
 | Error factors | [factor results](../experiments/prediction_error_factors_rank1.json) | Adapted pathology metadata and intervention groups |
 | Product/export | [CLI](../src/pathopress/cli.py), [export](../exports/pathopress_public/README.md), [site](../website/README.md) | Local engineering analogue; no hosted deployment |
-| LLM baselines | [protocol](llm-baseline.md), [real-run status](../experiments/llm_baseline/real_run_status.json) | Complete 1,990-request/81,080-target offline pack; real provider run unrun |
 
 The method grid completed 343/343 configurations: 12 method families over
 seven transforms, including pathology rank-sensitivity additions beyond the
@@ -151,9 +152,6 @@ time rule but remains a small retrospective study.
 - Label reported, provided, and predicted cells distinctly.
 - Do not describe the feasibility proxy as measured cost or the bounded subset
   search as globally exhaustive.
-- Do not use deterministic mock LLM metrics as scientific evidence. The four
-  named/blind zero-shot matrix and five-shot real-provider conditions are still unrun; all 30-fold requests are prepared.
-
 The comprehensive evidence/status matrix is in
 [full-parity-audit.md](full-parity-audit.md); metric mappings and error semantics
 are in [imputation.md](imputation.md).

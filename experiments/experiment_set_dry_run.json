@@ -3,10 +3,10 @@
   "status": "ready",
   "execution": "none_dry_run_only",
   "summary": {
-    "components": 21,
-    "declared_inputs": 140,
+    "components": 20,
+    "declared_inputs": 132,
     "declared_dependencies": 5,
-    "declared_artifacts": 128,
+    "declared_artifacts": 124,
     "external_call_components": 0
   },
   "experiments": [
@@ -202,19 +202,6 @@
       "declared_inputs": 5,
       "declared_dependencies": 0,
       "declared_artifacts": 5,
-      "external_calls": false,
-      "dry_run_only": true
-    },
-    {
-      "name": "llm_baseline_contract_only",
-      "status": "ready",
-      "scripts_present": true,
-      "missing_inputs": [],
-      "missing_dependencies": [],
-      "missing_artifacts": [],
-      "declared_inputs": 8,
-      "declared_dependencies": 0,
-      "declared_artifacts": 4,
       "external_calls": false,
       "dry_run_only": true
     },
