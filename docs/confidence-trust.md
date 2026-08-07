@@ -90,12 +90,10 @@ current:
 
 ```bash
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
-MPLCONFIGDIR=/tmp/pathopress-mpl PYTHONPATH=src python3 scripts/plot_confidence_calibration.py
 PYTHONPATH=src python3 scripts/build_public_release.py
 ```
 
 The primary artifacts are
 `experiments/confidence_calibration_rank1.json`,
 `experiments/confidence_cells_rank1.csv`,
-`experiments/deployment_confidence_rank1.json`, and
-`figures/confidence_calibration_rank1.{png,pdf}`.
+and `experiments/deployment_confidence_rank1.json`.

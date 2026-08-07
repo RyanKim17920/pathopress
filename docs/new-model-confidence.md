@@ -58,8 +58,6 @@ symmetric in normalized-score space and clipped to `[0, 100]`.
 - [`new_model_confidence_predictions_rank1.csv`](../experiments/new_model_confidence_predictions_rank1.csv)
   contains each probe set, actual, prediction, residual, cross-fitted risk,
   interval, excluded target, and calibration scope.
-- [`new_model_confidence_rank1.png`](../figures/new_model_confidence_rank1.png)
-  shows risk–coverage, coverage–width, suite coverage, and abstention support.
 - `pathopress add-model ... --confidence` and the static site return the
   interval, risk, bucket, fallback scope, group/prediction counts, or explicit
   abstention. Browser calculations stay local.
@@ -68,5 +66,4 @@ Reproduce with:
 
 ```bash
 PYTHONPATH=src python3 experiments/run_new_model_confidence.py --workers 4
-MPLCONFIGDIR=/tmp/pathopress-mpl PYTHONPATH=src python3 scripts/plot_new_model_confidence.py
 ```

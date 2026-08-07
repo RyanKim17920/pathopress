@@ -137,4 +137,3 @@ Primary artifacts:
 - [Soft-Impute sweep](../experiments/soft_impute_rank_sweep_results.json)
 - [probe compression](../experiments/probe_compression_rank1.json)
 - [ranking preservation](../experiments/ranking_preservation_rank1.json)
-- [confidence calibration figure](../figures/confidence_calibration_rank1.png)

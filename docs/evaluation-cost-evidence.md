@@ -11,10 +11,6 @@ The machine-readable records are in
 [`data/evaluation_cost_evidence.json`](../data/evaluation_cost_evidence.json),
 with a flat audit view in
 [`data/evaluation_cost_evidence.csv`](../data/evaluation_cost_evidence.csv).
-The [coverage figure](../figures/evaluation_cost_evidence_coverage.png) shows
-direct versus contextual evidence and states the unsupported numeric-cost
-conclusion explicitly. It intentionally does not repeat the same coverage as a
-suite heatmap or display feasibility strata as though they were cost tiers.
 
 ## Evidence policy
 
@@ -195,7 +191,6 @@ are included.
 
 ```bash
 python3 scripts/build_evaluation_cost_evidence.py
-python3 scripts/plot_evaluation_cost_evidence.py
 PYTHONPATH=src python3 -m unittest \
   tests.test_evaluation_cost_evidence \
   tests.test_burden_telemetry -v

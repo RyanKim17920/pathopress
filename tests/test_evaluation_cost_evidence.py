@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import importlib.util
 import json
 import subprocess
 import tempfile
@@ -12,17 +11,6 @@ from pathopress.matrix import filter_matrix, load_scores, make_matrix
 
 ROOT = Path(__file__).resolve().parents[1]
 REGISTRY = ROOT / "data/evaluation_cost_evidence.json"
-
-
-def load_cost_plot_module():
-    path = ROOT / "scripts/plot_evaluation_cost_evidence.py"
-    spec = importlib.util.spec_from_file_location("plot_evaluation_cost_evidence", path)
-    if spec is None or spec.loader is None:
-        raise RuntimeError(f"could not load {path}")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
 
 class EvaluationCostEvidenceTests(unittest.TestCase):
     @classmethod
@@ -38,7 +26,7 @@ class EvaluationCostEvidenceTests(unittest.TestCase):
         self.assertEqual(actual, expected)
         self.assertEqual(len(actual), 187)
 
-    def test_registry_and_figure_denominators_are_consistent(self) -> None:
+    def test_registry_denominators_are_consistent(self) -> None:
         total = len(self.records)
         summary = self.payload["summary"]
         self.assertEqual(summary["n_evaluations"], total)
@@ -52,22 +40,6 @@ class EvaluationCostEvidenceTests(unittest.TestCase):
                 if field != "n_evaluations":
                     with self.subTest(suite=suite, field=field):
                         self.assertLessEqual(count, denominator)
-
-        copy = load_cost_plot_module().denominator_copy(total)
-        self.assertEqual(copy["coverage_title"], f"A. Evidence coverage (n={total:,})")
-        self.assertEqual(copy["callout_title"], "B. Numeric burden curve")
-        self.assertEqual(copy["callout_headline"], "NOT MEASURABLE YET")
-        self.assertIn(f"0/{total:,}", copy["missingness_footer"])
-
-    def test_cost_figure_does_not_present_proxy_tiers_or_a_suite_heatmap(self) -> None:
-        module = load_cost_plot_module()
-        self.assertFalse(hasattr(module, "TIER_LABELS"))
-        source = (ROOT / "scripts/plot_evaluation_cost_evidence.py").read_text(
-            encoding="utf-8"
-        )
-        self.assertNotIn("Pre-error feasibility strata", source)
-        self.assertNotIn("Any source-backed evidence by suite", source)
-        self.assertIn("Unknown values remain unknown, never zero", source)
 
     def test_every_reported_fact_has_a_resolvable_source_and_locator(self) -> None:
         source_ids = {source["source_id"] for source in self.payload["sources"]}
