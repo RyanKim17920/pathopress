@@ -67,8 +67,10 @@ class ProbeDualObjectivePlotTests(unittest.TestCase):
             for item in [*figure.texts, *utility_ax.texts, *prediction_ax.texts]
         )
         self.assertIn("Transductive", text)
+        self.assertIn("all 8: THUNDER", text)
         self.assertIn("41 selection models", text)
-        self.assertIn("k=0 and random model-mean controls unavailable", text)
+        self.assertIn("No k=0/random model-mean controls", text)
+        self.assertIn("not measured cost", text)
         plt.close(figure)
 
     def test_fails_closed_without_training_only_semantics(self) -> None:

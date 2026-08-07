@@ -262,10 +262,14 @@ def build_figure(
     )
     coverage_values = {round(float(row["coverage"]), 12) for row in ordered}
     common_coverage = next(iter(coverage_values)) if len(coverage_values) == 1 else None
+    displayed_suites = {str(row["suite_id"]).upper() for row in ordered}
+    common_suite = next(iter(displayed_suites)) if len(displayed_suites) == 1 else None
+    common_display_scope = common_coverage is not None and common_suite is not None
     coverage_note = (
-        f"; all shown cover {round(common_coverage * metadata['matrix_shape'][0])}/"
-        f"{metadata['matrix_shape'][0]} models ({100 * common_coverage:.0f}%)"
-        if common_coverage is not None
+        f"; all {len(ordered)}: {common_suite}, "
+        f"{round(common_coverage * metadata['matrix_shape'][0])}/"
+        f"{metadata['matrix_shape'][0]} models each ({100 * common_coverage:.0f}%)"
+        if common_display_scope
         else ""
     )
     utility_ax.text(
@@ -273,14 +277,14 @@ def build_figure(
         1.01,
         "Transductive; exact probe cells included" + coverage_note,
         transform=utility_ax.transAxes,
-        fontsize=8.5,
-        color=GRAY,
+        fontsize=9.1,
+        color=CHARCOAL,
     )
     utility_ax.grid(axis="x", color=GRID, alpha=0.8, lw=0.7)
     utility_ax.set_axisbelow(True)
     max_improvement = max(row["improvement"] for row in ordered)
-    utility_ax.set_xlim(0, max_improvement * (1.08 if common_coverage else 1.28))
-    if common_coverage is None:
+    utility_ax.set_xlim(0, max_improvement * (1.08 if common_display_scope else 1.28))
+    if not common_display_scope:
         for position, row in zip(y, ordered):
             utility_ax.text(
                 row["improvement"] + max_improvement * 0.025,
@@ -326,8 +330,8 @@ def build_figure(
         f"Nested prefixes: {metadata['n_train']} selection models → "
         f"{metadata['n_validation']} held-out models",
         transform=prediction_ax.transAxes,
-        fontsize=8.5,
-        color=GRAY,
+        fontsize=9.1,
+        color=CHARCOAL,
     )
     prediction_ax.grid(color=GRID, alpha=0.8, lw=0.7)
     prediction_ax.set_axisbelow(True)
@@ -335,11 +339,11 @@ def build_figure(
     prediction_ax.text(
         0.02,
         0.03,
-        "IQR shading across held-out models\n"
-        "k=0 and random model-mean controls unavailable",
+        "Shading: held-out-model IQR\n"
+        "No k=0/random model-mean controls in current artifacts",
         transform=prediction_ax.transAxes,
-        fontsize=7.5,
-        color=GRAY,
+        fontsize=8.4,
+        color=CHARCOAL,
         va="bottom",
     )
 
@@ -352,14 +356,14 @@ def build_figure(
     fig.text(
         0.5,
         0.018,
-        "Panel A is a retrospective utility ranking, not causal task importance. "
-        "Panel B predicts each held-out model's mean over its reported normalized scores; "
-        "the 25-task pool is a feasibility proxy, not measured cost.",
+        "A ranks retrospective utility—not causal task importance. B predicts each held-out "
+        "model's mean over its reported normalized scores.\n"
+        "The 25-task pool is a feasibility proxy—not measured cost.",
         ha="center",
-        fontsize=8,
+        fontsize=8.8,
         color=CHARCOAL,
     )
-    fig.subplots_adjust(left=0.15, right=0.98, bottom=0.18, top=0.84)
+    fig.subplots_adjust(left=0.15, right=0.98, bottom=0.20, top=0.84)
     return fig, utility_ax, prediction_ax
 
 
