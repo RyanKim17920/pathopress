@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import json
 import os
 import sys
 import tempfile
@@ -59,32 +60,22 @@ class PublicationFigureLayoutTests(unittest.TestCase):
         self.assertTrue(labels[4].startswith("HEST READ"))
         self.assertTrue(labels[5].startswith("THR HNSC CASP8"))
 
-    def test_matrix_suite_names_use_legend_instead_of_colliding_ticks(self) -> None:
-        widths = {
-            "pathobench": 122,
-            "eva": 15,
-            "thunder": 16,
-            "hest": 9,
-            "pathorob": 6,
-        }
-        evaluations: list[str] = []
-        metadata: dict[str, tuple[str, str]] = {}
-        for suite, width in widths.items():
-            for index in range(width):
-                evaluation = f"{suite}.{index}"
-                evaluations.append(evaluation)
-                metadata[evaluation] = (suite, "metric")
-
-        fig, ax = plt.subplots()
-        groups = MATRIX_PLOT.add_suite_axis(ax, evaluations, metadata)
-        self.assertEqual([group[0] for group in groups], list(widths))
-        self.assertEqual([group[2] - group[1] for group in groups], list(widths.values()))
-        self.assertEqual(len(ax.get_xticks()), 0)
-        handles = MATRIX_PLOT.suite_legend_handles(groups)
-        self.assertEqual(
-            [handle.get_label() for handle in handles],
-            [MATRIX_PLOT.SUITE_LABELS.get(name, name.upper()) for name in widths],
+    def test_cell_validation_uses_one_axis_and_discloses_repeated_predictions(self) -> None:
+        result = json.loads(
+            (ROOT / "experiments" / "benchpress_style_results.json").read_text()
         )
+        values = MATRIX_PLOT.validation_plot_data(result)
+        self.assertEqual(values["selected_rank"], 1)
+        self.assertEqual(values["unique_cells"], 2_122)
+        self.assertEqual(values["prediction_instances"], 21_181)
+
+        fig, ax = MATRIX_PLOT.build_rank_selection_figure(result)
+        self.assertEqual(fig.axes, [ax])
+        disclosure = " ".join(text.get_text() for text in fig.texts)
+        self.assertIn("2,122 unique reported cells", disclosure)
+        self.assertIn("21,181 repeated held-out predictions", disclosure)
+        self.assertIn("Cell-level validation", disclosure)
+        self.assertIn("selects interaction rank 1", ax.get_title())
         plt.close(fig)
 
     def test_informativeness_coverage_is_in_a_separate_noncolliding_axis(self) -> None:
