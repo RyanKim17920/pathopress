@@ -140,7 +140,7 @@ def build_hero_figure(values: dict[str, object]):
             color=BLUE,
             lw=2.4,
             ms=4.8,
-            label="25-task low-friction proxy",
+            label="25-task feasibility pool",
         )
     ax.plot(
         [0],
@@ -164,12 +164,21 @@ def build_hero_figure(values: dict[str, object]):
     ax.set_title("Retrospective all-known matrix reconstruction", fontweight="bold")
     semantics = (
         f"{values['source_shape'][0]} models × {values['source_shape'][1]} protocols; "
-        f"{values['n_observed']:,} reported cells. Revealed probes are scored as exact. "
+        f"{values['n_observed']:,} reported cells. Revealed probes are scored as exact.\n"
         "Probe selection and evaluation use the same model population; this is not model-level holdout. "
-        "The 25-task set is a low-friction pipeline proxy, not measured cost."
+        "The 25-task feasibility pool is not measured cost."
     )
-    fig.text(0.5, 0.012, semantics, ha="center", va="bottom", fontsize=8.0, color=CHARCOAL)
-    fig.subplots_adjust(left=0.13, right=0.98, bottom=0.25, top=0.89)
+    fig.text(
+        0.5,
+        0.015,
+        semantics,
+        ha="center",
+        va="bottom",
+        fontsize=9.2,
+        linespacing=1.35,
+        color=CHARCOAL,
+    )
+    fig.subplots_adjust(left=0.13, right=0.98, bottom=0.27, top=0.89)
     return fig, ax
 
 
@@ -195,9 +204,6 @@ def parse_args() -> argparse.Namespace:
         type=Path,
         default=ROOT / "experiments/benchpress_style_hero_summary.json",
     )
-    # Preserve the existing inventory command while making clear that exact
-    # historical searches are not part of this retrospective overview.
-    parser.add_argument("--omit-stale-exhaustive", action="store_true", help=argparse.SUPPRESS)
     return parser.parse_args()
 
 

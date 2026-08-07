@@ -79,7 +79,7 @@ def build_rank_selection_figure(result: dict[str, object]):
     selected_error = float(values["selected_pooled_medae"])
     baseline = float(values["baseline_medae"])
 
-    fig, ax = plt.subplots(figsize=(7.6, 4.9))
+    fig, ax = plt.subplots(figsize=(8.7, 5.2))
     ax.fill_between(ranks, q1, q3, color=BLUE, alpha=0.16, label="Fold MedAE IQR")
     ax.plot(ranks, pooled, "o-", color=BLUE, lw=2.4, ms=5.5, label="Pooled OOF MedAE")
     ax.axhline(
@@ -116,18 +116,35 @@ def build_rank_selection_figure(result: dict[str, object]):
     )
     ax.set_ylim(min(q1) - 0.08, baseline + 0.10)
     ax.grid(axis="y", alpha=0.24)
-    ax.legend(frameon=False, loc="upper right")
+    ax.legend(
+        frameon=True,
+        facecolor="white",
+        framealpha=1.0,
+        edgecolor="#D9D9D9",
+        loc="upper left",
+        bbox_to_anchor=(1.015, 1.0),
+        borderaxespad=0,
+    )
     ax.set_title("Cell-level cross-validation selects interaction rank 1", fontweight="bold")
 
     semantics = (
         f"{values['n_models']} models × {values['n_evaluations']} protocols; "
         f"{values['unique_cells']:,} unique reported cells; "
         f"{values['prediction_instances']:,} repeated held-out predictions from "
-        f"{values['n_seeds']} seeds × {values['n_folds']} folds. "
+        f"{values['n_seeds']} seeds × {values['n_folds']} folds.\n"
         "Cell-level validation: other scores from the same model may remain visible."
     )
-    fig.text(0.5, 0.015, semantics, ha="center", va="bottom", fontsize=8.3, color=CHARCOAL)
-    fig.subplots_adjust(left=0.13, right=0.98, bottom=0.22, top=0.88)
+    fig.text(
+        0.5,
+        0.018,
+        semantics,
+        ha="center",
+        va="bottom",
+        fontsize=9.2,
+        linespacing=1.35,
+        color=CHARCOAL,
+    )
+    fig.subplots_adjust(left=0.11, right=0.73, bottom=0.25, top=0.88)
     return fig, ax
 
 
