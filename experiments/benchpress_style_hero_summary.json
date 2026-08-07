@@ -1,311 +1,32 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "source_shape": [
     59,
     187
   ],
+  "n_observed": 2122,
   "inputs": {
     "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
     "compression_sha256": "843379ea52052f76c42122c083ce1ce6cbba64686ae2c60b2492aacff621fe35",
-    "exhaustive_sha256": null
+    "selection_sha256": "f495ab1b0408494fa828db758f375bea598c87aceabb4f4b4a2e288496ea29df"
   },
-  "example_selection": "largest evaluation-column-median absolute error within EVA, HEST, PathoBench, and THUNDER; distinct models with at least ten retained scores",
-  "examples": [
-    {
-      "model_id": "dinov2-vit-g-14-initial",
-      "evaluation_id": "eva.leaderboard.breakhis.validation",
-      "suite_id": "eva",
-      "actual": 42.5,
-      "baseline_prediction": 79.3,
-      "baseline_absolute_error": 36.8,
-      "random": [
-        {
-          "k": 1,
-          "median": 37.362762773031136,
-          "q1": 37.362762773031136,
-          "q3": 37.362762773031136
-        },
-        {
-          "k": 2,
-          "median": 37.362762773031136,
-          "q1": 37.362762773031136,
-          "q3": 37.362762773031136
-        },
-        {
-          "k": 3,
-          "median": 37.362762773031136,
-          "q1": 37.362762773031136,
-          "q3": 37.362762773031136
-        },
-        {
-          "k": 4,
-          "median": 37.362762773031136,
-          "q1": 24.576081930212943,
-          "q3": 37.362762773031136
-        },
-        {
-          "k": 5,
-          "median": 37.362762773031136,
-          "q1": 24.576081930212943,
-          "q3": 37.362762773031136
-        },
-        {
-          "k": 6,
-          "median": 37.362762773031136,
-          "q1": 24.576081930212943,
-          "q3": 37.362762773031136
-        },
-        {
-          "k": 7,
-          "median": 37.362762773031136,
-          "q1": 24.576081930212943,
-          "q3": 37.362762773031136
-        },
-        {
-          "k": 8,
-          "median": 37.362762773031136,
-          "q1": 24.576081930212943,
-          "q3": 37.362762773031136
-        },
-        {
-          "k": 9,
-          "median": 28.838308877819006,
-          "q1": 17.49951820992644,
-          "q3": 37.362762773031136
-        },
-        {
-          "k": 10,
-          "median": 28.838308877819006,
-          "q1": 15.414244390175137,
-          "q3": 37.362762773031136
-        }
-      ]
-    },
-    {
-      "model_id": "genbio-pathfm",
-      "evaluation_id": "hest.skcm.gene_expression",
-      "suite_id": "hest",
-      "actual": 83.575,
-      "baseline_prediction": 78.8125,
-      "baseline_absolute_error": 4.762500000000003,
-      "random": [
-        {
-          "k": 1,
-          "median": 4.162364815905292,
-          "q1": 2.998006994855153,
-          "q3": 4.162364815905292
-        },
-        {
-          "k": 2,
-          "median": 4.162364815905292,
-          "q1": 2.465991318610172,
-          "q3": 4.162364815905292
-        },
-        {
-          "k": 3,
-          "median": 4.162364815905292,
-          "q1": 2.465991318610172,
-          "q3": 4.162364815905292
-        },
-        {
-          "k": 4,
-          "median": 3.3861262685385327,
-          "q1": 2.418025851089638,
-          "q3": 4.162364815905292
-        },
-        {
-          "k": 5,
-          "median": 3.52890657972889,
-          "q1": 2.418025851089638,
-          "q3": 4.162364815905292
-        },
-        {
-          "k": 6,
-          "median": 3.52890657972889,
-          "q1": 2.418025851089638,
-          "q3": 4.162364815905292
-        },
-        {
-          "k": 7,
-          "median": 3.52890657972889,
-          "q1": 2.418025851089638,
-          "q3": 4.162364815905292
-        },
-        {
-          "k": 8,
-          "median": 2.933839247680261,
-          "q1": 2.4671599479578,
-          "q3": 4.162364815905292
-        },
-        {
-          "k": 9,
-          "median": 2.933839247680261,
-          "q1": 2.4671599479578,
-          "q3": 4.162364815905292
-        },
-        {
-          "k": 10,
-          "median": 2.755005291057387,
-          "q1": 2.418025851089638,
-          "q3": 3.8648311498809775
-        }
-      ]
-    },
-    {
-      "model_id": "prism-slide",
-      "evaluation_id": "pathobench.exaone2025.hancook.grading-scc-conventional-nonkeratinizing",
-      "suite_id": "pathobench",
-      "actual": 43.7,
-      "baseline_prediction": 71.0,
-      "baseline_absolute_error": 27.299999999999997,
-      "random": [
-        {
-          "k": 1,
-          "median": 27.466268384581156,
-          "q1": 25.348075935373245,
-          "q3": 28.66936257458133
-        },
-        {
-          "k": 2,
-          "median": 28.101333584200376,
-          "q1": 25.600418004673905,
-          "q3": 29.98729169337272
-        },
-        {
-          "k": 3,
-          "median": 26.899730667111648,
-          "q1": 25.486552890745884,
-          "q3": 28.261812624130336
-        },
-        {
-          "k": 4,
-          "median": 25.65890375476441,
-          "q1": 25.18179156324858,
-          "q3": 27.49863577145386
-        },
-        {
-          "k": 5,
-          "median": 25.739335690847206,
-          "q1": 24.356785481670986,
-          "q3": 27.77426389704766
-        },
-        {
-          "k": 6,
-          "median": 25.503196904029004,
-          "q1": 24.060118378751266,
-          "q3": 28.123191212303198
-        },
-        {
-          "k": 7,
-          "median": 25.81112564345264,
-          "q1": 24.19130813531706,
-          "q3": 27.675420065541633
-        },
-        {
-          "k": 8,
-          "median": 25.48339802505454,
-          "q1": 24.19130813531706,
-          "q3": 26.279795090525262
-        },
-        {
-          "k": 9,
-          "median": 26.086854142075097,
-          "q1": 24.29020602933303,
-          "q3": 27.602580202306513
-        },
-        {
-          "k": 10,
-          "median": 26.145900414713942,
-          "q1": 25.023395357534103,
-          "q3": 27.558522519981604
-        }
-      ]
-    },
-    {
-      "model_id": "clip-b",
-      "evaluation_id": "thunder.break_his.linear_probing",
-      "suite_id": "thunder",
-      "actual": 40.0,
-      "baseline_prediction": 68.9,
-      "baseline_absolute_error": 28.900000000000006,
-      "random": [
-        {
-          "k": 1,
-          "median": 29.279212892622724,
-          "q1": 20.89315455539098,
-          "q3": 29.279212892622724
-        },
-        {
-          "k": 2,
-          "median": 29.279212892622724,
-          "q1": 18.09780177631373,
-          "q3": 29.279212892622724
-        },
-        {
-          "k": 3,
-          "median": 29.279212892622724,
-          "q1": 18.09780177631373,
-          "q3": 29.279212892622724
-        },
-        {
-          "k": 4,
-          "median": 23.688507334468227,
-          "q1": 18.09780177631373,
-          "q3": 29.279212892622724
-        },
-        {
-          "k": 5,
-          "median": 23.688507334468227,
-          "q1": 18.09780177631373,
-          "q3": 29.279212892622724
-        },
-        {
-          "k": 6,
-          "median": 23.688507334468227,
-          "q1": 18.09780177631373,
-          "q3": 29.279212892622724
-        },
-        {
-          "k": 7,
-          "median": 23.688507334468227,
-          "q1": 18.09780177631373,
-          "q3": 29.279212892622724
-        },
-        {
-          "k": 8,
-          "median": 18.09780177631373,
-          "q1": 13.719059203886621,
-          "q3": 29.279212892622724
-        },
-        {
-          "k": 9,
-          "median": 18.09780177631373,
-          "q1": 13.719059203886621,
-          "q3": 29.279212892622724
-        },
-        {
-          "k": 10,
-          "median": 17.680589109288583,
-          "q1": 12.940973869681304,
-          "q3": 26.483860113545475
-        }
-      ]
-    }
-  ],
-  "overall_tracks": [
-    "random_any_candidate",
-    "greedy_any_candidate",
-    "greedy_25_task_feasibility_proxy"
-  ],
-  "ranking_tracks": [
-    "random_any_candidate_margin5",
-    "greedy_any_candidate_margin5",
-    "greedy_25_task_feasibility_proxy_margin5"
-  ],
-  "exact_results": {},
+  "tracks": {
+    "column_median_baseline": true,
+    "random_any_candidate_median_iqr": true,
+    "selected_any_candidate": true,
+    "selected_25_task_low_friction_proxy": true
+  },
+  "semantics": {
+    "evaluation_scope": "retrospective_all_known_same_model_population",
+    "revealed_probe_cells": "exact_zero_error",
+    "model_level_holdout": false,
+    "low_friction_proxy_is_measured_cost": false,
+    "task_annotations": "omitted",
+    "outcome_selected_examples": "omitted"
+  },
   "contract_status": {
     "masking_and_k_budget": "exact",
     "rank_and_domain": "pathology_adapted",
-    "exhaustive_25C5_30C5": "not_run_for_current_scores"
+    "exhaustive_25C5_30C5": "not_claimed_in_hero"
   }
 }

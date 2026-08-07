@@ -3,12 +3,9 @@ from __future__ import annotations
 import csv
 import importlib.util
 import json
-import os
-import sys
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 import matplotlib.pyplot as plt
 
@@ -32,33 +29,28 @@ HERO_PLOT = load_script("plot_benchpress_style_hero.py")
 
 
 class PublicationFigureLayoutTests(unittest.TestCase):
-    def test_hero_worker_and_blas_limits_are_hard_capped(self) -> None:
-        with patch.object(sys, "argv", ["plot_benchpress_style_hero.py"]):
-            self.assertLessEqual(HERO_PLOT.parse_args().workers, 4)
-        with patch.object(
-            sys,
-            "argv",
-            ["plot_benchpress_style_hero.py", "--workers", "5"],
-        ), self.assertRaises(SystemExit):
-            HERO_PLOT.parse_args()
-        for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
-            self.assertEqual(os.environ[variable], "1")
+    def test_hero_is_one_result_first_axis_with_honest_scope_labels(self) -> None:
+        compression = json.loads(
+            (ROOT / "experiments" / "probe_compression_rank1.json").read_text()
+        )
+        selection = json.loads(
+            (ROOT / "experiments" / "probe_selection_results_rank1.json").read_text()
+        )
+        values = HERO_PLOT.hero_plot_data(compression, selection)
+        self.assertTrue(values["proxy_supported"])
+        self.assertEqual(values["source_shape"], [59, 187])
+        self.assertEqual(values["n_observed"], 2_122)
 
-    def test_hero_probe_labels_are_suite_aware_and_collision_free(self) -> None:
-        rows = [
-            {"added_evaluation_id": "thunder.spider_skin.linear_probing"},
-            {"added_evaluation_id": "thunder.esca.linear_probing"},
-            {"added_evaluation_id": "eva.leaderboard.patch_camelyon.test"},
-            {"added_evaluation_id": "eva.leaderboard.breakhis.validation"},
-            {"added_evaluation_id": "hest.read.gene_expression"},
-            {"added_evaluation_id": "pathobench.threads2025.cptac_hnsc.casp8-mutation"},
-        ]
-        labels = HERO_PLOT._trajectory_labels(rows)
-        self.assertEqual(len(labels), len(set(labels)))
-        self.assertTrue(labels[0].startswith("THU SPIDER SKIN"))
-        self.assertTrue(labels[2].startswith("EVA PCam test"))
-        self.assertTrue(labels[4].startswith("HEST READ"))
-        self.assertTrue(labels[5].startswith("THR HNSC CASP8"))
+        fig, ax = HERO_PLOT.build_hero_figure(values)
+        self.assertEqual(fig.axes, [ax])
+        self.assertEqual(ax.get_title(), "Retrospective all-known matrix reconstruction")
+        disclosure = " ".join(text.get_text() for text in fig.texts)
+        self.assertIn("Revealed probes are scored as exact", disclosure)
+        self.assertIn("not model-level holdout", disclosure)
+        self.assertIn("not measured cost", disclosure)
+        self.assertNotIn("ProcessPoolExecutor", (ROOT / "scripts/plot_benchpress_style_hero.py").read_text())
+        self.assertFalse(ax.texts)
+        plt.close(fig)
 
     def test_cell_validation_uses_one_axis_and_discloses_repeated_predictions(self) -> None:
         result = json.loads(
