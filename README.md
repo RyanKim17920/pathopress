@@ -28,11 +28,14 @@ and retrospective interpolation is not prospective clinical validation.
 
 - The logit, per-evaluation-standardized bias-ALS implementation matches the
   pinned BenchPress numerical primitive to floating-point precision. Pathology
-  cross-validation selects interaction rank 1; BenchPress deploys rank 2.
+  cell-level cross-validation selects interaction rank 1; this is a completion
+  hyperparameter, not the literal matrix rank. BenchPress deploys rank 2.
 - On the shared 10-seed × 3-fold artifact, rank-1 bias ALS gives 3.134532 MAE,
   1.609006 MedAE, and 1.608566 median fold MedAE over 21,181 supported
-  predictions. The column-median baseline is 4.151756/2.400000 MAE/MedAE.
-  Both raw and logit Soft-Impute sweeps independently select rank 1.
+  repeated held-out prediction instances from 2,122 unique reported cells.
+  Other scores from the same model may remain visible. The column-median
+  baseline is 4.151756/2.400000 MAE/MedAE. Both raw and logit Soft-Impute
+  sweeps independently select rank 1.
 - The current 59×187 7-transform × 12-method comparison ran 343/343 configurations.
   The best MedAPE row is logit BenchReg at 1.9023, but it covers only 68.3% of
   held-out cells. Coverage is therefore part of every method result; a partial
@@ -45,10 +48,12 @@ and retrospective interpolation is not prospective clinical validation.
   at five unrestricted probes and 0.8780 at ten. The 25-task pipeline-feasibility
   proxy reaches 0.4000 at ten; it is not a measured cost set. No exhaustive
   choose-five search has been run for the current 59×187 scores.
-- For the same scorecard-selected probes, median error in each model's average
-  observed score falls from 1.7065 at one probe to 0.8471 at ten unrestricted
-  probes and 0.7120 for the 25-task proxy. This is a separately evaluated
-  usefulness measure, not the greedy selection objective.
+- Prefixes selected on 41 training models predict the mean reported normalized
+  score of 18 held-out models. Median model-mean error for unrestricted probes
+  is 1.9039 at one probe, 0.7835 at five, and 0.8921 at ten; the 25-task proxy
+  is 1.2254/0.9247 at five/ten. These non-monotone held-out values include exact
+  revealed probes and supported hidden predictions. There is no committed
+  held-out `k=0` or random model-mean control.
 - The standalone ranking-preservation release is now derived from the current
   compression artifact: at `k=10`, unrestricted all-known margin-5 pairwise
   accuracy is 0.8780 versus a 0.6029 random-prefix median, and hidden-only
@@ -143,8 +148,8 @@ No build or download command performs deployment or upload.
 | Canonical substrate | [matrix/fold manifest](experiments/shared_artifacts_manifest.json), [matrix NPZ](experiments/analysis_matrix.npz), [folds](experiments/folds_s10_f3_bs42.json) |
 | Point estimates and rank | [imputations](outputs/imputations_rank1.csv), [bias-ALS CV](experiments/benchpress_style_results.json), [Soft-Impute sweep](experiments/soft_impute_rank_sweep_results.json) |
 | Full classical grid | [manifest](experiments/method_comparison/manifest.json), [results](experiments/method_comparison/results.json), [top table](experiments/method_comparison/top_methods.md) |
-| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [current ranking preservation](figures/ranking_preservation_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
-| Cost and feasibility evidence | [source-backed registry](data/evaluation_cost_evidence.json), [measured-burden contract](docs/budgeted-probe-selection.md), [current fail-closed preflight](experiments/budgeted_probe_selection_rank1.json), [coverage figure](figures/evaluation_cost_evidence_coverage.png) |
+| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [task utility and held-out mean figure](figures/probe_dual_objective_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
+| Cost and feasibility evidence | [source-backed registry](data/evaluation_cost_evidence.json), [measured-burden contract](docs/budgeted-probe-selection.md), [current fail-closed preflight](experiments/budgeted_probe_selection_rank1.json) |
 | Ranking and time | [ranking](experiments/ranking_preservation_rank1.json), [temporal](experiments/temporal_deployment_rank1.json) |
 | Trust | [confidence](experiments/confidence_calibration_rank1.json), [existing-row intervals](experiments/deployment_confidence_rank1.json), [unseen-model intervals](experiments/new_model_confidence_rank1.json), [new-model method](docs/new-model-confidence.md) |
 | Figures | [figure gallery](figures/README.md) |
@@ -191,9 +196,10 @@ PYTHONPATH=src python3 experiments/run_confidence_calibration.py
 PYTHONPATH=src python3 experiments/run_new_model_confidence.py
 PYTHONPATH=src python3 experiments/run_temporal_deployment.py
 python3 scripts/build_evaluation_cost_evidence.py
-python3 scripts/plot_evaluation_cost_evidence.py
-python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive
+python3 scripts/plot_benchpress_style.py
+python3 scripts/plot_benchpress_style_hero.py
 python3 scripts/plot_probe_dual_objective.py
+python3 scripts/plot_temporal_deployment.py
 ```
 
 Some commands are intentionally expensive or sharded; consult the experiment

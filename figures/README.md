@@ -1,72 +1,36 @@
 # Generated figure gallery
 
-Figures are result-first: plotting scripts read committed compact JSON/CSV/NPZ
-artifacts and do not implicitly rerun expensive experiments. PNGs are review
-assets; matching PDFs are publication/vector assets.
+The public gallery contains exactly four result figures. PNG files are review
+assets; matching PDFs are publication/vector assets. Plotters consume committed
+JSON/CSV results and do not rerun the expensive experiments.
 
 The fixed research matrix is 59 models × 187 protocol-level evaluations with
-2,122 observed cells (19.2332% density) and 8,911 rank-1 point estimates.
+2,122 observed cells (19.2332% density).
 
-## Canonical main figures
-
-These six figures carry the main result. Other retained figures are diagnostic
-or supplementary and should not be presented as alternative headline charts.
-
-| Figure | What it shows | Source artifact |
+| Figure | Evidence and scope | Source artifact |
 |---|---|---|
-| [BenchPress-style pathology hero](pathopress_benchpress_hero_rank1.png) | four target-cell examples plus random, most-predictive, and 25-task scorecard trajectories | [`benchpress_style_hero_summary.json`](../experiments/benchpress_style_hero_summary.json) |
-| [Completed matrix](matrix_completed_rank1.png) | reported values and translucent rank-1 estimates | [`imputations_rank1.csv`](../outputs/imputations_rank1.csv) |
-| [Matched validation](benchpress_style_validation_rank1.png) | rank sweep, OOF parity, suite errors, error distribution | [`benchpress_style_results.json`](../experiments/benchpress_style_results.json) |
-| [One-probe informativeness](probe_informativeness_rank1.png) | first-step greedy utility with observed-model coverage | [`probe_informativeness_rank1.csv`](../outputs/probe_informativeness_rank1.csv) |
-| [Model-average prediction](probe_dual_objective_rank1.png) | model-average MedAE for scorecard-selected probe sets | [`probe_dual_objective_rank1.csv`](../outputs/probe_dual_objective_rank1.csv) |
-| [Ranking preservation](ranking_preservation_rank1.png) | current margin-5 all-known/random and held-out probe trajectories | [`ranking_preservation_rank1.json`](../experiments/ranking_preservation_rank1.json) |
+| [Cell-level rank validation](benchpress_style_validation_rank1.png) | Rank sweep over 2,122 unique reported cells and 21,181 repeated held-out prediction instances from ten seeds × three folds. Other scores from the same model may remain visible; this is not model-level holdout. | [`benchpress_style_results.json`](../experiments/benchpress_style_results.json) |
+| [BenchPress-style pathology hero](pathopress_benchpress_hero_rank1.png) | Retrospective all-known cell reconstruction. Revealed probes are exact, and selection/evaluation use the same model population. The 25-task track is a low-friction proxy, not measured cost. | [`benchpress_style_hero_summary.json`](../experiments/benchpress_style_hero_summary.json) |
+| [Task utility and held-out mean prediction](probe_dual_objective_rank1.png) | Panel A is transductive single-task utility, not causal task importance. Panel B uses prefixes selected on 41 training models to predict the mean reported normalized score of 18 held-out models; revealed probe values are exact and supported hidden cells are predicted. No held-out `k=0` or random model-mean control is available. | [`probe_dual_objective_rank1.csv`](../outputs/probe_dual_objective_rank1.csv) |
+| [Temporal deployment](temporal_deployment_rank1.png) | Seven 2025 target models trained from strictly prior releases. Each trajectory is the target-level median over ten probe seeds; MedAE includes `k` exact revealed cells plus supported hidden predictions. | [`temporal_deployment_rank1.json`](../experiments/temporal_deployment_rank1.json) |
 
-The informativeness chart is a predictive-information ranking, not a cost
-ranking. Its sample-count metadata does not measure runtime, memory, annotation,
-access, licensing, acquisition, or dollars.
-
-## Supplementary figures
-
-These figures retain unique robustness, deployment, or cost detail
-without duplicating the canonical narrative.
-
-| Figure | What it shows | Source artifact |
-|---|---|---|
-| [Soft-Impute rank sweep](soft_impute_rank_sweep.png) | raw/logit MedAE and MedAPE rank sensitivity | [`soft_impute_rank_sweep_results.json`](../experiments/soft_impute_rank_sweep_results.json) |
-| [Confidence calibration](confidence_calibration_rank1.png) | risk correlation, retention, strata, conformal intervals | [`confidence_calibration_rank1.json`](../experiments/confidence_calibration_rank1.json) |
-| [Unseen-model confidence](new_model_confidence_rank1.png) | empirical risk–coverage, coverage–width, suite coverage, abstention support | [`new_model_confidence_rank1.json`](../experiments/new_model_confidence_rank1.json) |
-| [Temporal deployment](temporal_deployment_rank1.png) | seven 2025 target releases with prior-only training | [`temporal_deployment_rank1.json`](../experiments/temporal_deployment_rank1.json) |
-| [Evaluation cost evidence](evaluation_cost_evidence_coverage.png) | source coverage, missingness, and explicitly non-monetary pre-error feasibility strata | [`evaluation_cost_evidence.json`](../data/evaluation_cost_evidence.json) |
-
-Matched rank-1 error is 3.134532 MAE / 1.609006 MedAE. All-known greedy
-scorecard MedAE is 1.397334 and 1.213706 at five and ten probes; hidden-only is
-1.548536 and 1.493709. These are normalized-score retrospective quantities,
-not clinical accuracy or confidence intervals.
-
-The current pre-error feasibility curve uses 25 image/patch classification
-protocols selected without outcome errors. It is not measured cost. The
-checked-in greedy curves are complete through `k=10`; all-known random baselines
-cover unrestricted `k=30` and every feasibility candidate through `k=25`.
-Held-out and ranking random controls cover `k=10`. No exhaustive `C(25,5)` or
-`C(30,5)` result is claimed for the current 59 × 187 matrix.
+The interaction rank is a fitted completion hyperparameter, not the literal
+rank of the pathology data. The ranking, confidence, Soft-Impute, and cost
+audits remain available as machine-readable experiment artifacts without
+additional public charts. In particular, the cost registry reports no measured
+runtime/dollar curve; sample count and the 25-task proxy are not cost models.
 
 ## Regeneration
 
-Install the research dependencies first. PyTorch is isolated in the optional
-`mlp` extra and is not required to render the checked-in figures.
+Install the research dependencies, then run only these lightweight plotters:
 
 ```bash
 python3 -m pip install -e '.[research]'
 python3 scripts/plot_benchpress_style.py
-python3 scripts/plot_probe_selection.py
-python3 scripts/plot_ranking_preservation.py
-python3 scripts/plot_confidence_calibration.py
-python3 scripts/plot_new_model_confidence.py
-python3 scripts/plot_temporal_deployment.py
 python3 scripts/plot_benchpress_style_hero.py
 python3 scripts/plot_probe_dual_objective.py
-python3 scripts/plot_evaluation_cost_evidence.py
+python3 scripts/plot_temporal_deployment.py
 ```
 
-The exact experiment commands and local-cache boundaries are in
-[the experiment index](../experiments/README.md).
+The experiment runners and local-cache boundaries are documented in the
+[experiment index](../experiments/README.md).

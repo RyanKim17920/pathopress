@@ -63,9 +63,9 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def main() -> None:
-    args = parse_args()
-    payload = json.loads(args.input.read_text(encoding="utf-8"))
+def build_temporal_figure(payload: dict):
+    """Build the single-panel, target-labelled temporal figure."""
+
     config = payload["config"]
     targets = list(config["target_model_ids"])
     trajectories = model_trajectories(payload)
@@ -97,30 +97,19 @@ def main() -> None:
         ax.plot([10.0, 10.35], [actual_y, text_y], color=color, lw=0.9, alpha=0.75)
         ax.text(10.42, text_y, target, color=color, va="center", fontsize=9)
 
-    matrix = np.asarray([trajectories[target] for target in targets], dtype=float)
-    cohort_median = np.median(matrix, axis=0)
-    ax.plot(
-        x,
-        cohort_median,
-        "D--",
-        color="#303030",
-        lw=1.6,
-        ms=5,
-        label="Cohort median",
-        zorder=5,
-    )
-
     ax.set(
         xlim=(0.6, 12.65),
         ylim=(0, max(2.3, max(label_y) + 0.15)),
         xticks=DISPLAY_K,
         xlabel="Revealed target evaluations (k)",
-        ylabel="Median absolute error (normalized-score points)",
+        ylabel=(
+            "Parity/reconstruction MedAE\n"
+            "(includes exact revealed cells; normalized points)"
+        ),
     )
     ax.grid(axis="y", color="#D7D7D7", alpha=0.65, lw=0.8)
-    ax.legend(frameon=False, loc="upper right")
     fig.suptitle(
-        "Temporal deployment with prior-only training: seven 2025 pathology targets",
+        "Prior-only temporal reconstruction: seven 2025 pathology targets",
         fontsize=15,
         fontweight="bold",
         y=0.97,
@@ -131,10 +120,17 @@ def main() -> None:
         "Each trajectory is the target-model median across ten probe seeds. "
         "MedAE includes k exact revealed cells plus all supported hidden predictions.",
         ha="center",
-        fontsize=9,
+        fontsize=10.2,
         color="#444444",
     )
-    fig.subplots_adjust(left=0.11, right=0.80, bottom=0.18, top=0.86)
+    fig.subplots_adjust(left=0.15, right=0.80, bottom=0.20, top=0.86)
+    return fig, ax
+
+
+def main() -> None:
+    args = parse_args()
+    payload = json.loads(args.input.read_text(encoding="utf-8"))
+    fig, _ = build_temporal_figure(payload)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(args.output, dpi=300, bbox_inches="tight")

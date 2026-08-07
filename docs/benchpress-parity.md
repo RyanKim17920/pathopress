@@ -81,14 +81,18 @@ probe sets and are not the ranking result. The dedicated `ranking_aware`
 trajectories are selected and evaluated with the pinned margin of 5 normalized
 points. The artifact records both margins and this distinction explicitly.
 
-The upstream-shaped [pathology hero](../figures/pathopress_benchpress_hero_rank1.png)
-reconstructs the four target examples and overall score-prediction panel; the
-[ranking-preservation figure](../figures/ranking_preservation_rank1.png) shows the
-random and greedy margin-5 trajectories. At `k=10`, unrestricted all-known
-pairwise accuracy is 0.8780, versus 0.4000 for the 25-task feasibility proxy.
-The [dual-objective table](../outputs/probe_dual_objective_rank1.csv) also asks
-how well those scorecard-selected probes predict each model's average observed
-score. It reports that quantity separately and does not imply it was optimized.
+The [pathology hero](../figures/pathopress_benchpress_hero_rank1.png) shows the
+retrospective all-known scorecard trajectory. Revealed probes are exact, and
+selection/evaluation use the same model population, so it is not model-level
+holdout. The machine-readable [ranking result](../experiments/ranking_preservation_rank1.json)
+preserves the random and greedy margin-5 trajectories without a separate public
+chart. At `k=10`, unrestricted all-known pairwise accuracy is 0.8780, versus
+0.4000 for the 25-task feasibility proxy. The
+[task-utility and held-out-mean figure](../figures/probe_dual_objective_rank1.png)
+separates transductive single-task utility from mean-score prediction on 18
+held-out models using prefixes selected on 41 training models. Revealed probe
+values are exact, supported hidden cells are predicted, and no held-out `k=0`
+or random model-mean control is available.
 
 The v2 pre-error allowlist contains the 25 retained image/patch classification
 evaluations. This exactly matches the pinned upstream candidate count, but not

@@ -1,9 +1,7 @@
 from __future__ import annotations
 
-import csv
 import importlib.util
 import json
-import tempfile
 import unittest
 from pathlib import Path
 
@@ -24,8 +22,8 @@ def load_script(name: str):
 
 
 MATRIX_PLOT = load_script("plot_benchpress_style.py")
-PROBE_PLOT = load_script("plot_probe_selection.py")
 HERO_PLOT = load_script("plot_benchpress_style_hero.py")
+TEMPORAL_PLOT = load_script("plot_temporal_deployment.py")
 
 
 class PublicationFigureLayoutTests(unittest.TestCase):
@@ -70,49 +68,23 @@ class PublicationFigureLayoutTests(unittest.TestCase):
         self.assertIn("selects interaction rank 1", ax.get_title())
         plt.close(fig)
 
-    def test_informativeness_coverage_is_in_a_separate_noncolliding_axis(self) -> None:
-        with tempfile.TemporaryDirectory() as temporary:
-            csv_path = Path(temporary) / "informativeness.csv"
-            with csv_path.open("w", newline="", encoding="utf-8") as handle:
-                writer = csv.DictWriter(
-                    handle,
-                    fieldnames=(
-                        "evaluation_id",
-                        "suite_id",
-                        "improvement_over_column_median",
-                        "model_coverage",
-                    ),
-                )
-                writer.writeheader()
-                for index in range(15):
-                    writer.writerow(
-                        {
-                            "evaluation_id": f"hest.very_long_evaluation_name_{index}.gene_expression",
-                            "suite_id": "hest",
-                            "improvement_over_column_median": -0.08 + index * 0.02,
-                            "model_coverage": 0.47 + (index % 2) * 0.07,
-                        }
-                    )
-
-            fig, score_ax, coverage_ax = PROBE_PLOT.build_informativeness_figure(csv_path)
-            fig.canvas.draw()
-            renderer = fig.canvas.get_renderer()
-            score_labels = [label.get_window_extent(renderer) for label in score_ax.get_yticklabels()]
-            coverage_labels = [text.get_window_extent(renderer) for text in coverage_ax.texts]
-
-            self.assertEqual(len(score_labels), 15)
-            self.assertEqual(len(coverage_labels), 15)
-            self.assertTrue(all(not left.overlaps(right) for left in score_labels for right in coverage_labels))
-            for labels in (score_labels, coverage_labels):
-                self.assertTrue(
-                    all(
-                        not labels[first].overlaps(labels[second])
-                        for first in range(len(labels))
-                        for second in range(first + 1, len(labels))
-                    )
-                )
-            plt.close(fig)
-
+    def test_temporal_figure_is_one_panel_without_obscuring_cohort_overlay(self) -> None:
+        payload = json.loads(
+            (ROOT / "experiments" / "temporal_deployment_rank1.json").read_text()
+        )
+        fig, ax = TEMPORAL_PLOT.build_temporal_figure(payload)
+        self.assertEqual(fig.axes, [ax])
+        self.assertIsNone(ax.get_legend())
+        self.assertIn("Parity/reconstruction MedAE", ax.get_ylabel())
+        self.assertIn("exact revealed cells", ax.get_ylabel())
+        self.assertEqual(
+            {text.get_text() for text in ax.texts},
+            set(payload["config"]["target_model_ids"]),
+        )
+        disclosure = " ".join(text.get_text() for text in fig.texts)
+        self.assertIn("ten probe seeds", disclosure)
+        self.assertIn("supported hidden predictions", disclosure)
+        plt.close(fig)
 
 if __name__ == "__main__":
     unittest.main()

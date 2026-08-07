@@ -71,7 +71,7 @@ held-out cell.
 
 The NPZ prediction shards are rebuildable local cache and are not retained.
 Compact [results](method_comparison/results.json), [top methods](method_comparison/top_methods.md),
-the manifest, and figure are the tracked merge products.
+and the manifest are the tracked merge products.
 
 ## Probe compression and ranking
 
@@ -123,8 +123,7 @@ PYTHONPATH=src:experiments python3 experiments/build_probe_exhaustive_summary.py
   --cheap-run "$CHEAP_RUN" --pruned-run "$PRUNED_RUN" \
   --fast-equivalence experiments/probe_exhaustive_fast_equivalence_v2.json
 PYTHONPATH=src python3 experiments/run_ranking_preservation.py
-python3 scripts/plot_ranking_preservation.py
-python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive
+python3 scripts/plot_benchpress_style_hero.py
 python3 scripts/plot_probe_dual_objective.py
 ```
 
@@ -163,11 +162,14 @@ python3 scripts/plot_probe_dual_objective.py
 
 All-known greedy MedAE is 1.397334/1.213706 at five/ten probes; hidden-only is
 1.548536/1.493709. The 25-task feasibility allowlist is an input/label pipeline
-proxy, not measured compute, access, or licensing cost. The faithful
-[BenchPress-style summary](benchpress_style_hero_summary.json) records exact
-masking/search budgets, the pathology rank-1 adaptation, and that current-score
-exhaustive searches were not run. The [dual-objective table](../outputs/probe_dual_objective_rank1.csv)
-reports model-average prediction error without pretending it was optimized.
+proxy, not measured compute, access, or licensing cost. The
+[BenchPress-style summary](benchpress_style_hero_summary.json) records the
+retrospective all-known scope, exact revealed probes, pathology rank-1
+adaptation, and absence of a current exhaustive-search claim. The
+[dual-objective table](../outputs/probe_dual_objective_rank1.csv) reports mean
+reported-score prediction on 18 held-out models using prefixes selected on 41
+training models. It includes exact revealed probes and supported hidden
+predictions; no held-out `k=0` or random model-mean control is available.
 
 ## Confidence and time
 
@@ -195,22 +197,25 @@ PYTHONPATH=src python3 experiments/run_temporal_deployment.py
   exclusion prevents hidden-score leakage; unsupported contexts abstain.
 - [Temporal deployment](temporal_deployment_rank1.json) evaluates seven
   verified 2025 targets using strictly earlier models and 1/5/10 revealed
-  scores over ten seeds. This is a small retrospective cohort.
+  scores over ten seeds. Its parity MedAE includes exact revealed cells plus
+  supported hidden predictions. This is a small retrospective cohort.
 
 ## Publication and product artifacts
 
 ```bash
-python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive
-python3 scripts/plot_probe_dual_objective.py
 python3 scripts/build_evaluation_cost_evidence.py
-python3 scripts/plot_evaluation_cost_evidence.py
+python3 scripts/plot_benchpress_style.py
+python3 scripts/plot_benchpress_style_hero.py
+python3 scripts/plot_probe_dual_objective.py
+python3 scripts/plot_temporal_deployment.py
 PYTHONPATH=src python3 scripts/build_public_release.py
 PYTHONPATH=src python3 scripts/build_hf_dataset.py --parquet auto
 PYTHONPATH=src python3 scripts/publish_hf_dataset.py  # validation + dry run; no network
 ```
 
-The publication summaries and figures are compact derivatives of
-experiment artifacts. The public build produces a hash-verified all/paper/wide
+The four public figure pairs and their summaries are compact derivatives of
+experiment artifacts. Cost evidence remains a registry and prose audit, not a
+chart. The public build produces a hash-verified all/paper/wide
 export and `website/data.json`; it performs no upload or deployment. See the
 [figure gallery](../figures/README.md), [export README](../exports/pathopress_public/README.md),
 and [static-site README](../website/README.md).
