@@ -600,7 +600,7 @@
         ],
         "medape_median": 2.271455778617758,
         "method": "Bias ALS",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0128__logit__bias_als__hp00_76abd2c48e.npz",
+        "path": "experiments/method_comparison/predictions/0128__logit__bias_als__hp00_76abd2c48e.npz",
         "sha256": "1acf640b544cd61a7a0606f683e977896bfc0e529edc994b79b07510e40fb0c0",
         "shard_id": "0128__logit__bias_als__hp00_76abd2c48e",
         "transform": "logit"
@@ -626,7 +626,7 @@
         ],
         "medape_median": 2.1601441790951106,
         "method": "Bias ALS",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0129__logit__bias_als__hp01_165174028c.npz",
+        "path": "experiments/method_comparison/predictions/0129__logit__bias_als__hp01_165174028c.npz",
         "sha256": "a3e3465a5f165be8a5a02ea57f8143676309ff1cbaff19fa94aee9071e180b89",
         "shard_id": "0129__logit__bias_als__hp01_165174028c",
         "transform": "logit"
@@ -652,7 +652,7 @@
         ],
         "medape_median": 2.1644116569739116,
         "method": "Bias ALS",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0130__logit__bias_als__hp02_0a43174731.npz",
+        "path": "experiments/method_comparison/predictions/0130__logit__bias_als__hp02_0a43174731.npz",
         "sha256": "29b429a013aa20db4b813fe23ffd30ea5706df46419e22d472c674c9807df928",
         "shard_id": "0130__logit__bias_als__hp02_0a43174731",
         "transform": "logit"
@@ -714,7 +714,7 @@
         ],
         "medape_median": 2.1854034439315324,
         "method": "Bias ALS",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0277__probit__bias_als__hp02_0a43174731.npz",
+        "path": "experiments/method_comparison/predictions/0277__probit__bias_als__hp02_0a43174731.npz",
         "sha256": "bf72d76a982b42e81d2f27009bdad515374bd9a5de91e0a686f4b05e4b19ba15",
         "shard_id": "0277__probit__bias_als__hp02_0a43174731",
         "transform": "probit"
@@ -740,7 +740,7 @@
         ],
         "medape_median": 2.187423488909083,
         "method": "Bias ALS",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0325__quantile__bias_als__hp01_165174028c.npz",
+        "path": "experiments/method_comparison/predictions/0325__quantile__bias_als__hp01_165174028c.npz",
         "sha256": "7cb7fcf2c6c2943774ff35f83a9f0da644974cb053bb34062b779f4f7908ed60",
         "shard_id": "0325__quantile__bias_als__hp01_165174028c",
         "transform": "quantile"
@@ -766,7 +766,7 @@
         ],
         "medape_median": 2.2233076909466396,
         "method": "Bias ALS",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0032__identity__bias_als__hp02_0a43174731.npz",
+        "path": "experiments/method_comparison/predictions/0032__identity__bias_als__hp02_0a43174731.npz",
         "sha256": "b48742333fc3913557254b24960d9a3093c0e73eaf7f4ca34697df782ec0330a",
         "shard_id": "0032__identity__bias_als__hp02_0a43174731",
         "transform": "identity"
@@ -792,7 +792,7 @@
         ],
         "medape_median": 2.2560175357576293,
         "method": "Bias ALS",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0227__sqrt__bias_als__hp01_165174028c.npz",
+        "path": "experiments/method_comparison/predictions/0227__sqrt__bias_als__hp01_165174028c.npz",
         "sha256": "60be40376557e6007fda958f7f20d83599d72df8140578c6e7a5446288359875",
         "shard_id": "0227__sqrt__bias_als__hp01_165174028c",
         "transform": "sqrt"
@@ -818,7 +818,7 @@
         ],
         "medape_median": 2.263939752550847,
         "method": "Bias ALS",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0080__log__bias_als__hp01_165174028c.npz",
+        "path": "experiments/method_comparison/predictions/0080__log__bias_als__hp01_165174028c.npz",
         "sha256": "8f4158bbdb205e286e22bc5219f22eac128489ebf427cbc6f59691fe72273c74",
         "shard_id": "0080__log__bias_als__hp01_165174028c",
         "transform": "log"
@@ -844,7 +844,7 @@
         ],
         "medape_median": 2.2656331234160874,
         "method": "Bias ALS",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0178__asinh__bias_als__hp01_165174028c.npz",
+        "path": "experiments/method_comparison/predictions/0178__asinh__bias_als__hp01_165174028c.npz",
         "sha256": "c2cddf60ff77a869010625099d90a3383c30d1ad1ff4295d383f1076ae3df9dd",
         "shard_id": "0178__asinh__bias_als__hp01_165174028c",
         "transform": "asinh"
@@ -869,7 +869,7 @@
         ],
         "medape_median": 2.297413628000945,
         "method": "Bench-KNN",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0005__identity__bench_knn__hp03_6e6a90b2b6.npz",
+        "path": "experiments/method_comparison/predictions/0005__identity__bench_knn__hp03_6e6a90b2b6.npz",
         "sha256": "6f44b7ab368a8ceb5cc0c6fb476a61634102d0225ec4b0f8070450c6e6de5a02",
         "shard_id": "0005__identity__bench_knn__hp03_6e6a90b2b6",
         "transform": "identity"
@@ -894,7 +894,7 @@
         ],
         "medape_median": 2.3010871738083942,
         "method": "Bench-KNN",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0103__logit__bench_knn__hp03_6e6a90b2b6.npz",
+        "path": "experiments/method_comparison/predictions/0103__logit__bench_knn__hp03_6e6a90b2b6.npz",
         "sha256": "1a5ff7f1c562f4e32e99608eeced7dd58cc4312b564c98ace238a481fa6b29d9",
         "shard_id": "0103__logit__bench_knn__hp03_6e6a90b2b6",
         "transform": "logit"
@@ -919,7 +919,7 @@
         ],
         "medape_median": 2.3111560873044406,
         "method": "Bench-KNN",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0250__probit__bench_knn__hp03_6e6a90b2b6.npz",
+        "path": "experiments/method_comparison/predictions/0250__probit__bench_knn__hp03_6e6a90b2b6.npz",
         "sha256": "37af72268f5566d14a3d9f08f4e2084b6a9d1c0186d00e4aa3a9238342a6b491",
         "shard_id": "0250__probit__bench_knn__hp03_6e6a90b2b6",
         "transform": "probit"
@@ -944,7 +944,7 @@
         ],
         "medape_median": 2.3182104908676253,
         "method": "Bench-KNN",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0298__quantile__bench_knn__hp02_ecc06f3aeb.npz",
+        "path": "experiments/method_comparison/predictions/0298__quantile__bench_knn__hp02_ecc06f3aeb.npz",
         "sha256": "9302223c9de155101daf17c190dbfe063ee9aeee5b40a93a80a2e4dc2eedd709",
         "shard_id": "0298__quantile__bench_knn__hp02_ecc06f3aeb",
         "transform": "quantile"
@@ -969,7 +969,7 @@
         ],
         "medape_median": 2.326764662330363,
         "method": "Bench-KNN",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0201__sqrt__bench_knn__hp03_6e6a90b2b6.npz",
+        "path": "experiments/method_comparison/predictions/0201__sqrt__bench_knn__hp03_6e6a90b2b6.npz",
         "sha256": "805ef09585549d40a2efc42efd70beb0fa419e3a637c19fb3cfaa4cc04e93faa",
         "shard_id": "0201__sqrt__bench_knn__hp03_6e6a90b2b6",
         "transform": "sqrt"
@@ -994,7 +994,7 @@
         ],
         "medape_median": 2.3300743292006354,
         "method": "Bench-KNN",
-        "path": "experiments/method_comparison_m3abcce77d475/predictions/0152__asinh__bench_knn__hp03_6e6a90b2b6.npz",
+        "path": "experiments/method_comparison/predictions/0152__asinh__bench_knn__hp03_6e6a90b2b6.npz",
         "sha256": "ca3d33799ef56b6b631fe2c9e83fdab7c061a75489fc2b8f2fd52f0c48cb80d4",
         "shard_id": "0152__asinh__bench_knn__hp03_6e6a90b2b6",
         "transform": "asinh"
@@ -1020,11 +1020,11 @@
   "input": {
     "cells_path": "experiments/confidence_cells_rank1.csv",
     "cells_sha256": "3cdb1be9e6444a2f04c459085bc38dfe27219b29161b19b7e6da0bc658ef7322",
-    "folds_path": "experiments/folds_s10_f3_bs42_m3abcce77d475.json",
+    "folds_path": "experiments/folds_s10_f3_bs42.json",
     "folds_sha256": "418ed9ddef661f39ad31bc804cdb3213de3ef46c8520cc3a98db9e6c1a9c813f",
-    "method_manifest_path": "experiments/method_comparison_m3abcce77d475/manifest.json",
+    "method_manifest_path": "experiments/method_comparison/manifest.json",
     "method_manifest_sha256": "addee143b81c361584b0ee1eec276152eefabae83364b0aecff30717fb5927d8",
-    "method_results_path": "experiments/method_comparison_m3abcce77d475/results.json",
+    "method_results_path": "experiments/method_comparison/results.json",
     "method_results_sha256": "4befa1e4376a633a389da03a6f123ebe7fb74e7d29cd7ae0c182e5c59e8ebc35",
     "scores_path": "data/scores.csv",
     "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448"

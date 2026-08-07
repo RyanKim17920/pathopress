@@ -2,9 +2,12 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 import matplotlib.pyplot as plt
 
@@ -28,6 +31,18 @@ HERO_PLOT = load_script("plot_benchpress_style_hero.py")
 
 
 class PublicationFigureLayoutTests(unittest.TestCase):
+    def test_hero_worker_and_blas_limits_are_hard_capped(self) -> None:
+        with patch.object(sys, "argv", ["plot_benchpress_style_hero.py"]):
+            self.assertLessEqual(HERO_PLOT.parse_args().workers, 4)
+        with patch.object(
+            sys,
+            "argv",
+            ["plot_benchpress_style_hero.py", "--workers", "5"],
+        ), self.assertRaises(SystemExit):
+            HERO_PLOT.parse_args()
+        for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
+            self.assertEqual(os.environ[variable], "1")
+
     def test_hero_probe_labels_are_suite_aware_and_collision_free(self) -> None:
         rows = [
             {"added_evaluation_id": "thunder.spider_skin.linear_probing"},

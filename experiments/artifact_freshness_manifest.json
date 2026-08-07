@@ -3,7 +3,7 @@
   "kind": "pathopress_completed_result_graph",
   "experiment_set": {
     "path": "experiments/experiment_set.json",
-    "sha256": "b5cf1c50400ee9710da6f9b92ee44a7eb2023652e72232b3033029a34ed63f37"
+    "sha256": "96150ce57ed82c9ae8ecdf4195c71d314566d1708d839f41ad108c4593560b8d"
   },
   "components": {
     "shared_analysis_contract": {
@@ -66,51 +66,20 @@
         "figures/matrix_completed_rank1.pdf"
       ]
     },
-    "method_comparison_grid": {
-      "command": "python3 experiments/run_method_comparison.py --merge && python3 scripts/plot_method_comparison.py",
+    "method_comparison": {
+      "command": "python3 experiments/run_method_comparison.py --merge",
       "inputs": [
         "data/scores.csv",
         "experiments/folds_s10_f3_bs42.json",
         "experiments/run_method_comparison.py",
-        "scripts/plot_method_comparison.py",
-        "src/pathopress"
-      ],
-      "dependencies": [
-        {
-          "path": "experiments/method_comparison/predictions",
-          "role": "ignored_cache",
-          "config": {
-            "expected_shards": 343,
-            "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
-            "folds_sha256": "f6cb9f7d68d7b3c7d3b4ca1aeacce935a19be2bf4e5e4b4e38f79a8baf690713"
-          }
-        }
-      ],
-      "artifacts": [
-        "experiments/method_comparison/manifest.json",
-        "experiments/method_comparison/results.json",
-        "experiments/method_comparison/top_methods.csv",
-        "experiments/method_comparison/top_methods.md",
-        "figures/method_comparison_grid.png",
-        "figures/method_comparison_grid.pdf"
-      ]
-    },
-    "structure_analysis": {
-      "command": "python3 experiments/run_structure_analysis.py && python3 scripts/plot_structure_analysis.py",
-      "inputs": [
-        "data/scores.csv",
-        "experiments/probe_compression_rank1.json",
-        "experiments/run_structure_analysis.py",
-        "scripts/plot_structure_analysis.py",
         "src/pathopress"
       ],
       "dependencies": [],
       "artifacts": [
-        "experiments/structure_analysis",
-        "figures/benchmark_best_neighbor_correlations.png",
-        "figures/benchmark_best_neighbor_correlations.pdf",
-        "figures/benchmark_correlation_mds_probes.png",
-        "figures/benchmark_correlation_mds_probes.pdf"
+        "experiments/method_comparison/manifest.json",
+        "experiments/method_comparison/results.json",
+        "experiments/method_comparison/top_methods.csv",
+        "experiments/method_comparison/top_methods.md"
       ]
     },
     "probe_selection": {
@@ -125,77 +94,24 @@
       "artifacts": [
         "experiments/probe_selection_results_rank1.json",
         "outputs/probe_informativeness_rank1.csv",
-        "figures/probe_selection_rank1.png",
-        "figures/probe_selection_rank1.pdf",
         "figures/probe_informativeness_rank1.png",
         "figures/probe_informativeness_rank1.pdf"
       ]
     },
     "probe_compression": {
-      "command": "python3 experiments/run_probe_compression.py && python3 scripts/plot_probe_compression.py",
+      "command": "python3 experiments/run_probe_compression.py",
       "inputs": [
         "data/scores.csv",
         "data/low_friction_allowlist_v2_top25.json",
         "experiments/probe_selection_results_rank1.json",
         "experiments/run_probe_compression.py",
-        "scripts/plot_probe_compression.py",
         "src/pathopress"
       ],
       "dependencies": [],
       "artifacts": [
         "experiments/probe_compression_rank1.json",
         "outputs/probe_compression_selected_raw_rank1.csv",
-        "outputs/probe_compression_random_all_known_raw_rank1.csv.gz",
-        "figures/probe_compression_curves_rank1.png",
-        "figures/probe_compression_curves_rank1.pdf"
-      ]
-    },
-    "probe_exhaustive": {
-      "command": "python3 experiments/validate_probe_exhaustive_chunks.py --runner-version legacy && python3 experiments/validate_probe_exhaustive_merged.py --runner-version legacy && python3 experiments/validate_probe_exhaustive_top.py --runner-version legacy",
-      "inputs": [
-        "experiments/run_probe_exhaustive.py",
-        "experiments/fast_rank1.cpp",
-        "experiments/probe_exhaustive_fast_equivalence.json",
-        "experiments/validate_probe_exhaustive_chunks.py",
-        "experiments/validate_probe_exhaustive_merged.py",
-        "experiments/validate_probe_exhaustive_top.py",
-        "src/pathopress"
-      ],
-      "dependencies": [
-        {
-          "path": "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/shards",
-          "role": "ignored_raw_cache",
-          "config": {
-            "expected_chunks": 240,
-            "expected_records": 53130,
-            "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
-            "config_sha256": "42974b7b5d21f7beb51fdaba491fb4d5f34d85762271935d5bcf84e31efa75d8"
-          }
-        },
-        {
-          "path": "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/shards",
-          "role": "ignored_raw_cache",
-          "config": {
-            "expected_chunks": 560,
-            "expected_records": 142506,
-            "scores_sha256": "f581973b3f91880d19a2f2129f7da65f1ece4abf7cbdc0039ecbb10e4a61a43c",
-            "config_sha256": "fd40559e91ee1b060c2d27ac1067818f127ba1ebd20fa580d09185366a879c3b"
-          }
-        }
-      ],
-      "artifacts": [
-        "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/config.json",
-        "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/merged_summary.json.gz",
-        "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/config.json",
-        "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/merged_summary.json.gz",
-        "experiments/probe_exhaustive_integrity_manifest.json",
-        "experiments/probe_exhaustive_merged_validation.json",
-        "experiments/probe_exhaustive_scalar_top_validation.json",
-        "experiments/probe_exhaustive_fast_equivalence.json",
-        "experiments/probe_exhaustive_fast_equivalence_v2.json",
-        "experiments/probe_exhaustive_runner_parity.json",
-        "experiments/probe_exhaustive_execution_status.json",
-        "experiments/probe_exhaustive_rank1.json"
+        "outputs/probe_compression_random_all_known_raw_rank1.csv.gz"
       ]
     },
     "ranking_preservation": {
@@ -223,7 +139,6 @@
         "experiments/folds_s10_f3_bs42.json",
         "experiments/method_comparison/manifest.json",
         "experiments/method_comparison/results.json",
-        "experiments/method_comparison/predictions",
         "experiments/run_confidence_calibration.py",
         "scripts/plot_confidence_calibration.py",
         "src/pathopress"
@@ -251,77 +166,6 @@
         "experiments/new_model_confidence_predictions_rank1.csv",
         "figures/new_model_confidence_rank1.png",
         "figures/new_model_confidence_rank1.pdf"
-      ]
-    },
-    "predictability_and_error_analysis": {
-      "command": "python3 experiments/run_predictability.py && python3 experiments/run_error_analysis.py && python3 scripts/plot_predictability.py && python3 scripts/plot_error_analysis.py",
-      "inputs": [
-        "data/scores.csv",
-        "data/tasks.csv",
-        "experiments/run_predictability.py",
-        "experiments/run_error_analysis.py",
-        "scripts/plot_predictability.py",
-        "scripts/plot_error_analysis.py",
-        "src/pathopress"
-      ],
-      "dependencies": [],
-      "artifacts": [
-        "experiments/predictability_predictions_rank1.csv",
-        "experiments/predictability_results_rank1.json",
-        "experiments/error_analysis_rank1.json",
-        "figures/benchmark_predictability_rank1.png",
-        "figures/benchmark_predictability_rank1.pdf",
-        "figures/model_predictability_rank1.png",
-        "figures/model_predictability_rank1.pdf",
-        "figures/predictability_factors_rank1.png",
-        "figures/predictability_factors_rank1.pdf"
-      ]
-    },
-    "prediction_error_factors": {
-      "command": "python3 experiments/run_prediction_error_factors.py --merge-only && python3 scripts/build_prediction_error_factor_tables.py && python3 scripts/plot_prediction_error_factors.py",
-      "inputs": [
-        "data/scores.csv",
-        "data/tasks.csv",
-        "data/model_metadata.csv",
-        "data/model_release_dates.csv",
-        "experiments/error_analysis_rank1.json",
-        "experiments/run_prediction_error_factors.py",
-        "scripts/build_prediction_error_factor_tables.py",
-        "scripts/plot_prediction_error_factors.py",
-        "src/pathopress"
-      ],
-      "dependencies": [
-        {
-          "path": "experiments/prediction_error_factor_shards",
-          "role": "ignored_cache",
-          "config": {
-            "active_units": 6030,
-            "matrix_sha256": "b6b1e1ad47948bb265432dfea8a09a1a692edcc633b186f20c65a0a7e3295b32"
-          }
-        },
-        {
-          "path": "outputs/prediction_error_factor_predictions_rank1.csv",
-          "role": "ignored_raw_cache",
-          "config": {
-            "rows": 289681,
-            "matrix_sha256": "b6b1e1ad47948bb265432dfea8a09a1a692edcc633b186f20c65a0a7e3295b32"
-          }
-        }
-      ],
-      "artifacts": [
-        "experiments/prediction_error_factors_rank1.json",
-        "experiments/prediction_error_factor_manifest.json",
-        "outputs/prediction_error_factor_records_rank1.csv",
-        "outputs/prediction_error_factor_table_rank1.csv",
-        "outputs/prediction_error_factor_table_appendix_rank1.csv",
-        "figures/predictability_factors_benchmark_rank1.png",
-        "figures/predictability_factors_benchmark_rank1.pdf",
-        "figures/predictability_factors_model_rank1.png",
-        "figures/predictability_factors_model_rank1.pdf",
-        "figures/predictability_factors_benchmark_appendix_rank1.png",
-        "figures/predictability_factors_benchmark_appendix_rank1.pdf",
-        "figures/predictability_factors_model_appendix_rank1.png",
-        "figures/predictability_factors_model_appendix_rank1.pdf"
       ]
     },
     "temporal_deployment": {
@@ -374,62 +218,24 @@
         "figures/evaluation_cost_evidence_coverage.pdf"
       ]
     },
-    "publication_tables": {
-      "command": "python3 scripts/build_publication_tables.py",
-      "inputs": [
-        "data/scores.csv",
-        "data/tasks.csv",
-        "data/model_metadata.csv",
-        "data/model_release_dates.csv",
-        "data/evaluation_feasibility.csv",
-        "experiments/structure_analysis",
-        "scripts/build_publication_tables.py",
-        "src/pathopress"
-      ],
-      "dependencies": [],
-      "artifacts": [
-        "outputs/tables"
-      ]
-    },
-    "publication_hero": {
-      "command": "python3 scripts/plot_publication_hero.py && python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive && python3 scripts/plot_probe_dual_objective.py",
+    "benchpress_publication_figures": {
+      "command": "python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive && python3 scripts/plot_probe_dual_objective.py",
       "inputs": [
         "data/scores.csv",
         "experiments/probe_compression_rank1.json",
         "outputs/probe_compression_selected_raw_rank1.csv",
-        "scripts/plot_publication_hero.py",
         "scripts/plot_benchpress_style_hero.py",
         "scripts/plot_probe_dual_objective.py",
         "src/pathopress"
       ],
       "dependencies": [],
       "artifacts": [
-        "experiments/publication_hero_summary.json",
         "experiments/benchpress_style_hero_summary.json",
         "outputs/probe_dual_objective_rank1.csv",
-        "figures/pathopress_hero_rank1.png",
-        "figures/pathopress_hero_rank1.pdf",
         "figures/pathopress_benchpress_hero_rank1.png",
         "figures/pathopress_benchpress_hero_rank1.pdf",
         "figures/probe_dual_objective_rank1.png",
         "figures/probe_dual_objective_rank1.pdf"
-      ]
-    },
-    "publication_metadata_overview": {
-      "command": "python3 scripts/plot_metadata_overview.py",
-      "inputs": [
-        "data/scores.csv",
-        "data/tasks.csv",
-        "data/model_metadata.csv",
-        "data/model_release_dates.csv",
-        "scripts/plot_metadata_overview.py",
-        "src/pathopress"
-      ],
-      "dependencies": [],
-      "artifacts": [
-        "experiments/publication_metadata_summary.json",
-        "figures/pathopress_metadata_overview.png",
-        "figures/pathopress_metadata_overview.pdf"
       ]
     },
     "public_export": {
@@ -473,11 +279,6 @@
       "sha256": "f1d9cc353979ad642a05b963f61cd8f6fe3ddd4783a38addff3d133ed8ef8be1",
       "bytes": 3912
     },
-    "data/evaluation_feasibility.csv": {
-      "kind": "file",
-      "sha256": "6d00d1f2d8af6f0681a633ee54f21987e6920326a64b226e765c714de487c9cd",
-      "bytes": 105572
-    },
     "data/low_friction_allowlist_v2_top25.json": {
       "kind": "file",
       "sha256": "da227c3127534c8fdb3cd91d34d40490aad109de739f19c8377ce6e2a16aa9be",
@@ -520,28 +321,18 @@
     },
     "experiments/confidence_calibration_rank1.json": {
       "kind": "file",
-      "sha256": "8b35524e0411c49b17a831e2e5f7fc812273b8e634fc8188cddb980634327360",
-      "bytes": 295489
+      "sha256": "39421b2bf5cb160854df823695095667c67e30844bbfc62d5305cd27dd4e47ba",
+      "bytes": 295237
     },
     "experiments/confidence_cells_rank1.csv": {
       "kind": "file",
       "sha256": "3cdb1be9e6444a2f04c459085bc38dfe27219b29161b19b7e6da0bc658ef7322",
       "bytes": 8889306
     },
-    "experiments/error_analysis_rank1.json": {
-      "kind": "file",
-      "sha256": "a5032edfe297cfc8c0b667f47e59574a58e901a6c14d4f8b2f0d6a5b6050fe3a",
-      "bytes": 134152
-    },
     "experiments/experiment_set.json": {
       "kind": "file",
-      "sha256": "b5cf1c50400ee9710da6f9b92ee44a7eb2023652e72232b3033029a34ed63f37",
-      "bytes": 16596
-    },
-    "experiments/fast_rank1.cpp": {
-      "kind": "file",
-      "sha256": "c0ea04290031f6fecaa83c3e5e492e3d8529875d23bf24d3a554f6ca15ac1dd3",
-      "bytes": 4599
+      "sha256": "96150ce57ed82c9ae8ecdf4195c71d314566d1708d839f41ad108c4593560b8d",
+      "bytes": 8879
     },
     "experiments/folds_s10_f3_bs42.json": {
       "kind": "file",
@@ -550,19 +341,13 @@
     },
     "experiments/method_comparison/manifest.json": {
       "kind": "file",
-      "sha256": "7fe8db2753d445256338f34bbb54d0a98f8d2f6378b8cf45306f52ad917c1cf4",
-      "bytes": 1800245
-    },
-    "experiments/method_comparison/predictions": {
-      "kind": "directory",
-      "sha256": "f9c3fc72edfca0168b018174d88ad5b9b8c3ca32e83fd422e6109471392022ec",
-      "file_count": 343,
-      "bytes": 474001381
+      "sha256": "37b47af20b843916f111f0109642cda80932fe1907a90bf06f9cfdcf6ee2523e",
+      "bytes": 1803963
     },
     "experiments/method_comparison/results.json": {
       "kind": "file",
-      "sha256": "7e0b2a7180b1e985370205849f419aef63a29d12542c85399cf7d34c76ea590c",
-      "bytes": 412421
+      "sha256": "d14c91a6bda1d3a97510ed34010dee6612c7b40973faed82ec24f52ceae98648",
+      "bytes": 413531
     },
     "experiments/new_model_confidence_rank1.json": {
       "kind": "file",
@@ -573,11 +358,6 @@
       "kind": "file",
       "sha256": "843379ea52052f76c42122c083ce1ce6cbba64686ae2c60b2492aacff621fe35",
       "bytes": 5116638
-    },
-    "experiments/probe_exhaustive_fast_equivalence.json": {
-      "kind": "file",
-      "sha256": "f3f9e9b021593113d78387ec4bfe46b25ca1aadc5e15ebe4b276baaad3ba211a",
-      "bytes": 4720
     },
     "experiments/probe_selection_results_rank1.json": {
       "kind": "file",
@@ -599,11 +379,6 @@
       "sha256": "a2d16c0b6193bf9a986013407d0972c924ebf91b70bf3809ca9e4a422f704f87",
       "bytes": 23400
     },
-    "experiments/run_error_analysis.py": {
-      "kind": "file",
-      "sha256": "c368c743e4fd3663a0bb26056ae7bb6f01d8a17b586608c9bc6c33d508920884",
-      "bytes": 7561
-    },
     "experiments/run_method_comparison.py": {
       "kind": "file",
       "sha256": "33da9d32fcf2ff1d3a174506576a4a6d530cb92c2476618b268d7f5989bf0808",
@@ -614,25 +389,10 @@
       "sha256": "daa6daba1d708f4c03082963a3d47eed132a4b726d5ad7286b1199de049cc421",
       "bytes": 9209
     },
-    "experiments/run_predictability.py": {
-      "kind": "file",
-      "sha256": "fb730d87a43a4306e6f749c10ac55c35e2f036c1f5e528dba75ae2abd0a6bf8c",
-      "bytes": 6467
-    },
-    "experiments/run_prediction_error_factors.py": {
-      "kind": "file",
-      "sha256": "9cf341d30394eabab947db81b8fd49afc4b7197d6048ff3b5025a928e7945f8c",
-      "bytes": 48853
-    },
     "experiments/run_probe_compression.py": {
       "kind": "file",
       "sha256": "5ab5cd09846d9a6dabbd8b3e2b3924e4b605bf877b9f62e073a0012019c52260",
       "bytes": 38029
-    },
-    "experiments/run_probe_exhaustive.py": {
-      "kind": "file",
-      "sha256": "ed7ea29f4938c466f8e77cb2f37b6e12b3e3c94d06f089de4fa36d2e2f104b7e",
-      "bytes": 37084
     },
     "experiments/run_probe_selection.py": {
       "kind": "file",
@@ -649,11 +409,6 @@
       "sha256": "ff507f5b4d7488713a2b375c4157d05af57852abd5e469829bd441621f52f396",
       "bytes": 22323
     },
-    "experiments/run_structure_analysis.py": {
-      "kind": "file",
-      "sha256": "3318669131ad051ff62f621370afb4a42f1b770ee502883c7c409a0aae854a63",
-      "bytes": 8486
-    },
     "experiments/run_temporal_deployment.py": {
       "kind": "file",
       "sha256": "72290a11f985497d1ad2dc9965cb7de9f50a9488e86d2dd7f1ce6d3dce314bfb",
@@ -664,31 +419,10 @@
       "sha256": "219746a907329d4265288acd7547414bb348e290c81760e75d83b3c74c5c31d2",
       "bytes": 10098
     },
-    "experiments/structure_analysis": {
-      "kind": "directory",
-      "sha256": "2f54db1eb38ad8f0bde551a850fe6428ae447b8d10fa166f527d80766a2c199e",
-      "file_count": 10,
-      "bytes": 275329
-    },
     "experiments/temporal_deployment_rank1.json": {
       "kind": "file",
       "sha256": "e6ff3fe97f8a0ba9e428e3f299de4ee39b733a264b1862f0786750fd1249af72",
       "bytes": 4537921
-    },
-    "experiments/validate_probe_exhaustive_chunks.py": {
-      "kind": "file",
-      "sha256": "793813dc2c877fa9755e4290628b3e76db8adca50c3a2c5f72d678bb7e69ab9b",
-      "bytes": 33856
-    },
-    "experiments/validate_probe_exhaustive_merged.py": {
-      "kind": "file",
-      "sha256": "63a5aa78ecf98560400d4f4fb99710ca1345fe6fd7197f580dc80bd02e2d8529",
-      "bytes": 6434
-    },
-    "experiments/validate_probe_exhaustive_top.py": {
-      "kind": "file",
-      "sha256": "e2d83fec21b945d0555cde24775d32cc33d291af8f14e9ec4b175f00cdb9c59a",
-      "bytes": 13320
     },
     "outputs/probe_compression_selected_raw_rank1.csv": {
       "kind": "file",
@@ -697,8 +431,8 @@
     },
     "pyproject.toml": {
       "kind": "file",
-      "sha256": "e6fddc50fda0b3ff1e5bc7f587972bf31015911a0533a9bd86b98e6485b67e27",
-      "bytes": 848
+      "sha256": "06cb620472a59754e1ae496df74914371368b28e6cb35c0eea27d830cbc905f4",
+      "bytes": 867
     },
     "scripts/build_evaluation_cost_evidence.py": {
       "kind": "file",
@@ -710,20 +444,10 @@
       "sha256": "68b5dec63aaae9bf1b5910198fe040bb5b1a05a50a315c97ae27d6eeeff4462c",
       "bytes": 1661
     },
-    "scripts/build_prediction_error_factor_tables.py": {
-      "kind": "file",
-      "sha256": "a8bfc7c1a8e5252a4c4552d9a32b7ecdd10648102b3100b1aaa2af8cace604f6",
-      "bytes": 6134
-    },
     "scripts/build_public_release.py": {
       "kind": "file",
       "sha256": "966a6e3fee9265809de1a47ba2a4371c9eae0f7c72f9382492713c119fc69ace",
       "bytes": 4778
-    },
-    "scripts/build_publication_tables.py": {
-      "kind": "file",
-      "sha256": "9f080d5b91c14c0a6cc8172d0c11c4373e5ff4a64c6c44632d736f5dcbacbace",
-      "bytes": 8427
     },
     "scripts/build_shared_artifacts.py": {
       "kind": "file",
@@ -747,78 +471,38 @@
     },
     "scripts/plot_benchpress_style_hero.py": {
       "kind": "file",
-      "sha256": "8f05908077e2efd4efdbd92307c27b745e62b5f8c1d4f342e46f476bc60d7041",
-      "bytes": 15928
+      "sha256": "1edb3447533616274a559030317c44f0250ccfa37c133d185d8f489a025d6cd2",
+      "bytes": 16210
     },
     "scripts/plot_confidence_calibration.py": {
       "kind": "file",
       "sha256": "e66cef2121ce336590f23dd4a3aabf1db93f39d61805088ad655ad96262ad1e6",
       "bytes": 8018
     },
-    "scripts/plot_error_analysis.py": {
-      "kind": "file",
-      "sha256": "4970b22bb1c3e4e706998985c9817c00c1fb4ba5d046c8f3c2b352cc3fc05522",
-      "bytes": 2869
-    },
     "scripts/plot_evaluation_cost_evidence.py": {
       "kind": "file",
       "sha256": "9669fbd95d3cd31337b18b202e70bf42944250506867f406e85468abd8aaab62",
       "bytes": 5375
-    },
-    "scripts/plot_metadata_overview.py": {
-      "kind": "file",
-      "sha256": "d402b7a20ae8067034702787cdb5108df02e3a32c94c01c7c17b68c958a61e5b",
-      "bytes": 6404
-    },
-    "scripts/plot_method_comparison.py": {
-      "kind": "file",
-      "sha256": "e28d477bbc5c28a462308cf4122c761d8a0823f3845dd07c98547c5a2c3cc8cd",
-      "bytes": 4011
     },
     "scripts/plot_new_model_confidence.py": {
       "kind": "file",
       "sha256": "b83d1c63e4b317480af050dd37600f9b3d8de69eee9735a95efa7c2af2dd10a9",
       "bytes": 4468
     },
-    "scripts/plot_predictability.py": {
-      "kind": "file",
-      "sha256": "f357bb737666725c9c6e699f94d6cf7a7e278ac727eb6e094567a6d477153da7",
-      "bytes": 4079
-    },
-    "scripts/plot_prediction_error_factors.py": {
-      "kind": "file",
-      "sha256": "ac7ce38f11d274a4e5fe216726c9333e164084135230aefd9aef89da1574cdd0",
-      "bytes": 11028
-    },
-    "scripts/plot_probe_compression.py": {
-      "kind": "file",
-      "sha256": "d113d18632f71e57ceb616abea39fca77bdf502e89a9ab93a3b6f0e5904c856b",
-      "bytes": 4349
-    },
     "scripts/plot_probe_dual_objective.py": {
       "kind": "file",
-      "sha256": "f05beb84ad9cad96e1f43fdd0e0a2735628b222cb54d0cfd8daf904f81dc050f",
-      "bytes": 5102
+      "sha256": "1ea5b80be07cc8a9f68245bc820eef6afc4533539659b6ec4db4c4dc6b51d8a6",
+      "bytes": 4534
     },
     "scripts/plot_probe_selection.py": {
       "kind": "file",
-      "sha256": "a59a6504e054e1d658cc604f936d5312b6a3e25c90c1cbdc6d796fb52d3e0b2f",
-      "bytes": 9958
-    },
-    "scripts/plot_publication_hero.py": {
-      "kind": "file",
-      "sha256": "b8b739fe0a47b8b527253e20dd08a3b3fa5601503c747c9b35956c82c99bdb27",
-      "bytes": 9232
+      "sha256": "e615f515c8709740ce7625d806f220348c513677e160bd37cda06a8973259983",
+      "bytes": 5038
     },
     "scripts/plot_ranking_preservation.py": {
       "kind": "file",
       "sha256": "256d61f536368a8f4561a4fe5f931672028a0cc883914ead2352a9348c350d99",
       "bytes": 4692
-    },
-    "scripts/plot_structure_analysis.py": {
-      "kind": "file",
-      "sha256": "8965e67c412daca72997d958bb9427fb48a7438ed433d058e55714a26fca5338",
-      "bytes": 5490
     },
     "scripts/plot_temporal_deployment.py": {
       "kind": "file",
@@ -832,9 +516,9 @@
     },
     "src/pathopress": {
       "kind": "directory",
-      "sha256": "2e030941b935596741a357f5d4ef855b32b260291e07eb0c4943677decc0f983",
-      "file_count": 28,
-      "bytes": 305512
+      "sha256": "fe800ec2a4431ab958606b3c16f01686f088eaf9c0228ec26b3caf2725874631",
+      "file_count": 23,
+      "bytes": 279016
     },
     "src/pathopress/budgeted_probes.py": {
       "kind": "file",
@@ -848,41 +532,11 @@
     },
     "uv.lock": {
       "kind": "file",
-      "sha256": "404440988573e17d0a64671af23a331a54469500889b8da84edde4e082a25700",
-      "bytes": 424018
+      "sha256": "a59bc71cdf51bfaf78fad5df67a52f114033e3d7350213e26de46d98e480fc43",
+      "bytes": 424030
     }
   },
-  "dependencies": {
-    "experiments/method_comparison/predictions": {
-      "kind": "directory",
-      "sha256": "f9c3fc72edfca0168b018174d88ad5b9b8c3ca32e83fd422e6109471392022ec",
-      "file_count": 343,
-      "bytes": 474001381
-    },
-    "experiments/prediction_error_factor_shards": {
-      "kind": "directory",
-      "sha256": "0220d8926e4c620cff18b9074429d72283a8d5e9869b5f2d2bf6063083539218",
-      "file_count": 6030,
-      "bytes": 22579496
-    },
-    "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/shards": {
-      "kind": "directory",
-      "sha256": "0fb47fb317d9b0b3bb7192fa236c1d257742ac32546a1bc1351a25c421107c28",
-      "file_count": 240,
-      "bytes": 1234294099
-    },
-    "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/shards": {
-      "kind": "directory",
-      "sha256": "1b07034c2653382fa22c03ca923647444b0c8c4b4fa3b2405c943fea5027fc56",
-      "file_count": 560,
-      "bytes": 3352388363
-    },
-    "outputs/prediction_error_factor_predictions_rank1.csv": {
-      "kind": "file",
-      "sha256": "307ff38252c8ffb34e2b11c60ece003415705b7db16f0dad3da7294c63aa0179",
-      "bytes": 31278613
-    }
-  },
+  "dependencies": {},
   "artifacts": {
     "data/evaluation_cost_evidence.csv": {
       "kind": "file",
@@ -921,8 +575,8 @@
     },
     "experiments/confidence_calibration_rank1.json": {
       "kind": "file",
-      "sha256": "8b35524e0411c49b17a831e2e5f7fc812273b8e634fc8188cddb980634327360",
-      "bytes": 295489
+      "sha256": "39421b2bf5cb160854df823695095667c67e30844bbfc62d5305cd27dd4e47ba",
+      "bytes": 295237
     },
     "experiments/confidence_cells_rank1.csv": {
       "kind": "file",
@@ -934,15 +588,10 @@
       "sha256": "18d6ac87006be456276c364c1db4bc4790a8262c9a473de124956f53d93e26c6",
       "bytes": 18911
     },
-    "experiments/error_analysis_rank1.json": {
-      "kind": "file",
-      "sha256": "a5032edfe297cfc8c0b667f47e59574a58e901a6c14d4f8b2f0d6a5b6050fe3a",
-      "bytes": 134152
-    },
     "experiments/experiment_set_dry_run.json": {
       "kind": "file",
-      "sha256": "1ba6bed8a05f209d78c43dcb95b4604121e78a3f2c4a3a104efbb9ffffb982c2",
-      "bytes": 7679
+      "sha256": "8d4cb0a19ad319890c7d1be3cc237954d012db027bbbe7fba4c5814bc306319b",
+      "bytes": 5560
     },
     "experiments/folds_s10_f3_bs42.json": {
       "kind": "file",
@@ -951,23 +600,23 @@
     },
     "experiments/method_comparison/manifest.json": {
       "kind": "file",
-      "sha256": "7fe8db2753d445256338f34bbb54d0a98f8d2f6378b8cf45306f52ad917c1cf4",
-      "bytes": 1800245
+      "sha256": "37b47af20b843916f111f0109642cda80932fe1907a90bf06f9cfdcf6ee2523e",
+      "bytes": 1803963
     },
     "experiments/method_comparison/results.json": {
       "kind": "file",
-      "sha256": "7e0b2a7180b1e985370205849f419aef63a29d12542c85399cf7d34c76ea590c",
-      "bytes": 412421
+      "sha256": "d14c91a6bda1d3a97510ed34010dee6612c7b40973faed82ec24f52ceae98648",
+      "bytes": 413531
     },
     "experiments/method_comparison/top_methods.csv": {
       "kind": "file",
-      "sha256": "2ca960e2df008312c25bdd0d3076f714825021fe4eb191557cef41093b26cb95",
-      "bytes": 4119
+      "sha256": "72e34bd75096fd34a7103e06d9d4e0c54b74e1d6d9ea9062fae5918f623fb8bf",
+      "bytes": 4126
     },
     "experiments/method_comparison/top_methods.md": {
       "kind": "file",
-      "sha256": "6ff0128b98fb59aee7b7b5f3ca3a3bd7a7a1eec12f961c144308aed84a2c1af5",
-      "bytes": 2604
+      "sha256": "2dcfeafe8b2e6d9e0b0a920991b5c614a7748d42e7fb4c16d5cb9edd4137045f",
+      "bytes": 2609
     },
     "experiments/new_model_confidence_predictions_rank1.csv": {
       "kind": "file",
@@ -979,105 +628,15 @@
       "sha256": "d16c4ce0e65125e4ed42e61ba69d724f8625ed65f014c62d0e8420b1bbc990b6",
       "bytes": 252114
     },
-    "experiments/predictability_predictions_rank1.csv": {
-      "kind": "file",
-      "sha256": "2313c6cb7b18c7c24d25f291f8c20a7235b0dea5cb464c1adbc2983d70f6d0b6",
-      "bytes": 898765
-    },
-    "experiments/predictability_results_rank1.json": {
-      "kind": "file",
-      "sha256": "c011f690578bd34e5aaa247a33dbd1c175e50ce808b6102963bfa4dc97325d9e",
-      "bytes": 189175
-    },
-    "experiments/prediction_error_factor_manifest.json": {
-      "kind": "file",
-      "sha256": "eff452b159dd648c3b3a17406673bf09232c93c1d812a382ad1217edb3a7e2e7",
-      "bytes": 1697
-    },
-    "experiments/prediction_error_factors_rank1.json": {
-      "kind": "file",
-      "sha256": "49501e8dbb08de0dc9a6bb814da67edcec20b3c1e1fec1444cba1d1839f3f498",
-      "bytes": 210898
-    },
     "experiments/probe_compression_rank1.json": {
       "kind": "file",
       "sha256": "843379ea52052f76c42122c083ce1ce6cbba64686ae2c60b2492aacff621fe35",
       "bytes": 5116638
     },
-    "experiments/probe_exhaustive_execution_status.json": {
-      "kind": "file",
-      "sha256": "869c69d7933d65fda415cdd75346232eb060057fec4142af9438d965d1b38267",
-      "bytes": 7327
-    },
-    "experiments/probe_exhaustive_fast_equivalence.json": {
-      "kind": "file",
-      "sha256": "f3f9e9b021593113d78387ec4bfe46b25ca1aadc5e15ebe4b276baaad3ba211a",
-      "bytes": 4720
-    },
-    "experiments/probe_exhaustive_fast_equivalence_v2.json": {
-      "kind": "file",
-      "sha256": "ec421c44447b06c5f3c28372b300d7287d8e94f6337b43b7b84b5909210753ae",
-      "bytes": 17233
-    },
-    "experiments/probe_exhaustive_integrity_manifest.json": {
-      "kind": "file",
-      "sha256": "54b7516e23ad4b956eef5e49179fad645d74c3539ca320a90e1e917673c3f9bd",
-      "bytes": 1486068
-    },
-    "experiments/probe_exhaustive_merged_validation.json": {
-      "kind": "file",
-      "sha256": "03035f5372ced215de8d173859a4768447adb4239bb96e4af56cc8ff2002606c",
-      "bytes": 2520
-    },
-    "experiments/probe_exhaustive_rank1.json": {
-      "kind": "file",
-      "sha256": "0a71a334c05ee15a4b68fdbd22cc6bcee51081faa810416895e0a1f455497a94",
-      "bytes": 1267595
-    },
-    "experiments/probe_exhaustive_runner_parity.json": {
-      "kind": "file",
-      "sha256": "e704b98690fb555a05ae74be7bd21724ab833f6d4353d6a5d297f2a50b865255",
-      "bytes": 2499
-    },
-    "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/config.json": {
-      "kind": "file",
-      "sha256": "42974b7b5d21f7beb51fdaba491fb4d5f34d85762271935d5bcf84e31efa75d8",
-      "bytes": 3511
-    },
-    "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91/merged_summary.json.gz": {
-      "kind": "file",
-      "sha256": "0a3bf1bb2f7578cdfd04d1304d9364cf23063edf9580acda062c466cabcfd70a",
-      "bytes": 40238
-    },
-    "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/config.json": {
-      "kind": "file",
-      "sha256": "fd40559e91ee1b060c2d27ac1067818f127ba1ebd20fa580d09185366a879c3b",
-      "bytes": 4169
-    },
-    "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91/merged_summary.json.gz": {
-      "kind": "file",
-      "sha256": "14d5e0b3623e4dfb9b437518fb6f7f62a9430c9f4ae26c3a7c3fc50970ec0db1",
-      "bytes": 42659
-    },
-    "experiments/probe_exhaustive_scalar_top_validation.json": {
-      "kind": "file",
-      "sha256": "befbcbbc74f74943b34e2ec5be09dd948ffdb82f515030829efa94f69f2cf490",
-      "bytes": 173817
-    },
     "experiments/probe_selection_results_rank1.json": {
       "kind": "file",
       "sha256": "f495ab1b0408494fa828db758f375bea598c87aceabb4f4b4a2e288496ea29df",
       "bytes": 863737
-    },
-    "experiments/publication_hero_summary.json": {
-      "kind": "file",
-      "sha256": "779e94fd012eeb758068c783c0536df4924e72f45101c5ee297f5eb3f34b264c",
-      "bytes": 2081
-    },
-    "experiments/publication_metadata_summary.json": {
-      "kind": "file",
-      "sha256": "df9e16536d288b1f1e9924b66bd146dba7ea06f09b6f77809112b3089c87df18",
-      "bytes": 4798
     },
     "experiments/ranking_preservation_rank1.json": {
       "kind": "file",
@@ -1094,12 +653,6 @@
       "sha256": "219746a907329d4265288acd7547414bb348e290c81760e75d83b3c74c5c31d2",
       "bytes": 10098
     },
-    "experiments/structure_analysis": {
-      "kind": "directory",
-      "sha256": "2f54db1eb38ad8f0bde551a850fe6428ae447b8d10fa166f527d80766a2c199e",
-      "file_count": 10,
-      "bytes": 275329
-    },
     "experiments/temporal_deployment_rank1.json": {
       "kind": "file",
       "sha256": "e6ff3fe97f8a0ba9e428e3f299de4ee39b733a264b1862f0786750fd1249af72",
@@ -1110,36 +663,6 @@
       "sha256": "c400534fb3c3db164842cb79eb1e535e8158bcb2f62227398d05342fdcc5ef6c",
       "file_count": 24,
       "bytes": 4971377
-    },
-    "figures/benchmark_best_neighbor_correlations.pdf": {
-      "kind": "file",
-      "sha256": "ab9e0b5d38f40f26b9d76ef7a1c0c2fb66a98d81ea559160a76c3ddb58afa0ee",
-      "bytes": 22701
-    },
-    "figures/benchmark_best_neighbor_correlations.png": {
-      "kind": "file",
-      "sha256": "d6b58b06a1527ae6abf30452d057229ac6ae2610cbcc7967995c8e53badbee76",
-      "bytes": 81594
-    },
-    "figures/benchmark_correlation_mds_probes.pdf": {
-      "kind": "file",
-      "sha256": "4caa069bb981729838370b8a481daa3085c592b7dd153d4cb0421e2c30e3f2bd",
-      "bytes": 39922
-    },
-    "figures/benchmark_correlation_mds_probes.png": {
-      "kind": "file",
-      "sha256": "dac378f747de3f74a510c8b7520dd3101a63b5e47fbac5a4e32b70eedc0d7eea",
-      "bytes": 223505
-    },
-    "figures/benchmark_predictability_rank1.pdf": {
-      "kind": "file",
-      "sha256": "8020ff82cfe782d72ab16799b789a30a6caafef10995363be6522a9612fff884",
-      "bytes": 45471
-    },
-    "figures/benchmark_predictability_rank1.png": {
-      "kind": "file",
-      "sha256": "b17e2d65d4949874efb130a42dc9c1e0637afd38ba5403fd874730ff67e1dfd4",
-      "bytes": 1694459
     },
     "figures/benchpress_style_validation_rank1.pdf": {
       "kind": "file",
@@ -1181,26 +704,6 @@
       "sha256": "0c1c24f98314029a020dabda6eb1ced05cbed2c33d6d5e0eb8bce544958faec0",
       "bytes": 178280
     },
-    "figures/method_comparison_grid.pdf": {
-      "kind": "file",
-      "sha256": "ad20e048690d2d025a77e4478ef53fe3de80140d448fa4cdda1699d3e068fd64",
-      "bytes": 75911
-    },
-    "figures/method_comparison_grid.png": {
-      "kind": "file",
-      "sha256": "a984631505a1ba397835d8aeff93d2d0d4bb2d89fa4b82d644e31f7a8ef41baf",
-      "bytes": 377743
-    },
-    "figures/model_predictability_rank1.pdf": {
-      "kind": "file",
-      "sha256": "6602c47e5280ad39445a00a69417e15aec29f38184be313ab4f833878e042723",
-      "bytes": 33540
-    },
-    "figures/model_predictability_rank1.png": {
-      "kind": "file",
-      "sha256": "8dbada1d1e0c27bdf6f353f46b13ca025746b7d06fd28d111242303b38493e70",
-      "bytes": 351931
-    },
     "figures/new_model_confidence_rank1.pdf": {
       "kind": "file",
       "sha256": "920aa5f1fd55b167c1d4a44055171ece8764252ee18366a69e160ec3f98e5ad8",
@@ -1221,115 +724,25 @@
       "sha256": "1c7de7784712a575f8ec06ab09227a957bc80ac2a50fb445904b95d5db264855",
       "bytes": 496643
     },
-    "figures/pathopress_hero_rank1.pdf": {
-      "kind": "file",
-      "sha256": "203d77a2abd1069d6eae54d4e8c982942bd62e35cd49df372066bd4a033da0b2",
-      "bytes": 58215
-    },
-    "figures/pathopress_hero_rank1.png": {
-      "kind": "file",
-      "sha256": "c58c909f299888a36dbca8c756f68d80e37389808651384180a9cef6f0655d54",
-      "bytes": 662943
-    },
-    "figures/pathopress_metadata_overview.pdf": {
-      "kind": "file",
-      "sha256": "a4682ab427025a2a14744833759e4eae4c7ab1d914b9a0cd64083568f156bb97",
-      "bytes": 42468
-    },
-    "figures/pathopress_metadata_overview.png": {
-      "kind": "file",
-      "sha256": "5144f58357d1ca2ef04f371bfb46655ab9dac903c2f41ecd501ee35b79f2ae70",
-      "bytes": 394425
-    },
-    "figures/predictability_factors_benchmark_appendix_rank1.pdf": {
-      "kind": "file",
-      "sha256": "4aa7b3b7acdaf4a30c3996e3e9bdaf5edd3ef636838eb215ad2a849ab55d33f9",
-      "bytes": 27349
-    },
-    "figures/predictability_factors_benchmark_appendix_rank1.png": {
-      "kind": "file",
-      "sha256": "c6c9e65d88f27349dc51b2ff3a8414f7d5d13398d8be7451cc88d829d6c38230",
-      "bytes": 221941
-    },
-    "figures/predictability_factors_benchmark_rank1.pdf": {
-      "kind": "file",
-      "sha256": "f494e25b99b3621df296bc0f71f7ba8045d84d66028dfc37c379c62f85d6b73c",
-      "bytes": 53324
-    },
-    "figures/predictability_factors_benchmark_rank1.png": {
-      "kind": "file",
-      "sha256": "9c18b44873da524918c7d608e2fbc0135ab8e5ca04501aa00da1c6154e1d0d03",
-      "bytes": 402316
-    },
-    "figures/predictability_factors_model_appendix_rank1.pdf": {
-      "kind": "file",
-      "sha256": "7ba28381c3af30f549a70ae3ef7dc5d0f3f8f649b22a945df517fa5a92cfbbc8",
-      "bytes": 34589
-    },
-    "figures/predictability_factors_model_appendix_rank1.png": {
-      "kind": "file",
-      "sha256": "27fb1cc26993116efcdb41c994b18cbfa94037c2229500db4d33c40abf37fa9d",
-      "bytes": 259492
-    },
-    "figures/predictability_factors_model_rank1.pdf": {
-      "kind": "file",
-      "sha256": "6e800e62b73032b449b30c3573b08654790e456cf7a80ab77077f56c8fcf7d03",
-      "bytes": 47813
-    },
-    "figures/predictability_factors_model_rank1.png": {
-      "kind": "file",
-      "sha256": "5d6fa34b4f245be5d6fbd4412db79b1f24fd137a87d744eebd3a2f481ff64579",
-      "bytes": 297008
-    },
-    "figures/predictability_factors_rank1.pdf": {
-      "kind": "file",
-      "sha256": "8f1049f739c8be3798ae1812bc58e59ed9ee08da8f1b4ac3f10ada8d230e6912",
-      "bytes": 51646
-    },
-    "figures/predictability_factors_rank1.png": {
-      "kind": "file",
-      "sha256": "928cb209b1fc07836090122b3981883bab114a13e3c0ae6d74de851e5de76347",
-      "bytes": 639685
-    },
-    "figures/probe_compression_curves_rank1.pdf": {
-      "kind": "file",
-      "sha256": "1a46ec03c3b6cd478955d13f7615b68f1bcc87b43d6f51b8a89fe88cc357d11b",
-      "bytes": 30978
-    },
-    "figures/probe_compression_curves_rank1.png": {
-      "kind": "file",
-      "sha256": "c61bea48079903c2a76f1e33ee6ace925ae5d057d0901dce360373896abc4e7c",
-      "bytes": 518698
-    },
     "figures/probe_dual_objective_rank1.pdf": {
       "kind": "file",
-      "sha256": "60bdb765ffe7458a299afb902558d77f906392ad0f1ecf11a631562a1d200674",
-      "bytes": 31228
+      "sha256": "bb31f28c574533ba2b245754071a7ba6f695d1b417f11d683965e0762cd72f24",
+      "bytes": 25717
     },
     "figures/probe_dual_objective_rank1.png": {
       "kind": "file",
-      "sha256": "6278ed94af69e1eff5ea374605d1fdfabef4323a3d69b956507528219de78a1b",
-      "bytes": 253829
+      "sha256": "45c8fec68e403f89cbeb39e450664faa4791ceba1ee2046de1a962d33ebb19b0",
+      "bytes": 129874
     },
     "figures/probe_informativeness_rank1.pdf": {
       "kind": "file",
-      "sha256": "06ff13314f9b645598ba5455d528059c54ea67926f6058faa6fef462cf396896",
+      "sha256": "ee99098785e5216b54ce9e4366bb428bffc9225b9d3c856db0cc2d17c4b590f9",
       "bytes": 29737
     },
     "figures/probe_informativeness_rank1.png": {
       "kind": "file",
       "sha256": "6803cb095a2636aae37f860e68856879bbdf41809ad9136af5808e0e4687fdf2",
       "bytes": 161912
-    },
-    "figures/probe_selection_rank1.pdf": {
-      "kind": "file",
-      "sha256": "536d9919c34e0c62f9ef0dbb39d7e8be92211c408d84a9597024482df531db22",
-      "bytes": 41195
-    },
-    "figures/probe_selection_rank1.png": {
-      "kind": "file",
-      "sha256": "f711374592800b03eac76236573790d421ef83bfb27d0ee668e9056c26801edb",
-      "bytes": 372193
     },
     "figures/ranking_preservation_rank1.pdf": {
       "kind": "file",
@@ -1361,21 +774,6 @@
       "sha256": "46c240d24cd7ef1b603b092f1d4fe85987d3ed4775f9508daf3dd4296402921a",
       "bytes": 113651
     },
-    "outputs/prediction_error_factor_records_rank1.csv": {
-      "kind": "file",
-      "sha256": "544d5defeb592523d7945610b56d1b46363e1cea4ba8e3a0cab4c067b10fe794",
-      "bytes": 2655629
-    },
-    "outputs/prediction_error_factor_table_appendix_rank1.csv": {
-      "kind": "file",
-      "sha256": "b8025b451afd9974a4f3dff1c6c617c8478fed09ca399ebb11ab641c90f52867",
-      "bytes": 9920
-    },
-    "outputs/prediction_error_factor_table_rank1.csv": {
-      "kind": "file",
-      "sha256": "7526cc37dca5692cd9d63ade8c2fe92567175d6e33282c8748437ffa4ec2bcc2",
-      "bytes": 5120
-    },
     "outputs/probe_compression_random_all_known_raw_rank1.csv.gz": {
       "kind": "file",
       "sha256": "286ae2b192b588cff7b34c1842764c2f19f78fa6f999666c821dc119ae8a12b6",
@@ -1388,8 +786,8 @@
     },
     "outputs/probe_dual_objective_rank1.csv": {
       "kind": "file",
-      "sha256": "961b581b07d9ee25ebcfa4cf200ef2bae602f714ce55f800ae45b90735edb2ca",
-      "bytes": 8881
+      "sha256": "2716d26f5c9274fc6edeb052152d8b89a0c634e95f9c71cd6e7b0caaf4f01f31",
+      "bytes": 9122
     },
     "outputs/probe_informativeness_rank1.csv": {
       "kind": "file",
@@ -1405,12 +803,6 @@
       "kind": "file",
       "sha256": "e94b9d3802297ac6bc6e1fb6c6c11992890294e0245ce01f80a74d2022741b67",
       "bytes": 28119
-    },
-    "outputs/tables": {
-      "kind": "directory",
-      "sha256": "f533f59978a84b719a3779ed78a91704d2230e8afb784c45fd7798e1f7f12ac5",
-      "file_count": 13,
-      "bytes": 154899
     },
     "outputs/temporal_deployment_raw_rank1.csv": {
       "kind": "file",
@@ -1433,5 +825,5 @@
       "bytes": 1822
     }
   },
-  "manifest_sha256": "e6d4f75a50ea2cae5fc0d0a41639ab4987295c1469c1f06a2231e4a09a69aaf1"
+  "manifest_sha256": "94aad4b68eb9c9d5af0af2dae97011fb3d95c34059dfadaa37ec7dbeb48994a7"
 }

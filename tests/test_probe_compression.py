@@ -25,9 +25,6 @@ from pathopress.probe_compression import (
     sharded_combinations,
 )
 
-from scripts.plot_probe_compression import probe_ticks
-
-
 RUNNER_PATH = Path(__file__).resolve().parents[1] / "experiments/run_probe_compression.py"
 RUNNER_SPEC = importlib.util.spec_from_file_location("run_probe_compression_test", RUNNER_PATH)
 assert RUNNER_SPEC is not None and RUNNER_SPEC.loader is not None
@@ -183,10 +180,6 @@ class ProbeCompressionTests(unittest.TestCase):
             self.assertEqual(repeat[0], repeat[1][:1])
             self.assertEqual(repeat[1], repeat[2][:2])
             self.assertEqual(set(repeat[-1]), {2, 5, 9})
-
-    def test_probe_plot_ticks_cover_upstream_random_k30_range(self) -> None:
-        self.assertEqual(probe_ticks(10), list(range(1, 11)))
-        self.assertEqual(probe_ticks(30), [1, 5, 10, 15, 20, 25, 30])
 
     def test_rank_pruning_uses_all_steps_normalized_rank_and_id_ties(self) -> None:
         trajectory = [

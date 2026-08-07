@@ -86,12 +86,12 @@ metric normalization and the selected rank are documented adaptations.
 ## Confidence is a separate cross-fitted experiment
 
 [Confidence calibration](../experiments/confidence_calibration_rank1.json)
-uses 20,270 OOF cells and compares disagreement, structural-support, and a
-combined risk model. Structural support has Spearman 0.606612 with absolute
-error. Its nominal 90% leave-fold-out conformal intervals achieve 89.9803%
-coverage with median width 10.1435 points. The hybrid method achieves 89.9901%
-coverage with 10.0770-point median width; keeping its lowest-risk 20% reduces
-MedAE from 1.647585 to 0.607845.
+uses 21,181 OOF cells and compares disagreement, structural-support, and a
+combined risk model. Structural support has Spearman 0.602190 with absolute
+error. Its nominal 90% leave-fold-out conformal intervals achieve 89.9816%
+coverage with median width 9.9293 points. The combined method achieves 89.9721%
+coverage with 9.9131-point median width; keeping its lowest-risk 20% reduces
+MedAE from 1.609006 to 0.611151.
 
 Those figures measure retrospective selective prediction. The generator stack
 follows BenchPress's exact selection contract: three same-family lambda

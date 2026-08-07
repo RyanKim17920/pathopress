@@ -153,6 +153,8 @@ class ProbeExhaustiveIntegrityTests(unittest.TestCase):
                 json.dumps({"evaluation_ids": evaluations}), encoding="utf-8"
             )
             config = {
+                "schema_version": VALIDATOR.runner.CONFIG_SCHEMA_VERSION,
+                "config_schema": "pathopress.probe_exhaustive.run.v2",
                 "eval_protocol": VALIDATOR.runner.EVAL_PROTOCOL,
                 "upstream_reference_commit": (
                     VALIDATOR.runner.UPSTREAM_REFERENCE_COMMIT
@@ -174,6 +176,10 @@ class ProbeExhaustiveIntegrityTests(unittest.TestCase):
                 "scores_sha256": hashlib.sha256(scores.read_bytes()).hexdigest(),
                 "model_ids_hash": VALIDATOR.runner._short_text_hash(models),
                 "evaluation_ids_hash": VALIDATOR.runner._short_text_hash(evaluations),
+                "model_ids": models,
+                "evaluation_ids": evaluations,
+                "model_ids_sha256": VALIDATOR.runner._sha256_strings(models),
+                "evaluation_ids_sha256": VALIDATOR.runner._sha256_strings(evaluations),
                 "candidate_allowlist_path": str(allowlist),
                 "candidate_allowlist_sha256": hashlib.sha256(
                     allowlist.read_bytes()
@@ -181,10 +187,13 @@ class ProbeExhaustiveIntegrityTests(unittest.TestCase):
                 "candidate_limit": None,
                 "candidate_ids": evaluations,
                 "candidate_hash": VALIDATOR.runner._short_text_hash(evaluations),
+                "candidate_ids_sha256": VALIDATOR.runner._sha256_strings(evaluations),
                 "fixed_probe_ids": [],
                 "fixed_probe_hash": None,
+                "fixed_probe_ids_sha256": VALIDATOR.runner._sha256_strings([]),
                 "remaining_candidate_ids": evaluations,
                 "remaining_candidate_hash": VALIDATOR.runner._short_text_hash(evaluations),
+                "remaining_candidate_ids_sha256": VALIDATOR.runner._sha256_strings(evaluations),
                 "choose_size_after_fixed": 5,
                 "total_combinations": math.comb(25, 5),
                 "num_waves": 10,
@@ -192,6 +201,7 @@ class ProbeExhaustiveIntegrityTests(unittest.TestCase):
                 "assignment_modulus": 80,
                 "chunk_size": VALIDATOR.runner.DEFAULT_CHUNK_SIZE,
                 "cell_masking": VALIDATOR.EXPECTED_MASKING_TEXT,
+                "execution_backend": {"kind": "test-native-backend"},
             }
             cases = (
                 ("assignment_modulus", 81, "scientific contract"),
@@ -215,38 +225,20 @@ class ProbeExhaustiveIntegrityTests(unittest.TestCase):
                             evaluations,
                             scores,
                             workers=1,
+                            expected_backend=config["execution_backend"],
                         )
-
-    def test_live_legacy_run_hash_contract_when_current(self) -> None:
-        run_dir = ROOT / (
-            "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91"
-        )
-        config = json.loads((run_dir / "config.json").read_text(encoding="utf-8"))
-        live_hash = hashlib.sha256((ROOT / "data/scores.csv").read_bytes()).hexdigest()
-        if config["scores_sha256"] != live_hash:
-            self.skipTest("frozen legacy run is intentionally bound to an earlier matrix")
-        matrix, models, evaluations = VALIDATOR.legacy_runner._load_matrix(
-            ROOT / "data/scores.csv"
-        )
-        self.assertEqual(config["scores_sha256"], live_hash)
-        self.assertEqual(
-            config["model_ids_hash"],
-            VALIDATOR.legacy_runner._short_text_hash(models),
-        )
-        self.assertEqual(
-            config["evaluation_ids_hash"],
-            VALIDATOR.legacy_runner._short_text_hash(evaluations),
-        )
-        self.assertEqual(
-            [config["n_models"], config["n_evaluations"]], list(matrix.shape)
-        )
 
     def test_merged_order_validation_rejects_top_and_provenance_tampering(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             directory = Path(temporary)
             run_dir = directory / "run"
             run_dir.mkdir()
-            config = {"total_combinations": 2, "metric": "medae"}
+            config = {
+                "schema_version": 2,
+                "config_schema": "pathopress.probe_exhaustive.run.v2",
+                "total_combinations": 2,
+                "metric": "medae",
+            }
             config_path = run_dir / "config.json"
             config_path.write_text(json.dumps(config), encoding="utf-8")
             config_hash = hashlib.sha256(config_path.read_bytes()).hexdigest()

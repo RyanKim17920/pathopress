@@ -11,16 +11,6 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CHEAP = (
-    ROOT
-    / "experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91"
-)
-DEFAULT_PRUNED = (
-    ROOT
-    / "experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91"
-)
-
-
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -45,8 +35,8 @@ def display(path: Path) -> str:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--cheap-run", type=Path, default=DEFAULT_CHEAP)
-    parser.add_argument("--pruned-run", type=Path, default=DEFAULT_PRUNED)
+    parser.add_argument("--cheap-run", type=Path, required=True)
+    parser.add_argument("--pruned-run", type=Path, required=True)
     parser.add_argument(
         "--scalar-validation",
         type=Path,
@@ -65,12 +55,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--fast-equivalence",
         type=Path,
-        default=ROOT / "experiments/probe_exhaustive_fast_equivalence.json",
-    )
-    parser.add_argument(
-        "--runner-parity",
-        type=Path,
-        default=ROOT / "experiments/probe_exhaustive_runner_parity.json",
+        default=ROOT / "experiments/probe_exhaustive_fast_equivalence_v2.json",
     )
     parser.add_argument(
         "--compression",
@@ -99,6 +84,11 @@ def summarize_space(
     config_path = run_dir / "config.json"
     merged_path = run_dir / "merged_summary.json.gz"
     config = load_json(config_path)
+    if (
+        config.get("schema_version") != 2
+        or config.get("config_schema") != "pathopress.probe_exhaustive.run.v2"
+    ):
+        raise RuntimeError(f"exact summary requires a schema-v2 run: {run_dir}")
     merged = load_json(merged_path)
     config_hash = sha256(config_path)
     if merged.get("config") != config:
@@ -272,8 +262,6 @@ def main() -> int:
         "provenance": {
             "compression": display(args.compression),
             "compression_sha256": sha256(args.compression),
-            "runner_parity": display(args.runner_parity),
-            "runner_parity_sha256": sha256(args.runner_parity),
             "fast_backend_equivalence": display(args.fast_equivalence),
             "fast_backend_equivalence_sha256": sha256(args.fast_equivalence),
             "scalar_validation": display(args.scalar_validation),

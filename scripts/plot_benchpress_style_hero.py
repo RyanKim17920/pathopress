@@ -11,6 +11,9 @@ import sys
 from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
+for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
+    os.environ[variable] = "1"
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -121,7 +124,14 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--hero-output", type=Path, default=ROOT / "figures/pathopress_benchpress_hero_rank1")
     parser.add_argument("--summary-output", type=Path, default=ROOT / "experiments/benchpress_style_hero_summary.json")
-    parser.add_argument("--workers", type=int, default=max(1, min(31, (os.cpu_count() or 2) - 1)))
+    parser.add_argument(
+        "--workers",
+        type=int,
+        choices=range(1, 5),
+        default=max(1, min(4, os.cpu_count() or 1)),
+        metavar="{1,2,3,4}",
+        help="process workers (hard-capped at four; each worker uses one BLAS thread)",
+    )
     return parser.parse_args()
 
 

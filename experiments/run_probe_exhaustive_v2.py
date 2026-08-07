@@ -2,13 +2,9 @@
 """Backend-bound schema-v2 exhaustive search using the BenchPress contract.
 
 This is the pathology adaptation of BenchPress's
-``all_known_probe_bruteforce_v1`` runner.  Each invocation evaluates one
-wave/shard residue.  ``merge`` is deliberately complete-by-default: a partial
+``all_known_probe_bruteforce_v1`` runner. Each invocation evaluates one
+wave/shard residue. ``merge`` is deliberately complete-by-default: a partial
 run is rejected unless ``--allow-incomplete`` is explicitly requested.
-
-The sibling ``run_probe_exhaustive.py`` is retained byte-for-byte as the
-legacy-v1 generator referenced by frozen audit manifests. New searches must use
-this schema-v2 runner.
 """
 
 from __future__ import annotations
@@ -65,7 +61,6 @@ FAST_SOURCE = ROOT / "experiments" / "fast_rank1_v2.cpp"
 DEFAULT_FAST_EQUIVALENCE = (
     ROOT / "experiments" / "probe_exhaustive_fast_equivalence_v2.json"
 )
-STALE_RUN_REGISTRY = ROOT / "experiments" / "probe_exhaustive_stale_runs.json"
 CONFIG_SCHEMA_VERSION = 2
 FAST_EQUIVALENCE_SCHEMA_VERSION = 2
 FAST_CELL_DELTA_CAP = 1e-10
@@ -229,23 +224,6 @@ def _short_text_hash(values: Sequence[str]) -> str:
 
 def _safe_token(value: str) -> str:
     return "".join(char if char.isalnum() or char in "-_" else "_" for char in value)
-
-
-def _assert_run_is_active(out_dir: Path) -> None:
-    """Fail closed for stopped score-matrix snapshots retained for audit."""
-
-    if not STALE_RUN_REGISTRY.exists():
-        return
-    registry = _load_json(STALE_RUN_REGISTRY)
-    relative = _display_path(out_dir)
-    for run in registry.get("runs", []):
-        if run.get("out_dir") == relative and run.get("status") != "active":
-            raise RuntimeError(
-                f"Run directory {relative} is marked {run.get('status')!r} in "
-                f"{STALE_RUN_REGISTRY}. Use a new hash-bound --out-dir after "
-                "rebuilding the matrix and candidate allowlists; retained chunks "
-                "are audit evidence only."
-            )
 
 
 def _validate_fast_equivalence(
@@ -632,41 +610,7 @@ def _base_run_config(config: dict[str, Any]) -> dict[str, Any]:
     return {key: value for key, value in config.items() if key not in _SHARD_KEYS}
 
 
-def _config_for_chunk_v1(config: dict[str, Any]) -> dict[str, Any]:
-    """Preserve the exact historical chunk identity for frozen legacy runs."""
-
-    keys = (
-        "eval_protocol",
-        "upstream_reference_commit",
-        "k",
-        "metric",
-        "seed",
-        "n_models",
-        "n_evaluations",
-        "n_observed",
-        "n_target_cells",
-        "predictor_rank",
-        "predictor_regularization",
-        "scores_sha256",
-        "model_ids_hash",
-        "evaluation_ids_hash",
-        "candidate_hash",
-        "fixed_probe_hash",
-        "remaining_candidate_hash",
-        "choose_size_after_fixed",
-        "total_combinations",
-        "num_waves",
-        "num_shards",
-        "wave_index",
-        "shard_index",
-        "assignment_residue",
-        "assignment_modulus",
-        "chunk_size",
-    )
-    return {key: config.get(key) for key in keys}
-
-
-def _config_for_chunk_v2(config: dict[str, Any]) -> dict[str, Any]:
+def _config_for_chunk(config: dict[str, Any]) -> dict[str, Any]:
     keys = (
         "schema_version",
         "config_schema",
@@ -701,16 +645,9 @@ def _config_for_chunk_v2(config: dict[str, Any]) -> dict[str, Any]:
     missing = [key for key in keys if key not in config]
     if missing:
         raise ValueError(f"schema-v2 config is missing required keys: {missing}")
+    if config.get("schema_version") != CONFIG_SCHEMA_VERSION:
+        raise ValueError("exact-search chunks require a schema-v2 run config")
     return {key: config[key] for key in keys}
-
-
-def _config_for_chunk(config: dict[str, Any]) -> dict[str, Any]:
-    schema_version = config.get("schema_version", 1)
-    if schema_version == 1:
-        return _config_for_chunk_v1(config)
-    if schema_version == CONFIG_SCHEMA_VERSION:
-        return _config_for_chunk_v2(config)
-    raise ValueError(f"Unsupported run config schema_version={schema_version!r}")
 
 
 def _config_at_location(
@@ -1092,7 +1029,6 @@ def _run_shard_with_backend(
     out_dir = (args.out_dir or _default_out_dir(
         args, _candidate_source_label(args.candidate_allowlist)
     )).resolve()
-    _assert_run_is_active(out_dir)
     config, fixed_indices, remaining_candidates = _build_config(
         args,
         matrix,
@@ -1200,7 +1136,6 @@ def _expected_chunk_count(assigned_count: int, chunk_size: int) -> int:
 
 def merge(args: argparse.Namespace) -> None:
     out_dir = args.out_dir.resolve()
-    _assert_run_is_active(out_dir)
     config_path = out_dir / "config.json"
     if not config_path.exists():
         raise FileNotFoundError(f"Missing config: {config_path}")
@@ -1373,7 +1308,7 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=None,
         help=(
-            "optional compiled experiments/fast_rank1.cpp execution backend; "
+            "optional compiled experiments/fast_rank1_v2.cpp execution backend; "
             "scientific equivalence must be verified before production use"
         ),
     )

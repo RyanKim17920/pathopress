@@ -148,37 +148,19 @@ class MaintenanceTests(unittest.TestCase):
         self.assertTrue(all(row["status"] == "ready" for row in results), results)
         names = {row["name"] for row in results}
         self.assertTrue({
-            "method_comparison_grid", "structure_analysis", "probe_exhaustive",
+            "method_comparison",
             "ranking_preservation", "confidence_calibration",
-            "predictability_and_error_analysis", "prediction_error_factors",
-            "temporal_deployment", "publication_tables", "publication_hero",
-            "publication_metadata_overview", "public_export",
+            "temporal_deployment", "benchpress_publication_figures", "public_export",
         }.issubset(names))
-        by_name = {row["name"]: row for row in results}
-        self.assertGreater(by_name["method_comparison_grid"]["declared_dependencies"], 0)
-        self.assertGreater(by_name["prediction_error_factors"]["declared_dependencies"], 0)
         self.assertTrue(all(row["declared_artifacts"] > 0 for row in results))
-
-        ignored = [
-            dependency
-            for experiment in payload["experiments"]
-            for dependency in experiment.get("dependencies", [])
-            if isinstance(dependency, dict) and dependency.get("role", "").startswith("ignored")
-        ]
-        self.assertIn("content-digested", payload["description"])
-        self.assertEqual(len(ignored), 5)
-        self.assertTrue(all(dependency.get("config") for dependency in ignored))
+        self.assertIn("intentionally excluded", payload["description"])
+        self.assertFalse(any(row.get("dependencies") for row in payload["experiments"]))
 
         manifest = json.loads(
             (ROOT / "experiments/artifact_freshness_manifest.json").read_text()
         )
         self.assertEqual(manifest["schema_version"], 2)
-        for dependency in ignored:
-            record = manifest["dependencies"][dependency["path"]]
-            self.assertRegex(record["sha256"], r"^[0-9a-f]{64}$")
-            self.assertGreater(record["bytes"], 0)
-            if record["kind"] == "directory":
-                self.assertGreater(record["file_count"], 0)
+        self.assertEqual(manifest["dependencies"], {})
 
 
 if __name__ == "__main__":

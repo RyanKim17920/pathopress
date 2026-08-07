@@ -158,19 +158,12 @@ A defensible living release should enforce:
 ```bash
 PYTHONPATH=src python3 scripts/build_shared_artifacts.py
 PYTHONPATH=src python3 experiments/run_benchpress_style.py
-PYTHONPATH=src python3 experiments/run_structure_analysis.py
 PYTHONPATH=src python3 experiments/run_probe_compression.py
 PYTHONPATH=src python3 experiments/build_probe_pruning.py
-# Validate the completed hash-bound exact-search artifacts.
-PYTHONPATH=src python3 experiments/validate_probe_exhaustive_chunks.py
-PYTHONPATH=src python3 experiments/validate_probe_exhaustive_merged.py
-PYTHONPATH=src python3 experiments/validate_probe_exhaustive_top.py
-PYTHONPATH=src python3 experiments/build_probe_exhaustive_summary.py
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
 PYTHONPATH=src python3 experiments/run_temporal_deployment.py
 ```
 
 See [the experiment index](../experiments/README.md) before rerunning expensive
-or sharded jobs, [the full parity audit](full-parity-audit.md) for the complete
-status matrix, and [the public export notice](../exports/pathopress_public/LICENSES.md)
+or sharded jobs, and [the public export notice](../exports/pathopress_public/LICENSES.md)
 for redistribution boundaries.

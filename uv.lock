@@ -1305,6 +1305,9 @@ hf = [
     { name = "huggingface-hub" },
     { name = "pyarrow" },
 ]
+mlp = [
+    { name = "torch" },
+]
 plots = [
     { name = "matplotlib", version = "3.10.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "matplotlib", version = "3.11.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
@@ -1317,7 +1320,6 @@ research = [
     { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
     { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-    { name = "torch" },
 ]
 test = [
     { name = "pyarrow" },
@@ -1337,9 +1339,9 @@ requires-dist = [
     { name = "scikit-learn", marker = "extra == 'confidence'", specifier = ">=1.3" },
     { name = "scikit-learn", marker = "extra == 'research'", specifier = ">=1.3" },
     { name = "scipy", marker = "extra == 'research'", specifier = ">=1.10" },
-    { name = "torch", marker = "extra == 'research'", specifier = ">=2.0" },
+    { name = "torch", marker = "extra == 'mlp'", specifier = ">=2.0" },
 ]
-provides-extras = ["plots", "confidence", "hf", "evidence", "test", "research"]
+provides-extras = ["plots", "confidence", "hf", "evidence", "test", "research", "mlp"]
 
 [[package]]
 name = "pillow"

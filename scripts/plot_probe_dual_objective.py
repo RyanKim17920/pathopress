@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Compare scorecard reconstruction with model-average prediction usefulness."""
+"""Plot model-average prediction usefulness of scorecard-selected probes."""
 
 from __future__ import annotations
 
@@ -65,23 +65,40 @@ def main() -> int:
         writer = csv.DictWriter(handle, fieldnames=list(records[0]), lineterminator="\n")
         writer.writeheader(); writer.writerows(records)
 
-    fig, axes = plt.subplots(1, 2, figsize=(12.2, 4.8))
+    fig, ax = plt.subplots(figsize=(7.6, 4.8))
     for mode in LABELS:
         rows = [row for row in records if row["candidate_mode"] == mode]
         color = COLORS[mode]
-        axes[0].plot([row["k"] for row in rows], [row["scorecard_medae"] for row in rows], "o-", color=color, lw=2.2, label=LABELS[mode])
-        axes[0].plot([row["k"] for row in rows], [row["model_average_medae"] for row in rows], "s--", color=color, lw=1.8, alpha=.82)
-        axes[1].plot([row["scorecard_medae"] for row in rows], [row["model_average_medae"] for row in rows], "o-", color=color, lw=2, label=LABELS[mode])
-        for row in rows:
-            axes[1].annotate(str(row["k"]), (row["scorecard_medae"], row["model_average_medae"]), xytext=(3, 3), textcoords="offset points", fontsize=8)
-    axes[0].set(xlabel="Measured evaluations (k)", ylabel="Median absolute error (points)", title="A  Scorecard vs model-average usefulness")
-    axes[0].legend(frameon=False, title="Solid circles: scorecard\nDashed squares: model average")
-    axes[1].set(xlabel="Scorecard MedAE", ylabel="Model-average MedAE", title="B  Same selected probe sets; labels are k")
-    axes[1].legend(frameon=False)
-    for ax in axes: ax.grid(alpha=.2)
-    fig.suptitle("Two objectives for pathology probe information", fontsize=15, fontweight="bold", y=.97)
-    fig.text(.5, .025, "Greedy sets were selected for scorecard MedAE. Model-average error is a separately reported usefulness metric. 25-task set is a pipeline feasibility proxy, not measured cost.", ha="center", fontsize=8)
-    fig.subplots_adjust(left=.075, right=.985, bottom=.20, top=.82, wspace=.25)
+        ax.plot(
+            [row["k"] for row in rows],
+            [row["model_average_medae"] for row in rows],
+            "o-",
+            color=color,
+            lw=2.2,
+            label=LABELS[mode],
+        )
+    ax.set(
+        xlabel="Measured evaluations (k)",
+        ylabel="Median absolute model-average error (points)",
+        xticks=range(1, 11),
+    )
+    ax.grid(alpha=.2)
+    ax.legend(frameon=False)
+    fig.suptitle(
+        "Predicting a model's average pathology score",
+        fontsize=15,
+        fontweight="bold",
+        y=.97,
+    )
+    fig.text(
+        .5,
+        .025,
+        "Probe sets were selected for scorecard MedAE; model-average MedAE is an independent evaluation. "
+        "The 25-task set is a feasibility proxy, not measured cost.",
+        ha="center",
+        fontsize=8,
+    )
+    fig.subplots_adjust(left=.13, right=.98, bottom=.22, top=.84)
     for suffix in ("png", "pdf"):
         fig.savefig(args.output.with_suffix(f".{suffix}"), dpi=200, bbox_inches="tight")
     plt.close(fig)

@@ -33,24 +33,18 @@ and retrospective interpolation is not prospective clinical validation.
   1.609006 MedAE, and 1.608566 median fold MedAE over 21,181 supported
   predictions. The column-median baseline is 4.151756/2.400000 MAE/MedAE.
   Both raw and logit Soft-Impute sweeps independently select rank 1.
-- The complete 7-transform × 12-method comparison ran 343/343 configurations.
-  The best MedAPE row is logit BenchReg at 1.9077, but it covers only 71.9% of
+- The current 59×187 7-transform × 12-method comparison ran 343/343 configurations.
+  The best MedAPE row is logit BenchReg at 1.9023, but it covers only 68.3% of
   held-out cells. Coverage is therefore part of every method result; a partial
   regression row does not replace the full-coverage selected predictor.
-- The previous 168-column snapshot's largest complete 32 × 16 submatrix had
-  stable rank 1.431, with 69.88%/87.57% variance explained by one/two
-  components. Structure artifacts must be regenerated before those statistics
-  are applied to the current 187-column matrix.
 - With the all-known BenchPress denominator, greedy rank-1 scorecard MedAE is
   1.397334 at five probes and 1.213706 at ten. Hidden-only values are 1.548536
   and 1.493709. These are transductive reconstruction results, not estimates of
   a new model's clinical utility.
 - The margin-5 ranking-aware greedy trajectory reaches 0.7321 pairwise accuracy
   at five unrestricted probes and 0.8780 at ten. The 25-task pipeline-feasibility
-  proxy reaches 0.4000 at ten; it is not a measured cost set. The checked-in
-  exact MedAE searches (25-task optimum 1.485944; historical error-informed
-  30-task optimum 1.427339) are complete only for their bound 59×168 snapshot.
-  No exhaustive choose-five search has been run for the current 59×187 scores.
+  proxy reaches 0.4000 at ten; it is not a measured cost set. No exhaustive
+  choose-five search has been run for the current 59×187 scores.
 - For the same scorecard-selected probes, median error in each model's average
   observed score falls from 1.7065 at one probe to 0.8471 at ten unrestricted
   probes and 0.7120 for the 25-task proxy. This is a separately evaluated
@@ -64,17 +58,16 @@ and retrospective interpolation is not prospective clinical validation.
   pathology rank 1, eight structural features, nested ridge/MLP risk selection,
   conformal intervals, and cross-fitted P(|error| <= 10 normalized points).
   Cross-fitted structural-support uncertainty correlates with absolute error at
-  Spearman 0.6066; its leave-fold-out 90% intervals cover 89.980% of 20,270 OOF
-  instances. A separate unseen-model artifact uses 30,992 nested
+  Spearman 0.6022; its leave-fold-out 90% intervals cover 89.982% of 21,181 OOF
+  instances. A separate unseen-model artifact calibrates 31,163 of 33,272 nested
   leave-model-out/temporal predictions; its nominal-90% empirical coverage is
-  94.98% with 15.25-point median width, and unsupported columns abstain.
+  94.80% with 14.72-point median width, and unsupported columns abstain.
 - A hard-rule temporal experiment predicts seven 2025 model releases using
   strictly earlier models and 1/5/10 revealed cells across ten seeds. It is a
   small retrospective release cohort, not external or prospective validation.
 
 Detailed protocol distinctions and remaining gaps are in
-[the parity note](docs/benchpress-parity.md) and
-[the full audit](docs/full-parity-audit.md).
+[the parity note](docs/benchpress-parity.md).
 
 ## Install and quick start
 
@@ -86,9 +79,9 @@ pathopress audit --scores data/scores.csv
 pathopress validate --scores data/scores.csv
 ```
 
-Install `.[research]` before regenerating analyses or figures. This extra
-includes the compatible PyTorch dependency used by the MLP method-grid units;
-the grid records dependency failures rather than silently dropping units.
+Install `.[research]` before regenerating analyses or figures. Install
+`.[research,mlp]` only when rerunning the optional PyTorch MLP method-grid
+units; the grid records dependency failures rather than silently dropping them.
 
 The product CLI uses canonical IDs and supports CSV or JSON:
 
@@ -149,21 +142,17 @@ No build or download command performs deployment or upload.
 | Registry and deduplication | [suites](data/suites.csv), [tasks](data/tasks.csv), [deduplication](data/deduplication.csv), [scores](data/scores.csv), [provenance](data/provenance.json) |
 | Canonical substrate | [matrix/fold manifest](experiments/shared_artifacts_manifest.json), [matrix NPZ](experiments/analysis_matrix.npz), [folds](experiments/folds_s10_f3_bs42.json) |
 | Point estimates and rank | [imputations](outputs/imputations_rank1.csv), [bias-ALS CV](experiments/benchpress_style_results.json), [Soft-Impute sweep](experiments/soft_impute_rank_sweep_results.json) |
-| Full classical grid | [manifest](experiments/method_comparison/manifest.json), [results](experiments/method_comparison/results.json), [top table](experiments/method_comparison/top_methods.md), [grid figure](figures/method_comparison_grid.png) |
-| Structure | [structure manifest](experiments/structure_analysis/manifest.json), [stable rank](experiments/structure_analysis/stable_rank_results.json), [MDS coordinates](experiments/structure_analysis/mds_coordinates.csv) |
-| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [historical exact-search status](experiments/probe_exhaustive_execution_status.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [current ranking preservation](figures/ranking_preservation_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
+| Full classical grid | [manifest](experiments/method_comparison/manifest.json), [results](experiments/method_comparison/results.json), [top table](experiments/method_comparison/top_methods.md) |
+| Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [current ranking preservation](figures/ranking_preservation_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
 | Cost and feasibility evidence | [source-backed registry](data/evaluation_cost_evidence.json), [measured-burden contract](docs/budgeted-probe-selection.md), [current fail-closed preflight](experiments/budgeted_probe_selection_rank1.json), [coverage figure](figures/evaluation_cost_evidence_coverage.png) |
 | Ranking and time | [ranking](experiments/ranking_preservation_rank1.json), [temporal](experiments/temporal_deployment_rank1.json) |
-| Trust and error factors | [confidence](experiments/confidence_calibration_rank1.json), [existing-row intervals](experiments/deployment_confidence_rank1.json), [unseen-model intervals](experiments/new_model_confidence_rank1.json), [new-model method](docs/new-model-confidence.md), [predictability](experiments/predictability_results_rank1.json), [factor analysis](experiments/prediction_error_factors_rank1.json) |
-| Publication outputs | [table manifest](outputs/tables/manifest.json), [metadata summary](experiments/publication_metadata_summary.json), [figure gallery](figures/README.md) |
+| Trust | [confidence](experiments/confidence_calibration_rank1.json), [existing-row intervals](experiments/deployment_confidence_rank1.json), [unseen-model intervals](experiments/new_model_confidence_rank1.json), [new-model method](docs/new-model-confidence.md) |
+| Figures | [figure gallery](figures/README.md) |
 | Product surface | [CLI](src/pathopress/cli.py), [public export](exports/pathopress_public/README.md), [static site](website/README.md) |
 
-Large resumable caches remain local. The 343 method NPZ shards occupy about 439
-MiB under `experiments/method_comparison/predictions/` and are narrowly ignored
-by Git; the merged manifest records their count, path, and size. The 6,030
-Section 6 unit shards (about 22 MiB) and their 289,681-row raw prediction CSV
-(about 30 MiB) are also ignored, while compact merged records, tables, and
-figures remain tracked.
+Large method and exact-search shard caches are rebuildable and are not retained
+in the compact repository. The checked-in method manifest and results preserve
+the completed 343-unit current-matrix summary.
 
 ## Experiments
 
@@ -174,7 +163,6 @@ Core regeneration commands are:
 PYTHONPATH=src python3 experiments/run_method_comparison.py --prepare-folds
 # Run independent shards, then:
 PYTHONPATH=src python3 experiments/run_method_comparison.py --merge
-PYTHONPATH=src python3 experiments/run_structure_analysis.py
 PYTHONPATH=src python3 experiments/run_probe_compression.py
 PYTHONPATH=src python3 experiments/build_probe_pruning.py
 # New matrices require new schema-v2 run directories and a full exact rerun.
@@ -202,7 +190,6 @@ PYTHONPATH=src python3 experiments/run_ranking_preservation.py
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
 PYTHONPATH=src python3 experiments/run_new_model_confidence.py
 PYTHONPATH=src python3 experiments/run_temporal_deployment.py
-PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --workers 8
 python3 scripts/build_evaluation_cost_evidence.py
 python3 scripts/plot_evaluation_cost_evidence.py
 python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive

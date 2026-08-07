@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
-"""Render BenchPress-style probe and informativeness figures."""
+"""Render the one-probe informativeness figure."""
 
 from __future__ import annotations
 
 import argparse
 import csv
-import json
 import os
-from collections import defaultdict
 from pathlib import Path
 
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/pathopress-matplotlib")
@@ -49,19 +47,6 @@ def _style() -> None:
     )
 
 
-def _random_band(rows: list[dict[str, object]], key: str, metric: str) -> tuple[np.ndarray, ...]:
-    by_k: dict[int, list[float]] = defaultdict(list)
-    for row in rows:
-        value = row[key][metric]  # type: ignore[index]
-        if value is not None:
-            by_k[int(row["k"])].append(float(value))
-    x = np.asarray(sorted(by_k))
-    median = np.asarray([np.median(by_k[int(k)]) for k in x])
-    q1 = np.asarray([np.percentile(by_k[int(k)], 25) for k in x])
-    q3 = np.asarray([np.percentile(by_k[int(k)], 75) for k in x])
-    return x, median, q1, q3
-
-
 def _short_name(value: str) -> str:
     parts = value.split(".")
     if value.startswith("thunder."):
@@ -81,89 +66,6 @@ def _short_name(value: str) -> str:
         task = parts[-1].replace("-mutation", "").replace("-", " ").upper()
         return f"EXAONE {task}"
     return value
-
-
-def render_curves(payload: dict[str, object], output_base: Path) -> None:
-    baseline = payload["baseline"]
-    greedy = payload["all_known_greedy"]
-    random_rows = payload["random_global_prefixes"]
-    heldout = payload["heldout_model"]["validation"]  # type: ignore[index]
-    max_k = len(greedy)  # type: ignore[arg-type]
-
-    fig, axes = plt.subplots(1, 2, figsize=(12.4, 5.7))
-    specifications = [
-        (
-            axes[0],
-            "parity", "medae", "hidden_only", "medae",
-            "Scorecard reconstruction", "Median absolute cell error",
-        ),
-        (
-            axes[1],
-            "model_average", "medae", "model_average", "medae",
-            "Model-average prediction (all-known vs held-out)",
-            "Median absolute row-average error",
-        ),
-    ]
-    for ax, all_key, all_metric, held_key, held_metric, title, ylabel in specifications:
-        base = float(baseline[all_key][all_metric])  # type: ignore[index]
-        random_x, random_y, random_q1, random_q3 = _random_band(
-            random_rows, all_key, all_metric  # type: ignore[arg-type]
-        )
-        random_x = np.concatenate([[0], random_x])
-        random_y = np.concatenate([[base], random_y])
-        random_q1 = np.concatenate([[base], random_q1])
-        random_q3 = np.concatenate([[base], random_q3])
-        greedy_x = np.arange(0, max_k + 1)
-        greedy_y = np.asarray(
-            [base]
-            + [float(row[all_key][all_metric]) for row in greedy]  # type: ignore[index,union-attr]
-        )
-        heldout_x = np.arange(1, len(heldout) + 1)  # type: ignore[arg-type]
-        heldout_y = np.asarray(
-            [float(row[held_key][held_metric]) for row in heldout]  # type: ignore[index,union-attr]
-        )
-
-        ax.fill_between(random_x, random_q1, random_q3, color=GRAY, alpha=0.14, lw=0)
-        ax.plot(random_x, random_y, "o--", color=GRAY, lw=2.0, ms=4.5, label="Random, all-known")
-        ax.plot(greedy_x, greedy_y, "o-", color=MAGENTA, lw=2.2, ms=4.7, label="Greedy, all-known")
-        ax.plot(heldout_x, heldout_y, "s-", color=BLUE, lw=2.2, ms=4.5, label="Greedy, 70/30 held-out models")
-        ax.plot([0], [base], marker="D", color="white", markeredgecolor=CHARCOAL, ms=5.3, zorder=5)
-        if ax is axes[0]:
-            for row in greedy:  # type: ignore[union-attr]
-                step = int(row["step"])
-                name = _short_name(str(row["added_evaluation_id"]))
-                ax.annotate(
-                    name,
-                    (step, float(row[all_key][all_metric])),  # type: ignore[index]
-                    xytext=(0, 10 if step % 2 else 22), textcoords="offset points",
-                    rotation=36, ha="left", va="bottom", fontsize=6.8,
-                    color=MAGENTA,
-                    bbox=dict(boxstyle="round,pad=0.1", facecolor="white", edgecolor="none", alpha=0.78),
-                )
-        ax.set_xlim(-0.4, max_k + 0.4)
-        ax.set_xticks(range(0, max_k + 1))
-        ax.set_xlabel("# Top pathology evaluations", fontsize=11)
-        ax.set_ylabel(ylabel, fontsize=11)
-        ax.set_title(title, fontsize=13, fontweight="bold", color=CHARCOAL)
-        ax.grid(axis="y", color=GRID, alpha=0.75, lw=0.7)
-        ax.legend(frameon=False, fontsize=8.5)
-
-    fig.suptitle(
-        "PathoPress probe policies (rank-1 Bias-ALS)",
-        fontsize=15, fontweight="bold", color=CHARCOAL, y=1.01,
-    )
-    fig.text(
-        0.5,
-        -0.005,
-        "All-known matches BenchPress and counts measured probes as zero error; held-out-model curves exclude probe cells. Model-average curves report MedAE across model rows.",
-        ha="center", fontsize=8.5, color=CHARCOAL,
-    )
-    fig.tight_layout()
-    for suffix in ("png", "pdf"):
-        path = output_base.with_suffix(f".{suffix}")
-        path.parent.mkdir(parents=True, exist_ok=True)
-        fig.savefig(path, dpi=220, bbox_inches="tight")
-    plt.close(fig)
 
 
 def build_informativeness_figure(csv_path: Path, top_n: int = 15):
@@ -240,11 +142,6 @@ def render_informativeness(csv_path: Path, output_base: Path, top_n: int = 15) -
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--results",
-        type=Path,
-        default=PROJECT_ROOT / "experiments" / "probe_selection_results_rank1.json",
-    )
-    parser.add_argument(
         "--informativeness",
         type=Path,
         default=PROJECT_ROOT / "outputs" / "probe_informativeness_rank1.csv",
@@ -254,14 +151,11 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
-    payload = json.loads(args.results.read_text(encoding="utf-8"))
     _style()
-    render_curves(payload, PROJECT_ROOT / "figures" / "probe_selection_rank1")
     render_informativeness(
         args.informativeness,
         PROJECT_ROOT / "figures" / "probe_informativeness_rank1",
     )
-    print("wrote figures/probe_selection_rank1.{png,pdf}")
     print("wrote figures/probe_informativeness_rank1.{png,pdf}")
 
 

@@ -5,6 +5,8 @@ before regenerating analyses:
 
 ```bash
 python3 -m pip install -e '.[research]'
+# Add `mlp` only when running the optional PyTorch method-grid units:
+python3 -m pip install -e '.[research,mlp]'
 ```
 
 The fixed substrate is 59 models × 187 protocol-level evaluations with 2,122
@@ -57,37 +59,19 @@ PYTHONPATH=src python3 experiments/run_method_comparison.py --list-shards
 PYTHONPATH=src python3 experiments/run_method_comparison.py \
   --run-range 0 343 --workers 8
 PYTHONPATH=src python3 experiments/run_method_comparison.py --merge
-python3 scripts/plot_method_comparison.py
 ```
 
 [The manifest](method_comparison/manifest.json) records 343 completed, zero
 missing, and zero unsupported units. The methods are benchmark/model means,
 benchmark/model KNN, benchmark/model regression, Soft-Impute, bias ALS, NMF,
 PMF, nuclear norm, and MLP over identity/log/logit/asinh/sqrt/probit/quantile
-transforms. The best MedAPE row is logit BenchReg at 1.9077 with 71.9% coverage;
+transforms. The best MedAPE row is logit BenchReg at 1.9023 with 68.3% coverage;
 coverage-filtered results must not be compared as though they predicted every
 held-out cell.
 
-The 343 NPZ caches under `method_comparison/predictions/` total about 439 MiB
-and are narrowly Git-ignored. Compact [results](method_comparison/results.json),
-[top methods](method_comparison/top_methods.md), manifest, and figure are the
-tracked merge products.
-
-## Matrix structure
-
-```bash
-PYTHONPATH=src python3 experiments/run_structure_analysis.py
-python3 scripts/plot_structure_analysis.py
-python3 scripts/build_publication_tables.py
-```
-
-[The structure manifest](structure_analysis/manifest.json) links threshold
-sensitivity, complete-submatrix stable rank/SVD, pairwise correlations, and
-classical MDS. The largest complete block is 32 × 16 with stable rank 1.431046;
-the first one/two components explain 69.8789%/87.5715%. All 168 evaluations
-have a neighbor sharing at least five models, with median best absolute
-correlation 0.916362. Publication CSV/Markdown/LaTeX tables are under
-[`outputs/tables/`](../outputs/tables/).
+The NPZ prediction shards are rebuildable local cache and are not retained.
+Compact [results](method_comparison/results.json), [top methods](method_comparison/top_methods.md),
+the manifest, and figure are the tracked merge products.
 
 ## Probe compression and ranking
 
@@ -139,7 +123,6 @@ PYTHONPATH=src:experiments python3 experiments/build_probe_exhaustive_summary.py
   --cheap-run "$CHEAP_RUN" --pruned-run "$PRUNED_RUN" \
   --fast-equivalence experiments/probe_exhaustive_fast_equivalence_v2.json
 PYTHONPATH=src python3 experiments/run_ranking_preservation.py
-python3 scripts/plot_probe_compression.py
 python3 scripts/plot_ranking_preservation.py
 python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive
 python3 scripts/plot_probe_dual_objective.py
@@ -160,18 +143,10 @@ python3 scripts/plot_probe_dual_objective.py
   diagnostics; only `ranking_aware` is the dedicated margin-5 ranking objective.
 - [Top-30 pruning](probe_pruning_rank1_top30.json) uses all ten source MedAE
   greedy contexts and exact normalized-rank aggregation.
-- [Exhaustive status](probe_exhaustive_execution_status.json) records historical
-  `C(25,5)=53,130` and `C(30,5)=142,506` MedAE searches bound to the earlier
-  59×168 score matrix. All 195,636 candidates across 800 chunks were validated
-  on that snapshot, and the [compact result](probe_exhaustive_rank1.json) retains
-  the certified historical top lists. No exhaustive choose-five search has been
-  run for the current 59×187 scores; the metadata says
-  `not_run_for_current_scores`. The 25-task universe remains a pre-error
-  pipeline proxy, not a measured-cost set.
-- The frozen legacy-v1 audit continues to bind
-  `run_probe_exhaustive.py`, `fast_rank1.cpp`, and
-  `probe_exhaustive_fast_equivalence.json` byte-for-byte. New native searches
-  use `run_probe_exhaustive_v2.py` with `fast_rank1_v2.cpp`: schema-v2 chunk
+- No exhaustive choose-five search has been run for the current 59×187 scores.
+  The 25-task universe remains a pre-error pipeline proxy, not a measured-cost
+  set. New native searches use `run_probe_exhaustive_v2.py` with
+  `fast_rank1_v2.cpp`: schema-v2 chunk
   configs bind the runner, native library, equivalence evidence, compiler,
   flags, platform, and full candidate identities. The verifier requires at
   least 32 unique scalar/native comparisons under fixed `1e-10` cell and
@@ -180,26 +155,7 @@ python3 scripts/plot_probe_dual_objective.py
   lifetime of one reusable worker pool. Regenerate the host-bound evidence with
   `PYTHONPATH=src:experiments python3 experiments/verify_fast_rank1.py` before
   starting a new v2 native run.
-- The three validators default to schema v2 and require explicit run
-  directories. To re-audit the frozen release's legacy-v1 directories, pass
-  `--runner-version legacy`, the legacy equivalence file, and the preserved
-  `/tmp/libpathopress_fast_rank1.so` library to the chunk validator. Legacy
-  mode is audit-only; do not use it to create or resume a new search.
-
-  ```bash
-  LEGACY_CHEAP=experiments/probe_exhaustive_runs/cheap25_medae_k5_mf581973b3f91
-  LEGACY_PRUNED=experiments/probe_exhaustive_runs/pruned30_medae_k5_mf581973b3f91
-  PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_chunks.py \
-    --runner-version legacy --library /tmp/libpathopress_fast_rank1.so \
-    --equivalence experiments/probe_exhaustive_fast_equivalence.json \
-    "$LEGACY_CHEAP" "$LEGACY_PRUNED"
-  PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_merged.py \
-    --runner-version legacy "$LEGACY_CHEAP" "$LEGACY_PRUNED"
-  PYTHONPATH=src:experiments python3 experiments/validate_probe_exhaustive_top.py \
-    --runner-version legacy \
-    --equivalence experiments/probe_exhaustive_fast_equivalence.json \
-    "$LEGACY_CHEAP" "$LEGACY_PRUNED"
-  ```
+- The three validators are schema-v2-only and require explicit run directories.
 - [Ranking](ranking_preservation_rank1.json) is rebuilt directly from the current
   compression artifact's dedicated margin-5 tracks. It reports unrestricted and
   25-task all-known/random trajectories plus held-out-model validation through
@@ -213,21 +169,17 @@ masking/search budgets, the pathology rank-1 adaptation, and that current-score
 exhaustive searches were not run. The [dual-objective table](../outputs/probe_dual_objective_rank1.csv)
 reports model-average prediction error without pretending it was optimized.
 
-## Confidence, time, and error factors
+## Confidence and time
 
 ```bash
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
 PYTHONPATH=src python3 experiments/run_new_model_confidence.py
 PYTHONPATH=src python3 experiments/run_temporal_deployment.py
-PYTHONPATH=src python3 experiments/run_predictability.py
-PYTHONPATH=src python3 experiments/run_error_analysis.py
-PYTHONPATH=src python3 experiments/run_prediction_error_factors.py --workers 8
-python3 scripts/build_prediction_error_factor_tables.py
 ```
 
-- [Confidence](confidence_calibration_rank1.json) contains 20,270 cross-fitted
+- [Confidence](confidence_calibration_rank1.json) contains 21,181 cross-fitted
   cells, risk–coverage curves, strata, and leave-fold-out conformal results.
-  Structural support has Spearman 0.606612 and nominal-90% coverage 0.899803.
+  Structural support has Spearman 0.602190 and nominal-90% coverage 0.899816.
   Its prediction-cache-first generator contract matches upstream: three Logit
   Bias-ALS lambda variants plus the top twelve full-coverage Section-4
   alternatives. Per-cell cross-fitted P(|error| <= 10 normalized points), fold
@@ -244,23 +196,12 @@ python3 scripts/build_prediction_error_factor_tables.py
 - [Temporal deployment](temporal_deployment_rank1.json) evaluates seven
   verified 2025 targets using strictly earlier models and 1/5/10 revealed
   scores over ten seeds. This is a small retrospective cohort.
-- [Predictability](predictability_results_rank1.json) contains 10,007 raw
-  predictions, 168 evaluation summaries, and 59 model summaries.
-- [Error factors](prediction_error_factors_rank1.json) merge 11,990 compact
-  records and nine intervention groups. Metadata are incomplete for some
-  variables (for example parameter count is known for 42/59 model-error rows),
-  so results are correlational and denominators vary.
-
-The factor experiment's 6,030 local unit-cache files (~22 MiB) and 289,681-row
-raw prediction CSV (~30 MiB) are Git-ignored. The manifest, merged records,
-tables, and figures remain tracked.
 
 ## Publication and product artifacts
 
 ```bash
-PYTHONPATH=src python3 scripts/build_publication_tables.py
-python3 scripts/plot_publication_hero.py
-python3 scripts/plot_metadata_overview.py
+python3 scripts/plot_benchpress_style_hero.py --omit-stale-exhaustive
+python3 scripts/plot_probe_dual_objective.py
 python3 scripts/build_evaluation_cost_evidence.py
 python3 scripts/plot_evaluation_cost_evidence.py
 PYTHONPATH=src python3 scripts/build_public_release.py
@@ -268,7 +209,7 @@ PYTHONPATH=src python3 scripts/build_hf_dataset.py --parquet auto
 PYTHONPATH=src python3 scripts/publish_hf_dataset.py  # validation + dry run; no network
 ```
 
-The publication summaries, tables, and figures are compact derivatives of
+The publication summaries and figures are compact derivatives of
 experiment artifacts. The public build produces a hash-verified all/paper/wide
 export and `website/data.json`; it performs no upload or deployment. See the
 [figure gallery](../figures/README.md), [export README](../exports/pathopress_public/README.md),
@@ -286,7 +227,7 @@ default. A network upload requires all three of `--upload`,
 experiment inventory supplies those capabilities.
 
 The [cost-evidence registry](../data/evaluation_cost_evidence.json) and
-[audit note](../docs/evaluation-cost-evidence.md) cover all 168 retained
+[audit note](../docs/evaluation-cost-evidence.md) cover all 187 retained
 protocols. They preserve source configuration/count evidence and explicit
 missingness; they do not impute a numeric evaluation cost.
 

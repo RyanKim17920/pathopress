@@ -96,15 +96,9 @@ its task identities or cost semantics. It is only a low-friction input/label
 pipeline proxy; several datasets are large, and it does not measure runtime,
 compute, tissue access, annotation labor, or licensing cost.
 
-The [exhaustive execution status](../experiments/probe_exhaustive_execution_status.json)
-is a historical audit bound to score hash `f581973b…` and the earlier 59×168
-matrix. On that snapshot, the upstream-equivalent `C(25,5)=53,130` and
-`C(30,5)=142,506` searches were complete and scalar-certified, with five-probe
-MedAE optima 1.485944 and 1.427339. They are candidate-bounded historical
-results, not results for the current 59×187 matrix; current-score exhaustive
-status is explicitly `not_run_for_current_scores`. Legacy-v1 chunk configs did
-not bind the generator binary, so the audit establishes numerical backend
-compatibility rather than generator attribution.
+No exhaustive choose-five result is checked in for the current 59×187 matrix.
+The retained schema-v2 runner and validators can produce a new hash-bound result;
+historical outputs from earlier matrix snapshots are intentionally excluded.
 
 ## Other parity layers
 
@@ -112,18 +106,16 @@ compatibility rather than generator attribution.
 |---|---|---|
 | Raw/logit rank sweep | [Soft-Impute results](../experiments/soft_impute_rank_sweep_results.json) | Exact algorithm; pathology data/rank choice |
 | Classical method grid | [343-shard manifest](../experiments/method_comparison/manifest.json), [results](../experiments/method_comparison/results.json) | Exact core algorithms; expanded pathology grid |
-| Complete-submatrix rank, thresholds, correlations, MDS | [structure manifest](../experiments/structure_analysis/manifest.json) | Adapted to protocol columns |
 | Score-probe search | [compression results](../experiments/probe_compression_rank1.json) | Adapted objectives and bounded search |
 | Ranking preservation | [ranking results](../experiments/ranking_preservation_rank1.json) | Current compression-derived margin-5 all-known/random and held-out trajectories through `k=10` |
 | Confidence calibration | [OOF calibration](../experiments/confidence_calibration_rank1.json), [method](confidence-trust.md) | Exact upstream experiment contract; pathology rank/data adaptation |
 | Temporal deployment | [temporal results](../experiments/temporal_deployment_rank1.json) | Adapted, retrospective seven-model cohort |
-| Error factors | [factor results](../experiments/prediction_error_factors_rank1.json) | Adapted pathology metadata and intervention groups |
 | Product/export | [CLI](../src/pathopress/cli.py), [export](../exports/pathopress_public/README.md), [site](../website/README.md) | Local engineering analogue; no hosted deployment |
 
 The method grid completed 343/343 configurations: 12 method families over
 seven transforms, including pathology rank-sensitivity additions beyond the
-upstream 329-shard grid. Its top MedAPE configuration is logit BenchReg at 1.9077
-with only 71.9% prediction coverage. It must not displace the full-coverage
+upstream 329-shard grid. Its top MedAPE configuration is logit BenchReg at 1.9023
+with only 68.3% prediction coverage. It must not displace the full-coverage
 rank-1 ALS product predictor on that aggregate alone.
 
 Confidence uses cross-fitted residuals. Its generator contract now matches
@@ -151,6 +143,4 @@ time rule but remains a small retrospective study.
 - Label reported, provided, and predicted cells distinctly.
 - Do not describe the feasibility proxy as measured cost or the bounded subset
   search as globally exhaustive.
-The comprehensive evidence/status matrix is in
-[full-parity-audit.md](full-parity-audit.md); metric mappings and error semantics
-are in [imputation.md](imputation.md).
+Metric mappings and error semantics are in [imputation.md](imputation.md).

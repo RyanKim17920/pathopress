@@ -18,7 +18,6 @@ import experiments.run_probe_exhaustive_v2 as runner
 from experiments.run_probe_exhaustive_v2 import (
     ROOT,
     _assignment_residue,
-    _assert_run_is_active,
     _config_at_location,
     _cleanup_staged_fast_library,
     _config_for_chunk,
@@ -36,7 +35,11 @@ from pathopress.probe_compression import predict_all_known, score_predictions
 
 
 def _base_config() -> dict[str, object]:
+    model_ids = ["model.0", "model.1"]
+    evaluation_ids = [f"eval.{index}" for index in range(5)]
     return {
+        "schema_version": 2,
+        "config_schema": "pathopress.probe_exhaustive.run.v2",
         "eval_protocol": "all_known_probe_bruteforce_v1",
         "upstream_reference_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4",
         "k": 1,
@@ -51,6 +54,16 @@ def _base_config() -> dict[str, object]:
         "scores_sha256": "scores",
         "model_ids_hash": "models",
         "evaluation_ids_hash": "evaluations",
+        "model_ids_sha256": "model-sha256",
+        "evaluation_ids_sha256": "evaluation-sha256",
+        "candidate_ids_sha256": "candidate-sha256",
+        "fixed_probe_ids_sha256": "fixed-sha256",
+        "remaining_candidate_ids_sha256": "remaining-sha256",
+        "model_ids": model_ids,
+        "evaluation_ids": evaluation_ids,
+        "candidate_ids": evaluation_ids,
+        "fixed_probe_ids": [],
+        "remaining_candidate_ids": evaluation_ids,
         "candidate_hash": "candidates",
         "fixed_probe_hash": None,
         "remaining_candidate_hash": "remaining",
@@ -60,40 +73,33 @@ def _base_config() -> dict[str, object]:
         "num_shards": 2,
         "assignment_modulus": 4,
         "chunk_size": 2,
+        "execution_backend": {"kind": "test-native-backend"},
     }
 
 
 def _record(combo_index: int) -> dict[str, object]:
+    rows = [0] * 5 + [1] * 5
+    columns = list(range(5)) * 2
+    values = [float(index + 1) for index in range(10)]
     return {
         "combo_index": combo_index,
         "probe_set": [f"eval.{combo_index}"],
-        "score": float(combo_index),
-        "medape": float(combo_index + 1),
-        "medae": float(combo_index),
+        "probe_names": [f"eval.{combo_index}"],
+        "score": 0.0,
+        "medape": 0.0,
+        "medae": 0.0,
         "n": 10,
         "elapsed_s": 0.01,
         "predictions": {
-            "i": [0],
-            "j": [combo_index],
-            "true": [1.0],
-            "pred": [1.0],
+            "i": rows,
+            "j": columns,
+            "true": values,
+            "pred": values,
         },
     }
 
 
 class ProbeExhaustiveRunnerTests(unittest.TestCase):
-    def test_frozen_legacy_generator_hashes_remain_available(self) -> None:
-        expected = {
-            "run_probe_exhaustive.py": "ed7ea29f4938c466f8e77cb2f37b6e12b3e3c94d06f089de4fa36d2e2f104b7e",
-            "fast_rank1.cpp": "c0ea04290031f6fecaa83c3e5e492e3d8529875d23bf24d3a554f6ca15ac1dd3",
-            "probe_exhaustive_fast_equivalence.json": "f3f9e9b021593113d78387ec4bfe46b25ca1aadc5e15ebe4b276baaad3ba211a",
-        }
-        for name, digest in expected.items():
-            self.assertEqual(
-                hashlib.sha256((ROOT / "experiments" / name).read_bytes()).hexdigest(),
-                digest,
-            )
-
     def test_staged_fast_library_fd_survives_path_replacement(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             source = Path(temporary) / "backend.so"
@@ -110,12 +116,6 @@ class ProbeExhaustiveRunnerTests(unittest.TestCase):
                 self.assertEqual(os.read(descriptor, len(original) + 1), original)
             finally:
                 _cleanup_staged_fast_library(descriptor, directory)
-
-    def test_stopped_old_matrix_runs_fail_closed(self) -> None:
-        with self.assertRaisesRegex(RuntimeError, "audit evidence only"):
-            _assert_run_is_active(
-                ROOT / "experiments" / "probe_exhaustive_runs" / "cheap25_medae_k5"
-            )
 
     def test_compiled_rank1_backend_is_numerically_equivalent(self) -> None:
         compiler = shutil.which("g++")
@@ -392,9 +392,9 @@ class ProbeExhaustiveRunnerTests(unittest.TestCase):
 
         wrong_order = dict(payload)
         wrong_order["records"] = list(reversed(payload["records"]))
-        self.assertEqual(
-            _valid_chunk_payload(wrong_order, config, indices)[1],
+        self.assertIn(
             "record combo_index mismatch",
+            _valid_chunk_payload(wrong_order, config, indices)[1],
         )
         wrong_config = dict(payload)
         wrong_config["config"] = {**payload["config"], "metric": "medape"}

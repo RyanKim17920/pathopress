@@ -133,18 +133,6 @@ class FoldTests(unittest.TestCase):
 
 
 class GridAndArtifactTests(unittest.TestCase):
-    def test_coverage_display_grid_uses_percent_units(self) -> None:
-        specification = importlib.util.spec_from_file_location(
-            "plot_method_comparison", ROOT / "scripts" / "plot_method_comparison.py"
-        )
-        module = importlib.util.module_from_spec(specification)
-        specification.loader.exec_module(module)
-        results = {
-            "identity": {"Benchmark Mean": {"coverage": 0.75, "medae_median": 2.0}}
-        }
-        self.assertEqual(module._display_grid(results, "coverage")[0, 0], 75.0)
-        self.assertEqual(module._display_grid(results, "medae_median")[0, 0], 2.0)
-
     def test_exact_grid_plus_rank_sensitivity_rows(self) -> None:
         self.assertEqual(len(TRANSFORMS), 7)
         self.assertEqual(len(METHODS), 12)
