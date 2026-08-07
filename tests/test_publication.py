@@ -35,8 +35,7 @@ class PublicationDataTests(unittest.TestCase):
             dual = list(csv.DictReader(handle))
         self.assertEqual(len(dual), 20)
         objectives = {row["selection_objective"] for row in dual}
-        self.assertEqual(len(objectives), 1)
-        self.assertIn(objectives.pop(), {"scorecard_medae", "training_scorecard_medae"})
+        self.assertEqual(objectives, {"training_scorecard_medae"})
 
 
 if __name__ == "__main__":
