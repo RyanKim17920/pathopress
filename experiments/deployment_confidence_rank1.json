@@ -33,7 +33,7 @@
   },
   "calibration": {
     "file": "confidence_calibration_rank1.json",
-    "sha256": "8b35524e0411c49b17a831e2e5f7fc812273b8e634fc8188cddb980634327360",
+    "sha256": "39421b2bf5cb160854df823695095667c67e30844bbfc62d5305cd27dd4e47ba",
     "upstream_commit": "0a684b63ee0e4a401cb907a3827a82ea997d74c4"
   },
   "calibration_cells": {

@@ -10,7 +10,7 @@
     "burden_sha256": "f1d9cc353979ad642a05b963f61cd8f6fe3ddd4783a38addff3d133ed8ef8be1",
     "budget": "data/probe_budget_v1.example.json",
     "budget_sha256": "0f612a1432eeb306f78954d4dc7d088eeee6339cd02184ad4d8b3b8625397e25",
-    "runner_sha256": "f3482cf9f3f125fd42e1002604b3820b13753349504dae9abc8ee6f0d7bc19d5",
+    "runner_sha256": "7a4a4b20eb952134617bbd877862f8668a22febcb053570786dd7d9f34e01c58",
     "budgeted_probes_sha256": "ece8176d54abbe2ef417ac2c261e2a43220cbd832427171bb1ca7ebf0449e102"
   },
   "configuration": {
@@ -24,7 +24,7 @@
     "missing_policy": "exclude",
     "one_per_task_identity": true,
     "seed": 42,
-    "workers": 1,
+    "workers": 4,
     "worker_cap": 4,
     "blas_threads_per_worker": 1,
     "tie_break": "objective within 1e-12; normalized budget pressure; canonical cost vector; lexicographic evaluation IDs"

@@ -48,7 +48,24 @@
       "name": "probe_compression",
       "command": "python3 experiments/run_probe_compression.py",
       "inputs": ["data/scores.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/probe_selection_results_rank1.json", "experiments/run_probe_compression.py", "src/pathopress"],
-      "artifacts": ["experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "outputs/probe_compression_random_all_known_raw_rank1.csv.gz"],
+      "artifacts": ["experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv.gz", "outputs/probe_compression_random_all_known_raw_rank1.csv.gz"],
+      "external_calls": false
+    },
+    {
+      "name": "lofo_matched_cells",
+      "command": "python3 scripts/replay_lofo_matched_cells.py --write-informativeness",
+      "ordering_note": "Must run after probe_selection and probe_compression. The --write-informativeness flag repopulates the matched_cell_* and skill columns of outputs/probe_informativeness_rank1.csv that run_probe_selection.py writes empty (the transductive track cannot produce them). Omit the flag to regenerate the replay artifact without touching the informativeness CSV.",
+      "inputs": [
+        "data/scores.csv",
+        "experiments/probe_selection_results_rank1.json",
+        "experiments/probe_compression_rank1.json",
+        "scripts/replay_lofo_matched_cells.py",
+        "src/pathopress"
+      ],
+      "artifacts": [
+        "experiments/lofo_matched_cells_rank1.json",
+        "outputs/probe_informativeness_rank1.csv"
+      ],
       "external_calls": false
     },
     {
@@ -97,7 +114,7 @@
     {
       "name": "benchpress_publication_figures",
       "command": "python3 scripts/plot_benchpress_style_hero.py && python3 scripts/plot_probe_dual_objective.py",
-      "inputs": ["experiments/probe_compression_rank1.json", "experiments/probe_selection_results_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv", "outputs/probe_informativeness_rank1.csv", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py"],
+      "inputs": ["experiments/probe_compression_rank1.json", "experiments/probe_selection_results_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv.gz", "outputs/probe_informativeness_rank1.csv", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py"],
       "artifacts": ["experiments/benchpress_style_hero_summary.json", "outputs/probe_dual_objective_rank1.csv", "figures/pathopress_benchpress_hero_rank1.png", "figures/pathopress_benchpress_hero_rank1.pdf", "figures/probe_dual_objective_rank1.png", "figures/probe_dual_objective_rank1.pdf"],
       "external_calls": false
     },

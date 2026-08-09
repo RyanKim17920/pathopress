@@ -1,13 +1,14 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "metadata": {
     "experiment": "Current-score probe ranking preservation",
-    "source_protocol": "probe_compression_ranking_aware_margin5_v1",
+    "source_protocol": "probe_compression_ranking_aware_v1",
     "prediction_rank": 1,
     "ranking_margin": 5.0,
+    "ranking_margin_note": "Greedy probe selection used margin=5.0; the margin_sweep track re-evaluates the same probe sets at multiple margin thresholds so the greedy-vs-random gap is visible everywhere.",
     "top_fraction": 0.2,
     "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
-    "compression_sha256": "843379ea52052f76c42122c083ce1ce6cbba64686ae2c60b2492aacff621fe35",
+    "compression_sha256": "9b94fbb93e4fb02e3f759480bcee2ceb0e7c4f60494d30425b80539d1a061acf",
     "semantics": "All-known tracks count revealed probes as exact and use every observed target; held-out non-probe tracks rank hidden validation cells only; the with-probe-zero diagnostic includes revealed validation probes. Greedy sets optimize median pairwise accuracy at a true normalized-score gap of at least five points.",
     "historical_oof_artifact": "The former 0/1/2/5-margin OOF ranking release was bound to an earlier score snapshot and is superseded by these current compression-derived trajectories."
   },
@@ -35,6 +36,7 @@
     "ranking_random_curve_limit": 10,
     "random_raw_output": "outputs/probe_compression_random_all_known_raw_rank1.csv.gz",
     "limit_reason": "full candidate rescoring is exact at each reported k; the reported curve is deliberately bounded because each set masks and completes every model row",
+    "lofo_max_probes": 5,
     "candidate_modes": {
       "any_candidate": 187,
       "pre_error_low_friction_allowlist": 25
@@ -376,337 +378,337 @@
       "heldout_greedy": [
         {
           "k": 1,
-          "added_evaluation_id": "eva.leaderboard.bach.validation",
+          "added_evaluation_id": "pathobench.exaone2025.cptac_luad.stk11-mutation",
           "probe_ids": [
-            "eva.leaderboard.bach.validation"
+            "pathobench.exaone2025.cptac_luad.stk11-mutation"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 487,
-            "pairwise_median_accuracy": 0.5,
-            "pairwise_pooled_accuracy": 0.5400410677618069,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6071428571428571,
+            "pairwise_pooled_accuracy": 0.4747835497835498,
             "top_fraction": 0.2,
-            "top_total_k": 192,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.4010416666666667
+            "top_total_k": 13,
+            "top_median_recovery": 0.42857142857142855,
+            "top_pooled_recovery": 0.42662595703884504
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.5,
-            "pairwise_pooled_accuracy": 0.5447154471544715,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6071428571428571,
+            "pairwise_pooled_accuracy": 0.4747835497835498,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.40414507772020725
+            "top_total_k": 13,
+            "top_median_recovery": 0.42857142857142855,
+            "top_pooled_recovery": 0.42662595703884504
           }
         },
         {
           "k": 2,
-          "added_evaluation_id": "pathobench.exaone2025.cptac_luad.immune-class",
+          "added_evaluation_id": "hest.read.gene_expression",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "pathobench.exaone2025.cptac_luad.immune-class"
+            "pathobench.exaone2025.cptac_luad.stk11-mutation",
+            "hest.read.gene_expression"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 486,
-            "pairwise_median_accuracy": 0.6,
-            "pairwise_pooled_accuracy": 0.5267489711934157,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.5357142857142857,
+            "pairwise_pooled_accuracy": 0.5375386518243661,
             "top_fraction": 0.2,
-            "top_total_k": 191,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.3298429319371728
+            "top_total_k": 12,
+            "top_median_recovery": 0.5,
+            "top_pooled_recovery": 0.47685130221062266
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.6666666666666666,
-            "pairwise_pooled_accuracy": 0.532520325203252,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.5714285714285714,
+            "pairwise_pooled_accuracy": 0.5426406926406926,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.33678756476683935
+            "top_total_k": 13,
+            "top_median_recovery": 0.5357142857142857,
+            "top_pooled_recovery": 0.48713196830253574
           }
         },
         {
           "k": 3,
-          "added_evaluation_id": "thunder.esca.linear_probing",
+          "added_evaluation_id": "pathobench.threads2025.cptac_brca.tp53-mutation",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "pathobench.exaone2025.cptac_luad.immune-class",
-            "thunder.esca.linear_probing"
+            "pathobench.exaone2025.cptac_luad.stk11-mutation",
+            "hest.read.gene_expression",
+            "pathobench.threads2025.cptac_brca.tp53-mutation"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 457,
-            "pairwise_median_accuracy": 0.8166666666666667,
-            "pairwise_pooled_accuracy": 0.7330415754923414,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.42857142857142855,
+            "pairwise_pooled_accuracy": 0.4581735724592867,
             "top_fraction": 0.2,
-            "top_total_k": 189,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.43915343915343913
+            "top_total_k": 12,
+            "top_median_recovery": 0.4642857142857143,
+            "top_pooled_recovery": 0.46244874022764143
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8529411764705882,
-            "pairwise_pooled_accuracy": 0.7520325203252033,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.4642857142857143,
+            "pairwise_pooled_accuracy": 0.46327561327561323,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.45077720207253885
+            "top_total_k": 13,
+            "top_median_recovery": 0.5714285714285714,
+            "top_pooled_recovery": 0.47289486899631206
           }
         },
         {
           "k": 4,
+          "added_evaluation_id": "pathorob.tcga_2x2.robustness_index",
+          "probe_ids": [
+            "pathobench.exaone2025.cptac_luad.stk11-mutation",
+            "hest.read.gene_expression",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathorob.tcga_2x2.robustness_index"
+          ],
+          "validation_non_probe": {
+            "ranking_scope": "hidden_only",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.5357142857142857,
+            "pairwise_pooled_accuracy": 0.5747371675943105,
+            "top_fraction": 0.2,
+            "top_total_k": 12,
+            "top_median_recovery": 0.5357142857142857,
+            "top_pooled_recovery": 0.49564081642229973
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.5357142857142857,
+            "pairwise_pooled_accuracy": 0.5811147186147186,
+            "top_fraction": 0.2,
+            "top_total_k": 13,
+            "top_median_recovery": 0.6428571428571429,
+            "top_pooled_recovery": 0.5095919385663424
+          }
+        },
+        {
+          "k": 5,
+          "added_evaluation_id": "eva.leaderboard.monusac.test",
+          "probe_ids": [
+            "pathobench.exaone2025.cptac_luad.stk11-mutation",
+            "hest.read.gene_expression",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathorob.tcga_2x2.robustness_index",
+            "eva.leaderboard.monusac.test"
+          ],
+          "validation_non_probe": {
+            "ranking_scope": "hidden_only",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6964285714285714,
+            "pairwise_pooled_accuracy": 0.7078231292517005,
+            "top_fraction": 0.2,
+            "top_total_k": 12,
+            "top_median_recovery": 0.6785714285714286,
+            "top_pooled_recovery": 0.5868777369991056
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6964285714285714,
+            "pairwise_pooled_accuracy": 0.7154761904761904,
+            "top_fraction": 0.2,
+            "top_total_k": 13,
+            "top_median_recovery": 0.7857142857142857,
+            "top_pooled_recovery": 0.6055530972233535
+          }
+        },
+        {
+          "k": 6,
+          "added_evaluation_id": "thunder.patch_camelyon.linear_probing",
+          "probe_ids": [
+            "pathobench.exaone2025.cptac_luad.stk11-mutation",
+            "hest.read.gene_expression",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathorob.tcga_2x2.robustness_index",
+            "eva.leaderboard.monusac.test",
+            "thunder.patch_camelyon.linear_probing"
+          ],
+          "validation_non_probe": {
+            "ranking_scope": "hidden_only",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6785714285714286,
+            "pairwise_pooled_accuracy": 0.7130952380952381,
+            "top_fraction": 0.2,
+            "top_total_k": 12,
+            "top_median_recovery": 0.5357142857142857,
+            "top_pooled_recovery": 0.5647940601193008
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.7321428571428571,
+            "pairwise_pooled_accuracy": 0.730952380952381,
+            "top_fraction": 0.2,
+            "top_total_k": 13,
+            "top_median_recovery": 0.7142857142857143,
+            "top_pooled_recovery": 0.5899729036074458
+          }
+        },
+        {
+          "k": 7,
           "added_evaluation_id": "pathobench.exaone2025.cptac_ccrcc.immune-class",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "pathobench.exaone2025.cptac_luad.immune-class",
-            "thunder.esca.linear_probing",
+            "pathobench.exaone2025.cptac_luad.stk11-mutation",
+            "hest.read.gene_expression",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathorob.tcga_2x2.robustness_index",
+            "eva.leaderboard.monusac.test",
+            "thunder.patch_camelyon.linear_probing",
             "pathobench.exaone2025.cptac_ccrcc.immune-class"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 457,
-            "pairwise_median_accuracy": 0.8,
-            "pairwise_pooled_accuracy": 0.7177242888402626,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.7142857142857143,
+            "pairwise_pooled_accuracy": 0.730952380952381,
             "top_fraction": 0.2,
-            "top_total_k": 188,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.425531914893617
+            "top_total_k": 12,
+            "top_median_recovery": 0.6071428571428571,
+            "top_pooled_recovery": 0.5730824219029224
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8333333333333334,
-            "pairwise_pooled_accuracy": 0.7378048780487805,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.7678571428571429,
+            "pairwise_pooled_accuracy": 0.7488095238095239,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.44041450777202074
-          }
-        },
-        {
-          "k": 5,
-          "added_evaluation_id": "hest.hoptimus1report2025.ccrcc.gene_expression",
-          "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "pathobench.exaone2025.cptac_luad.immune-class",
-            "thunder.esca.linear_probing",
-            "pathobench.exaone2025.cptac_ccrcc.immune-class",
-            "hest.hoptimus1report2025.ccrcc.gene_expression"
-          ],
-          "validation_non_probe": {
-            "ranking_scope": "hidden_only",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 457,
-            "pairwise_median_accuracy": 0.8,
-            "pairwise_pooled_accuracy": 0.7177242888402626,
-            "top_fraction": 0.2,
-            "top_total_k": 188,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.425531914893617
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8333333333333334,
-            "pairwise_pooled_accuracy": 0.7378048780487805,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.44041450777202074
-          }
-        },
-        {
-          "k": 6,
-          "added_evaluation_id": "eva.leaderboard.camelyon16_small.test",
-          "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "pathobench.exaone2025.cptac_luad.immune-class",
-            "thunder.esca.linear_probing",
-            "pathobench.exaone2025.cptac_ccrcc.immune-class",
-            "hest.hoptimus1report2025.ccrcc.gene_expression",
-            "eva.leaderboard.camelyon16_small.test"
-          ],
-          "validation_non_probe": {
-            "ranking_scope": "hidden_only",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 455,
-            "pairwise_median_accuracy": 0.75,
-            "pairwise_pooled_accuracy": 0.7208791208791209,
-            "top_fraction": 0.2,
-            "top_total_k": 187,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.42245989304812837
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8571428571428571,
-            "pairwise_pooled_accuracy": 0.741869918699187,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.44041450777202074
-          }
-        },
-        {
-          "k": 7,
-          "added_evaluation_id": "eva.leaderboard.camelyon16_small.validation",
-          "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "pathobench.exaone2025.cptac_luad.immune-class",
-            "thunder.esca.linear_probing",
-            "pathobench.exaone2025.cptac_ccrcc.immune-class",
-            "hest.hoptimus1report2025.ccrcc.gene_expression",
-            "eva.leaderboard.camelyon16_small.test",
-            "eva.leaderboard.camelyon16_small.validation"
-          ],
-          "validation_non_probe": {
-            "ranking_scope": "hidden_only",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 455,
-            "pairwise_median_accuracy": 0.75,
-            "pairwise_pooled_accuracy": 0.7230769230769231,
-            "top_fraction": 0.2,
-            "top_total_k": 186,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.41397849462365593
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8571428571428571,
-            "pairwise_pooled_accuracy": 0.7439024390243902,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.43523316062176165
+            "top_total_k": 13,
+            "top_median_recovery": 0.7142857142857143,
+            "top_pooled_recovery": 0.5998500810230344
           }
         },
         {
           "k": 8,
-          "added_evaluation_id": "eva.leaderboard.crc.validation",
+          "added_evaluation_id": "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "pathobench.exaone2025.cptac_luad.immune-class",
-            "thunder.esca.linear_probing",
+            "pathobench.exaone2025.cptac_luad.stk11-mutation",
+            "hest.read.gene_expression",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathorob.tcga_2x2.robustness_index",
+            "eva.leaderboard.monusac.test",
+            "thunder.patch_camelyon.linear_probing",
             "pathobench.exaone2025.cptac_ccrcc.immune-class",
-            "hest.hoptimus1report2025.ccrcc.gene_expression",
-            "eva.leaderboard.camelyon16_small.test",
-            "eva.leaderboard.camelyon16_small.validation",
-            "eva.leaderboard.crc.validation"
+            "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 455,
-            "pairwise_median_accuracy": 0.75,
-            "pairwise_pooled_accuracy": 0.7208791208791209,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.7083333333333334,
+            "pairwise_pooled_accuracy": 0.7112244897959182,
             "top_fraction": 0.2,
-            "top_total_k": 185,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.42162162162162165
+            "top_total_k": 12,
+            "top_median_recovery": 0.6071428571428571,
+            "top_pooled_recovery": 0.5773772881076388
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8571428571428571,
-            "pairwise_pooled_accuracy": 0.741869918699187,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.7678571428571429,
+            "pairwise_pooled_accuracy": 0.7423160173160175,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.44559585492227977
+            "top_total_k": 13,
+            "top_median_recovery": 0.7142857142857143,
+            "top_pooled_recovery": 0.6078956069257032
           }
         },
         {
           "k": 9,
-          "added_evaluation_id": "eva.leaderboard.patch_camelyon_10shot.test",
+          "added_evaluation_id": "pathobench.threads2025.cptac_ccrcc.os",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "pathobench.exaone2025.cptac_luad.immune-class",
-            "thunder.esca.linear_probing",
+            "pathobench.exaone2025.cptac_luad.stk11-mutation",
+            "hest.read.gene_expression",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathorob.tcga_2x2.robustness_index",
+            "eva.leaderboard.monusac.test",
+            "thunder.patch_camelyon.linear_probing",
             "pathobench.exaone2025.cptac_ccrcc.immune-class",
-            "hest.hoptimus1report2025.ccrcc.gene_expression",
-            "eva.leaderboard.camelyon16_small.test",
-            "eva.leaderboard.camelyon16_small.validation",
-            "eva.leaderboard.crc.validation",
-            "eva.leaderboard.patch_camelyon_10shot.test"
+            "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+            "pathobench.threads2025.cptac_ccrcc.os"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 452,
-            "pairwise_median_accuracy": 0.775,
-            "pairwise_pooled_accuracy": 0.7212389380530974,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.8214285714285714,
+            "pairwise_pooled_accuracy": 0.7535714285714284,
             "top_fraction": 0.2,
-            "top_total_k": 184,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.41847826086956524
+            "top_total_k": 12,
+            "top_median_recovery": 0.7142857142857143,
+            "top_pooled_recovery": 0.590143126150173
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8571428571428571,
-            "pairwise_pooled_accuracy": 0.7439024390243902,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.875,
+            "pairwise_pooled_accuracy": 0.780952380952381,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.44559585492227977
+            "top_total_k": 13,
+            "top_median_recovery": 0.75,
+            "top_pooled_recovery": 0.6222142376037808
           }
         },
         {
           "k": 10,
-          "added_evaluation_id": "hest.hoptimus1report2025.coad.gene_expression",
+          "added_evaluation_id": "eva.leaderboard.bach.validation",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "pathobench.exaone2025.cptac_luad.immune-class",
-            "thunder.esca.linear_probing",
+            "pathobench.exaone2025.cptac_luad.stk11-mutation",
+            "hest.read.gene_expression",
+            "pathobench.threads2025.cptac_brca.tp53-mutation",
+            "pathorob.tcga_2x2.robustness_index",
+            "eva.leaderboard.monusac.test",
+            "thunder.patch_camelyon.linear_probing",
             "pathobench.exaone2025.cptac_ccrcc.immune-class",
-            "hest.hoptimus1report2025.ccrcc.gene_expression",
-            "eva.leaderboard.camelyon16_small.test",
-            "eva.leaderboard.camelyon16_small.validation",
-            "eva.leaderboard.crc.validation",
-            "eva.leaderboard.patch_camelyon_10shot.test",
-            "hest.hoptimus1report2025.coad.gene_expression"
+            "hoptimus1report2025.braf_crc.cptac_coad.abmil_auc",
+            "pathobench.threads2025.cptac_ccrcc.os",
+            "eva.leaderboard.bach.validation"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 452,
-            "pairwise_median_accuracy": 0.775,
-            "pairwise_pooled_accuracy": 0.7212389380530974,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.8035714285714286,
+            "pairwise_pooled_accuracy": 0.7595238095238095,
             "top_fraction": 0.2,
-            "top_total_k": 184,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.41847826086956524
+            "top_total_k": 12,
+            "top_median_recovery": 0.6428571428571429,
+            "top_pooled_recovery": 0.5850985018726773
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
+            "pairwise_n_pairs": 2,
             "pairwise_median_accuracy": 0.8571428571428571,
-            "pairwise_pooled_accuracy": 0.7439024390243902,
+            "pairwise_pooled_accuracy": 0.7869047619047619,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.44559585492227977
+            "top_total_k": 13,
+            "top_median_recovery": 0.7857142857142857,
+            "top_pooled_recovery": 0.6203747176767035
           }
         }
       ]
@@ -1046,337 +1048,337 @@
       "heldout_greedy": [
         {
           "k": 1,
-          "added_evaluation_id": "eva.leaderboard.bach.validation",
-          "probe_ids": [
-            "eva.leaderboard.bach.validation"
-          ],
-          "validation_non_probe": {
-            "ranking_scope": "hidden_only",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 487,
-            "pairwise_median_accuracy": 0.5,
-            "pairwise_pooled_accuracy": 0.5400410677618069,
-            "top_fraction": 0.2,
-            "top_total_k": 192,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.4010416666666667
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.5,
-            "pairwise_pooled_accuracy": 0.5447154471544715,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.40414507772020725
-          }
-        },
-        {
-          "k": 2,
           "added_evaluation_id": "thunder.bach.linear_probing",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
             "thunder.bach.linear_probing"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 456,
-            "pairwise_median_accuracy": 0.6666666666666666,
-            "pairwise_pooled_accuracy": 0.6951754385964912,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6428571428571429,
+            "pairwise_pooled_accuracy": 0.6417053184910327,
             "top_fraction": 0.2,
-            "top_total_k": 190,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.2789473684210526
+            "top_total_k": 12,
+            "top_median_recovery": 0.42857142857142855,
+            "top_pooled_recovery": 0.47980882668382663
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.6666666666666666,
-            "pairwise_pooled_accuracy": 0.717479674796748,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.7142857142857143,
+            "pairwise_pooled_accuracy": 0.6587121212121213,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.29015544041450775
+            "top_total_k": 13,
+            "top_median_recovery": 0.4642857142857143,
+            "top_pooled_recovery": 0.49584795469709364
+          }
+        },
+        {
+          "k": 2,
+          "added_evaluation_id": "eva.leaderboard.bach.validation",
+          "probe_ids": [
+            "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation"
+          ],
+          "validation_non_probe": {
+            "ranking_scope": "hidden_only",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6071428571428571,
+            "pairwise_pooled_accuracy": 0.608495670995671,
+            "top_fraction": 0.2,
+            "top_total_k": 12,
+            "top_median_recovery": 0.42857142857142855,
+            "top_pooled_recovery": 0.46599694191179053
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6785714285714286,
+            "pairwise_pooled_accuracy": 0.6293290043290043,
+            "top_fraction": 0.2,
+            "top_total_k": 13,
+            "top_median_recovery": 0.4642857142857143,
+            "top_pooled_recovery": 0.49200954758858984
           }
         },
         {
           "k": 3,
+          "added_evaluation_id": "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+          "probe_ids": [
+            "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation",
+            "hoptimus1report2025.tcga_uniform.linear_probe_top1"
+          ],
+          "validation_non_probe": {
+            "ranking_scope": "hidden_only",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.5714285714285714,
+            "pairwise_pooled_accuracy": 0.5684523809523809,
+            "top_fraction": 0.2,
+            "top_total_k": 12,
+            "top_median_recovery": 0.39285714285714285,
+            "top_pooled_recovery": 0.46736571751429523
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6071428571428571,
+            "pairwise_pooled_accuracy": 0.6309523809523808,
+            "top_fraction": 0.2,
+            "top_total_k": 13,
+            "top_median_recovery": 0.4642857142857143,
+            "top_pooled_recovery": 0.49480744093947865
+          }
+        },
+        {
+          "k": 4,
+          "added_evaluation_id": "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+          "probe_ids": [
+            "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation",
+            "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+            "hoptimus1report2025.cam17_wilds.linear_probe_top1"
+          ],
+          "validation_non_probe": {
+            "ranking_scope": "hidden_only",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.6428571428571429,
+            "pairwise_pooled_accuracy": 0.6684523809523809,
+            "top_fraction": 0.2,
+            "top_total_k": 12,
+            "top_median_recovery": 0.42857142857142855,
+            "top_pooled_recovery": 0.4808967272898191
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6785714285714286,
+            "pairwise_pooled_accuracy": 0.6952380952380952,
+            "top_fraction": 0.2,
+            "top_total_k": 13,
+            "top_median_recovery": 0.5357142857142857,
+            "top_pooled_recovery": 0.5104508554959365
+          }
+        },
+        {
+          "k": 5,
+          "added_evaluation_id": "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+          "probe_ids": [
+            "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation",
+            "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+            "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+            "hoptimus1report2025.crc_no_norm.linear_probe_top1"
+          ],
+          "validation_non_probe": {
+            "ranking_scope": "hidden_only",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.6428571428571429,
+            "pairwise_pooled_accuracy": 0.6595238095238095,
+            "top_fraction": 0.2,
+            "top_total_k": 12,
+            "top_median_recovery": 0.42857142857142855,
+            "top_pooled_recovery": 0.4753394624472291
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6785714285714286,
+            "pairwise_pooled_accuracy": 0.6873015873015873,
+            "top_fraction": 0.2,
+            "top_total_k": 13,
+            "top_median_recovery": 0.5357142857142857,
+            "top_pooled_recovery": 0.5059418161481875
+          }
+        },
+        {
+          "k": 6,
+          "added_evaluation_id": "eva.leaderboard.bracs.validation",
+          "probe_ids": [
+            "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation",
+            "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+            "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+            "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+            "eva.leaderboard.bracs.validation"
+          ],
+          "validation_non_probe": {
+            "ranking_scope": "hidden_only",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.6785714285714286,
+            "pairwise_pooled_accuracy": 0.7029761904761905,
+            "top_fraction": 0.2,
+            "top_total_k": 12,
+            "top_median_recovery": 0.42857142857142855,
+            "top_pooled_recovery": 0.4813889670964957
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.7857142857142857,
+            "pairwise_pooled_accuracy": 0.7686507936507937,
+            "top_fraction": 0.2,
+            "top_total_k": 13,
+            "top_median_recovery": 0.5357142857142857,
+            "top_pooled_recovery": 0.5230603025005449
+          }
+        },
+        {
+          "k": 7,
+          "added_evaluation_id": "eva.leaderboard.gleason_arvaniti.validation",
+          "probe_ids": [
+            "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation",
+            "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+            "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+            "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.gleason_arvaniti.validation"
+          ],
+          "validation_non_probe": {
+            "ranking_scope": "hidden_only",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.5714285714285714,
+            "pairwise_pooled_accuracy": 0.5878968253968254,
+            "top_fraction": 0.2,
+            "top_total_k": 12,
+            "top_median_recovery": 0.42857142857142855,
+            "top_pooled_recovery": 0.4545549736653764
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.75,
+            "pairwise_pooled_accuracy": 0.6978715728715729,
+            "top_fraction": 0.2,
+            "top_total_k": 13,
+            "top_median_recovery": 0.42857142857142855,
+            "top_pooled_recovery": 0.5140527176312775
+          }
+        },
+        {
+          "k": 8,
           "added_evaluation_id": "thunder.break_his.linear_probing",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
             "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation",
+            "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+            "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+            "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
             "thunder.break_his.linear_probing"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 424,
-            "pairwise_median_accuracy": 0.6666666666666666,
-            "pairwise_pooled_accuracy": 0.6933962264150944,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.5,
+            "pairwise_pooled_accuracy": 0.4916666666666667,
             "top_fraction": 0.2,
-            "top_total_k": 188,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.2872340425531915
+            "top_total_k": 11,
+            "top_median_recovery": 0.5,
+            "top_pooled_recovery": 0.4771510892770969
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.6666666666666666,
-            "pairwise_pooled_accuracy": 0.7357723577235772,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.7142857142857143,
+            "pairwise_pooled_accuracy": 0.6154401154401155,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.30569948186528495
+            "top_total_k": 13,
+            "top_median_recovery": 0.5,
+            "top_pooled_recovery": 0.5455942176059572
           }
         },
         {
-          "k": 4,
-          "added_evaluation_id": "hoptimus1report2025.mhist.linear_probe_top1",
-          "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "thunder.bach.linear_probing",
-            "thunder.break_his.linear_probing",
-            "hoptimus1report2025.mhist.linear_probe_top1"
-          ],
-          "validation_non_probe": {
-            "ranking_scope": "hidden_only",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 424,
-            "pairwise_median_accuracy": 0.6666666666666666,
-            "pairwise_pooled_accuracy": 0.7075471698113207,
-            "top_fraction": 0.2,
-            "top_total_k": 188,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.3351063829787234
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.72,
-            "pairwise_pooled_accuracy": 0.7479674796747967,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.35233160621761656
-          }
-        },
-        {
-          "k": 5,
+          "k": 9,
           "added_evaluation_id": "thunder.bracs.linear_probing",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
             "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation",
+            "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+            "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+            "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
             "thunder.break_his.linear_probing",
-            "hoptimus1report2025.mhist.linear_probe_top1",
             "thunder.bracs.linear_probing"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 403,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.5357142857142857,
+            "pairwise_pooled_accuracy": 0.5159013605442178,
+            "top_fraction": 0.2,
+            "top_total_k": 11,
+            "top_median_recovery": 0.5,
+            "top_pooled_recovery": 0.4658971615868168
+          },
+          "validation_with_probe_zero": {
+            "ranking_scope": "all_target",
+            "pairwise_margin": 5.0,
+            "pairwise_n_pairs": 2,
             "pairwise_median_accuracy": 0.7142857142857143,
-            "pairwise_pooled_accuracy": 0.7468982630272953,
+            "pairwise_pooled_accuracy": 0.6378066378066378,
             "top_fraction": 0.2,
-            "top_total_k": 186,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.3763440860215054
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8,
-            "pairwise_pooled_accuracy": 0.7926829268292683,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.39896373056994816
-          }
-        },
-        {
-          "k": 6,
-          "added_evaluation_id": "thunder.ccrcc.linear_probing",
-          "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "thunder.bach.linear_probing",
-            "thunder.break_his.linear_probing",
-            "hoptimus1report2025.mhist.linear_probe_top1",
-            "thunder.bracs.linear_probing",
-            "thunder.ccrcc.linear_probing"
-          ],
-          "validation_non_probe": {
-            "ranking_scope": "hidden_only",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 379,
-            "pairwise_median_accuracy": 0.8,
-            "pairwise_pooled_accuracy": 0.7572559366754618,
-            "top_fraction": 0.2,
-            "top_total_k": 184,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.375
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8571428571428571,
-            "pairwise_pooled_accuracy": 0.8130081300813008,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.40414507772020725
-          }
-        },
-        {
-          "k": 7,
-          "added_evaluation_id": "thunder.tcga_crc_msi.linear_probing",
-          "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "thunder.bach.linear_probing",
-            "thunder.break_his.linear_probing",
-            "hoptimus1report2025.mhist.linear_probe_top1",
-            "thunder.bracs.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing"
-          ],
-          "validation_non_probe": {
-            "ranking_scope": "hidden_only",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 356,
-            "pairwise_median_accuracy": 0.8,
-            "pairwise_pooled_accuracy": 0.7471910112359551,
-            "top_fraction": 0.2,
-            "top_total_k": 182,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.3901098901098901
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8571428571428571,
-            "pairwise_pooled_accuracy": 0.8170731707317073,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.42487046632124353
-          }
-        },
-        {
-          "k": 8,
-          "added_evaluation_id": "thunder.spider_thorax.linear_probing",
-          "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "thunder.bach.linear_probing",
-            "thunder.break_his.linear_probing",
-            "hoptimus1report2025.mhist.linear_probe_top1",
-            "thunder.bracs.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.spider_thorax.linear_probing"
-          ],
-          "validation_non_probe": {
-            "ranking_scope": "hidden_only",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 346,
-            "pairwise_median_accuracy": 0.7333333333333334,
-            "pairwise_pooled_accuracy": 0.7398843930635838,
-            "top_fraction": 0.2,
-            "top_total_k": 180,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.3888888888888889
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8571428571428571,
-            "pairwise_pooled_accuracy": 0.8170731707317073,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.43005181347150256
-          }
-        },
-        {
-          "k": 9,
-          "added_evaluation_id": "thunder.esca.linear_probing",
-          "probe_ids": [
-            "eva.leaderboard.bach.validation",
-            "thunder.bach.linear_probing",
-            "thunder.break_his.linear_probing",
-            "hoptimus1report2025.mhist.linear_probe_top1",
-            "thunder.bracs.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.esca.linear_probing"
-          ],
-          "validation_non_probe": {
-            "ranking_scope": "hidden_only",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 317,
-            "pairwise_median_accuracy": 0.8,
-            "pairwise_pooled_accuracy": 0.7255520504731862,
-            "top_fraction": 0.2,
-            "top_total_k": 178,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.3595505617977528
-          },
-          "validation_with_probe_zero": {
-            "ranking_scope": "all_target",
-            "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.8571428571428571,
-            "pairwise_pooled_accuracy": 0.823170731707317,
-            "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.40932642487046633
+            "top_total_k": 13,
+            "top_median_recovery": 0.5,
+            "top_pooled_recovery": 0.5482240538753446
           }
         },
         {
           "k": 10,
-          "added_evaluation_id": "thunder.patch_camelyon.linear_probing",
+          "added_evaluation_id": "eva.leaderboard.breakhis.validation",
           "probe_ids": [
-            "eva.leaderboard.bach.validation",
             "thunder.bach.linear_probing",
+            "eva.leaderboard.bach.validation",
+            "hoptimus1report2025.tcga_uniform.linear_probe_top1",
+            "hoptimus1report2025.cam17_wilds.linear_probe_top1",
+            "hoptimus1report2025.crc_no_norm.linear_probe_top1",
+            "eva.leaderboard.bracs.validation",
+            "eva.leaderboard.gleason_arvaniti.validation",
             "thunder.break_his.linear_probing",
-            "hoptimus1report2025.mhist.linear_probe_top1",
             "thunder.bracs.linear_probing",
-            "thunder.ccrcc.linear_probing",
-            "thunder.tcga_crc_msi.linear_probing",
-            "thunder.spider_thorax.linear_probing",
-            "thunder.esca.linear_probing",
-            "thunder.patch_camelyon.linear_probing"
+            "eva.leaderboard.breakhis.validation"
           ],
           "validation_non_probe": {
             "ranking_scope": "hidden_only",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 306,
-            "pairwise_median_accuracy": 0.7333333333333334,
-            "pairwise_pooled_accuracy": 0.7189542483660131,
+            "pairwise_n_pairs": 1,
+            "pairwise_median_accuracy": 0.5,
+            "pairwise_pooled_accuracy": 0.5056972789115647,
             "top_fraction": 0.2,
-            "top_total_k": 176,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.3806818181818182
+            "top_total_k": 11,
+            "top_median_recovery": 0.5,
+            "top_pooled_recovery": 0.4788359423827404
           },
           "validation_with_probe_zero": {
             "ranking_scope": "all_target",
             "pairwise_margin": 5.0,
-            "pairwise_n_pairs": 492,
-            "pairwise_median_accuracy": 0.9117647058823529,
-            "pairwise_pooled_accuracy": 0.8252032520325203,
+            "pairwise_n_pairs": 2,
+            "pairwise_median_accuracy": 0.6428571428571429,
+            "pairwise_pooled_accuracy": 0.6314574314574315,
             "top_fraction": 0.2,
-            "top_total_k": 193,
-            "top_median_recovery": 0.0,
-            "top_pooled_recovery": 0.43523316062176165
+            "top_total_k": 13,
+            "top_median_recovery": 0.5714285714285714,
+            "top_pooled_recovery": 0.5674318735648208
           }
         }
       ]
@@ -1409,24 +1411,24 @@
         "heldout_non_probe": {
           "ranking_scope": "hidden_only",
           "pairwise_margin": 5.0,
-          "pairwise_n_pairs": 452,
-          "pairwise_median_accuracy": 0.775,
-          "pairwise_pooled_accuracy": 0.7212389380530974,
+          "pairwise_n_pairs": 1,
+          "pairwise_median_accuracy": 0.8035714285714286,
+          "pairwise_pooled_accuracy": 0.7595238095238095,
           "top_fraction": 0.2,
-          "top_total_k": 184,
-          "top_median_recovery": 0.0,
-          "top_pooled_recovery": 0.41847826086956524
+          "top_total_k": 12,
+          "top_median_recovery": 0.6428571428571429,
+          "top_pooled_recovery": 0.5850985018726773
         },
         "heldout_with_probe_zero": {
           "ranking_scope": "all_target",
           "pairwise_margin": 5.0,
-          "pairwise_n_pairs": 492,
+          "pairwise_n_pairs": 2,
           "pairwise_median_accuracy": 0.8571428571428571,
-          "pairwise_pooled_accuracy": 0.7439024390243902,
+          "pairwise_pooled_accuracy": 0.7869047619047619,
           "top_fraction": 0.2,
-          "top_total_k": 193,
-          "top_median_recovery": 0.0,
-          "top_pooled_recovery": 0.44559585492227977
+          "top_total_k": 13,
+          "top_median_recovery": 0.7857142857142857,
+          "top_pooled_recovery": 0.6203747176767035
         }
       },
       "pre_error_low_friction_allowlist": {
@@ -1454,26 +1456,276 @@
         "heldout_non_probe": {
           "ranking_scope": "hidden_only",
           "pairwise_margin": 5.0,
-          "pairwise_n_pairs": 306,
-          "pairwise_median_accuracy": 0.7333333333333334,
-          "pairwise_pooled_accuracy": 0.7189542483660131,
+          "pairwise_n_pairs": 1,
+          "pairwise_median_accuracy": 0.5,
+          "pairwise_pooled_accuracy": 0.5056972789115647,
           "top_fraction": 0.2,
-          "top_total_k": 176,
-          "top_median_recovery": 0.0,
-          "top_pooled_recovery": 0.3806818181818182
+          "top_total_k": 11,
+          "top_median_recovery": 0.5,
+          "top_pooled_recovery": 0.4788359423827404
         },
         "heldout_with_probe_zero": {
           "ranking_scope": "all_target",
           "pairwise_margin": 5.0,
-          "pairwise_n_pairs": 492,
-          "pairwise_median_accuracy": 0.9117647058823529,
-          "pairwise_pooled_accuracy": 0.8252032520325203,
+          "pairwise_n_pairs": 2,
+          "pairwise_median_accuracy": 0.6428571428571429,
+          "pairwise_pooled_accuracy": 0.6314574314574315,
           "top_fraction": 0.2,
-          "top_total_k": 193,
-          "top_median_recovery": 0.0,
-          "top_pooled_recovery": 0.43523316062176165
+          "top_total_k": 13,
+          "top_median_recovery": 0.5714285714285714,
+          "top_pooled_recovery": 0.5674318735648208
         }
       }
     }
+  },
+  "margin_sweep": {
+    "mode": "any_candidate",
+    "k": 10,
+    "sweep_points": [
+      {
+        "margin": 0.0,
+        "margin_type": "absolute"
+      },
+      {
+        "margin": 1.0,
+        "margin_type": "absolute"
+      },
+      {
+        "margin": 2.0,
+        "margin_type": "absolute"
+      },
+      {
+        "margin": 3.0,
+        "margin_type": "absolute"
+      },
+      {
+        "margin": 5.0,
+        "margin_type": "absolute"
+      },
+      {
+        "margin": 10.0,
+        "margin_type": "absolute"
+      },
+      {
+        "margin": 0.25,
+        "margin_type": "sd"
+      },
+      {
+        "margin": 0.25,
+        "margin_type": "iqr"
+      },
+      {
+        "margin": 0.5,
+        "margin_type": "sd"
+      },
+      {
+        "margin": 0.5,
+        "margin_type": "iqr"
+      },
+      {
+        "margin": 1.0,
+        "margin_type": "sd"
+      },
+      {
+        "margin": 1.0,
+        "margin_type": "iqr"
+      }
+    ],
+    "greedy": [
+      {
+        "margin": 0.0,
+        "margin_type": "absolute",
+        "n_pairs": 17159,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.6785714285714286,
+        "pooled_accuracy": 0.7706160032635935
+      },
+      {
+        "margin": 1.0,
+        "margin_type": "absolute",
+        "n_pairs": 13763,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.7083333333333334,
+        "pooled_accuracy": 0.8105064302840951
+      },
+      {
+        "margin": 2.0,
+        "margin_type": "absolute",
+        "n_pairs": 10973,
+        "n_eligible_columns": 178,
+        "median_accuracy": 0.7461340206185567,
+        "pooled_accuracy": 0.8358698623895015
+      },
+      {
+        "margin": 3.0,
+        "margin_type": "absolute",
+        "n_pairs": 8845,
+        "n_eligible_columns": 168,
+        "median_accuracy": 0.7845768880800728,
+        "pooled_accuracy": 0.848728094968909
+      },
+      {
+        "margin": 5.0,
+        "margin_type": "absolute",
+        "n_pairs": 6048,
+        "n_eligible_columns": 148,
+        "median_accuracy": 0.8779761904761905,
+        "pooled_accuracy": 0.861276455026455
+      },
+      {
+        "margin": 10.0,
+        "margin_type": "absolute",
+        "n_pairs": 2722,
+        "n_eligible_columns": 100,
+        "median_accuracy": 1.0,
+        "pooled_accuracy": 0.8831741366642175
+      },
+      {
+        "margin": 0.25,
+        "margin_type": "sd",
+        "n_pairs": 14397,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.6956521739130435,
+        "pooled_accuracy": 0.8042647773841772
+      },
+      {
+        "margin": 0.25,
+        "margin_type": "iqr",
+        "n_pairs": 13657,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.6956521739130435,
+        "pooled_accuracy": 0.8104268873105367
+      },
+      {
+        "margin": 0.5,
+        "margin_type": "sd",
+        "n_pairs": 11957,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.7123893805309734,
+        "pooled_accuracy": 0.8292213765994815
+      },
+      {
+        "margin": 0.5,
+        "margin_type": "iqr",
+        "n_pairs": 10751,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.711864406779661,
+        "pooled_accuracy": 0.8377825318575016
+      },
+      {
+        "margin": 1.0,
+        "margin_type": "sd",
+        "n_pairs": 8232,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.75,
+        "pooled_accuracy": 0.8622448979591837
+      },
+      {
+        "margin": 1.0,
+        "margin_type": "iqr",
+        "n_pairs": 6076,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.7777777777777778,
+        "pooled_accuracy": 0.8630678077682686
+      }
+    ],
+    "random": [
+      {
+        "margin": 0.0,
+        "margin_type": "absolute",
+        "n_pairs": 17159,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.5520676691729323,
+        "pooled_accuracy": 0.6071740777434582
+      },
+      {
+        "margin": 1.0,
+        "margin_type": "absolute",
+        "n_pairs": 13763,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.5669642857142857,
+        "pooled_accuracy": 0.6230908958802587
+      },
+      {
+        "margin": 2.0,
+        "margin_type": "absolute",
+        "n_pairs": 10973,
+        "n_eligible_columns": 178,
+        "median_accuracy": 0.570852534562212,
+        "pooled_accuracy": 0.6331905586439442
+      },
+      {
+        "margin": 3.0,
+        "margin_type": "absolute",
+        "n_pairs": 8845,
+        "n_eligible_columns": 168,
+        "median_accuracy": 0.5848115266460283,
+        "pooled_accuracy": 0.637591859807801
+      },
+      {
+        "margin": 5.0,
+        "margin_type": "absolute",
+        "n_pairs": 6048,
+        "n_eligible_columns": 148,
+        "median_accuracy": 0.6028577059519117,
+        "pooled_accuracy": 0.6466435185185186
+      },
+      {
+        "margin": 10.0,
+        "margin_type": "absolute",
+        "n_pairs": 2722,
+        "n_eligible_columns": 100,
+        "median_accuracy": 0.6634615384615384,
+        "pooled_accuracy": 0.6574577516531962
+      },
+      {
+        "margin": 0.25,
+        "margin_type": "sd",
+        "n_pairs": 14397,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.5593077247783875,
+        "pooled_accuracy": 0.6189692297006322
+      },
+      {
+        "margin": 0.25,
+        "margin_type": "iqr",
+        "n_pairs": 13657,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.5616605616605617,
+        "pooled_accuracy": 0.6221205242732665
+      },
+      {
+        "margin": 0.5,
+        "margin_type": "sd",
+        "n_pairs": 11957,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.5672514619883041,
+        "pooled_accuracy": 0.6291461068829973
+      },
+      {
+        "margin": 0.5,
+        "margin_type": "iqr",
+        "n_pairs": 10751,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.575187969924812,
+        "pooled_accuracy": 0.6352339317272813
+      },
+      {
+        "margin": 1.0,
+        "margin_type": "sd",
+        "n_pairs": 8232,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.5669642857142857,
+        "pooled_accuracy": 0.6423469387755102
+      },
+      {
+        "margin": 1.0,
+        "margin_type": "iqr",
+        "n_pairs": 6076,
+        "n_eligible_columns": 187,
+        "median_accuracy": 0.5916666666666667,
+        "pooled_accuracy": 0.6553159973666887
+      }
+    ]
   }
 }

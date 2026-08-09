@@ -3388,7 +3388,7 @@
     "new_model_confidence": "group-balanced empirical 90% intervals from leave-one-model-out sparse-probe and temporal residuals; unsupported columns abstain",
     "observations": 2122,
     "point_method": "logit + evaluation z-score + bias ALS rank=1 lambda=0.1",
-    "probe_compression_sha256": "843379ea52052f76c42122c083ce1ce6cbba64686ae2c60b2492aacff621fe35",
+    "probe_compression_sha256": "e2b69eebd9fd09c64ea080ede9f6dad4784dc89f7adc6a093aebd3874eb494ad",
     "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448"
   },
   "models": [

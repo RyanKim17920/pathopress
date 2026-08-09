@@ -2,7 +2,7 @@
   "default_visible_count": 5,
   "feasibility_allowlist_sha256": "da227c3127534c8fdb3cd91d34d40490aad109de739f19c8377ce6e2a16aa9be",
   "matrix_scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
-  "probe_compression_sha256": "843379ea52052f76c42122c083ce1ce6cbba64686ae2c60b2492aacff621fe35",
+  "probe_compression_sha256": "e2b69eebd9fd09c64ea080ede9f6dad4784dc89f7adc6a093aebd3874eb494ad",
   "probe_count": 10,
   "schema_version": "pathopress-static-starter-sets-v1",
   "sets": {

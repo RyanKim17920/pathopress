@@ -3,12 +3,12 @@
   "description": "Public PathoPress pathology benchmark score-matrix tables.",
   "exporter": {
     "implementation": "pathopress.public_data.build_public_export",
-    "implementation_sha256": "8a9a15066dac027c490422c7445d38ec117a05b6b397d28e2083d62a553cfed3",
+    "implementation_sha256": "90b907dfc81ca969d90ab26297431ceb59c1965e6b2dd457d1d4cfb453325503",
     "pandas_used": false,
-    "pandas_version": null,
+    "pandas_version": "3.0.5",
     "parquet_backend": "pyarrow",
     "pyarrow_version": "25.0.0",
-    "uv_lock_sha256": "404440988573e17d0a64671af23a331a54469500889b8da84edde4e082a25700"
+    "uv_lock_sha256": "a59bc71cdf51bfaf78fad5df67a52f114033e3d7350213e26de46d98e480fc43"
   },
   "files": [
     {
@@ -125,14 +125,14 @@
       "sha256": "aba2fb1952530c511428ab9b9111d8570fd2c2e9cb2751ea5aa3e8d13cbe6b5f"
     },
     {
-      "bytes": 42092,
+      "bytes": 42095,
       "path": "schema.json",
-      "sha256": "a4bfc08fee57e6d9f2f665b4d8ba3e703d48782348eea0bbb8aa4bc30284ce68"
+      "sha256": "10c7c3e395d31382cf305da6c75e2be8795a5f63b4224a67b152bb7727bc876a"
     },
     {
-      "bytes": 1951,
+      "bytes": 1954,
       "path": "metadata.json",
-      "sha256": "bea825b3cc12f04f6094f58366432f0d0bdd9e41a919fadffc1f5ed5e162fa39"
+      "sha256": "06b510c5255746ca32676e9820e3e7839a2bd2df298964611a2dc6c199c587a7"
     },
     {
       "bytes": 2965,
@@ -147,13 +147,13 @@
   ],
   "hf_table_schema_version": "pathopress-hf-table-schema-v1",
   "inputs": {
-    "exporter_implementation_sha256": "8a9a15066dac027c490422c7445d38ec117a05b6b397d28e2083d62a553cfed3",
+    "exporter_implementation_sha256": "90b907dfc81ca969d90ab26297431ceb59c1965e6b2dd457d1d4cfb453325503",
     "model_metadata_sha256": "10ff121ee4d5be607e601c82ff9225686075147f16d8c61b0cf37160a51524f4",
     "provenance_sha256": "7843d0ac84d4837bd864c1cf5da97d13f6a87c6fd2065b65e053f35238dd4668",
     "scores_sha256": "2cc398ddcd516c000a4ba299ecb0a1d4a07a1ad395421899418d2a479e159448",
     "suites_sha256": "879f842af930b31bbd1f5116fd357b22f2552be2b33459ec0ce3c49bb9270194",
     "tasks_sha256": "0c9f711767a51fee2563c7617b15a15a0244dac19207f33317580bc67ce21209",
-    "uv_lock_sha256": "404440988573e17d0a64671af23a331a54469500889b8da84edde4e082a25700"
+    "uv_lock_sha256": "a59bc71cdf51bfaf78fad5df67a52f114033e3d7350213e26de46d98e480fc43"
   },
   "paper_filter": {
     "accepted_audit_statuses": [

@@ -1,12 +1,12 @@
 {
   "exporter": {
     "implementation": "pathopress.public_data.build_public_export",
-    "implementation_sha256": "8a9a15066dac027c490422c7445d38ec117a05b6b397d28e2083d62a553cfed3",
+    "implementation_sha256": "90b907dfc81ca969d90ab26297431ceb59c1965e6b2dd457d1d4cfb453325503",
     "pandas_used": false,
-    "pandas_version": null,
+    "pandas_version": "3.0.5",
     "parquet_backend": "pyarrow",
     "pyarrow_version": "25.0.0",
-    "uv_lock_sha256": "404440988573e17d0a64671af23a331a54469500889b8da84edde4e082a25700"
+    "uv_lock_sha256": "a59bc71cdf51bfaf78fad5df67a52f114033e3d7350213e26de46d98e480fc43"
   },
   "pathology_adaptation": "BenchPress benchmark_id maps to PathoPress evaluation_id; normalized_score preserves direction on a 0-100 fit scale.",
   "schema_version": "pathopress-hf-table-schema-v1",
