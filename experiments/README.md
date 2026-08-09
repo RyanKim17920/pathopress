@@ -167,9 +167,47 @@ proxy, not measured compute, access, or licensing cost. The
 retrospective all-known scope, exact revealed probes, pathology rank-1
 adaptation, and absence of a current exhaustive-search claim. The
 [dual-objective table](../outputs/probe_dual_objective_rank1.csv) reports mean
-reported-score prediction on 18 held-out models using prefixes selected on 41
-training models. It includes exact revealed probes and supported hidden
+reported-score prediction under a leave-one-family-out protocol with 34
+family folds; all 59 models are held out exactly once, with 1 validation
+model per fold at the median (min 1, max 7) and 58 training models. It
+includes exact revealed probes and supported hidden
 predictions; no held-out `k=0` or random model-mean control is available.
+
+## Matched-cell LOFO comparison
+
+```bash
+PYTHONPATH=src python3 scripts/replay_lofo_matched_cells.py
+```
+
+Each probe-selection arm hides a different set of cells, so the per-arm MedAEs in
+[probe compression](probe_compression_rank1.json) and
+[legacy selection](probe_selection_results_rank1.json) use different denominators
+and are not directly comparable to one another. This replay re-derives the
+held-out per-cell predictions from the recorded LOFO probe sets and scores every
+arm on one matched cell set: per fold and per depth `k`, it excludes the union of
+the cells revealed by the greedy prefix and by all ten random repeats. At `k=4`
+that excludes 486 of 2,122 cells and leaves 1,636 matched.
+
+- [Matched-cell results](lofo_matched_cells_rank1.json) is the reproduction path
+  for every corrected LOFO number. At `k=4`: greedy 1.8781, `k=0` 2.6524, random
+  2.6013 under the median-over-340-fold-×-repeat-MedAEs convention and 2.6260
+  under median-of-fold-medians. The two random conventions differ at every `k`,
+  so any quoted random value must name its convention.
+- Paired per-fold results are the well-supported part: greedy beats `k=0` in 18 of
+  34 folds (Wilcoxon `p = 0.0088`) and random in 22 of 34 (`p = 0.0151`). The
+  bootstrap-over-folds 95% CI on the reduction is [2.8%, 58.7%] versus `k=0` and
+  [3.4%, 53.5%] versus random, so the 29.2% point estimate must not be quoted to
+  three significant figures.
+- Per-column skill is null: 86 of 174 scored columns (49.4%, CI [42.0%, 56.9%])
+  have a matched greedy `k=4` MedAE below their matched `k=0` MedAE. Including
+  all 187 columns gives 94/187 (50.3%, CI [43.3%, 57.2%]); 8 of the 12
+  noise-floor-excluded columns (`SKILL_NOISE_FLOOR_DISPERSION = 0.5`) are
+  positive, and 1 further column has no matched cells.
+- The `allowlist_arm_by_k` block records the 25-task negative result: at `k=4` on
+  its own 1,581 matched cells, allowlist greedy is 1.9951 against 1.7234 for
+  greedy over any candidate.
+- The artifact is hash-bound through `provenance`, which pins the score CSV, the
+  replay script, and the selection and compression artifacts it reads.
 
 ## Confidence and time
 

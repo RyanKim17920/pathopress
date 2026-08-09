@@ -35,30 +35,85 @@ and retrospective interpolation is not prospective clinical validation.
   repeated held-out prediction instances from 2,122 unique reported cells.
   Other scores from the same model may remain visible. The column-median
   baseline is 4.151756/2.400000 MAE/MedAE. Both raw and logit Soft-Impute
-  sweeps independently select rank 1.
+  sweeps independently select rank 1. Pathology per-column score dispersion
+  is approximately four times tighter than the upstream BenchPress LLM matrix
+  (median column SD 3.75 here versus 14.1 upstream; 69% of pathology columns
+  have SD below 5 versus roughly 4% upstream). A raw MedAE of 1.609 against
+  BenchPress's 4.6 therefore does not indicate a three-fold improvement: on a
+  scale-corrected error-to-dispersion basis the ratio is 0.43 here versus 0.33
+  upstream, meaning this port is modestly worse than upstream, not better.
 - The current 59×187 7-transform × 12-method comparison ran 343/343 configurations.
   The best MedAPE row is logit BenchReg at 1.9023, but it covers only 68.3% of
   held-out cells. Coverage is therefore part of every method result; a partial
   regression row does not replace the full-coverage selected predictor.
 - With the all-known BenchPress denominator, greedy rank-1 scorecard MedAE is
   1.397334 at five probes and 1.213706 at ten. Hidden-only values are 1.548536
-  and 1.493709. These are transductive reconstruction results, not estimates of
-  a new model's clinical utility.
-- The margin-5 ranking-aware greedy trajectory reaches 0.7321 pairwise accuracy
-  at five unrestricted probes and 0.8780 at ten. The 25-task pipeline-feasibility
-  proxy reaches 0.4000 at ten; it is not a measured cost set. No exhaustive
-  choose-five search has been run for the current 59×187 scores.
-- Prefixes selected on 41 training models predict the mean reported normalized
-  score of 18 held-out models. Median model-mean error for unrestricted probes
-  is 1.9039 at one probe, 0.7835 at five, and 0.8921 at ten; the 25-task proxy
-  is 1.2254/0.9247 at five/ten. These non-monotone held-out values include exact
-  revealed probes and supported hidden predictions. There is no committed
-  held-out `k=0` or random model-mean control.
-- The standalone ranking-preservation release is now derived from the current
-  compression artifact: at `k=10`, unrestricted all-known margin-5 pairwise
-  accuracy is 0.8780 versus a 0.6029 random-prefix median, and hidden-only
-  held-out-model accuracy is 0.7750. It supersedes the earlier-snapshot OOF
-  margin-sensitivity release.
+  and 1.493709. These values are computed from the full 59×187 matrix without
+  any model split, so they are unchanged by the LOFO rerun. They are transductive
+  reconstruction results, not estimates of a new model's clinical utility.
+- The ranking-aware greedy trajectory reaches 0.7321 pairwise accuracy at five
+  unrestricted probes and, at margin 5 normalized points (retaining 6,048 of
+  17,159 model pairs, 35%, across 148 of 187 columns), 0.878 at ten. The
+  unconditional figure at margin 0 — all 17,159 pairs and all 187 columns — is
+  0.679 greedy versus 0.552 random. Greedy exceeds the random baseline at every
+  tested margin (absolute 0–10 points, relative 0.25–1.0 × SD/IQR), including
+  relative margins that retain all 187 columns; that margin-invariant result is
+  the robust conclusion. The 25-task pipeline-feasibility proxy reaches 0.4000
+  at ten; it is not a measured cost set. No exhaustive choose-five search has
+  been run for the current 59×187 scores.
+- Under a leave-one-family-out (LOFO) protocol, all 59 models are held out
+  exactly once across 34 family folds. Median validation set size is 1 model
+  per fold (min 1, max 7); 58 training models per fold at the median. The three
+  arms are scored on **matched cells**: per fold and per depth k, the union of
+  the cells revealed by the greedy prefix and by all ten random repeats is
+  excluded, and every arm is scored on the identical remainder (486 of 2,122
+  cells excluded at four probes, 1,636 matched). At four probes greedy reaches
+  MedAE **1.8781**, the k=0 baseline **2.6524**, and the random control
+  **2.6013** (median over all 340 fold × repeat MedAEs; the median-of-fold-
+  medians convention gives 2.6260, and any quoted random value must name its
+  convention). Results are medians across 34 folds. Greedy beats k=0 in 18 of
+  34 folds (Wilcoxon p = 0.0088) and random in 22 of 34 (p = 0.0151); that
+  paired-fold result is the solid finding. The point-estimate reduction versus
+  k=0 is 29.2%, but the bootstrap-over-folds 95% CI is [2.8%, 58.7%] versus k=0
+  and [3.4%, 53.5%] versus random, so the effect size is not estimable at useful
+  precision and must not be quoted to three significant figures. Revealed probes
+  contribute exact zero-error cells only to the all-known denominator. Reproduce
+  with `scripts/replay_lofo_matched_cells.py`
+  ([artifact](experiments/lofo_matched_cells_rank1.json)).
+- Per-evaluation utility is **null**. On the corrected per-column,
+  leave-one-out, matched-cell measurement, **86 of 174 scored evaluation columns
+  (49.4%, bootstrap 95% CI [42.0%, 56.9%])** improve at four greedy probes over
+  their own k=0 baseline — indistinguishable from a coin flip. A column counts
+  positive when its matched greedy k=4 MedAE is below its matched k=0 MedAE for
+  that fold. Including all 187 columns gives 94/187 (50.3%, CI [43.3%, 57.2%]).
+  This supersedes and withdraws an earlier 58.9% figure, which divided a
+  matrix-wide numerator by a column-scoped denominator and mostly re-encoded each
+  column's dispersion.
+- The 25-task feasibility allowlist does not support a selection claim. On its
+  own matched set at four probes (1,581 cells) allowlist greedy is 1.9951 against
+  1.7234 for greedy over any candidate, and within the allowlist greedy (2.0404)
+  is no better than allowlist random (2.0109) under either aggregation
+  convention. This is a negative result.
+- The greedy selector optimizes `parity.median_absolute_error`, which scores
+  revealed probe cells as literal 0.0, so it partly rewards revealing cells that
+  would be predicted badly rather than informative ones. At four probes the
+  objective reads 1.5142 against the held-out 1.7994, about 15.9% optimistic.
+  This is a disclosed limitation; correcting it changes which probes are selected
+  and needs an ~8.7-hour rerun.
+- The standalone ranking-preservation release is derived from the current
+  compression artifact. At `k=10`, unrestricted all-known pairwise accuracy is
+  0.679 (greedy) versus 0.552 (random) when all 17,159 pairs are included
+  (margin 0). At the margin-5 threshold — which retains 6,048 of 17,159 pairs
+  (35%) across 148 of 187 columns because the median true score gap between
+  model pairs in this dataset is only 3.10 normalized points — the figures are
+  0.878 greedy versus 0.603 random. The all-known track uses the full 59×187
+  matrix and does not depend on any model split, so this value is byte-identical
+  before and after the LOFO rerun. Greedy beats random at every tested margin.
+  Hidden-only held-out-model accuracy at margin 5 is 0.804 under the LOFO
+  protocol (pairwise_n_pairs = 1 at k=10); the estimate is based on too few
+  independent pairs to support precise inference and should not be read as an
+  improvement over the prior single-split value. It supersedes the
+  earlier-snapshot OOF margin-sensitivity release.
 - The pinned BenchPress 3+12 confidence generator contract is reproduced with
   pathology rank 1, eight structural features, nested ridge/MLP risk selection,
   conformal intervals, and cross-fitted P(|error| <= 10 normalized points).
@@ -72,7 +127,9 @@ and retrospective interpolation is not prospective clinical validation.
   small retrospective release cohort, not external or prospective validation.
 
 Detailed protocol distinctions and remaining gaps are in
-[the parity note](docs/benchpress-parity.md).
+[the parity note](docs/benchpress-parity.md). A consolidated statement of
+scope, verified claims, and known limitations is in
+[docs/scope-and-claims.md](docs/scope-and-claims.md).
 
 ## Install and quick start
 
@@ -149,6 +206,7 @@ No build or download command performs deployment or upload.
 | Point estimates and rank | [imputations](outputs/imputations_rank1.csv), [bias-ALS CV](experiments/benchpress_style_results.json), [Soft-Impute sweep](experiments/soft_impute_rank_sweep_results.json) |
 | Full classical grid | [manifest](experiments/method_comparison/manifest.json), [results](experiments/method_comparison/results.json), [top table](experiments/method_comparison/top_methods.md) |
 | Probe compression | [selection](experiments/probe_selection_results_rank1.json), [compression](experiments/probe_compression_rank1.json), [top-30 pruning](experiments/probe_pruning_rank1_top30.json), [BenchPress-style hero](figures/pathopress_benchpress_hero_rank1.png), [task utility and held-out mean figure](figures/probe_dual_objective_rank1.png), [dual-objective table](outputs/probe_dual_objective_rank1.csv) |
+| Matched-cell LOFO comparison | [replay script](scripts/replay_lofo_matched_cells.py), [matched-cell results](experiments/lofo_matched_cells_rank1.json) |
 | Cost and feasibility evidence | [source-backed registry](data/evaluation_cost_evidence.json), [measured-burden contract](docs/budgeted-probe-selection.md), [current fail-closed preflight](experiments/budgeted_probe_selection_rank1.json) |
 | Ranking and time | [ranking](experiments/ranking_preservation_rank1.json), [temporal](experiments/temporal_deployment_rank1.json) |
 | Trust | [confidence](experiments/confidence_calibration_rank1.json), [existing-row intervals](experiments/deployment_confidence_rank1.json), [unseen-model intervals](experiments/new_model_confidence_rank1.json), [new-model method](docs/new-model-confidence.md) |
@@ -192,6 +250,7 @@ PYTHONPATH=src:experiments python3 experiments/build_probe_exhaustive_summary.py
   --cheap-run "$CHEAP_RUN" --pruned-run "$PRUNED_RUN" \
   --fast-equivalence experiments/probe_exhaustive_fast_equivalence_v2.json
 PYTHONPATH=src python3 experiments/run_ranking_preservation.py
+PYTHONPATH=src python3 scripts/replay_lofo_matched_cells.py
 PYTHONPATH=src python3 experiments/run_confidence_calibration.py
 PYTHONPATH=src python3 experiments/run_new_model_confidence.py
 PYTHONPATH=src python3 experiments/run_temporal_deployment.py
