@@ -29,6 +29,15 @@ After `pip install -e .` the same workflows are also reachable as
 
 ## Registry and input construction
 
+`fetch_sources.py` materializes the eight pinned upstream checkouts that
+`build_registry.py` reads, at the exact commits in `data/provenance.json`. It
+takes an optional destination (default `/tmp/pathopress_sources`), is idempotent,
+refuses anything that is not a full commit SHA, verifies every checkout and the
+committed `source_data` snapshot digests, and exits non-zero on drift.
+`--dry-run` resolves the pins without fetching; `--check` verifies an existing
+tree offline. Run it before `build_registry.py`, which records whichever commit
+it finds rather than enforcing the pin.
+
 `build_registry.py` is the sole producer of `data/scores.csv` and
 `data/provenance.json`; it imports every module in `scripts/evidence/` (by that
 exact import path, so `scripts/evidence/` must not move).

@@ -159,6 +159,36 @@ pathopress-download-release BASE_URL DESTINATION
 The long selection and compression sweeps are multi-hour jobs; see
 [experiments/README.md](experiments/README.md) before rerunning them.
 
+### Rebuilding `data/scores.csv` itself
+
+Everything above runs from the checked-in `data/scores.csv`. Rebuilding *that*
+file additionally needs the pinned upstream checkouts, which are not vendored
+here. Fetch them at the exact revisions recorded in `data/provenance.json`:
+
+```bash
+python3 scripts/fetch_sources.py --dry-run   # resolve all 8 pins, fetch nothing
+python3 scripts/fetch_sources.py             # ~150 MB into /tmp/pathopress_sources
+python3 scripts/build_registry.py --sources /tmp/pathopress_sources
+```
+
+`fetch_sources.py` takes an optional destination argument, defaults to the
+directory `build_registry.py --sources` defaults to, skips checkouts already at
+their pin, refuses any revision that is not a full 40-character commit SHA, and
+exits non-zero on a pin mismatch rather than continuing with a wrong source. It
+then verifies content, not just revisions: the five files vendored byte-exact
+under `source_data/pinned/` must match the fresh checkout, and the 18 committed
+`source_data/*.csv` snapshots must match the SHA-256 digests recorded in
+`data/provenance.json`. No credentials or Hugging Face token are
+needed, and no Git LFS payloads are downloaded. `--check` re-verifies an
+existing tree without touching the network.
+
+Run it before `build_registry.py`: the build records whichever commit it finds
+checked out, so it will not catch a drifted source on its own.
+
+What this does **not** cover: the `source_data/*.csv` snapshots are committed
+and hash-verified, but regenerating them from the original papers is not fully
+automated. See [Source snapshots](#source-snapshots) below.
+
 ## Pipeline
 
 ```mermaid
@@ -184,6 +214,44 @@ flowchart TD
     class SRC,SCORES,ART,PUB,EXP data
     class REG,SHARED,SEL,COMP,REPLAY,RANK,FIG,REL code
 ```
+
+## Source snapshots
+
+The registry has two kinds of input. The eight pinned repository checkouts are
+fully automatable — every pin in `data/provenance.json` was confirmed still
+fetchable at its exact commit from GitHub and Hugging Face, and
+`scripts/fetch_sources.py` materializes them end to end.
+
+The other kind is the 18 `source_data/*.csv` snapshots, which carry the scores
+extracted from papers, model cards, vendor reports, and one Nature Source Data
+spreadsheet. Those files are **committed and hash-verified**, so a rebuild of
+`data/scores.csv` never re-downloads a PDF. Regenerating the snapshots from
+their origins is a different matter, and is only partly automatable:
+
+- Retrievable and hashed: the arXiv e-print archives (EXAONE Path 2.5, THREADS,
+  H0-mini/UNI2-h, Virchow, Virchow2, UNI) and the PathoROB Nature Source Data
+  `.xlsx`. `data/provenance.json` records a URL and a SHA-256 for each; all were
+  confirmed to still return HTTP 200.
+- Retrievable but unhashed: the H-optimus-1 vendor news page, which is a live
+  marketing page with no archival copy or content hash. It can change or vanish
+  without notice.
+- **Not retrievable from the record**: the Group B, Wave E, and Wave F snapshots
+  (GenBio PathFM, Midnight MICCAI 2025, OpenMidnight, CONCH, CONCH1.5/TITAN,
+  Phikon family, CTransPath, Hibou, MUSK, GPFM) have snapshot SHA-256 digests in
+  `data/provenance.json` but **no source URL**. Their extraction cannot be
+  replayed from this repository alone; the committed CSVs are the authoritative
+  record. The `source_data/*_source_audit.md` files document what was taken from
+  where in prose.
+- `scripts/extract_group_b_official_scores.py` also reads an OpenMidnight
+  checkout that `data/provenance.json` does not pin. `fetch_sources.py
+  --include-extractor-sources` fetches it at the revision this project used,
+  which is recorded in the script rather than in provenance.
+- The extractors are hand-tuned parsers written against specific table layouts.
+  Even where a source is retrievable, they are not a general-purpose pipeline.
+
+In short: `data/scores.csv` is reproducible from a clean machine; the
+paper-derived snapshots feeding it are auditable but not, in every case,
+re-derivable.
 
 ## Documentation and licensing
 

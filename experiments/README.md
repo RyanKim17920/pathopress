@@ -9,6 +9,18 @@ python3 -m pip install -e '.[research]'
 python3 -m pip install -e '.[research,mlp]'
 ```
 
+Every experiment below starts from the checked-in `data/scores.csv` and needs no
+upstream sources. To rebuild `data/scores.csv` first — the only step that reaches
+the network — fetch the pinned checkouts, then run the registry build:
+
+```bash
+python3 scripts/fetch_sources.py                 # pins from data/provenance.json
+python3 scripts/build_registry.py --sources /tmp/pathopress_sources
+```
+
+See the README's [Source snapshots](../README.md#source-snapshots) section for
+which upstream inputs are re-derivable and which are only auditable.
+
 ## Artifact storage forms
 
 Two artifacts are stored in a compressed-but-lossless form so the repository
