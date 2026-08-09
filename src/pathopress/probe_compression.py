@@ -23,15 +23,108 @@ from pathopress.ranking import pairwise_ranking_accuracy, top_fraction_recovery
 # own explicit margin (5 normalized-score points in the public experiment).
 SCORE_RECONSTRUCTION_PAIRWISE_DIAGNOSTIC_MARGIN = 2.0
 
+# Consistency constant turning a median absolute deviation into a robust
+# standard-deviation estimate.  Mirrors ``pathopress.probes.MAD_TO_SD_SCALE``;
+# the observed columns hold a median of only ~7 models, where a sample SD is
+# high-variance and outlier-dominated.
+MAD_TO_SD_SCALE = 1.4826
+
 
 @dataclass(frozen=True)
 class ProbePredictions:
+    """Predictions plus the dispersion estimates their metrics normalize by.
+
+    ``column_sd`` is the legacy per-column sample SD.  In the all-known track
+    it is computed over the full matrix, which includes each target cell's own
+    value even though that value is hidden while the cell is being predicted;
+    in the held-out track it is computed over context rows only.  The two are
+    therefore **not** comparable, and the ``medae_normalized*`` keys derived
+    from ``column_sd`` are retained only so previously published artifacts stay
+    reproducible.
+
+    ``column_dispersion_by_cell`` (FIX 2) is the leakage-free replacement and
+    has the shape of the matrix.  For every cell it holds the robust dispersion
+    (``MAD * 1.4826``) of that cell's column computed from exactly the rows a
+    predictor legitimately sees when that cell is its target -- the target row's
+    own observation is never included on either track.  The ``*_loo`` metric
+    keys are derived from it and are comparable across tracks.
+    """
+
     probe_indices: tuple[int, ...]
     actual: np.ndarray
     predicted: np.ndarray
     target_mask: np.ndarray
     revealed_mask: np.ndarray
     heldout_mask: np.ndarray
+    column_sd: np.ndarray | None = None
+    column_dispersion_by_cell: np.ndarray | None = None
+
+
+# Leave-target-out dispersion depends only on the score matrix, which greedy
+# selection holds fixed across thousands of candidate probe sets.  A tiny
+# content-keyed cache keeps that from being recomputed every call.
+_DISPERSION_CACHE: dict[tuple[tuple[int, ...], bytes], np.ndarray] = {}
+_DISPERSION_CACHE_MAX = 8
+
+
+def _robust_dispersion(values: np.ndarray) -> float:
+    """``MAD * 1.4826`` over finite values; NaN when fewer than two remain."""
+
+    finite = np.asarray(values, dtype=float)
+    finite = finite[np.isfinite(finite)]
+    if finite.size < 2:
+        return float("nan")
+    median = float(np.median(finite))
+    return MAD_TO_SD_SCALE * float(np.median(np.abs(finite - median)))
+
+
+def _leave_target_out_dispersion(actual: np.ndarray) -> np.ndarray:
+    """All-known dispersion: per cell, its column excluding that cell's row.
+
+    In the all-known protocol every other row stays fully visible while one
+    target row is masked, so the legitimately-available dispersion estimate for
+    cell ``(r, c)`` is column ``c`` over all observed rows except ``r``.
+
+    Depends only on ``actual``, which greedy selection holds fixed across every
+    candidate probe set, so the result is memoized on the matrix contents.
+    """
+
+    key = (actual.shape, actual.tobytes())
+    cached = _DISPERSION_CACHE.get(key)
+    if cached is not None:
+        return cached
+
+    dispersion = np.full(actual.shape, np.nan, dtype=float)
+    for col in range(actual.shape[1]):
+        column = actual[:, col]
+        observed = np.isfinite(column)
+        # Rows with no observation in this column drop nothing when removed.
+        missing_value = _robust_dispersion(column)
+        dispersion[~observed, col] = missing_value
+        for row in np.flatnonzero(observed):
+            dispersion[row, col] = _robust_dispersion(np.delete(column, row))
+
+    if len(_DISPERSION_CACHE) >= _DISPERSION_CACHE_MAX:
+        _DISPERSION_CACHE.clear()
+    _DISPERSION_CACHE[key] = dispersion
+    return dispersion
+
+
+def _context_dispersion(actual: np.ndarray, context: Sequence[int]) -> np.ndarray:
+    """Held-out dispersion: per cell, its column over context rows only.
+
+    Target rows are entirely unseen on this track, so excluding all of them --
+    not merely the one being predicted -- is what the protocol makes available.
+    The result is broadcast to matrix shape so both tracks expose the same
+    per-cell interface.
+    """
+
+    dispersion = np.full(actual.shape, np.nan, dtype=float)
+    if not context:
+        return dispersion
+    for col in range(actual.shape[1]):
+        dispersion[:, col] = _robust_dispersion(actual[list(context), col])
+    return dispersion
 
 
 def _indices(values: Sequence[int], limit: int, label: str) -> tuple[int, ...]:
@@ -50,7 +143,12 @@ def predict_all_known(
     rank: int = 1,
     regularization: float = 0.1,
 ) -> ProbePredictions:
-    """Predict every observed row in turn with all other rows visible."""
+    """Predict every observed row in turn with all other rows visible.
+
+    Emits both dispersion estimates: the legacy full-matrix ``column_sd`` and
+    the leakage-free ``column_dispersion_by_cell``, which drops each target
+    cell's own row from its column before estimating dispersion.
+    """
 
     actual = np.asarray(matrix, dtype=float)
     if actual.ndim != 2:
@@ -76,7 +174,24 @@ def predict_all_known(
             allow_empty_rows=True,
         )
         predicted[row, hidden] = completed[row, hidden]
-    return ProbePredictions(probes, actual, predicted, observed, revealed, heldout)
+    # Legacy per-column SD over the full observed matrix.  This DOES include
+    # each target cell's own value, which is hidden while that cell is being
+    # predicted, so it is retained for artifact compatibility only.
+    column_sd = np.asarray([
+        float(np.std(actual[np.isfinite(actual[:, c]), c], ddof=0))
+        if np.isfinite(actual[:, c]).sum() > 1 else 0.0
+        for c in range(actual.shape[1])
+    ])
+    return ProbePredictions(
+        probes,
+        actual,
+        predicted,
+        observed,
+        revealed,
+        heldout,
+        column_sd,
+        _leave_target_out_dispersion(actual),
+    )
 
 
 def predict_heldout_models(
@@ -121,7 +236,33 @@ def predict_heldout_models(
             allow_empty_rows=True,
         )
         predicted[row, hidden] = completed[row, hidden]
-    return ProbePredictions(probes, actual, predicted, target_mask, revealed, heldout)
+
+    # Column SD from context rows only (leakage-safe: target rows are held-out
+    # models, so we must NOT include their observations in the column
+    # dispersion estimate.  Context rows are the training-set models that are
+    # genuinely available during probe selection and prediction.)
+    col_sd = np.full(actual.shape[1], np.nan)
+    for col in range(actual.shape[1]):
+        if context:
+            col_vals = actual[list(context), col]
+            col_finite = col_vals[np.isfinite(col_vals)]
+        else:
+            col_finite = np.array([])
+        if col_finite.size > 1:
+            col_sd[col] = float(np.std(col_finite, ddof=0))
+        elif col_finite.size == 1:
+            col_sd[col] = 0.0
+
+    return ProbePredictions(
+        probes,
+        actual,
+        predicted,
+        target_mask,
+        revealed,
+        heldout,
+        col_sd,
+        _context_dispersion(actual, context),
+    )
 
 
 def score_predictions(
@@ -142,6 +283,16 @@ def score_predictions(
     artifact compatibility.  Its default value of 2 is only an ancillary
     diagnostic on score-reconstruction curves.  Ranking-aware selection must
     pass its objective margin explicitly; the public ranking contract uses 5.
+
+    Two families of dispersion-normalized keys are emitted.  ``medae_normalized``
+    and ``medae_normalized_pooled`` divide by the legacy per-column sample SD;
+    on the all-known track that SD is computed over the full matrix and so
+    includes the very values being predicted, while on the held-out track it is
+    computed over context rows only.  Those two keys are therefore NOT
+    comparable across tracks and exist for artifact compatibility.
+    ``medae_normalized_loo`` and ``medae_normalized_pooled_loo`` divide by
+    ``column_dispersion_by_cell``, which excludes each target cell's own row on
+    both tracks, and are the comparable pair.
     """
 
     target = result.target_mask
@@ -188,7 +339,69 @@ def score_predictions(
         ranking_heldout,
         top_fraction=top_fraction,
     )
-    return {
+    # Dispersion-normalized metrics (FIX 2).  Uses column_sd from the
+    # ProbePredictions artifact.  column_sd is computed from the observed
+    # context matrix only — for all_known that's the full matrix, for
+    # heldout models that's the context rows only.  Both keys are omitted
+    # entirely when no finite value is available to prevent NaN from leaking
+    # into JSON-serialized artifacts.
+    medae_normalized = None
+    medae_normalized_pooled = None
+    if result.column_sd is not None:
+        # Per-cell normalized error: |pred - actual| / column_sd for that column.
+        norm_errors = np.full_like(errors, np.nan)
+        for col in range(errors.shape[1]):
+            sd = result.column_sd[col]
+            if np.isfinite(sd) and sd > 0:
+                norm_errors[:, col] = errors[:, col] / sd
+        # Per-cell pooled: median of all finite normalized errors over target cells.
+        flat_norm = norm_errors[target]
+        finite_flat = flat_norm[np.isfinite(flat_norm)]
+        if finite_flat.size:
+            medae_normalized = float(np.median(finite_flat))
+        # Per-column pooled: median over columns of (per-column medae / column_sd).
+        col_medae_norms: list[float] = []
+        for col in range(errors.shape[1]):
+            col_target = target[:, col]
+            if col_target.any():
+                col_medae = float(np.median(errors[col_target, col]))
+                sd = result.column_sd[col]
+                if np.isfinite(sd) and sd > 0:
+                    col_medae_norms.append(col_medae / sd)
+        if col_medae_norms:
+            medae_normalized_pooled = float(np.median(col_medae_norms))
+
+    # Leakage-free dispersion normalization (FIX 2).  ``column_dispersion_by_cell``
+    # never includes a target cell's own row, on either track, so the ``*_loo``
+    # keys ARE comparable between all-known and held-out runs — unlike the
+    # ``medae_normalized*`` keys above, whose all-known denominator is computed
+    # over the full matrix including the very cells being predicted.
+    medae_normalized_loo = None
+    medae_normalized_pooled_loo = None
+    if result.column_dispersion_by_cell is not None:
+        dispersion = np.asarray(result.column_dispersion_by_cell, dtype=float)
+        if dispersion.shape != errors.shape:
+            raise ValueError("column_dispersion_by_cell must have the matrix shape")
+        usable = target & np.isfinite(dispersion) & (dispersion > 0)
+        if usable.any():
+            medae_normalized_loo = float(
+                np.median(errors[usable] / dispersion[usable])
+            )
+            col_loo_norms: list[float] = []
+            for col in range(errors.shape[1]):
+                col_usable = usable[:, col]
+                if col_usable.any():
+                    col_loo_norms.append(
+                        float(
+                            np.median(
+                                errors[col_usable, col] / dispersion[col_usable, col]
+                            )
+                        )
+                    )
+            if col_loo_norms:
+                medae_normalized_pooled_loo = float(np.median(col_loo_norms))
+
+    return_dict: dict[str, float | int | str] = {
         "n_target": int(target.sum()),
         "n_revealed": int(result.revealed_mask.sum()),
         "n_hidden": int(result.heldout_mask.sum()),
@@ -207,6 +420,17 @@ def score_predictions(
         "top_median_recovery": top.median_recovery,
         "top_pooled_recovery": top.pooled_recovery,
     }
+    if medae_normalized is not None and np.isfinite(medae_normalized):
+        return_dict["medae_normalized"] = medae_normalized
+    if medae_normalized_pooled is not None and np.isfinite(medae_normalized_pooled):
+        return_dict["medae_normalized_pooled"] = medae_normalized_pooled
+    if medae_normalized_loo is not None and np.isfinite(medae_normalized_loo):
+        return_dict["medae_normalized_loo"] = medae_normalized_loo
+    if medae_normalized_pooled_loo is not None and np.isfinite(
+        medae_normalized_pooled_loo
+    ):
+        return_dict["medae_normalized_pooled_loo"] = medae_normalized_pooled_loo
+    return return_dict
 
 
 def objective_value(metrics: dict[str, float | int | str | None], objective: str) -> float:

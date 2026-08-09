@@ -42,6 +42,10 @@ from pathopress.probe_compression import (  # noqa: E402
     predict_heldout_models,
     score_predictions,
 )
+from pathopress.probes import (  # noqa: E402
+    family_blocked_model_split,
+    random_model_split,
+)
 
 
 def _sha256(path: Path) -> str:
@@ -130,6 +134,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--max-subsets", type=int, default=200_000)
     parser.add_argument("--random-repeats", type=int, default=10)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument(
+        "--split-mode",
+        choices=("random", "family_blocked"),
+        default="family_blocked",
+        help="Model split strategy for held-out validation (default: family_blocked)",
+    )
     parser.add_argument("--missing-policy", choices=("error", "exclude"), default="exclude")
     parser.add_argument(
         "--one-per-task-identity", action=argparse.BooleanOptionalAction, default=True
@@ -217,11 +227,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         )
         return common
 
-    rng = np.random.RandomState(args.seed)
-    model_order = rng.permutation(len(models))
-    n_train = min(max(1, round(0.7 * len(models))), len(models) - 1)
-    train_indices = tuple(sorted(int(value) for value in model_order[:n_train]))
-    validation_indices = tuple(sorted(int(value) for value in model_order[n_train:]))
+    if args.split_mode == "family_blocked":
+        model_metadata_path = ROOT / "data" / "model_metadata.csv"
+        train_indices, validation_indices, split_info = family_blocked_model_split(
+            models, model_metadata_path=model_metadata_path, seed=args.seed
+        )
+    else:
+        train_indices, validation_indices, split_info = random_model_split(
+            models, seed=args.seed
+        )
     index_by_id = {evaluation_id: index for index, evaluation_id in enumerate(evaluations)}
 
     with ProcessPoolExecutor(max_workers=args.workers) as executor:
@@ -299,6 +313,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     common.update({
         "split": {
             "seed": args.seed,
+            "split_mode": split_info.get("split_mode", args.split_mode),
             "train_model_ids": [models[index] for index in train_indices],
             "validation_model_ids": [models[index] for index in validation_indices],
         },

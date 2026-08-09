@@ -238,8 +238,9 @@ def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
 
     exact_k = list(range(1, 11))
 
-    def has_exact_k(rows: list[dict[str, Any]]) -> bool:
-        return [row.get("k") for row in rows] == exact_k
+    def has_exact_k(rows: list[dict[str, Any]], expected_k: list[int] | None = None) -> bool:
+        target = expected_k if expected_k is not None else exact_k
+        return [row.get("k") for row in rows] == target
 
     def has_exact_random_grid(rows: list[dict[str, Any]], max_k: int = 10) -> bool:
         expected_k = list(range(1, max_k + 1))
@@ -247,6 +248,12 @@ def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
             [row.get("k") for row in rows if row.get("repeat") == repeat] == expected_k
             for repeat in range(10)
         )
+
+    is_lofo = payload.get("split", {}).get("split_mode") == "leave_one_family_out"
+    heldout_max_k = (
+        config.get("lofo_max_probes", 10) if is_lofo else 10
+    )
+    heldout_exact_k = list(range(1, heldout_max_k + 1))
 
     for mode, expected_ids in expected_candidates.items():
         curve = curves.get(mode, {})
@@ -256,28 +263,108 @@ def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
             f"{mode}_candidate_ids_mismatch_current_inputs",
         )
         expected = len(expected_ids)
-        for key in (
-            "all_known_greedy_medae", "heldout_greedy_medae",
-            "all_known_greedy_medape", "heldout_greedy_medape",
-        ):
+        for key in ("all_known_greedy_medae", "all_known_greedy_medape"):
             require(has_exact_k(curve.get(key, [])), f"{mode}_{key}_requires_exact_k1_10")
+
+        # Under LOFO, held-out curves live per-fold, not at top level.
+        if is_lofo:
+            lofo_folds = curve.get("lofo", {})
+            _fold_keys = sorted(lofo_folds.keys(), key=lambda x: int(x))
+            # Top-level held-out keys must NOT exist under LOFO
+            for key in ("heldout_greedy_medae", "heldout_greedy_medape",
+                        "heldout_random"):
+                require(
+                    key not in curve,
+                    f"{mode}_{key}_must_not_exist_at_top_level_in_lofo",
+                )
+            # Validate each fold's held-out curves
+            for _fk in _fold_keys:
+                _fold_curve = lofo_folds[_fk].get(mode, {})
+                for key in ("heldout_greedy_medae", "heldout_greedy_medape"):
+                    require(
+                        has_exact_k(_fold_curve.get(key, []), heldout_exact_k),
+                        f"{mode}_{key}_lofo_fold{_fk}_requires_exact_k1_{heldout_max_k}",
+                    )
+                require(
+                    has_exact_random_grid(
+                        _fold_curve.get("heldout_random", []), heldout_max_k,
+                    ),
+                    f"{mode}_heldout_random_lofo_fold{_fk}_requires_exact_10x_k1_{heldout_max_k}",
+                )
+        else:
+            for key in ("heldout_greedy_medae", "heldout_greedy_medape"):
+                require(
+                    has_exact_k(curve.get(key, []), heldout_exact_k),
+                    f"{mode}_{key}_requires_exact_k1_{heldout_max_k}",
+                )
+            require(
+                has_exact_random_grid(curve.get("heldout_random", []), heldout_max_k),
+                f"{mode}_heldout_random_requires_exact_10x_k1_{heldout_max_k}",
+            )
+
         all_known_max = min(
             expected, int(config.get("all_known_random_curve_limit", 10))
         )
-        heldout_max = min(
-            expected, int(config.get("heldout_random_curve_limit", 10))
-        )
-        require(
-            has_exact_random_grid(curve.get("all_known_random", []), all_known_max),
-            f"{mode}_all_known_random_requires_exact_10x_k1_{all_known_max}",
-        )
-        require(
-            has_exact_random_grid(curve.get("heldout_random", []), heldout_max),
-            f"{mode}_heldout_random_requires_exact_10x_k1_{heldout_max}",
-        )
+        # In LOFO mode, all_known_random is only computed for any_candidate
+        # (fold-invariant; identical across all 34 folds).  Allowlist modes
+        # do not have it, so skip the check for non-any_candidate LOFO modes.
+        if is_lofo and mode != "any_candidate":
+            # Validate the per-fold copy of all_known_random for allowlist
+            # (absent by design—no failure expected, but catches future regressions).
+            lofo_folds = curve.get("lofo", {})
+            if lofo_folds:
+                _fold_keys = sorted(lofo_folds.keys(), key=lambda x: int(x))
+                for _fk in _fold_keys:
+                    _fold_curve = lofo_folds[_fk].get(mode, {})
+                    require(
+                        "all_known_random" not in _fold_curve,
+                        f"{mode}_all_known_random_should_not_exist_in_lofo_fold{_fk}",
+                    )
+        elif not is_lofo or mode == "any_candidate":
+            require(
+                has_exact_random_grid(curve.get("all_known_random", []), all_known_max),
+                f"{mode}_all_known_random_requires_exact_10x_k1_{all_known_max}",
+            )
+        # Provenance check: reject top-level held-out curves that are
+        # byte-identical to any single fold's curve.  This is exactly the
+        # failure mode that lets a fold-0 backfill slip past has_exact_k.
+        if is_lofo:
+            lofo_folds = curve.get("lofo", {})
+            _fold_keys = sorted(lofo_folds.keys(), key=lambda x: int(x))
+            for _hk in ("heldout_greedy_medae", "heldout_greedy_medape",
+                        "heldout_random"):
+                _top = curve.get(_hk)
+                if _top is not None:
+                    for _fk in _fold_keys:
+                        _fc = lofo_folds[_fk].get(mode, {})
+                        _fold_val = _fc.get(_hk)
+                        if json.dumps(_top, sort_keys=True) == json.dumps(
+                                _fold_val, sort_keys=True
+                        ):
+                            require(
+                                False,
+                                f"{mode}_{_hk}_is_byte_identical_to_lofo_fold{_fk}",
+                            )
         require(rank.get("margin") == 5.0, f"{mode}_ranking_margin5")
         require(has_exact_k(rank.get("all_known_greedy", [])), f"{mode}_ranking_all_known_exact_k1_10")
-        require(has_exact_k(rank.get("heldout_greedy", [])), f"{mode}_ranking_holdout_exact_k1_10")
+        if is_lofo:
+            # LOFO: ranking heldout_greedy goes to full k=10 (all_known_greedy depth),
+            # not limited by lofo_max_probes (which only limits score curves).
+            if "heldout_greedy" in rank:
+                require(
+                    has_exact_k(rank["heldout_greedy"]),
+                    f"{mode}_ranking_holdout_exact_k1_10",
+                )
+            elif "lofo_folds" in rank:
+                fold_ok = all(
+                    has_exact_k(f.get("heldout_greedy", []))
+                    for f in rank["lofo_folds"]
+                )
+                require(fold_ok, f"{mode}_ranking_holdout_exact_k1_10")
+            else:
+                require(False, f"{mode}_ranking_holdout_missing")
+        else:
+            require(has_exact_k(rank.get("heldout_greedy", [])), f"{mode}_ranking_holdout_exact_k1_10")
         require(
             has_exact_random_grid(
                 rank.get("all_known_random", []),

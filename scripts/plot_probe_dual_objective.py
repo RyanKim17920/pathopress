@@ -173,47 +173,134 @@ def build_heldout_mean_records(
         raise ValueError("compression artifact does not declare training-only probe selection")
 
     split = payload["split"]
-    train_indices = tuple(int(value) for value in split["train_model_indices"])
-    validation_indices = tuple(int(value) for value in split["validation_model_indices"])
-    n_train = len(train_indices)
-    n_validation = len(validation_indices)
+    split_mode = split.get("split_mode", "")
+    n_folds = split.get("n_folds", 1)
 
-    grouped: dict[tuple[str, int], list[dict[str, str]]] = defaultdict(list)
+    # Group raw CSV rows by (candidate_mode, k, fold)
+    grouped: dict[tuple[str, int, object], list[dict[str, str]]] = defaultdict(list)
     for row in _read_csv(raw_path):
         if (
             row["protocol"] == "heldout"
             and row["method"] == "greedy"
             and row["selection_objective"] == "medae"
         ):
-            grouped[(row["candidate_mode"], int(row["k"]))].append(row)
-
-    expected_validation_ids = split["validation_model_ids"]
+            fold_key = row.get("fold")
+            grouped[(row["candidate_mode"], int(row["k"]), fold_key)].append(row)
 
     records: list[dict[str, Any]] = []
-    for mode in MODE_LABELS:
-        steps = payload["curves"][mode]["heldout_greedy_medae"]
-        for step in steps:
-            k = int(step["k"])
-            rows = grouped.get((mode, k), [])
-            row_models = {row["model_id"] for row in rows}
-            if row_models != set(expected_validation_ids):
-                raise ValueError(
-                    f"held-out raw rows for {mode} k={k} do not cover the declared split"
+
+    if split_mode == "leave_one_family_out":
+        # LOFO mode: aggregate across all folds
+        lofo_folds_data = split.get("per_fold", [])
+        all_train_sizes = [f.get("n_train_models", 0) for f in lofo_folds_data]
+        all_val_sizes = [f.get("n_validation_models", 0) for f in lofo_folds_data]
+        median_train = int(float(np.median(all_train_sizes))) if all_train_sizes else 0
+        median_val = int(float(np.median(all_val_sizes))) if all_val_sizes else 0
+        n_lofo_folds = len(lofo_folds_data)
+        total_heldout = sum(all_val_sizes)
+
+        for mode in MODE_LABELS:
+            # Collect all k values across folds
+            mode_keys = [(k, fl) for (m, k, fl) in grouped if m == mode]
+            mode_keys = list({k for k, _ in mode_keys})
+            mode_keys.sort()
+            for k in mode_keys:
+                # Aggregate all held-out model errors across folds at this k
+                all_errors: list[float] = []
+                probe_ids: list[str] = []
+                added_id: str = ""
+                for fl in grouped[(mode, k, None)] if (mode, k, None) in grouped else []:
+                    # fold=None rows are non-LOFO; skip
+                    pass
+                # Collect from per-fold groups
+                fold_rows = [
+                    rows for (m, fk, fl), rows in grouped.items()
+                    if m == mode and fk == k
+                ]
+                all_fold_errors = []
+                for rows in fold_rows:
+                    errs = _model_mean_errors(rows)
+                    all_fold_errors.extend(errs.tolist())
+
+                if all_fold_errors:
+                    all_errors_arr = np.array(all_fold_errors, dtype=float)
+                    # Probe identity: aggregated across LOFO folds; use first fold as exemplar
+                    _fold_heldout = payload["curves"][mode]["lofo"]["0"][mode].get(
+                        "heldout_greedy_medae", []
+                    )
+                    _exemplar = next(
+                        (s for s in _fold_heldout if int(s.get("k", -1)) == k), {}
+                    )
+                    records.append({
+                        "protocol": "heldout_model",
+                        "candidate_mode": mode,
+                        "candidate_label": MODE_LABELS[mode],
+                        "k": k,
+                        "added_evaluation_id": _exemplar.get(
+                            "added_evaluation_id",
+                            f"<fold-0 exemplar; {n_lofo_folds} LOFO folds aggregated>",
+                        ),
+                        "probe_ids": json.dumps(
+                            _exemplar.get("probe_ids", []),
+                            separators=(",", ":"),
+                        ),
+                        "model_average_medae": float(np.median(all_errors_arr)),
+                        "model_average_q25": float(np.quantile(all_errors_arr, 0.25)),
+                        "model_average_q75": float(np.quantile(all_errors_arr, 0.75)),
+                        "model_average_mae": float(np.mean(all_errors_arr)),
+                        "n_train_models": median_train,
+                        "n_heldout_models": median_val,
+                        "selection_objective": "training_scorecard_medae",
+                        "selection_scope": "nested prefixes selected per LOFO fold",
+                        "target": "mean of each held-out model's reported normalized scores",
+                        "random_control_available": False,
+                    })
+
+        n_train = median_train
+        n_validation = median_val
+    else:
+        # Single-split mode: original logic
+        train_indices = tuple(int(value) for value in split["train_model_indices"])
+        validation_indices = tuple(int(value) for value in split["validation_model_indices"])
+        n_train = len(train_indices)
+        n_validation = len(validation_indices)
+        n_folds_total = 1
+        total_heldout = n_validation
+
+        simple_grouped: dict[tuple[str, int], list[dict[str, str]]] = defaultdict(list)
+        for (cm, k, fl), rows in grouped.items():
+            simple_grouped[(cm, k)].extend(rows)
+
+        expected_validation_ids = split["validation_model_ids"]
+
+        for mode in MODE_LABELS:
+            steps = payload["curves"][mode]["heldout_greedy_medae"]
+            for step in steps:
+                k = int(step["k"])
+                rows = simple_grouped.get((mode, k), [])
+                row_models = {row["model_id"] for row in rows}
+                if row_models != set(expected_validation_ids):
+                    raise ValueError(
+                        f"held-out raw rows for {mode} k={k} do not cover the declared split"
+                    )
+                records.append(
+                    _record(
+                        mode=mode,
+                        k=k,
+                        errors=_model_mean_errors(rows),
+                        probe_ids=list(step["probe_ids"]),
+                        added_evaluation_id=step["added_evaluation_id"],
+                        n_train=n_train,
+                        n_validation=n_validation,
+                    )
                 )
-            records.append(
-                _record(
-                    mode=mode,
-                    k=k,
-                    errors=_model_mean_errors(rows),
-                    probe_ids=list(step["probe_ids"]),
-                    added_evaluation_id=step["added_evaluation_id"],
-                    n_train=n_train,
-                    n_validation=n_validation,
-                )
-            )
+
     return records, {
         "n_train": n_train,
         "n_validation": n_validation,
+        "split_mode": split_mode,
+        "n_folds": n_folds if split_mode == "leave_one_family_out" else 0,
+        "total_heldout": total_heldout if split_mode == "leave_one_family_out" else 0,
         "matrix_shape": payload["configuration"]["matrix_shape"],
         "zero_probe_available": False,
         "zero_probe_missing_reason": (
@@ -233,6 +320,21 @@ def write_records(path: Path, records: list[dict[str, Any]]) -> None:
         writer = csv.DictWriter(handle, fieldnames=list(records[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(records)
+
+
+def _caption_text(metadata: dict[str, Any]) -> str:
+    """Build the prediction-subplot caption from metadata."""
+    if metadata.get("split_mode") == "leave_one_family_out":
+        return (
+            f"Nested prefixes, leave-one-family-out over "
+            f"{metadata['n_folds']} family folds; "
+            f"{metadata['total_heldout']} held-out model instances "
+            f"(median {metadata['n_validation']} validation model/fold)"
+        )
+    return (
+        f"Nested prefixes: {metadata['n_train']} selection models → "
+        f"{metadata['n_validation']} held-out models"
+    )
 
 
 def build_figure(
@@ -327,8 +429,7 @@ def build_figure(
     prediction_ax.text(
         0,
         1.01,
-        f"Nested prefixes: {metadata['n_train']} selection models → "
-        f"{metadata['n_validation']} held-out models",
+        _caption_text(metadata),
         transform=prediction_ax.transAxes,
         fontsize=9.1,
         color=CHARCOAL,

@@ -81,6 +81,10 @@ class ProbeCompressionTests(unittest.TestCase):
             "repeat", "k", "model_id", "evaluation_id",
             "actual_normalized_score", "predicted_normalized_score",
             "is_revealed_probe_cell", "is_hidden_prediction",
+            # Every raw row now carries the LOFO fold it came from (None for
+            # the fold-invariant all-known track), matching the field list the
+            # runner declares for the random raw CSV.
+            "fold",
         ]
         output = io.StringIO()
         writer = csv.DictWriter(output, fieldnames=fields, lineterminator="\n")
@@ -97,6 +101,8 @@ class ProbeCompressionTests(unittest.TestCase):
         self.assertEqual(len(rows), 6 * MATRIX.size)
         self.assertEqual({int(row["k"]) for row in rows}, {1, 2, 3})
         self.assertEqual({row["method"] for row in rows}, {"random_prefix"})
+        self.assertEqual({row["protocol"] for row in rows}, {"all_known"})
+        self.assertEqual({row["fold"] for row in rows}, {""})
 
     def test_all_known_reveals_probes_exactly_and_scores_medae_medape(self) -> None:
         predictions = predict_all_known(MATRIX, [1], rank=1)

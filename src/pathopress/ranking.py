@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import math
-from typing import Sequence
+from typing import Literal, Sequence
 
 import numpy as np
 
@@ -94,6 +94,9 @@ def _validate_inputs(
 def _column_margins(
     margin: float | Sequence[float] | np.ndarray,
     n_columns: int,
+    *,
+    margin_relative_to: Literal["none", "sd", "iqr"] = "none",
+    actual_array: np.ndarray | None = None,
 ) -> np.ndarray:
     if np.isscalar(margin):
         margins = np.full(n_columns, float(margin), dtype=float)
@@ -104,6 +107,25 @@ def _column_margins(
                 "per-column margin must be a one-dimensional sequence with "
                 f"length {n_columns}"
             )
+    if margin_relative_to != "none":
+        if actual_array is None:
+            raise ValueError(
+                "actual_array is required when margin_relative_to is not 'none'"
+            )
+        dispersion = np.full(n_columns, float("nan"), dtype=float)
+        for col in range(n_columns):
+            finite_vals = actual_array[np.isfinite(actual_array[:, col]), col]
+            if len(finite_vals) >= 2:
+                if margin_relative_to == "sd":
+                    dispersion[col] = np.std(finite_vals, ddof=0)
+                elif margin_relative_to == "iqr":
+                    q75, q25 = np.quantile(finite_vals, 0.75), np.quantile(finite_vals, 0.25)
+                    dispersion[col] = q75 - q25
+        for col in range(n_columns):
+            if not np.isfinite(dispersion[col]) or dispersion[col] == 0.0:
+                margins[col] = 0.0
+            else:
+                margins[col] = margins[col] * dispersion[col]
     if not np.isfinite(margins).all() or np.any(margins < 0.0):
         raise ValueError("margins must be finite and non-negative")
     return margins
@@ -115,6 +137,7 @@ def pairwise_ranking_accuracy(
     heldout: np.ndarray,
     *,
     margin: float | Sequence[float] | np.ndarray = 0.0,
+    margin_relative_to: Literal["none", "sd", "iqr"] = "none",
 ) -> PairwiseRankingResult:
     """Measure whether completed leaderboards preserve same-column ordering.
 
@@ -124,12 +147,21 @@ def pairwise_ranking_accuracy(
     errors.  ``median_accuracy`` gives every eligible evaluation column equal
     weight, matching BenchPress's paper summary; ``pooled_accuracy`` weights by
     the number of eligible pairs and is included to make the denominator clear.
+
+    When ``margin_relative_to`` is "sd" or "iqr", the margin value is treated as
+    a multiplier applied to each column's dispersion (standard deviation or
+    interquartile range, respectively).  When "none" (the default), the margin
+    is used as an absolute value in the same units as the score matrix.
     """
 
     actual_array, predicted_array, heldout_array = _validate_inputs(
         actual, predicted, heldout
     )
-    margins = _column_margins(margin, actual_array.shape[1])
+    margins = _column_margins(
+        margin, actual_array.shape[1],
+        margin_relative_to=margin_relative_to,
+        actual_array=actual_array,
+    )
     column_results: list[PairwiseColumnResult] = []
 
     for column in range(actual_array.shape[1]):

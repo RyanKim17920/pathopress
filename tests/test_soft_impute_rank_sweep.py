@@ -122,5 +122,101 @@ class SoftImputeRankSweepTests(unittest.TestCase):
             self.assertEqual(cached, uninterrupted)
 
 
+    def test_sweep_result_serializes_without_nan(self) -> None:
+        """Regression: the sweep payload must not contain NaN values that would
+        fail allow_nan=False JSON serialization."""
+        matrix = np.asarray(
+            [
+                [12.0, 21.0, 35.0, 44.0],
+                [18.0, 27.0, 32.0, 49.0],
+                [31.0, 38.0, 46.0, 52.0],
+                [43.0, 51.0, 58.0, 67.0],
+                [55.0, 62.0, 71.0, 78.0],
+            ]
+        )
+        models = [f"model-{index}" for index in range(matrix.shape[0])]
+        evaluations = [f"eval-{index}" for index in range(matrix.shape[1])]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            payload = run_sweep(
+                matrix=matrix,
+                models=models,
+                evaluations=evaluations,
+                scores_sha256="fixture-score-sha256",
+                output_path=root / "result.json",
+                checkpoint_root=root / "checkpoints",
+                ranks=(1, 2),
+                transforms=("identity",),
+                seeds=(42,),
+                n_folds=2,
+                workers=1,
+                resume=False,
+                progress_every=100,
+            )
+        # The entire payload (including nested results) must serialize
+        # with allow_nan=False — this is the contract enforced by
+        # _atomic_write_json.
+        from experiments.run_soft_impute_rank_sweep import _canonical_bytes
+        _canonical_bytes(payload)  # should not raise
+
+    def test_metrics_omits_normalized_keys_when_column_sd_unavailable(self) -> None:
+        """The metrics() function must omit medae_normalized when column_sd
+        is None, rather than emitting NaN."""
+        from experiments.run_benchpress_style import metrics
+        result = metrics([1.0, 2.0, 3.0], [1.1, 2.2, 3.3])
+        self.assertNotIn("medae_normalized", result)
+        result_with_sd = metrics([1.0, 2.0, 3.0], [1.1, 2.2, 3.3], column_sd=1.0)
+        self.assertIn("medae_normalized", result_with_sd)
+        self.assertTrue(np.isfinite(result_with_sd["medae_normalized"]))
+
+
+    def test_sweep_result_serializes_without_nan(self) -> None:
+        """Regression: the sweep payload must not contain NaN values that would
+        fail allow_nan=False JSON serialization."""
+        matrix = np.asarray(
+            [
+                [12.0, 21.0, 35.0, 44.0],
+                [18.0, 27.0, 32.0, 49.0],
+                [31.0, 38.0, 46.0, 52.0],
+                [43.0, 51.0, 58.0, 67.0],
+                [55.0, 62.0, 71.0, 78.0],
+            ]
+        )
+        models = [f"model-{index}" for index in range(matrix.shape[0])]
+        evaluations = [f"eval-{index}" for index in range(matrix.shape[1])]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            payload = run_sweep(
+                matrix=matrix,
+                models=models,
+                evaluations=evaluations,
+                scores_sha256="fixture-score-sha256",
+                output_path=root / "result.json",
+                checkpoint_root=root / "checkpoints",
+                ranks=(1, 2),
+                transforms=("identity",),
+                seeds=(42,),
+                n_folds=2,
+                workers=1,
+                resume=False,
+                progress_every=100,
+            )
+        # The entire payload (including nested results) must serialize
+        # with allow_nan=False — this is the contract enforced by
+        # _atomic_write_json.
+        from experiments.run_soft_impute_rank_sweep import _canonical_bytes
+        _canonical_bytes(payload)  # should not raise
+
+    def test_metrics_omits_normalized_when_column_sd_unavailable(self) -> None:
+        """metrics() must omit medae_normalized when column_sd is None,
+        rather than emitting NaN."""
+        from experiments.run_benchpress_style import metrics
+        result = metrics([1.0, 2.0, 3.0], [1.1, 2.2, 3.3])
+        self.assertNotIn("medae_normalized", result)
+        result_with_sd = metrics([1.0, 2.0, 3.0], [1.1, 2.2, 3.3], column_sd=1.0)
+        self.assertIn("medae_normalized", result_with_sd)
+        self.assertTrue(np.isfinite(result_with_sd["medae_normalized"]))
+
+
 if __name__ == "__main__":
     unittest.main()

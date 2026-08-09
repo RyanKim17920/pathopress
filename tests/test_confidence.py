@@ -7,6 +7,7 @@ from pathopress.confidence import (
     coverage_width,
     crossfit_trust_probability,
     crossfit_error_risk,
+    feature_matrix,
     fit_trust_calibrator,
     predict_serialized_trust,
     RELATIVE_WIDTH_DENOMINATOR_EPSILON,
@@ -15,6 +16,7 @@ from pathopress.confidence import (
     spearman_uncertainty_error,
     stack_features,
     structural_support_features_for_cells,
+    summarize_confidence_method,
     uncertainty_tercile_errors,
 )
 from pathopress.metrics import MEDAPE_EPSILON
@@ -173,6 +175,173 @@ class ConfidencePrimitiveTests(unittest.TestCase):
             int(row["n_purged_repeated_target_instances"]) == 10
             for row in metadata.values()
         ))
+
+    # -- FIX A: conformal skipped cells visibility --
+
+    def test_conformal_skipped_cells_are_surfaced(self) -> None:
+        # To skip a fold, its calibration set (all OTHER folds) must have
+        # fewer than 5 valid samples. With 3 folds and 8 total samples,
+        # folds 0 and 1 each have 2 cells, so their calibration set only
+        # contains the other two folds' 6 cells -- enough. But fold 2 has
+        # 4 cells, so its calibration is 4 cells -- too few.
+        # A simpler arrangement: 4 samples, 4 folds of 1 each. Every fold's
+        # calibration set is 3 samples < 5, so all are skipped.
+        actual = np.zeros(4)
+        predicted = np.ones(4)
+        uncertainty = np.ones(4)
+        folds = np.asarray([0, 1, 2, 3])
+        summary = summarize_confidence_method(
+            actual, predicted, folds, uncertainty
+        )
+        self.assertEqual(summary["conformal_total_cells"], 4)
+        self.assertEqual(summary["conformal_skipped_cells"], 4)
+        # No cells contributed to coverage.
+        self.assertEqual(summary["conformal_90_interval"]["n"], 0)
+
+    def test_conformal_skipped_partial_fold(self) -> None:
+        # Fold 0 has 4 cells (calibration = 1 cell < 5, skipped).
+        # Fold 1 has 1 cell (calibration = 4 cells < 5, skipped).
+        # But adding fold 2 with 10 cells: fold 2 calibration is 5 cells >= 5.
+        actual = np.zeros(15)
+        predicted = np.ones(15)
+        uncertainty = np.ones(15)
+        folds = np.asarray([0] * 4 + [1] * 1 + [2] * 10)
+        summary = summarize_confidence_method(
+            actual, predicted, folds, uncertainty
+        )
+        self.assertEqual(summary["conformal_total_cells"], 15)
+        # Fold 2 has calibration size 5 >= 5, so it succeeds.
+        # Fold 0 calibration = 11 >= 5, succeeds. Fold 1 calibration = 14 >= 5.
+        self.assertEqual(summary["conformal_skipped_cells"], 0)
+
+    def test_conformal_skipped_partial_some_folds(self) -> None:
+        # 2 folds: fold 0 has 2 cells (calib = 10 >= 5, OK),
+        # fold 1 has 10 cells (calib = 2 < 5, SKIPPED).
+        actual = np.zeros(12)
+        predicted = np.ones(12)
+        uncertainty = np.ones(12)
+        folds = np.asarray([0] * 2 + [1] * 10)
+        summary = summarize_confidence_method(
+            actual, predicted, folds, uncertainty
+        )
+        self.assertEqual(summary["conformal_total_cells"], 12)
+        self.assertEqual(summary["conformal_skipped_cells"], 10)
+        self.assertEqual(summary["conformal_90_interval"]["n"], 2)
+
+    def test_conformal_skipped_cells_warns_when_nonzero(self) -> None:
+        actual = np.zeros(4)
+        predicted = np.ones(4)
+        uncertainty = np.ones(4)
+        folds = np.asarray([0, 0, 1, 1])
+        with self.assertWarns(RuntimeWarning):
+            summarize_confidence_method(actual, predicted, folds, uncertainty)
+
+    # -- FIX B: all-NaN slice visibility --
+
+    def test_structural_features_include_all_nan_flags(self) -> None:
+        matrix = np.asarray([
+            [1.0, 2.0, 3.0],
+            [np.nan, np.nan, np.nan],  # all-NaN row
+            [4.0, 5.0, 6.0],
+        ])
+        features = structural_support_features_for_cells(matrix, [(0, 0), (1, 0), (2, 2)])
+        self.assertIn("row_is_all_nan", features)
+        self.assertIn("col_is_all_nan", features)
+        np.testing.assert_array_equal(features["row_is_all_nan"], [0.0, 1.0, 0.0])
+        # All columns have at least one finite value
+        np.testing.assert_array_equal(features["col_is_all_nan"], [0.0, 0.0, 0.0])
+
+    def test_feature_matrix_preserves_boolean_features(self) -> None:
+        features = {
+            "structural_count": np.asarray([1.0, 2.0]),
+            "structural_row_is_all_nan": np.asarray([0.0, 1.0]),
+            "structural_col_is_all_nan": np.asarray([1.0, 0.0]),
+        }
+        matrix, names = feature_matrix(features)
+        # Boolean features should pass through without log1p transformation
+        row_is_nan_col = names.index("structural_row_is_all_nan")
+        col_is_nan_col = names.index("structural_col_is_all_nan")
+        np.testing.assert_array_equal(matrix[:, row_is_nan_col], [0.0, 1.0])
+        np.testing.assert_array_equal(matrix[:, col_is_nan_col], [1.0, 0.0])
+        # Non-boolean features should still be transformed
+        count_col = names.index("structural_count")
+        np.testing.assert_allclose(
+            matrix[:, count_col],
+            np.log1p(np.maximum([1.0, 2.0], 0.0))
+        )
+
+    def test_safe_stat_warns_on_all_nan_slices(self) -> None:
+        # An all-NaN column should trigger a warning via _safe_stat.
+        # We test through structural_support_features_for_cells which calls _safe_stat.
+        matrix = np.asarray([
+            [np.nan, 1.0],
+            [np.nan, 2.0],
+        ])
+        with self.assertWarns(RuntimeWarning):
+            structural_support_features_for_cells(matrix, [(0, 0), (1, 0)])
+
+    # -- BUG 5: Inf is silently zeroed without warning --
+
+    def test_safe_stat_warns_on_inf_slices(self) -> None:
+        """An Inf column should trigger a RuntimeWarning mentioning 'Inf'."""
+        matrix = np.asarray([
+            [np.inf, 1.0],
+            [np.inf, 2.0],
+        ])
+        import warnings
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            structural_support_features_for_cells(matrix, [(0, 0), (1, 0)])
+        inf_warnings = [w for w in caught if "Inf" in str(w.message)]
+        self.assertTrue(inf_warnings, "Expected at least one warning mentioning 'Inf'")
+
+    def test_safe_stat_warns_nan_and_inf_separately(self) -> None:
+        """When both NaN and Inf columns exist, the warning should mention both."""
+        matrix = np.asarray([
+            [np.nan, np.inf, 1.0],
+            [np.nan, np.inf, 2.0],
+        ])
+        import warnings
+        with warnings.catch_warnings(record=True) as caught:
+            warnings.simplefilter("always")
+            structural_support_features_for_cells(matrix, [(0, 0), (0, 1), (0, 2)])
+        combined = [w for w in caught if "NaN" in str(w.message) and "Inf" in str(w.message)]
+        self.assertTrue(combined, "Expected a warning mentioning both 'NaN' and 'Inf'")
+
+    # -- FIX C: risk model fallback visibility --
+
+    def test_risk_model_fallback_is_recorded_in_metadata(self) -> None:
+        # With n=120 and 4 folds (30 per fold), train=90 >= design.shape[1]+50,
+        # so the outer loop enters. But inner splits with mod 5 produce
+        # val=24 < 50 and mod 3 also produce val < 50, triggering fallback.
+        rng = np.random.RandomState(0)
+        n = 120
+        actual = rng.uniform(40.0, 90.0, size=n)
+        feature = rng.uniform(0.0, 5.0, size=n)
+        predicted = actual + feature + rng.normal(0.0, 0.1, size=n)
+        folds = np.arange(n) % 4
+        uncertainty, names, selected = crossfit_error_risk(
+            actual, predicted, folds,
+            {"feature": feature, "support": rng.uniform(1.0, 10.0, size=n)},
+        )
+        # All folds should have selected metadata
+        self.assertEqual(set(selected), {"0", "1", "2", "3"})
+        # All should show the fallback flag since inner splits are too small
+        fallback_folds = [k for k, v in selected.items() if v.get("fallback")]
+        self.assertEqual(len(fallback_folds), 4)
+
+    def test_risk_model_fallback_warns(self) -> None:
+        rng = np.random.RandomState(0)
+        n = 80
+        actual = rng.uniform(40.0, 90.0, size=n)
+        feature = rng.uniform(0.0, 5.0, size=n)
+        predicted = actual + feature + rng.normal(0.0, 0.1, size=n)
+        folds = np.arange(n) % 4
+        with self.assertWarns(RuntimeWarning):
+            crossfit_error_risk(
+                actual, predicted, folds,
+                {"feature": feature, "support": rng.uniform(1.0, 10.0, size=n)},
+            )
 
 
 if __name__ == "__main__":

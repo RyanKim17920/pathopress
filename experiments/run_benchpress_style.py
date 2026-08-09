@@ -56,11 +56,11 @@ def make_folds(matrix: np.ndarray, *, n_folds: int, seed: int):
     return folds
 
 
-def metrics(actual: list[float], predicted: list[float]) -> dict[str, float | int]:
+def metrics(actual: list[float], predicted: list[float], *, column_sd: float | None = None) -> dict[str, float | int]:
     a = np.asarray(actual, dtype=float)
     p = np.asarray(predicted, dtype=float)
     error = np.abs(p - a)
-    return {
+    result: dict[str, float | int] = {
         "n": int(error.size),
         "mae": round(float(np.mean(error)), 6),
         "medae": round(float(np.median(error)), 6),
@@ -70,6 +70,12 @@ def metrics(actual: list[float], predicted: list[float]) -> dict[str, float | in
         "within_5": round(float(np.mean(error <= 5.0)), 6),
         "within_10": round(float(np.mean(error <= 10.0)), 6),
     }
+    # Dispersion-normalized MedAE (FIX 2 analog for benchpress-style runner).
+    # Omitted from result dict when column_sd is unavailable or yields no finite
+    # value -- prevents NaN from leaking into JSON-serialized artifacts.
+    if column_sd is not None and np.isfinite(column_sd) and column_sd > 0:
+        result["medae_normalized"] = round(float(np.median(error)) / column_sd, 6)
+    return result
 
 
 def _fit_fold(job: tuple[np.ndarray, np.ndarray, list[tuple[int, int]], int]):

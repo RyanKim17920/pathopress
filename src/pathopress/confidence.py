@@ -214,6 +214,19 @@ def _safe_stat(matrix: np.ndarray, function, axis: int) -> np.ndarray:
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)
         values = function(matrix, axis=axis)
+    nan_count = int(np.sum(np.isnan(values)))
+    inf_count = int(np.sum(np.isinf(values)))
+    if nan_count or inf_count:
+        parts = []
+        if nan_count:
+            parts.append(f"{nan_count} NaN")
+        if inf_count:
+            parts.append(f"{inf_count} Inf")
+        warnings.warn(
+            f"{', '.join(parts)} slice(s) replaced with 0.0 in _safe_stat",
+            RuntimeWarning,
+            stacklevel=2,
+        )
     return np.nan_to_num(values, nan=0.0, posinf=0.0, neginf=0.0)
 
 
@@ -253,6 +266,8 @@ def structural_support_features_for_cells(
     columns = np.asarray([int(column) for _, column in cells], dtype=int)
     row_correlation, row_overlap = best_axis_correlations(training_matrix, axis=1)
     column_correlation, _ = best_axis_correlations(training_matrix, axis=0)
+    row_all_nan = np.isfinite(training_matrix).sum(axis=1) == 0
+    col_all_nan = np.isfinite(training_matrix).sum(axis=0) == 0
     return {
         "row_obs_count": np.isfinite(training_matrix).sum(axis=1).astype(float)[rows],
         "col_obs_count": np.isfinite(training_matrix).sum(axis=0).astype(float)[columns],
@@ -262,6 +277,8 @@ def structural_support_features_for_cells(
         "row_best_peer_abs_corr": row_correlation[rows],
         "row_best_peer_overlap": row_overlap[rows],
         "col_best_neighbor_abs_corr": column_correlation[columns],
+        "row_is_all_nan": row_all_nan[rows].astype(float),
+        "col_is_all_nan": col_all_nan[columns].astype(float),
     }
 
 
@@ -284,11 +301,16 @@ def confidence_feature_sets(
     }
 
 
-def feature_matrix(features: dict[str, np.ndarray]) -> tuple[np.ndarray, list[str]]:
+def feature_matrix(features: dict[str, np.ndarray], *, boolean_keys: Iterable[str] = ()) -> tuple[np.ndarray, list[str]]:
     names = sorted(features)
-    matrix = np.column_stack(
-        [np.log1p(np.maximum(np.asarray(features[name], dtype=float), 0.0)) for name in names]
-    )
+    boolean_keys = set(boolean_keys) | {name for name in names if name.endswith("_is_all_nan")}
+    columns = []
+    for name in names:
+        col = np.asarray(features[name], dtype=float)
+        if name not in boolean_keys:
+            col = np.log1p(np.maximum(col, 0.0))
+        columns.append(col)
+    matrix = np.column_stack(columns)
     return matrix, names
 
 
@@ -392,6 +414,19 @@ def crossfit_error_risk(
             continue
         config = select_risk_model_config(design, target, fold_id, train, seed=seed)
         selected[str(int(fold))] = _config_metadata(config)
+        inner5_train = train & ((fold_id % 5) != 0)
+        inner5_val = train & ((fold_id % 5) == 0)
+        inner3_train = train & ((fold_id % 3) != 0)
+        inner3_val = train & ((fold_id % 3) == 0)
+        if inner5_val.sum() < 50 or inner5_train.sum() < design.shape[1] + 50:
+            if inner3_val.sum() < 50 or inner3_train.sum() < design.shape[1] + 50:
+                selected[str(int(fold))]["fallback"] = True
+                warnings.warn(
+                    f"risk fold {int(fold)}: both inner splits too small, "
+                    "falling back to default Ridge model",
+                    RuntimeWarning,
+                    stacklevel=2,
+                )
         output[test] = np.expm1(
             _fit_predict(design[train], target[train], design[test], config, seed + 1000 + int(fold))
         )
@@ -408,6 +443,15 @@ def summarize_confidence_method(
 ) -> dict[str, object]:
     lower, upper, scale = conformal_interval(actual, predicted, uncertainty, fold_id)
     normal_width = 1.6448536269514722 * np.asarray(uncertainty, dtype=float)
+    conformal_total_cells = int(len(scale))
+    conformal_skipped_cells = int(np.sum(np.isnan(scale)))
+    if conformal_skipped_cells:
+        warnings.warn(
+            f"{conformal_skipped_cells}/{conformal_total_cells} conformal cells "
+            "skipped (insufficient calibration samples per fold)",
+            RuntimeWarning,
+            stacklevel=2,
+        )
     return {
         "spearman_uncertainty_abs_error": spearman_uncertainty_error(
             actual, predicted, uncertainty
@@ -419,6 +463,8 @@ def summarize_confidence_method(
         ),
         "conformal_90_interval": coverage_width(actual, lower, upper),
         "conformal_90_scale_median": float(np.nanmedian(scale)),
+        "conformal_skipped_cells": conformal_skipped_cells,
+        "conformal_total_cells": conformal_total_cells,
     }
 
 

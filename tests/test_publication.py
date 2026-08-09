@@ -33,7 +33,13 @@ class PublicationDataTests(unittest.TestCase):
             newline="", encoding="utf-8"
         ) as handle:
             dual = list(csv.DictReader(handle))
-        self.assertEqual(len(dual), 20)
+        # LOFO protocol: lofo_max_probes = 5, two candidate modes => 10 rows.
+        # This is an explicit constant -- the test must not source its expectation
+        # from the artifact it validates.  If the artifact is regenerated at a
+        # different depth this test will fail and a human decides if intended.
+        self.assertEqual(len(dual), 10,
+                         "dual-objective CSV should have 10 rows "
+                         "(2 candidate_modes × lofo_max_probes=5)")
         objectives = {row["selection_objective"] for row in dual}
         self.assertEqual(objectives, {"training_scorecard_medae"})
 
