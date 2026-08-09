@@ -27,7 +27,16 @@ build/
 *.tmp
 *.tmp.gz
 .tmp_*
+# Atomic-write siblings (`.<name>.tmp`) left behind by an interrupted run.
+.*.tmp
+.*.tmp.gz
+.DS_Store
 experiments/fast_rank1
+# Uncompressed expansions of the committed `.csv.gz` raw streams; only the
+# gzipped artifacts are tracked (see experiments/README.md, "Artifact storage
+# forms").
+outputs/probe_compression_selected_raw_rank1.csv
+outputs/probe_compression_random_all_known_raw_rank1.csv
 experiments/method_comparison/predictions/*.npz
 experiments/probe_compression_checkpoints/
 experiments/soft_impute_rank_sweep_checkpoints/

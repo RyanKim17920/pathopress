@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from pathopress.matrix import filter_matrix, load_scores, make_matrix
+from pathopress.probe_compression import load_probe_compression
 
 
 def file_sha256(path: Path) -> str:
@@ -197,7 +198,7 @@ def validate_probe_compression_semantics(root: Path) -> list[dict[str, str]]:
         if not path.is_file():
             return [{"path": str(path.relative_to(root)), "status": "missing"}]
     try:
-        payload = json.loads(artifact_path.read_text(encoding="utf-8"))
+        payload = load_probe_compression(artifact_path)
         allowlist = json.loads(allowlist_path.read_text(encoding="utf-8"))
         config = payload["configuration"]
         pruning = payload["pruning"]

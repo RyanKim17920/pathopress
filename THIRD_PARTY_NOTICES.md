@@ -61,8 +61,17 @@ behavior with the pinned revision; they do not change ownership or licensing.
 PathoPress does not redistribute the BenchPress score-matrix dataset. The
 PathoPress registry instead contains factual identifiers, protocol metadata,
 citations, and reported pathology scores from separately licensed upstream
-benchmark sources; see [`DATA_NOTICE.md`](DATA_NOTICE.md) and the public
-export's [`LICENSES.md`](exports/pathopress_public/LICENSES.md).
+benchmark sources; see [`DATA_NOTICE.md`](DATA_NOTICE.md), the terms restated
+next to the tables in [`data/LICENSE`](data/LICENSE), and the public export's
+[`LICENSES.md`](exports/pathopress_public/LICENSES.md).
+
+Those documents also explain how to resolve the terms of use for an individual
+score: `data/scores.csv` is one table, but its rows come from roughly twenty
+separately licensed publications and leaderboards, each pinned in
+[`data/provenance.json`](data/provenance.json). The extraction, normalization,
+and provenance work is PathoPress's and is MIT licensed with a CC-BY-style
+attribution expectation; the reported numbers themselves are not PathoPress's to
+license.
 
 ### Microsoft BenchPress MIT license
 

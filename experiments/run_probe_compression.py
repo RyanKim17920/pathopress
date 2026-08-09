@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import copy
 import csv
 import gzip
@@ -24,6 +25,8 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
 from pathopress.probe_compression import (  # noqa: E402
+    dump_probe_compression,
+    load_probe_compression,
     ProbePredictions,
     SCORE_RECONSTRUCTION_PAIRWISE_DIAGNOSTIC_MARGIN,
     candidate_prefixes,
@@ -59,6 +62,24 @@ def _write_json_atomic(path: Path, payload: Any) -> None:
     temporary = _temporary_sibling(path)
     try:
         temporary.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        os.replace(temporary, path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def _write_compression_artifact(path: Path, payload: Any) -> None:
+    """Atomically write the probe-compression artifact in its on-disk form.
+
+    Fold-invariant LOFO curves are hoisted to the mode level (see
+    ``pathopress.probe_compression``) and the payload is serialised compactly.
+    Both are storage-only changes; ``load_probe_compression`` restores the
+    fully materialised payload every consumer reads.
+    """
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = _temporary_sibling(path)
+    try:
+        temporary.write_text(dump_probe_compression(payload), encoding="utf-8")
         os.replace(temporary, path)
     finally:
         temporary.unlink(missing_ok=True)
@@ -117,11 +138,39 @@ def _save_phase_checkpoint(path: Path, checkpoint: dict[str, Any]) -> None:
     _write_json_atomic(path, checkpoint)
 
 
+@contextlib.contextmanager
+def _csv_text_writer(path: Path):
+    """Open ``path`` for CSV text output, gzipping when it ends in ``.gz``.
+
+    The gzip container is written with ``mtime=0`` and no embedded filename so
+    repeated runs over identical rows produce byte-identical artifacts.
+    """
+
+    if path.suffix == ".gz":
+        with path.open("wb") as binary, gzip.GzipFile(
+            filename="", fileobj=binary, mode="wb", mtime=0
+        ) as compressed, io.TextIOWrapper(
+            compressed, newline="", encoding="utf-8"
+        ) as handle:
+            yield handle
+    else:
+        with path.open("w", newline="", encoding="utf-8") as handle:
+            yield handle
+
+
+def _csv_text_reader(path: Path):
+    """Open a CSV artifact for reading, decompressing ``.gz`` inputs."""
+
+    if path.suffix == ".gz":
+        return gzip.open(path, "rt", newline="", encoding="utf-8")
+    return path.open(newline="", encoding="utf-8")
+
+
 def _write_csv_atomic(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = _temporary_sibling(path)
     try:
-        with temporary.open("w", newline="", encoding="utf-8") as handle:
+        with _csv_text_writer(temporary) as handle:
             if rows:
                 writer = csv.DictWriter(
                     handle, fieldnames=list(rows[0]), lineterminator="\n"
@@ -489,7 +538,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--allowlist", type=Path, default=ROOT / "data/low_friction_allowlist_v2_top25.json")
     parser.add_argument("--previous-probes", type=Path, default=ROOT / "experiments/probe_selection_results_rank1.json")
     parser.add_argument("--output", type=Path, default=ROOT / "experiments/probe_compression_rank1.json")
-    parser.add_argument("--raw-output", type=Path, default=ROOT / "outputs/probe_compression_selected_raw_rank1.csv")
+    parser.add_argument(
+        "--raw-output",
+        type=Path,
+        default=ROOT / "outputs/probe_compression_selected_raw_rank1.csv.gz",
+    )
     parser.add_argument(
         "--random-raw-output",
         type=Path,
@@ -564,7 +617,7 @@ def main() -> None:
     reusable_any = None
     reusable_any_raw: list[dict[str, Any]] = []
     if args.reuse_any_score_curves and args.output.exists() and args.raw_output.exists():
-        previous = json.loads(args.output.read_text(encoding="utf-8"))
+        previous = load_probe_compression(args.output)
         previous_any = previous.get("curves", {}).get("any_candidate")
         previous_config = previous.get("configuration", {})
         if (
@@ -583,7 +636,7 @@ def main() -> None:
             )
         ):
             reusable_any = copy.deepcopy(previous_any)
-            with args.raw_output.open(newline="", encoding="utf-8") as handle:
+            with _csv_text_reader(args.raw_output) as handle:
                 reusable_any_raw = [
                     row for row in csv.DictReader(handle)
                     if row["candidate_mode"] == "any_candidate"
@@ -594,7 +647,7 @@ def main() -> None:
     pruned_indices, pruning = _pruned_candidates(args.previous_probes, evaluations, args.pruned_keep)
 
     if args.ranking_random_only:
-        existing = json.loads(args.output.read_text(encoding="utf-8"))
+        existing = load_probe_compression(args.output)
         config = existing.get("configuration", {})
         if (
             config.get("scores_sha256") != scores_sha256
@@ -626,7 +679,7 @@ def main() -> None:
         # Keep the public ranking schema limited to the two upstream-comparable
         # candidate universes.  Pruning diagnostics live in ``pruning`` above.
         existing["ranking_aware"].pop("error_informed_pruned_diagnostic", None)
-        _write_json_atomic(args.output, existing)
+        _write_compression_artifact(args.output, existing)
         print(f"enriched {args.output} with exact margin-{args.ranking_margin:g} random ranking curves")
         return
 
@@ -1259,7 +1312,7 @@ def main() -> None:
     finally:
         random_raw_temporary.unlink(missing_ok=True)
 
-    _write_json_atomic(args.output, payload)
+    _write_compression_artifact(args.output, payload)
     _write_csv_atomic(args.raw_output, raw)
     print(f"wrote {args.output}, {args.raw_output}, and {args.random_raw_output}")
 

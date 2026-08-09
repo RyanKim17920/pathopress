@@ -1,0 +1,74 @@
+name: CI
+
+# Quoted so YAML 1.1 parsers do not fold the key into the boolean `true`.
+"on":
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs on the same ref; the freshness check reads a large
+# artifact and there is no value in racing two of them.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: tests + artifact freshness
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # uv owns the Python toolchain here, so there is no actions/setup-python
+      # step: `python-version` below makes setup-uv provision and pin the
+      # interpreter (UV_PYTHON) that every later `uv` command uses.
+      #
+      # pyproject.toml declares requires-python = ">=3.10". We pin the concrete
+      # 3.13 series because that is what the project is developed and validated
+      # against locally (.venv is CPython 3.13.x); >=3.10 is the support floor,
+      # not the tested configuration.
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: latest
+          python-version: "3.13"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      # --locked fails loudly if uv.lock has drifted from pyproject.toml rather
+      # than silently re-resolving. Extras are listed explicitly instead of
+      # --all-extras so the heavyweight, deliberately optional `mlp` extra
+      # (torch) stays out of CI; nothing under tests/ imports torch.
+      - name: Sync dependencies
+        run: >-
+          uv sync --locked
+          --extra test
+          --extra plots
+          --extra confidence
+          --extra research
+          --extra evidence
+          --extra hf
+
+      - name: Run tests
+        run: uv run pytest tests/ -q
+
+      # Verifies the hash-bound manifest in
+      # experiments/artifact_freshness_manifest.json still matches the committed
+      # artifacts. This reads experiments/probe_compression_rank1.json (~26 MB),
+      # so it is the slowest step; it is intentionally run plainly, with no
+      # continue-on-error, because a stale manifest is a real failure that must
+      # block the merge.
+      - name: Check artifact freshness
+        run: uv run python scripts/check_artifact_freshness.py check
+
+  # NOTE: experiments/run_probe_compression.py and
+  # experiments/run_probe_selection.py are multi-hour research jobs and are
+  # deliberately NOT run in CI. Their outputs are committed artifacts and are
+  # validated indirectly by the freshness check above.

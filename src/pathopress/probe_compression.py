@@ -7,8 +7,12 @@ can support MedAE, MedAPE, pairwise-margin, and top-fraction objectives.
 
 from __future__ import annotations
 
+import copy
+import gzip
+import json
 from dataclasses import dataclass
 from itertools import combinations
+from pathlib import Path
 from typing import Any, Iterable, Sequence
 
 import numpy as np
@@ -16,6 +20,122 @@ import numpy as np
 from pathopress.completion import complete
 from pathopress.metrics import absolute_percentage_errors
 from pathopress.ranking import pairwise_ranking_accuracy, top_fraction_recovery
+
+
+# ---------------------------------------------------------------------------
+# On-disk storage form of the probe-compression artifact
+# ---------------------------------------------------------------------------
+#
+# In leave-one-family-out (LOFO) mode every fold block under
+# ``curves[mode]["lofo"][fold][mode]`` carries a mixture of fold-specific
+# curves (``heldout_*``) and fold-invariant ones (the candidate lists and the
+# all-known curves, which do not depend on which family is held out).  The
+# fold-invariant blocks are byte-identical across all 34 folds *and* identical
+# to the canonical copy already stored at ``curves[mode][key]``, so storing
+# them per fold inflated the artifact past GitHub's 100 MB hard limit.
+#
+# The artifact is therefore written in a *hoisted* form: fold-invariant keys
+# live once at the mode level and the mode records which keys were hoisted in
+# ``curves[mode][FOLD_INVARIANT_KEYS_FIELD]``.  ``expand_fold_invariant_curves``
+# restores the fully materialised in-memory payload, so every consumer sees
+# exactly the values it saw before hoisting.  This is a pure storage change:
+# no metric, curve, or ordering is altered.
+
+FOLD_INVARIANT_KEYS_FIELD = "_fold_invariant_keys"
+
+#: Curve keys that are provably independent of which family is held out.
+FOLD_INVARIANT_CURVE_KEYS: tuple[str, ...] = (
+    "candidate_indices",
+    "candidate_ids",
+    "all_known_greedy_medae",
+    "all_known_greedy_medape",
+    "all_known_random",
+)
+
+
+def _curve_modes(curves: dict[str, Any]) -> list[str]:
+    return [
+        mode
+        for mode, block in curves.items()
+        if isinstance(block, dict) and isinstance(block.get("lofo"), dict)
+    ]
+
+
+def hoist_fold_invariant_curves(payload: dict[str, Any]) -> dict[str, Any]:
+    """Remove per-fold copies of fold-invariant curves (in place).
+
+    A key is hoisted only when every fold carries a value that serialises
+    byte-identically to the canonical mode-level copy, so the operation is
+    reversible by :func:`expand_fold_invariant_curves`.
+    """
+
+    curves = payload.get("curves")
+    if not isinstance(curves, dict):
+        return payload
+    for mode in _curve_modes(curves):
+        block = curves[mode]
+        folds = block["lofo"]
+        hoisted: list[str] = []
+        for key in FOLD_INVARIANT_CURVE_KEYS:
+            if key not in block:
+                continue
+            canonical = json.dumps(block[key], sort_keys=True)
+            fold_curves = [fold.get(mode, {}) for fold in folds.values()]
+            if not fold_curves or not all(key in curve for curve in fold_curves):
+                continue
+            if any(
+                json.dumps(curve[key], sort_keys=True) != canonical
+                for curve in fold_curves
+            ):
+                continue
+            for curve in fold_curves:
+                del curve[key]
+            hoisted.append(key)
+        if hoisted:
+            block[FOLD_INVARIANT_KEYS_FIELD] = hoisted
+    return payload
+
+
+def expand_fold_invariant_curves(payload: dict[str, Any]) -> dict[str, Any]:
+    """Restore per-fold copies of hoisted fold-invariant curves (in place)."""
+
+    curves = payload.get("curves")
+    if not isinstance(curves, dict):
+        return payload
+    for mode in _curve_modes(curves):
+        block = curves[mode]
+        hoisted = block.pop(FOLD_INVARIANT_KEYS_FIELD, None)
+        if not hoisted:
+            continue
+        for fold in block["lofo"].values():
+            curve = fold.get(mode)
+            if curve is None:
+                continue
+            for key in hoisted:
+                curve[key] = copy.deepcopy(block[key])
+    return payload
+
+
+def load_probe_compression(path: str | Path) -> dict[str, Any]:
+    """Read a probe-compression artifact into its fully materialised form.
+
+    Accepts both plain ``.json`` and gzipped ``.json.gz`` artifacts.
+    """
+
+    resolved = Path(path)
+    if resolved.suffix == ".gz":
+        with gzip.open(resolved, "rt", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    else:
+        payload = json.loads(resolved.read_text(encoding="utf-8"))
+    return expand_fold_invariant_curves(payload)
+
+
+def dump_probe_compression(payload: dict[str, Any]) -> str:
+    """Serialise a probe-compression payload in its hoisted on-disk form."""
+
+    stored = hoist_fold_invariant_curves(copy.deepcopy(payload))
+    return json.dumps(stored, separators=(",", ":"), sort_keys=False) + "\n"
 
 
 # This default is attached to score-reconstruction outputs only as an ancillary

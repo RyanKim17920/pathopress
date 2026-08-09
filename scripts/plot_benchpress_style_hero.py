@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import os
+import sys
 from pathlib import Path
 
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/pathopress-matplotlib")
@@ -19,6 +20,9 @@ import numpy as np
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from pathopress.probe_compression import load_probe_compression  # noqa: E402
 MAGENTA = "#D33682"
 BLUE = "#268BD2"
 GRAY = "#7C8790"
@@ -209,7 +213,7 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> int:
     args = parse_args()
-    compression = json.loads(args.compression.read_text(encoding="utf-8"))
+    compression = load_probe_compression(args.compression)
     selection = json.loads(args.selection.read_text(encoding="utf-8"))
     values = hero_plot_data(compression, selection)
     fig, _ = build_hero_figure(values)

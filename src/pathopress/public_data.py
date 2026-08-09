@@ -18,6 +18,8 @@ from urllib.request import urlopen
 
 import numpy as np
 
+from pathopress.probe_compression import load_probe_compression
+
 from .prediction import (
     DEFAULT_RANK,
     DEFAULT_REGULARIZATION,
@@ -763,9 +765,7 @@ def build_website_data(
     probe_compression_sha256 = None
     if probe_compression_path is not None:
         probe_compression_path = Path(probe_compression_path)
-        probe_compression = json.loads(
-            probe_compression_path.read_text(encoding="utf-8")
-        )
+        probe_compression = load_probe_compression(probe_compression_path)
         if probe_compression.get("configuration", {}).get("scores_sha256") != scores_sha256:
             raise ValueError("probe-compression artifact does not match website score matrix")
         probe_compression_sha256 = sha256_file(probe_compression_path)

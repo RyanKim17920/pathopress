@@ -19,7 +19,10 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from pathopress.matrix import filter_matrix, load_scores, make_matrix  # noqa: E402
-from pathopress.probe_compression import predict_all_known  # noqa: E402
+from pathopress.probe_compression import (  # noqa: E402
+    load_probe_compression,
+    predict_all_known,
+)
 from pathopress.ranking import pairwise_ranking_accuracy  # noqa: E402
 
 
@@ -466,7 +469,7 @@ def main() -> None:
     args = parse_args()
     scores_sha256 = hashlib.sha256(args.scores.read_bytes()).hexdigest()
     matrix, _, evaluations = filter_matrix(*make_matrix(load_scores(args.scores)))
-    compression = json.loads(args.compression.read_text(encoding="utf-8"))
+    compression = load_probe_compression(args.compression)
     _validate_current_compression(
         compression, scores_sha256, list(matrix.shape), evaluations
     )

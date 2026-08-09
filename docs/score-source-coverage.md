@@ -512,3 +512,19 @@ cells must remain excluded from training and evaluation unless their data
 status and protocol contracts are separately approved. The 336 public THREADS
 cells should still be evaluated with source-block and pretraining-overlap
 sensitivity analyses rather than treated as independent random observations.
+
+## Licensing and terms of use
+
+Eligibility and licensing are separate questions. The `audit_status`,
+quarantine, alternate-evidence, and analysis-ineligible markers described above
+are statements about scientific comparability — whether a cell may enter the
+registry or a completion experiment. They grant no reuse rights.
+
+Each score in `data/scores.csv` remains governed by the terms of the individual
+upstream publication or leaderboard it was parsed from, resolved through
+`suite_id` / `reference_url` / `source_locator` and the pinned entries in
+[`../data/provenance.json`](../data/provenance.json). PathoPress's extraction,
+normalization, and provenance work is MIT licensed with a CC-BY-style
+attribution expectation; the reported numbers themselves are not PathoPress's to
+license. See [`../DATA_NOTICE.md`](../DATA_NOTICE.md) and
+[`../data/LICENSE`](../data/LICENSE).

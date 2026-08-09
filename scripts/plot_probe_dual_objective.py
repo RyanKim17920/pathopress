@@ -5,8 +5,10 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gzip
 import json
 import os
+import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Iterable
@@ -21,6 +23,9 @@ import numpy as np
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
+from pathopress.probe_compression import load_probe_compression  # noqa: E402
 
 
 CHARCOAL = "#263238"
@@ -83,6 +88,11 @@ def _short_name(value: str) -> str:
 
 
 def _read_csv(path: Path) -> list[dict[str, str]]:
+    """Read a CSV artifact, transparently decompressing ``.gz`` inputs."""
+
+    if path.suffix == ".gz":
+        with gzip.open(path, "rt", newline="", encoding="utf-8") as handle:
+            return list(csv.DictReader(handle))
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
 
@@ -167,7 +177,7 @@ def build_heldout_mean_records(
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Build model-average records using only committed held-out predictions."""
 
-    payload = json.loads(compression_path.read_text(encoding="utf-8"))
+    payload = load_probe_compression(compression_path)
     semantics = payload.get("configuration", {}).get("heldout_semantics", "")
     if "selected on training rows only" not in semantics:
         raise ValueError("compression artifact does not declare training-only probe selection")
@@ -478,7 +488,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--raw",
         type=Path,
-        default=ROOT / "outputs/probe_compression_selected_raw_rank1.csv",
+        default=ROOT / "outputs/probe_compression_selected_raw_rank1.csv.gz",
     )
     parser.add_argument(
         "--informativeness",

@@ -101,3 +101,16 @@ remain quarantined. Raw bootstrap draws are uncertainty provenance, not tasks.
 ## Source policy
 
 The ledger links only author/publisher primary papers and official model/code releases. Community Hugging Face mirrors are excluded. Exact values enter only from a named table or machine-readable official artifact with a pinned digest and provenance record.
+
+## Licensing and terms of use
+
+This ledger records where each component came from; it conveys no rights to the
+component. Model checkpoints and the pathology datasets they are evaluated on
+are obtained directly from their publishers under their own licenses, several of
+which are non-commercial, gated, or require a data use agreement. PathoPress
+redistributes no weights, images, or labels.
+
+The reported scores extracted from these sources into `data/scores.csv` each
+retain the terms of their originating publication or leaderboard. See
+[`../DATA_NOTICE.md`](../DATA_NOTICE.md), [`../data/LICENSE`](../data/LICENSE),
+and [`../THIRD_PARTY_NOTICES.md`](../THIRD_PARTY_NOTICES.md).

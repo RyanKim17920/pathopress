@@ -7,6 +7,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from pathopress.probe_compression import load_probe_compression
+
 
 STARTER_SET_SCHEMA = "pathopress-static-starter-sets-v1"
 
@@ -27,7 +29,7 @@ def build_starter_sets(
         raise ValueError("count must be positive")
     probe_path = Path(probe_compression_path)
     allowlist_path = Path(feasibility_allowlist_path)
-    probe = json.loads(probe_path.read_text(encoding="utf-8"))
+    probe = load_probe_compression(probe_path)
     allowlist = json.loads(allowlist_path.read_text(encoding="utf-8"))
     if probe["configuration"]["allowlist_sha256"] != _sha256(allowlist_path):
         raise ValueError("probe-compression artifact does not match feasibility allowlist")

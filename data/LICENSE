@@ -1,0 +1,71 @@
+PathoPress data directory — licensing and terms of use
+======================================================
+
+This file states the terms for the tables in this directory. It is a summary of
+../DATA_NOTICE.md, which is authoritative; read that document before reusing or
+redistributing anything here.
+
+There is no single license for this directory. Three layers coexist:
+
+1. CODE that produced these tables (../src/pathopress/, ../scripts/) is MIT
+   licensed under ../LICENSE. Adapted Microsoft BenchPress components carry the
+   additional notice in ../THIRD_PARTY_NOTICES.md.
+
+2. PATHOPRESS-AUTHORED CURATION AND PROVENANCE METADATA is MIT licensed, with a
+   CC-BY-style expectation of attribution. This covers the structure and the
+   PathoPress judgements recorded in these files: provenance.json, suites.csv,
+   tasks.csv, model_sources.csv, model_metadata.csv, model_aliases.csv,
+   model_release_dates.csv, deduplication.csv, the score review ledger and its
+   schema, the allowlists, and the feasibility / cost / budget tables.
+
+3. REPORTED BENCHMARK SCORES are NOT PathoPress's to license. The numeric
+   `value` and `normalized_score` cells in scores.csv (and everything derived
+   from them) were machine-parsed from roughly twenty separately licensed
+   upstream publications, technical reports, and leaderboards. Each retains its
+   own copyright, license, terms of use, attribution requirements, and access
+   restrictions. PathoPress asserts no ownership over any reported number.
+
+Resolving the terms for a specific score
+----------------------------------------
+
+Every row of scores.csv is traceable to exactly one pinned upstream source:
+
+  - scores.csv columns `suite_id`, `reference_url`, and `source_locator`
+    identify the upstream table, figure, or leaderboard.
+  - provenance.json resolves that source to a pinned revision: `repositories`
+    entries are pinned by git or Hugging Face commit; `source_reports` entries
+    are pinned by URL plus a SHA-256 digest of the archived source and its
+    snapshot.
+  - ../exports/pathopress_public/LICENSES.md enumerates the upstream suites and
+    primary-paper sources with their pinned revisions.
+
+Apply the terms published by that source. They are not uniform: the
+repository-hosted benchmark suites carry open-source or dataset licenses, while
+the primary-paper sources are journal or preprint articles whose tables are
+governed by the publisher's copyright and reuse policy. Several underlying
+cohorts are private, gated, or subject to a data use agreement.
+
+The `audit_status` and review-ledger markers describe scientific eligibility and
+comparability (see ../docs/score-source-coverage.md). They are NOT license
+grants and must not be read as permission to redistribute.
+
+What is not here
+----------------
+
+PathoPress does not redistribute pathology images, whole-slide data, benchmark
+labels, or model weights. Those are obtained directly from their publishers
+under their own terms. ../docs/model-sources.md records the component-level
+source ledger and the policy of linking only author/publisher primary papers and
+official model or code releases.
+
+Attribution
+-----------
+
+If you reuse these tables, cite PathoPress AND the upstream sources of the
+scores you rely on. Citing PathoPress alone is not sufficient attribution for
+the reported numbers; the obligation to credit the original benchmark authors
+passes through to you. Per-source citation information is in provenance.json and
+model_sources.csv.
+
+Before publishing, mirroring, or using these artifacts commercially, review the
+terms of every underlying source and obtain legal advice where appropriate.

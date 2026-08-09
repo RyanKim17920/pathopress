@@ -9,6 +9,32 @@ python3 -m pip install -e '.[research]'
 python3 -m pip install -e '.[research,mlp]'
 ```
 
+## Artifact storage forms
+
+Two artifacts are stored in a compressed-but-lossless form so the repository
+stays inside GitHub's 100 MB per-file hard limit. Neither change alters a single
+recorded value.
+
+- `probe_compression_rank1.json` (108 MB → 26 MB) stores the fold-invariant LOFO
+  curves — `candidate_ids`, `candidate_indices`, `all_known_greedy_medae`,
+  `all_known_greedy_medape`, `all_known_random` — once per candidate mode
+  instead of repeating them byte-identically inside all 34 folds, and is
+  serialised without indentation. The hoisted keys are named in
+  `curves.<mode>._fold_invariant_keys`. Read it with
+  `pathopress.probe_compression.load_probe_compression`, which restores the
+  fully materialised per-fold payload; `tests/test_probe_compression_storage.py`
+  pins the round trip. A plain `json.load` still parses the file but leaves the
+  fold-invariant curves hoisted.
+- `../outputs/probe_compression_selected_raw_rank1.csv.gz` (397 MB → 49 MB) is
+  the same per-cell selected-probe stream, gzipped with `mtime=0` so repeated
+  runs are byte-identical. This matches the pre-existing
+  `probe_compression_random_all_known_raw_rank1.csv.gz`. Both are written and
+  read transparently by `run_probe_compression.py` and
+  `scripts/plot_probe_dual_objective.py`; regenerate them with
+  `PYTHONPATH=src python3 experiments/run_probe_compression.py` (a multi-hour
+  run — the committed artifacts exist so figures and the matched-cell replay can
+  be reproduced without it).
+
 The fixed substrate is 59 models × 187 protocol-level evaluations with 2,122
 observations (19.2332% density). The source registry contains 4,013 score rows:
 3,952 retained primary rows, 52 analysis-ineligible rows, and nine reported-

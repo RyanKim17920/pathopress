@@ -27,6 +27,23 @@ mlp = ["torch>=2.0"]
 
 [project.scripts]
 pathopress = "pathopress.cli:main"
+# Packaged front end for the reproduction pipeline.  These wrap the scripts in
+# `scripts/` and `experiments/` without replacing them: the documented
+# `python3 scripts/<name>.py` invocations keep working unchanged, and
+# `experiments/experiment_set.json` still records those literal commands.
+pathopress-run = "pathopress.workflows:main"
+pathopress-replay = "pathopress.workflows:replay_lofo_matched_cells"
+pathopress-check-freshness = "pathopress.workflows:check_freshness"
+pathopress-build-release = "pathopress.workflows:build_public_release"
+pathopress-download-release = "pathopress.workflows:download_public_release"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+# The package is fully annotated (`from __future__ import annotations` plus
+# parameter/return hints throughout), so ship the PEP 561 marker.
+pathopress = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
