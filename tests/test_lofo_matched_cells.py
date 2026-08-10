@@ -567,5 +567,248 @@ class SelectionObjectiveDisclosureTests(unittest.TestCase):
         )
 
 
+class AllowlistRestrictedRandomDrawTests(unittest.TestCase):
+    """The restricted random arm must actually be restricted, and nested.
+
+    The published claim "inside the 25-task low-friction allowlist, greedy is
+    no better than random" had no artifact behind it: the only ``random`` arm
+    in the LOFO artifacts shuffles all 187 evaluations, so it is a control for
+    the unrestricted greedy arm, not for the allowlist-greedy arm.  These tests
+    pin the properties the genuine control has to have.
+    """
+
+    POOL = (3, 11, 17, 23, 29, 31)
+
+    def test_prefixes_only_ever_use_allowlisted_columns(self) -> None:
+        drawn = REPLAY.allowlist_random_prefixes(
+            self.POOL, fold=0, max_k=4, repeats=10, seed=42
+        )
+        self.assertTrue(drawn)
+        for probes in drawn.values():
+            self.assertTrue(set(probes).issubset(set(self.POOL)))
+
+    def test_prefixes_are_nested_and_have_the_right_size(self) -> None:
+        drawn = REPLAY.allowlist_random_prefixes(
+            self.POOL, fold=3, max_k=4, repeats=10, seed=42
+        )
+        for repeat in range(10):
+            for k in range(1, 5):
+                probes = drawn[(repeat, k)]
+                self.assertEqual(len(probes), k)
+                self.assertEqual(len(set(probes)), k)
+                if k > 1:
+                    self.assertEqual(drawn[(repeat, k - 1)], probes[: k - 1])
+
+    def test_depth_is_capped_by_the_candidate_pool(self) -> None:
+        """A pool smaller than max_k must truncate, not raise or repeat."""
+
+        drawn = REPLAY.allowlist_random_prefixes(
+            (2, 5), fold=0, max_k=5, repeats=3, seed=42
+        )
+        self.assertEqual(max(k for _, k in drawn), 2)
+        self.assertEqual(REPLAY.allowlist_random_prefixes((), fold=0, max_k=5,
+                                                          repeats=3, seed=42), {})
+
+    def test_each_fold_gets_its_own_draw(self) -> None:
+        """Mirrors run_probe_selection.py, which offsets the seed by the fold."""
+
+        first = REPLAY.allowlist_random_prefixes(
+            self.POOL, fold=0, max_k=4, repeats=10, seed=42
+        )
+        second = REPLAY.allowlist_random_prefixes(
+            self.POOL, fold=1, max_k=4, repeats=10, seed=42
+        )
+        self.assertNotEqual(first, second)
+
+    def test_draw_matches_the_published_random_prefix_generator(self) -> None:
+        """Same generator as the unrestricted arm; only the pool differs."""
+
+        from pathopress.probes import random_global_probe_prefixes
+
+        expected = random_global_probe_prefixes(
+            len(self.POOL), max_probes=4, repeats=10, seed=42 + 7
+        )
+        drawn = REPLAY.allowlist_random_prefixes(
+            self.POOL, fold=7, max_k=4, repeats=10, seed=42
+        )
+        for repeat, prefixes in enumerate(expected):
+            for k, positions in enumerate(prefixes, start=1):
+                self.assertEqual(
+                    drawn[(repeat, k)],
+                    tuple(self.POOL[p] for p in positions),
+                )
+
+
+class AllowlistRestrictedRandomArmArtifactTests(unittest.TestCase):
+    """Pin the allowlist-internal head-to-head the published claim needs."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        path = ROOT / "experiments/lofo_matched_cells_rank1.json"
+        if not path.exists():
+            raise unittest.SkipTest("matched-cell artifact not generated")
+        cls.payload = json.loads(path.read_text(encoding="utf-8"))
+        if not cls.payload.get("allowlist_greedy_vs_random_by_k"):
+            raise unittest.SkipTest("allowlist arms not replayed")
+
+    def test_block_exists_for_every_depth_with_all_three_arms(self) -> None:
+        blocks = self.payload["allowlist_greedy_vs_random_by_k"]
+        self.assertEqual([b["k"] for b in blocks], [1, 2, 3, 4, 5])
+        for block in blocks:
+            for arm in ("k0", "allowlist_greedy", "allowlist_random"):
+                self.assertIn(arm, block["arms"])
+            self.assertEqual(
+                self.payload["configuration"]["n_allowlist_candidates"], 25
+            )
+            self.assertEqual(
+                self.payload["configuration"]["n_allowlist_random_repeats"], 10
+            )
+
+    def test_all_three_arms_share_one_cell_set_at_each_depth(self) -> None:
+        for block in self.payload["allowlist_greedy_vs_random_by_k"]:
+            folds = set(block["arms"]["k0"]["per_fold_medae"])
+            self.assertEqual(
+                set(block["arms"]["allowlist_greedy"]["per_fold_medae"]), folds
+            )
+            self.assertEqual(
+                set(block["arms"]["allowlist_random"]["per_fold_median_over_repeats"]),
+                folds,
+            )
+
+    def test_matched_set_is_strictly_smaller_than_the_greedy_only_block(self) -> None:
+        """Adding a random arm reveals more cells, so it must shrink further.
+
+        It must NOT shrink ``allowlist_arm_by_k``, whose numbers are published.
+        """
+
+        pairs = {b["k"]: b for b in self.payload["allowlist_greedy_vs_random_by_k"]}
+        for block in self.payload["allowlist_arm_by_k"]:
+            self.assertLess(
+                pairs[block["k"]]["n_matched_cells"], block["n_matched_cells"]
+            )
+        headline = next(b for b in self.payload["allowlist_arm_by_k"] if b["k"] == 4)
+        self.assertAlmostEqual(
+            headline["arms"]["allowlist_greedy"]["medae_median_of_fold_medians"],
+            1.9951398678,
+            places=6,
+        )
+
+    def test_the_unrestricted_random_arm_is_not_the_allowlist_control(self) -> None:
+        """Guard against re-quoting the 187-column arm as the allowlist control."""
+
+        unrestricted = next(b for b in self.payload["by_k"] if b["k"] == 4)
+        restricted = next(
+            b for b in self.payload["allowlist_greedy_vs_random_by_k"] if b["k"] == 4
+        )
+        self.assertNotAlmostEqual(
+            unrestricted["arms"]["random"]["medae_median_of_fold_medians"],
+            restricted["arms"]["allowlist_random"]["medae_median_of_fold_medians"],
+            places=3,
+        )
+        self.assertNotIn("allowlist_random", unrestricted["arms"])
+
+    def test_headline_allowlist_greedy_vs_random_values(self) -> None:
+        block = next(
+            b for b in self.payload["allowlist_greedy_vs_random_by_k"] if b["k"] == 4
+        )
+        self.assertEqual(block["n_matched_cells"], 1237)
+        self.assertAlmostEqual(
+            block["arms"]["k0"]["medae_median_of_fold_medians"], 2.8555082606,
+            places=6,
+        )
+        self.assertAlmostEqual(
+            block["arms"]["allowlist_greedy"]["medae_median_of_fold_medians"],
+            1.9463385335,
+            places=6,
+        )
+        self.assertAlmostEqual(
+            block["arms"]["allowlist_random"]["medae_median_of_fold_medians"],
+            2.0251163736,
+            places=6,
+        )
+        self.assertAlmostEqual(
+            block["arms"]["allowlist_random"]["medae_median_over_fold_repeat_medaes"],
+            2.0118290091,
+            places=6,
+        )
+        self.assertEqual(
+            block["arms"]["allowlist_random"]["n_fold_repeat_pairs"], 340
+        )
+
+    def test_headline_head_to_head_is_not_significant(self) -> None:
+        """The negative result itself: greedy's edge is inside the noise.
+
+        Both aggregation conventions put allowlist-greedy nominally ahead, but
+        the signed-rank test is far from significant and the bootstrap CI on
+        the reduction straddles zero, so no ordering is supported.
+        """
+
+        block = next(
+            b for b in self.payload["allowlist_greedy_vs_random_by_k"] if b["k"] == 4
+        )
+        head = block["allowlist_greedy_vs_allowlist_random"]
+        self.assertAlmostEqual(
+            head["wilcoxon_signed_rank"]["p_value"], 0.4939012303, places=8
+        )
+        self.assertGreater(head["wilcoxon_signed_rank"]["p_value"], 0.05)
+        reduction = head["bootstrap_reduction_over_folds"]
+        self.assertLess(reduction["ci_lower"], 0.0)
+        self.assertGreater(reduction["ci_upper"], 0.0)
+        self.assertAlmostEqual(reduction["point_estimate"], 0.0389004015, places=8)
+        # Both conventions are reported, because the claim is asserted under
+        # both and they do not agree to the quoted precision.
+        convention_a = block["allowlist_greedy_vs_allowlist_random_convention_a"]
+        self.assertAlmostEqual(convention_a["greedy_medae"], 1.9463385335, places=6)
+        self.assertAlmostEqual(convention_a["random_medae"], 2.0118290091, places=6)
+
+    def test_ties_are_exactly_the_zero_information_folds(self) -> None:
+        """Every tie is a fold where no allowlisted probe is observed at all.
+
+        In those folds the held-out family has no score on any of the 25
+        candidates, no arm can reveal a cell, and all three arms collapse onto
+        the k=0 completion.  Roughly half the folds are like this, which is why
+        the head-to-head has so little power.
+        """
+
+        for block in self.payload["allowlist_greedy_vs_random_by_k"]:
+            head = block["allowlist_greedy_vs_allowlist_random"]
+            self.assertEqual(head["folds_tied"], head["folds_zero_information"])
+            k0 = block["arms"]["k0"]["per_fold_medae"]
+            greedy = block["arms"]["allowlist_greedy"]["per_fold_medae"]
+            random_arm = block["arms"]["allowlist_random"][
+                "per_fold_median_over_repeats"
+            ]
+            tied = [
+                f for f in k0
+                if greedy[f] is not None and random_arm[f] is not None
+                and greedy[f] == random_arm[f]
+            ]
+            self.assertEqual(len(tied), head["folds_tied"])
+            for fold in tied:
+                self.assertEqual(greedy[fold], k0[fold])
+        headline = next(
+            b for b in self.payload["allowlist_greedy_vs_random_by_k"] if b["k"] == 4
+        )
+        self.assertEqual(
+            headline["allowlist_greedy_vs_allowlist_random"][
+                "folds_zero_information"], 15
+        )
+
+    def test_candidate_ids_are_recorded_and_match_the_allowlist_file(self) -> None:
+        recorded = self.payload["allowlist_candidate_ids"]
+        self.assertEqual(len(recorded), 25)
+        published = json.loads(
+            (ROOT / "data/low_friction_allowlist_v2_top25.json").read_text(
+                encoding="utf-8"
+            )
+        )["evaluation_ids"]
+        self.assertEqual(list(recorded), list(published))
+
+    def test_caveat_names_the_unrestricted_arm_trap(self) -> None:
+        joined = " ".join(self.payload["caveats"])
+        self.assertIn("UNRESTRICTED", joined)
+        self.assertIn("allowlist_greedy_vs_random_by_k", joined)
+
+
 if __name__ == "__main__":
     unittest.main()

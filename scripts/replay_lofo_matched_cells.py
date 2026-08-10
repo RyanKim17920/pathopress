@@ -67,6 +67,7 @@ from pathopress.probes import (  # noqa: E402
     compute_column_loo_baseline_medae,
     compute_column_robust_dispersion,
     compute_column_skill,
+    random_global_probe_prefixes,
     summarize_skill_positive_fraction,
 )
 
@@ -191,11 +192,16 @@ def read_selection_folds(
 
 def read_allowlist_prefixes(
     path: Path, max_k: int
-) -> dict[int, dict[int, tuple[int, ...]]]:
-    """Per-fold greedy prefixes for the pre-error low-friction allowlist arm.
+) -> tuple[dict[int, dict[int, tuple[int, ...]]], tuple[str, ...]]:
+    """Per-fold greedy prefixes *and* candidate ids for the allowlist arm.
 
     The compression artifact is ~100 MB, so this is only read when the
-    allowlist arm is requested.
+    allowlist arm is requested, and it is read once: both the recorded greedy
+    prefixes and the 25 allowlisted evaluation ids come out of the same parse.
+    The ids are taken from the artifact rather than from
+    ``data/low_friction_allowlist_v2_top25.json`` so that the restricted random
+    arm is drawn from exactly the candidate pool the recorded allowlist-greedy
+    arm searched, even if the standalone allowlist file is later revised.
     """
 
     payload = json.loads(path.read_text(encoding="utf-8"))
@@ -208,7 +214,50 @@ def read_allowlist_prefixes(
             for step in steps
             if int(step["k"]) <= max_k
         }
-    return prefixes
+    candidate_ids = tuple(str(v) for v in payload["allowlist"]["evaluation_ids"])
+    if not candidate_ids:
+        raise ValueError(f"{path} has an empty allowlist.evaluation_ids block")
+    return prefixes, candidate_ids
+
+
+def allowlist_random_prefixes(
+    candidate_indices: Sequence[int],
+    *,
+    fold: int,
+    max_k: int,
+    repeats: int,
+    seed: int,
+) -> dict[tuple[int, int], tuple[int, ...]]:
+    """Random *allowlist-restricted* nested prefixes for one LOFO fold.
+
+    This is the missing control.  The published ``random`` arm shuffles all 187
+    evaluations, so it is not restricted to the 25-task low-friction allowlist
+    and cannot be compared like-for-like with the allowlist-greedy arm: any gap
+    between them mixes "greedy beats random" with "the allowlist is a different
+    (and much smaller) candidate pool".  Here the permutation is taken over the
+    allowlist positions only and then mapped back to matrix column indices, so
+    greedy and random search the *same* pool.
+
+    The draw mirrors ``pathopress.probes.random_global_probe_prefixes`` exactly
+    -- nested prefixes from one shuffled permutation per repeat, RandomState
+    ``(seed + repeat) * 100000`` -- and uses the same per-fold seed offset
+    (``seed + fold``) that ``experiments/run_probe_selection.py`` uses for the
+    unrestricted held-out random arm, so the two random arms differ only in the
+    pool they are drawn from.
+    """
+
+    pool = [int(index) for index in candidate_indices]
+    depth = min(int(max_k), len(pool))
+    if depth < 1:
+        return {}
+    prefixes = random_global_probe_prefixes(
+        len(pool), max_probes=depth, repeats=int(repeats), seed=int(seed) + int(fold)
+    )
+    out: dict[tuple[int, int], tuple[int, ...]] = {}
+    for repeat, repeat_prefixes in enumerate(prefixes):
+        for k, positions in enumerate(repeat_prefixes, start=1):
+            out[(repeat, k)] = tuple(pool[int(p)] for p in positions)
+    return out
 
 
 # --------------------------------------------------------------------------
@@ -410,8 +459,23 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         args.selection, model_index, len(models), args.max_k
     )
     allowlist_prefixes: dict[int, dict[int, tuple[int, ...]]] = {}
+    allowlist_candidate_ids: tuple[str, ...] = ()
+    allowlist_candidate_indices: tuple[int, ...] = ()
     if args.allowlist:
-        allowlist_prefixes = read_allowlist_prefixes(args.compression, args.max_k)
+        allowlist_prefixes, allowlist_candidate_ids = read_allowlist_prefixes(
+            args.compression, args.max_k
+        )
+        evaluation_index = {name: i for i, name in enumerate(evaluations)}
+        missing = [name for name in allowlist_candidate_ids
+                   if name not in evaluation_index]
+        if missing:
+            raise ValueError(
+                "allowlist candidates absent from the filtered matrix, so the "
+                f"restricted random arm cannot be drawn: {sorted(missing)}"
+            )
+        allowlist_candidate_indices = tuple(
+            evaluation_index[name] for name in allowlist_candidate_ids
+        )
 
     # ---- build the job list and, in the same pass, the matched-cell sets ----
     #
@@ -424,9 +488,17 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     jobs: list[tuple[Any, ...]] = []
     matched_by_k: dict[int, dict[int, set[tuple[int, int]]]] = {}
     strict_by_k: dict[int, dict[int, set[tuple[int, int]]]] = {}
+    # Cell sets for the allowlist-internal head-to-head.  Kept separate from
+    # ``strict_by_k`` on purpose: the restricted random arm reveals cells the
+    # allowlist-greedy arm does not, and folding those exclusions into
+    # ``strict_by_k`` would silently move the already-published
+    # ``allowlist_arm_by_k`` numbers.
+    allow_pair_by_k: dict[int, dict[int, set[tuple[int, int]]]] = {}
+    allowlist_random_by_fold: dict[int, dict[tuple[int, int], tuple[int, ...]]] = {}
     target_by_fold: dict[int, set[tuple[int, int]]] = {}
     excluded_by_k: dict[int, dict[int, set[tuple[int, int]]]] = {}
     n_random_repeats = 0
+    n_allowlist_random_repeats = 0
     depths = sorted({k for fold in folds for k in fold["greedy"]})
 
     for fold in folds:
@@ -442,6 +514,22 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         repeats = sorted({repeat for repeat, _ in fold["random"]})
         n_random_repeats = max(n_random_repeats, len(repeats))
         allow = allowlist_prefixes.get(fold_id, {})
+        allow_random = (
+            allowlist_random_prefixes(
+                allowlist_candidate_indices,
+                fold=fold_id,
+                max_k=args.max_k,
+                repeats=len(repeats) or 1,
+                seed=args.seed,
+            )
+            if allowlist_candidate_indices
+            else {}
+        )
+        allowlist_random_by_fold[fold_id] = allow_random
+        allow_repeats = sorted({repeat for repeat, _ in allow_random})
+        n_allowlist_random_repeats = max(
+            n_allowlist_random_repeats, len(allow_repeats)
+        )
 
         for k in depths:
             revealed: set[tuple[int, int]] = set()
@@ -463,6 +551,20 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             strict_by_k.setdefault(k, {})[fold_id] = (
                 all_target_cells - revealed - allow_revealed
             )
+            # Allowlist-internal head-to-head: same base exclusion as
+            # ``strict_by_k`` plus every cell the restricted random repeats
+            # reveal, so allowlist-greedy and allowlist-random answer the
+            # identical per-fold question.
+            allow_random_revealed: set[tuple[int, int]] = set()
+            for repeat in allow_repeats:
+                probes = allow_random.get((repeat, k))
+                if probes is not None:
+                    allow_random_revealed |= _revealed_cells(
+                        observed, targets, probes
+                    )
+            allow_pair_by_k.setdefault(k, {})[fold_id] = (
+                all_target_cells - revealed - allow_revealed - allow_random_revealed
+            )
 
         jobs.append((("k0", fold_id, 0, -1), targets, context, (), args.rank))
         for k, probes in sorted(fold["greedy"].items()):
@@ -473,6 +575,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         for k, probes in sorted(allow.items()):
             jobs.append((("allowlist_greedy", fold_id, k, -1), targets, context, probes,
                          args.rank))
+        for (repeat, k), probes in sorted(allow_random.items()):
+            jobs.append((("allowlist_random", fold_id, k, repeat), targets, context,
+                         probes, args.rank))
 
     print(f"replaying {len(jobs)} (fold, probe-set) evaluations across "
           f"{len(folds)} folds", flush=True)
@@ -639,9 +744,151 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             }
         return block
 
+    def score_allowlist_pair(
+        k: int, cell_sets: dict[int, set[tuple[int, int]]]
+    ) -> dict[str, Any]:
+        """Allowlist-greedy vs allowlist-RANDOM, like-for-like at depth ``k``.
+
+        Both arms draw from the same 25-task low-friction allowlist and are
+        scored on the identical per-fold matched cell set, so this is the
+        comparison the published "greedy is no better than random inside the
+        allowlist" claim needs and which no prior artifact contained: the
+        ``random`` arm in ``by_k``/``allowlist_arm_by_k`` is the unrestricted
+        187-column arm and is not a control for the allowlist-greedy arm.
+        """
+
+        k0_values = [
+            _medae(fold_errors(("k0", f, 0, -1), cell_sets)) for f in fold_ids
+        ]
+        greedy_values = []
+        for f in fold_ids:
+            key = ("allowlist_greedy", f, k, -1)
+            greedy_values.append(
+                _medae(fold_errors(key, cell_sets)) if key in predictions
+                else float("nan")
+            )
+
+        random_by_fold: dict[int, dict[int, float]] = {}
+        for f in fold_ids:
+            for repeat, kk in sorted(allowlist_random_by_fold.get(f, {})):
+                if kk != k:
+                    continue
+                random_by_fold.setdefault(f, {})[repeat] = _medae(
+                    fold_errors(("allowlist_random", f, k, repeat), cell_sets)
+                )
+        random_fold_medians = [
+            _median_finite(list(random_by_fold.get(f, {}).values())) for f in fold_ids
+        ]
+        random_flat = [
+            value
+            for f in fold_ids
+            for value in random_by_fold.get(f, {}).values()
+        ]
+
+        def against(base: Sequence[float], series: Sequence[float]) -> dict[str, Any]:
+            pairs = [
+                (a, b) for a, b in zip(base, series)
+                if np.isfinite(a) and np.isfinite(b)
+            ]
+            return {
+                "folds_improved": int(sum(1 for a, b in pairs if b < a)),
+                "n_folds": len(pairs),
+                "wilcoxon_signed_rank": _wilcoxon(base, series),
+                "bootstrap_reduction_over_folds": _bootstrap_reduction(
+                    base, series, n_bootstrap=args.bootstrap, seed=args.seed
+                ),
+            }
+
+        def series_row(series: Sequence[float]) -> dict[str, Any]:
+            return {
+                "medae_median_of_fold_medians": _finite(_median_finite(series)),
+                "n_folds": int(sum(1 for value in series if np.isfinite(value))),
+                "per_fold_medae": {
+                    str(f): _finite(value) for f, value in zip(fold_ids, series)
+                },
+            }
+
+        greedy_better = [
+            (a, b) for a, b in zip(random_fold_medians, greedy_values)
+            if np.isfinite(a) and np.isfinite(b)
+        ]
+        # Folds where the held-out family has no observed score on ANY
+        # allowlisted candidate.  There, no allowlist probe set can reveal a
+        # cell, every arm collapses onto the k=0 completion, and the fold
+        # carries literally zero evidence about greedy vs random.  Counted
+        # explicitly because it is the reason so many folds tie.
+        zero_information = int(sum(
+            1
+            for base, gv, rv in zip(k0_values, greedy_values, random_fold_medians)
+            if np.isfinite(base) and np.isfinite(gv) and np.isfinite(rv)
+            and gv == base and rv == base
+        ))
+        return {
+            "k": k,
+            "n_matched_cells": sum(len(cells) for cells in cell_sets.values()),
+            "n_excluded_revealed_cells": sum(
+                len(target_by_fold[f]) - len(cell_sets[f]) for f in fold_ids
+            ),
+            "arms": {
+                "k0": series_row(k0_values),
+                "allowlist_greedy": {
+                    **series_row(greedy_values),
+                    "vs_k0": against(k0_values, greedy_values),
+                },
+                "allowlist_random": {
+                    # Convention A: one observation per (fold, repeat).
+                    "medae_median_over_fold_repeat_medaes": _finite(
+                        _median_finite(random_flat)
+                    ),
+                    "n_fold_repeat_pairs": int(
+                        sum(1 for value in random_flat if np.isfinite(value))
+                    ),
+                    # Convention B: collapse repeats within a fold first, so
+                    # each fold contributes one number and the arm is directly
+                    # comparable with k=0 and allowlist-greedy.
+                    "medae_median_of_fold_medians": _finite(
+                        _median_finite(random_fold_medians)
+                    ),
+                    "n_folds": int(
+                        sum(1 for value in random_fold_medians if np.isfinite(value))
+                    ),
+                    "per_fold_median_over_repeats": {
+                        str(f): _finite(value)
+                        for f, value in zip(fold_ids, random_fold_medians)
+                    },
+                    "vs_k0": against(k0_values, random_fold_medians),
+                },
+            },
+            "allowlist_greedy_vs_allowlist_random": {
+                "random_aggregation": "median_of_fold_medians",
+                "folds_greedy_better": int(sum(1 for a, b in greedy_better if b < a)),
+                "folds_tied": int(sum(1 for a, b in greedy_better if b == a)),
+                "folds_zero_information": zero_information,
+                "n_folds": len(greedy_better),
+                "wilcoxon_signed_rank": _wilcoxon(random_fold_medians, greedy_values),
+                "bootstrap_reduction_over_folds": _bootstrap_reduction(
+                    random_fold_medians, greedy_values,
+                    n_bootstrap=args.bootstrap, seed=args.seed,
+                ),
+            },
+            "allowlist_greedy_vs_allowlist_random_convention_a": {
+                # Same head-to-head, but with the random arm summarised by the
+                # (fold, repeat) convention.  Reported because the published
+                # claim is asserted "under both aggregation conventions".
+                "random_aggregation": "median_over_fold_repeat_medaes",
+                "random_medae": _finite(_median_finite(random_flat)),
+                "greedy_medae": _finite(_median_finite(greedy_values)),
+            },
+        }
+
     by_depth = [
         score_depth(k, matched_by_k[k], include_allowlist=False) for k in depths
     ]
+    allowlist_pair_by_depth = (
+        [score_allowlist_pair(k, allow_pair_by_k[k]) for k in depths]
+        if allowlist_prefixes and allowlist_candidate_indices
+        else None
+    )
     allowlist_by_depth = (
         [score_depth(k, strict_by_k[k], include_allowlist=True) for k in depths]
         if allowlist_prefixes
@@ -690,6 +937,12 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "n_folds": len(folds),
             "n_random_repeats": n_random_repeats,
             "allowlist_arm_included": bool(allowlist_prefixes),
+            "allowlist_random_arm_included": bool(
+                allowlist_prefixes and allowlist_candidate_indices
+            ),
+            "n_allowlist_random_repeats": n_allowlist_random_repeats,
+            "n_allowlist_candidates": len(allowlist_candidate_indices),
+            "allowlist_random_seed_formula": "RandomState((seed + fold + repeat) * 100000)",
             "bootstrap": args.bootstrap,
             "seed": args.seed,
             "noise_floor_dispersion": SKILL_NOISE_FLOOR_DISPERSION,
@@ -735,6 +988,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         # its own strictly smaller matched set and its own copy of every arm.
         # Never mix numbers across the two blocks.
         "allowlist_arm_by_k": allowlist_by_depth,
+        # The like-for-like allowlist-internal control: allowlist-greedy vs
+        # allowlist-RESTRICTED random, both drawn from the same 25 candidates
+        # and scored on one further-restricted matched set.  The ``random`` arm
+        # inside ``by_k`` and ``allowlist_arm_by_k`` is the UNRESTRICTED
+        # 187-column arm and must never be quoted as the allowlist control.
+        "allowlist_greedy_vs_random_by_k": allowlist_pair_by_depth,
+        "allowlist_candidate_ids": list(allowlist_candidate_ids),
         "per_column_skill": skill,
         "columns": column_table,
         "caveats": [
@@ -745,6 +1005,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "reported: median over all (fold, repeat) MedAEs, and median of "
             "per-fold medians over repeats.  They differ, so any single number "
             "quoted from this artifact must name its convention.",
+            "The 'random' arm in by_k and allowlist_arm_by_k is UNRESTRICTED "
+            "(drawn from all 187 evaluations) and is not a control for the "
+            "allowlist-greedy arm. The allowlist-restricted control lives in "
+            "allowlist_greedy_vs_random_by_k, where both arms are drawn from "
+            "the same 25 low-friction candidates and scored on one further "
+            "restricted matched cell set; only that block may be quoted for "
+            "any 'greedy vs random inside the allowlist' claim.",
             "Folds, not cells, are the bootstrap unit: one fold is one held-out "
             "model family.",
         ],
@@ -1154,6 +1421,31 @@ def main(argv: Sequence[str] | None = None) -> int:
             }
             for block in payload["by_k"]
         },
+        "allowlist_greedy_vs_allowlist_random": (
+            {
+                str(block["k"]): {
+                    "n_matched_cells": block["n_matched_cells"],
+                    "k0": block["arms"]["k0"]["medae_median_of_fold_medians"],
+                    "allowlist_greedy": block["arms"]["allowlist_greedy"][
+                        "medae_median_of_fold_medians"],
+                    "allowlist_random_fold_medians": block["arms"][
+                        "allowlist_random"]["medae_median_of_fold_medians"],
+                    "allowlist_random_fold_repeat": block["arms"][
+                        "allowlist_random"]["medae_median_over_fold_repeat_medaes"],
+                    "folds_greedy_better": block[
+                        "allowlist_greedy_vs_allowlist_random"]["folds_greedy_better"],
+                    "n_folds": block[
+                        "allowlist_greedy_vs_allowlist_random"]["n_folds"],
+                    "wilcoxon_p": block["allowlist_greedy_vs_allowlist_random"][
+                        "wilcoxon_signed_rank"]["p_value"],
+                    "reduction": block["allowlist_greedy_vs_allowlist_random"][
+                        "bootstrap_reduction_over_folds"],
+                }
+                for block in payload["allowlist_greedy_vs_random_by_k"]
+            }
+            if payload.get("allowlist_greedy_vs_random_by_k")
+            else None
+        ),
         "skill_headline": {
             "positive": headline["n_columns_positive"],
             "scored": headline["n_columns_scored"],

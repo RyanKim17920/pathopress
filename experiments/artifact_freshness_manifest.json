@@ -486,8 +486,8 @@
     },
     "scripts/replay_lofo_matched_cells.py": {
       "kind": "file",
-      "sha256": "b951df0b194a080215f5b588428ffddda83bb3f25fce06ac40bf727ab522bea1",
-      "bytes": 48274
+      "sha256": "036f416193b1aae35145f24a5206d82d7fab789edb653ace5bc9b000b4c972d4",
+      "bytes": 62844
     },
     "src/pathopress": {
       "kind": "directory",
@@ -575,8 +575,8 @@
     },
     "experiments/lofo_matched_cells_rank1.json": {
       "kind": "file",
-      "sha256": "baeeed654171b81fe5c7e84d8737d9f17890514508accc26d7364e32fe2cd4c0",
-      "bytes": 222392
+      "sha256": "7ac2ccc132b336e0a16e1c02935b756e3396f5d7dd2e475596728c5e732465bc",
+      "bytes": 257615
     },
     "experiments/method_comparison/manifest.json": {
       "kind": "file",
@@ -735,5 +735,5 @@
       "bytes": 1822
     }
   },
-  "manifest_sha256": "a809f48ed3b1f56960870b0316eb2a153a9f3f69bcb39797cf92ed8d4d1277f2"
+  "manifest_sha256": "85188c977e77a73fcc32f903fe55610ceb9fe9d4e683b119e2295e91f2c4f7c8"
 }
