@@ -109,9 +109,9 @@ It abstains without both histories and does not apply this trust probability to
 new model rows. See [the confidence/trust protocol](confidence-trust.md).
 
 [Unseen-model confidence](new-model-confidence.md) is calibrated separately
-from 30,992 genuinely hidden sparse-row and temporal predictions. Its nested
-leave-target-model-out evaluation obtains 94.98% empirical coverage at nominal
-90% and 15.25-point median width. The CLI and website expose the risk, interval,
+from 33,272 genuinely hidden sparse-row and temporal predictions. Its nested
+leave-target-model-out evaluation obtains 94.80% empirical coverage at nominal
+90% and 14.7223-point median width. The CLI and website expose the risk, interval,
 probe bucket, fallback scope, and calibration group counts, or deterministically
 abstain for unsupported columns. This remains retrospective and is not a
 clinical or future-domain coverage guarantee.
@@ -119,10 +119,27 @@ clinical or future-domain coverage guarantee.
 ## Probe and ranking validation
 
 All-known greedy reconstruction gives MedAE 1.397334 with five probes and
-1.213706 with ten; hidden-only values are 1.548536 and 1.493709. Held-out-model
-hidden-cell MedAE is 1.885364 and 2.008051. Revealed probes contribute exact
-zero-error cells only to the all-known denominator, so these quantities must
-not be merged.
+1.213706 with ten; hidden-only values are 1.548536 and 1.493709. Revealed
+probes contribute exact zero-error cells only to the all-known denominator, so
+these quantities must not be merged.
+
+The held-out-model protocol, which selects probes on training models and then
+completes each validation row in isolation, gives hidden-cell MedAE **3.137815**
+at five probes (n = 321) and **3.058947** at ten (n = 307). These come from
+[`probe_selection_results_rank1.json`](../experiments/probe_selection_results_rank1.json)
+at `heldout_model.validation[step].hidden_only.medae`, and they replace the
+previously quoted pair (1.885364 and 2.008051), which traces to no artifact.
+
+Three scope conditions are mandatory whenever they are quoted. They come from a
+**single 70/30 `split_mode = family_blocked` holdout with 48 training models and
+11 validation models**, not from the 34-fold LOFO protocol used below, so the
+estimate is seed-sensitive at this validation size. The hidden-cell denominator
+shrinks as k grows (334 at k=0, 321 at k=5, 307 at k=10), so the curve is not
+scored on a fixed cell set. And the direction of the result is the reverse of
+what was previously stated here: held-out error is **worse** than the 1.900
+all-known zero-probe scorecard baseline and worse than this protocol's own k=0
+hidden-cell baseline of 2.933142 (n = 334). Revealing probes on an unseen model's
+row does not improve reconstruction of that row under this split.
 
 Comparing probe-selection arms requires a further step, because each arm
 otherwise removes its own revealed cells and is therefore scored on a different
@@ -130,10 +147,14 @@ denominator. Under the matched-cell leave-one-family-out protocol, the union of
 the cells revealed by the greedy prefix and by all ten random repeats is excluded
 per fold and per depth, and every arm is scored on the identical remainder. At
 four probes that leaves 1,636 of 2,122 cells, on which greedy is 1.8781, the k=0
-baseline 2.6524, and the random control 2.6013 under the median-over-340-fold-×-
-repeat-MedAEs convention (2.6260 under median-of-fold-medians; the convention
-must always be named). Greedy beats k=0 in 18 of 34 folds (Wilcoxon p = 0.0088)
-and random in 22 of 34 (p = 0.0151). The reduction versus k=0 has a
+baseline 2.6524 (both being medians of the 34 fold medians), and the random
+control 2.6013 under convention A, the median over all 340 fold × repeat MedAEs
+(2.6260 under convention B, median of fold medians; the convention must always
+be named). Greedy beats k=0 in 18 of 34 folds (Wilcoxon p = 0.0088) and random
+in 22 of 34 (p = 0.0151) — that random test, and the CI against random, are
+computed on **convention B** fold medians, not on the convention-A value quoted
+in the same sentence, because a paired test needs one random value per fold.
+The reduction versus k=0 has a
 bootstrap-over-folds 95% CI of [2.8%, 58.7%], so its point estimate is not
 precise and should not be quoted to three significant figures.
 

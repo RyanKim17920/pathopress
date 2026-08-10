@@ -104,10 +104,23 @@ clustering, and native endpoint differences can all create apparent low rank.
 
 ## Does a small panel work?
 
-Retrospectively, yes. From a 1.935 all-known scorecard MedAE baseline, greedy
-rank-1 selection reaches 1.474879 with five probes and 1.270529 with ten.
-Strict hidden-only values are 1.637639 and 1.538607; isolated held-out-model
-values are 2.126261 and 2.142613.
+Retrospectively, yes. From a 1.900 all-known scorecard MedAE baseline, greedy
+rank-1 selection reaches 1.397334 with five probes and 1.213706 with ten.
+Strict hidden-only values are 1.548536 and 1.493709.
+
+The isolated held-out-model figures previously quoted at this point (2.126261
+and 2.142613) are permanently withdrawn rather than restored. They trace to no
+artifact anywhere in the repository, and the era of held-out-model figures they
+belonged to is not reproducible from the current code and data, so no substitute
+value is invented here. For the current, artifact-backed held-out evidence use
+instead: the 70/30 `family_blocked` held-out-model curve (hidden-cell MedAE
+3.137815 at five probes and 3.058947 at ten, from
+[`probe_selection_results_rank1.json`](../experiments/probe_selection_results_rank1.json)
+— see [imputation.md](imputation.md)), and the 34-fold leave-one-family-out
+matched-cell replay in
+[`lofo_matched_cells_rank1.json`](../experiments/lofo_matched_cells_rank1.json)
+(greedy 1.8781 versus k=0 2.6524 at four probes), which is the protocol this
+document's held-out claims should now be read against.
 
 Those protocols answer different questions. The all-known curve is
 transductive and includes exact revealed cells. Held-out-model validation is

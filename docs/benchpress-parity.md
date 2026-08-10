@@ -64,7 +64,24 @@ On the current matrix, the zero-probe scorecard baseline is 1.900 MedAE.
 Greedy all-known rank-1 completion reaches 1.397334 at five probes and 1.213706
 at ten; hidden-only values are 1.548536 and 1.493709. The held-out-row protocol
 selects probes on training models and evaluates each validation model in
-isolation; its hidden-cell MedAE is 1.885364 and 2.008051 at five and ten.
+isolation; its hidden-cell MedAE is **3.137815** at five probes (n = 321 hidden
+cells) and **3.058947** at ten (n = 307), read from
+[`probe_selection_results_rank1.json`](../experiments/probe_selection_results_rank1.json)
+under `heldout_model.validation[step].hidden_only.medae`.
+
+Three disclosures travel with that pair. First, it comes from a **single 70/30
+`split_mode = family_blocked` holdout — 48 training models and 11 validation
+models** — not from the 34-fold LOFO protocol used elsewhere in this note, and a
+single split at N = 11 validation models is seed-sensitive. Second, the hidden
+cell count shrinks with k (334 at k=0 down to 307 at k=10), so the curve is not
+scored on a fixed denominator. Third, and most importantly, **the sign of the
+story is the opposite of what was previously published here**: held-out error
+does not fall below the 1.900 zero-probe scorecard baseline — it is roughly 65%
+worse than it, and it is also worse than this protocol's own k=0 hidden-cell
+baseline of 2.933142 (n = 334). Revealing probes on a held-out model row does not
+improve reconstruction of that row under this split. The earlier figures
+(1.885364 at five, 2.008051 at ten) are withdrawn; they trace to no current
+artifact.
 
 Arm-to-arm comparison needs a matched denominator. Each arm removes the cells it
 reveals, so a greedy arm, a random arm, and a k=0 arm are otherwise scored on
@@ -72,12 +89,18 @@ three different cell sets. The matched-cell leave-one-family-out replay excludes
 per fold and per depth, the union of the cells revealed by the greedy prefix and
 by all ten random repeats, then scores every arm on the identical remainder. At
 four probes that excludes 486 of 2,122 cells and leaves 1,636 matched: greedy
-1.8781, k=0 2.6524, random 2.6013 (median over all 340 fold × repeat MedAEs;
-2.6260 under median-of-fold-medians, and the convention must be named whenever
-the random arm is quoted). Greedy beats k=0 in 18 of 34 folds
+1.8781, k=0 2.6524 (both medians of the 34 fold medians), random 2.6013 under
+convention A (median over all 340 fold × repeat MedAEs) or 2.6260 under
+convention B (median of the 34 per-fold medians); the convention must be named
+whenever the random arm is quoted. Greedy beats k=0 in 18 of 34 folds
 (Wilcoxon p = 0.0088) and random in 22 of 34 (p = 0.0151); the reduction versus
 k=0 has a bootstrap-over-folds 95% CI of [2.8%, 58.7%] and is therefore not
-estimable to three significant figures. Two scope notes travel with this: the
+estimable to three significant figures. Note the deliberate mismatch: the
+22-of-34 test and the [3.4%, 53.5%] CI against random are computed on
+**convention B** fold medians (2.6260), because a paired test needs one random
+value per fold, whereas the 2.6013 figure usually quoted alongside them is
+**convention A**. Table value and test statistic use different aggregations, and
+that is stated rather than left implicit. Two scope notes travel with this: the
 greedy selector optimizes `parity.median_absolute_error`, which scores revealed
 probe cells as literal 0.0 and is about 15.9% optimistic at four probes (1.5142
 against a held-out 1.7994); and per-evaluation utility on this protocol is null,
@@ -161,11 +184,32 @@ compute, tissue access, annotation labor, or licensing cost.
 
 The allowlist arm also carries a negative selection result. On its own matched
 cell set at four probes (1,581 cells), allowlist greedy reaches 1.9951 against
-1.7234 for greedy over any candidate, and on the published per-arm denominators
-allowlist greedy (2.0404) is not better than allowlist random (2.0109) under
-either random-arm aggregation convention. Restricting candidates to the
-feasibility pool does not just cost accuracy; within that pool, greedy selection
-shows no advantage over random selection at all.
+1.7234 for greedy over any candidate, so restricting candidates to the
+feasibility pool costs accuracy.
+
+Within that pool there is also no demonstrable selection signal. Against a
+genuine allowlist-restricted random control, scored on the cell set the two
+allowlist arms share at four probes (1,237 matched cells over 34 LOFO folds),
+allowlist greedy is 1.9463 and allowlist random is 2.0251 under
+median-of-fold-medians (2.0118 under median over all 340 fold × repeat MedAEs);
+the k=0 arm on those cells is 2.8555. Greedy leads nominally but wins only
+10 of 34 folds, ties 15 and loses 9, with Wilcoxon p = 0.4939 and a
+bootstrap-over-folds 95% CI on the reduction of [-11.5%, +20.7%]. The result is
+the same at every tested depth k=1..5, where p ranges from 0.05 to 0.49 and
+every CI straddles zero.
+
+The accompanying disclosure is not optional: the test is underpowered by design.
+The 15 ties are exactly the 15 folds where the allowlist arms are zero-information —
+the held-out family has no observed score on any of the 25 allowlist evaluations, so
+both arms produce literally identical predictions (not merely "too close to call") and
+reduce to the k=0 arm. This identity holds at every k=1..5. Restricting to the 19
+informative folds alone (10 wins vs 9 losses) is still non-significant, so the null
+is not an artifact of tie-handling. Only 19 folds carry signal. Read this as "no advantage demonstrated in a pool too sparse to test it",
+not as evidence that greedy is worse than random; the unrestricted 187-candidate
+arm on the same protocol beats random in 22 of 34 folds at p = 0.0151. The
+previously published pair (allowlist greedy 2.0404, allowlist random 2.0109) is
+withdrawn: those values occur in no artifact and the comparison's sign was
+inverted.
 
 No exhaustive choose-five result is checked in for the current 59×187 matrix.
 The retained schema-v2 runner and validators can produce a new hash-bound result;

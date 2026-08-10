@@ -41,8 +41,13 @@ The most tempting cross-domain claim — "PathoPress reconstructs pathology scor
 three times more accurately than BenchPress reconstructs LLM scores" — is an artifact of
 the two domains having different score dispersions. It should not be made.
 
-Measured on the vendored upstream BenchPress matrix (84 models x 133 benchmarks, 2,604
-cells) against the PathoPress matrix:
+Measured on the upstream BenchPress matrix (84 models x 133 benchmarks, 2,604 cells)
+against the PathoPress matrix. **The upstream matrix is not vendored in this repository.**
+It is an external dependency: reproducing the BenchPress column of the table below
+requires a separate checkout of `microsoft/benchpress` at pinned commit
+`0a684b63ee0e4a401cb907a3827a82ea997d74c4`. Every BenchPress-side dispersion figure here
+(84 x 133, 2,604 cells, median SD 14.1, MedAE 4.6, and the 0.33 ratio derived from them)
+is therefore **not reproducible from this repository alone**.
 
 | Per-column dispersion | BenchPress (LLM) | PathoPress (pathology) |
 | --- | --- | --- |
@@ -59,12 +64,26 @@ not evidence of a better method.
 Dispersion is also strongly metric-dependent *within* PathoPress, which means a single
 pooled error figure hides most of the variation:
 
+Population: median per-column SD over the **59-model x 187-evaluation analysis matrix**
+(`experiments/analysis_matrix.npz`), restricted to columns with at least two observed
+models.
+
 | Column metric | Median SD |
 | --- | --- |
 | `pearson_r` | 1.16 |
 | `auroc` | 1.36 |
 | `balanced_accuracy` | 6.09 |
-| `robustness_index` | 10.43 |
+| `robustness_index` | 9.91 |
+
+The `robustness_index` figure was previously given as 10.43. That value is the median SD
+over all 62 models in `data/scores.csv`, a different and larger population than the other
+three rows, which were already matrix figures. On the matrix the value is 9.9074, shown
+here as 9.91.
+
+Footnote on span: these four metrics are not the full set. Within the matrix,
+`clustering_score` has the highest median SD at **10.2849**, above `robustness_index`. Any
+"SDs span 1.16 to 9.91" statement therefore describes only the four metrics tabulated
+above, not every metric in the matrix.
 
 The consequence for ranking is direct: the median true score gap between two models on a
 given evaluation is **3.10 normalized points**, and **64.8% of model pairs differ by less
@@ -126,9 +145,13 @@ be the headline.** It is the greedy median at absolute margin 5, which retains 6
 worse still: it retains 2,722 pairs (16%) across 100 columns. Both figures are reachable
 only by discarding the pairs the method finds hardest, and section 2 shows that 64.8% of
 all pairs sit inside the 5-point margin, so margin 5 removes the majority of the real
-decision problem. Where 0.878 currently appears
-(`README.md:47`, `docs/benchpress-parity.md:89`, `docs/imputation.md:128`) it must be
-restated with its margin and pair-retention alongside the margin-0 number.
+decision problem. Wherever 0.878 appears it must be restated with its margin and
+pair-retention alongside the margin-0 number. That restatement has already been made at
+every current occurrence: `docs/benchpress-parity.md` (prose at the margin-5 discussion,
+the sweep table row, and the "most favorable point on the curve" note) and
+`docs/imputation.md` (margin-5 prose in the ranking-validation section). `README.md`
+does not quote 0.878 at all — the earlier pointer to `README.md:47` was wrong, as were the
+specific line numbers given for the other two files.
 
 Scope conditions on this claim: k = 10, rank 1, all-known regime; greedy selection is
 in-sample (see 5.3); the random baseline used here is the in-sample random-probe
@@ -200,11 +223,12 @@ of the cells revealed by the greedy prefix and by all 10 random repeats, then sc
 arm on the identical remainder. At k=4 this excludes 486 of 2,122 cells and scores all
 arms on the 1,636 matched cells.
 
-| Arm at k=4 (matched cells) | MedAE |
-| --- | --- |
-| greedy | **1.8781** |
-| k=0 baseline | **2.6524** |
-| random control | **2.6013** |
+| Arm at k=4 (matched cells) | MedAE | Aggregation convention |
+| --- | --- | --- |
+| greedy | **1.8781** | median of 34 fold medians |
+| k=0 baseline | **2.6524** | median of 34 fold medians |
+| random control | **2.6013** | **convention A**: median over all 340 fold × repeat MedAEs |
+| random control | **2.6260** | **convention B**: median of the 34 per-fold medians over repeats |
 
 The point estimate of the reduction versus k=0 is 29.2%. **That figure must not be quoted
 to three significant figures.** Bootstrapping over folds gives a 95% CI of
@@ -219,6 +243,15 @@ What *is* solid is the paired per-fold comparison, and that should lead:
 - greedy beats the random control in **22 of 34 folds**, Wilcoxon signed-rank
   **p = 0.0151**.
 
+**Convention mismatch, stated explicitly.** The paired test against the random arm is
+computed on **convention B** (fold medians, 2.6260) because a paired test needs one random
+value per fold, while the headline row most often quoted for the random arm is
+**convention A** (2.6013). The table value and the test statistic therefore do not use the
+same aggregation, and neither does the bootstrap CI against random ([3.4%, 53.5%]), which
+is also convention B. This is disclosed rather than harmonised because both aggregations
+are defensible; it must never be left implicit. The greedy and k=0 arms have only one
+value per fold, so no such ambiguity applies to them or to the 18/34, p = 0.0088 test.
+
 So the supported claim is that greedy probe selection reduces held-out reconstruction
 error relative to both controls, with a directional result that survives a paired test,
 and an effect size that is imprecise. This remains the primary out-of-sample evidence for
@@ -226,9 +259,11 @@ the probe-selection method.
 
 Random-arm aggregation convention: the random arm has two defensible aggregations and
 they differ at every k. **Convention A** — the median over all 340 fold × repeat MedAEs —
-gives **2.6013**, and is the convention used in the table above. **Convention B** — the
-median of the 34 per-fold medians over repeats — gives **2.6260**. Any quoted random-arm
-number must name its convention.
+gives **2.6013**. **Convention B** — the median of the 34 per-fold medians over repeats —
+gives **2.6260**. Any quoted random-arm number must name its convention, and any published
+pairing of a random-arm value with a significance test or CI must state which convention
+each of the two uses (see the convention-mismatch note above: the tests and CIs are
+convention B).
 
 Reproduction: `scripts/replay_lofo_matched_cells.py`, artifact
 `experiments/lofo_matched_cells_rank1.json`.
@@ -295,11 +330,33 @@ On its own matched cell set (1,581 cells at k=4), allowlist greedy reaches MedAE
 **1.9951**, against **1.7234** for greedy over any candidate on the same cells. Restricting
 the candidate pool makes reconstruction worse, as expected.
 
-More importantly, within the allowlist there is no selection signal at all: on the
-published per-arm denominators, allowlist greedy (**2.0404**) is not better than allowlist
-random (**2.0109**), and greedy is worse under both random-arm aggregation conventions.
+More importantly, within the allowlist there is no selection signal that survives a
+significance test. Against a genuine allowlist-restricted random control on the arms'
+shared matched-cell set at k=4 (**1,237 cells**, 34 LOFO folds), allowlist greedy reaches
+**1.9463** and allowlist random **2.0251** under the median-of-fold-medians convention
+(**2.0118** under the median-over-340-fold-×-repeat convention); the k=0 arm on the same
+cells is **2.8555**. Greedy is nominally ahead, but wins only **10 of 34 folds**, ties 15,
+and loses 9; the Wilcoxon signed-rank test gives **p = 0.4939** and the bootstrap CI on
+the reduction is **[-11.5%, +20.7%]**. The picture does not change with depth: across
+k = 1..5 the p-values range from 0.05 to 0.49 and every CI straddles zero.
+
+**Mandatory disclosure: this test is underpowered by design.** The 15 ties are exactly
+the **15 of 34 folds** where the allowlist arms are *zero-information* — the held-out
+family has no observed score on **any** of the 25 allowlist evaluations, so both arms
+produce literally identical predictions (not merely "too close to call") and collapse
+onto the k=0 arm. This identity holds at every k = 1..5. Restricting to the 19
+informative folds alone (10 wins vs 9 losses) is still non-significant, so the null
+is not an artifact of tie-handling. Only 19 folds contribute any signal at all. The
+correct reading is therefore "no advantage demonstrated within a pool that is too sparse
+to test", not "greedy is worse than random". For calibration, the unrestricted
+187-candidate arm on the same protocol beats random in 22 of 34 folds at p = 0.0151.
+
 **This is a negative result and is reported as one.** Nothing here supports a claim that
 useful probes can be chosen from within the 25-task feasibility pool.
+
+Note that the previously published pair (allowlist greedy 2.0404 versus allowlist random
+2.0109, "greedy worse under both conventions") is withdrawn: neither value occurs in any
+artifact, and the sign of the comparison was inverted.
 
 ## 4. Claims explicitly not supported
 
@@ -334,7 +391,8 @@ records the negative result).
 ### 4.4 "Held-out ranking accuracy is 1.0"
 
 Not supported. Under the group-wise held-out split, the reported
-`median_accuracy = 1.0` is a **counting artifact**: 57 of the 74 eligible columns contain
+`median_accuracy = 1.0` is a **counting artifact**: 57 of the 75 eligible columns (under
+the `>= 5` normalized-point gap rule; 56 of 73 under a strict `> 5` gap) contain
 exactly one comparable model pair, so the per-column accuracy is forced to 0 or 1 and the
 median collapses to 1.0. It is not evidence of perfect ranking. See 5.1.
 
@@ -369,10 +427,18 @@ outcomes.
 
 ### 5.1 Model non-independence
 
-The 59 models are not independent draws. **42 of 59 (71.2%) belong to a multi-model
+The 59 models are not independent draws. **40 of 59 (67.8%) belong to a multi-model
 family**, across 34 family groups (32 non-empty plus 2 blank-family singletons). The
 largest families are Kaiko (7), DINOv2 (4), DINOv3 (3), H-Optimus (3), and Midnight (3),
-plus 11 two-model families. Random model splits therefore leak architecture and
+plus **10** two-model families. The arithmetic is self-consistent: 15 multi-model families (10 two-model families plus 5 larger)
+account for 40 models, 17 non-empty singleton families and 2 blank-family singletons
+account for the remaining 19, and 15 + 17 + 2 = 34 groups. This is confirmed by the LOFO fold
+structure in `experiments/probe_selection_results_rank1.json` (34 folds: 15 with 2+ validation
+models, 19 with exactly 1). (The previously published
+"42 of 59 (71.2%)" and "11 two-model families" are withdrawn; both contradict
+`data/model_metadata.csv` and the 34-fold structure in
+`experiments/lofo_matched_cells_rank1.json`.) Random model splits therefore leak
+architecture and
 pretraining-corpus information across the split, and any accuracy measured under a random
 split is optimistic.
 
@@ -382,8 +448,13 @@ singletons, with every flagship family entirely in train** — so the split does
 generalization to a new family so much as it tests the leftovers. The result is also
 unstable across seeds: n_val swings 11 / 17 / 18 / 19 / 20 for seeds 42 / 0 / 7 / 1 / 123.
 At seed 42 this leaves only 334 observed validation cells, only **22 of 187 columns** with
-3 or more validation models, and of the 74 eligible columns, **57 with exactly one
-comparable pair** — the direct cause of the 1.0 artifact in 4.4. The honest summary is that
+3 or more validation models, and — under the ranking evaluator's documented margin rule,
+which counts a validation model pair as comparable when their true normalized-score gap is
+**>= 5** points — **75 eligible columns of which 57 contain exactly one comparable pair**,
+the direct cause of the 1.0 artifact in 4.4. The rule must be stated because it moves the
+count: under a strict `> 5` gap the same recomputation gives 73 eligible columns and 56
+single-pair columns. The published 57 corresponds to the `>= 5` rule. (The previously
+quoted "74 eligible columns" matches neither rule and is withdrawn.) The honest summary is that
 the group-wise design is the correct one and the current matrix is too small to support it.
 
 ### 5.2 Within-model cross-validation
@@ -439,7 +510,9 @@ gap in the evidence, not a negative result about the method.
 ### 5.6 Metric heterogeneity
 
 Columns mix `pearson_r`, `auroc`, `balanced_accuracy`, and `robustness_index`, whose median
-SDs span 1.16 to 10.43 (section 2). Pooled error and pooled accuracy figures are dominated
+per-column SDs over the 59 x 187 analysis matrix span 1.16 to 9.91 (section 2; the span
+covers those four tabulated metrics only — `clustering_score` is higher still at 10.28).
+Pooled error and pooled accuracy figures are dominated
 by the high-dispersion metrics. Per-metric breakdowns should accompany any pooled figure.
 
 ### 5.7 Under-supported held-out ranking estimate
@@ -472,15 +545,17 @@ well-supported (3.5); the held-out *ranking* result is not.
    optimizes an objective that is about 15.9% optimistic at k=4 because it scores revealed
    probe cells as zero (5.3a). Fixing this changes which probes are selected and needs an
    approximately 8.7-hour rerun.
-4. **Restate 0.878 with scope wherever it appears** — `README.md:47`,
-   `docs/benchpress-parity.md:89`, `docs/imputation.md:128` — pairing it with margin 5,
-   35% pair retention, 148/187 columns, and the margin-0 pair 0.679 vs 0.552.
+4. ~~**Restate 0.878 with scope wherever it appears.**~~ **Done.** Every current
+   occurrence — in `docs/benchpress-parity.md` and `docs/imputation.md` — now pairs it
+   with margin 5, 35% pair retention, 148/187 columns, and the margin-0 pair
+   0.679 vs 0.552. `README.md` does not quote the figure.
 5. **Replace all raw cross-domain MedAE comparisons with the error-to-dispersion ratio**
    (0.43 vs 0.33), and state explicitly that the port is modestly worse on that scale.
 6. **Retire the `improvement_over_column_median = 1.9000 - parity_medae` metric** and the
    "only THUNDER benefits" narrative built on it.
 7. **Withdraw the held-out `median_accuracy = 1.0` claim** or report it with the
-   57-of-74 single-pair column count that produces it.
+   57-of-75 single-pair column count that produces it (`>= 5` gap rule; 56-of-73 under a
+   strict `> 5` gap — state the rule alongside the count).
 8. **Add nested cross-validation for rank selection**, or report the reported figures as
    optimistic with an explicit statement to that effect.
 9. **Report group-wise split results across all five seeds**, not seed 42 alone, given the

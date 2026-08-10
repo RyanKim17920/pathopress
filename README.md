@@ -63,8 +63,8 @@ predicted.
 
 | Claim | Number | Protocol |
 |---|---|---|
-| Probe utility (headline) | MedAE **1.8781** at k=4 vs **2.6524** at k=0, random control **2.6013** | LOFO, 34 family folds, matched cells |
-| Paired-fold significance | 18/34 vs k=0 (p = 0.0088); 22/34 vs random (p = 0.0151) | Wilcoxon signed-rank over folds |
+| Probe utility (headline) | MedAE **1.8781** at k=4 vs **2.6524** at k=0 (medians of 34 fold medians), random control **2.6013** (convention A: median over all 340 fold × repeat MedAEs; **2.6260** under convention B, median of fold medians) | LOFO, 34 family folds, matched cells |
+| Paired-fold significance | 18/34 vs k=0 (p = 0.0088); 22/34 vs random (p = 0.0151) — the random test uses **convention B** fold medians, not the convention-A value in the row above | Wilcoxon signed-rank over folds |
 | Effect size | 29.2% point estimate, 95% CI **[2.8%, 58.7%]** | bootstrap over folds |
 | Ranking preservation | **0.679** greedy vs **0.552** random | all 17,159 model pairs, margin 0 |
 | Per-evaluation utility | **86 / 174 = 49.4%**, CI [42.0%, 56.9%] | per-column matched-cell, leave-one-out |
@@ -83,8 +83,26 @@ per-evaluation gain is not established.
 The most informative probes are the *heaviest* benchmarks. The top-ranked probe,
 `thunder.spider_skin.linear_probing`, covers 159,854 images; `thunder.esca`
 covers 367k and `thunder.tcga_uniform` 272k. Restricting selection to a 25-task
-low-friction allowlist erases the effect entirely: greedy scores **2.0404**
-against random's **2.0109** inside the allowlist — a null.
+low-friction allowlist erases the effect entirely. On the allowlist's own
+matched-cell set at k=4 (1,237 cells, 34 LOFO folds), allowlist greedy reaches
+MedAE **1.9463** against an allowlist-restricted random control of **2.0251**
+(median-of-fold-medians convention; **2.0118** under the median-over-340-fold-×-
+repeat convention), from a k=0 baseline of **2.8555**. The nominal gap favours
+greedy but is not a result: greedy wins 10 of 34 folds, ties 15, and loses 9
+(Wilcoxon p = 0.4939), and the bootstrap CI on the reduction is
+**[-11.5%, +20.7%]**. The conclusion is unchanged at every tested depth k = 1..5
+(p ranges from 0.05 to 0.49; every CI straddles zero).
+
+**This comparison is underpowered by design, and that must be disclosed with
+it.** The 15 ties are exactly the **15 of 34 folds** where the allowlist arms are
+*zero-information*: the held-out family has no observed score on any of the 25
+allowlist evaluations, so greedy and random produce literally identical predictions
+(not merely "too close to call") and both reduce to the k=0 arm. This identity
+between tied folds and zero-information folds holds at every k = 1..5, not just k=4.
+Restricting to the 19 informative folds alone (10 wins vs 9 losses) is still
+non-significant, so the null is not an artifact of tie-handling — the informative
+folds are genuinely balanced. Only 19 folds carry any signal. The unrestricted 187-candidate arm, by contrast,
+beats random in 22 of 34 folds at p = 0.0151.
 
 So the appealing version of this result — "run five cheap evaluations instead of
 187" — is not supported here. And it cannot be repaired with better cost
@@ -100,6 +118,14 @@ tighter than the upstream LLM matrix (median column SD **3.75** here vs **14.1**
 upstream). On a scale-corrected error-to-dispersion basis the ratio is **0.43**
 here versus **0.33** upstream — this port is modestly *worse* than upstream, not
 better.
+
+The upstream side of that comparison is an **external dependency, not vendored
+here**. The BenchPress matrix (84 models × 133 benchmarks, 2,604 cells, median
+column SD 14.1, MedAE 4.6) lives in a separate checkout of
+`microsoft/benchpress` at pinned commit
+`0a684b63ee0e4a401cb907a3827a82ea997d74c4`, so those dispersion figures — and
+the 0.33 ratio built from them — cannot be reproduced from this repository
+alone.
 
 <p align="center">
   <img width="900" alt="Cell-level rank validation" src="figures/benchpress_style_validation_rank1.png">

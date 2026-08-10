@@ -174,8 +174,13 @@ python3 scripts/plot_probe_dual_objective.py
   through the full `k=25` feasibility-proxy universe; held-out and ranking
   random controls remain at the upstream-comparable `k=10`. Per-cell all-known
   random predictions stream to a deterministic gzip CSV. The canonical artifact
-  contains all expanded curves, 10×10 random ranking baselines, 111,920 selected
-  prediction rows, and 1,167,100 random-prefix prediction rows.
+  contains all expanded curves, 10×10 random ranking baselines, 2,928,360
+  selected prediction rows
+  (`../outputs/probe_compression_selected_raw_rank1.csv.gz`), and 636,600
+  random-prefix prediction rows
+  (`../outputs/probe_compression_random_all_known_raw_rank1.csv.gz`). Both counts
+  were previously misstated (111,920 and 1,167,100): the selected-row file is
+  about 26× larger than reported and the random-prefix file about 2× smaller.
   Its `curves.*.pairwise_margin=2` values are ancillary score-reconstruction
   diagnostics; only `ranking_aware` is the dedicated margin-5 ranking objective.
 - [Top-30 pruning](probe_pruning_rank1_top30.json) uses all ten source MedAE
@@ -227,15 +232,20 @@ the cells revealed by the greedy prefix and by all ten random repeats. At `k=4`
 that excludes 486 of 2,122 cells and leaves 1,636 matched.
 
 - [Matched-cell results](lofo_matched_cells_rank1.json) is the reproduction path
-  for every corrected LOFO number. At `k=4`: greedy 1.8781, `k=0` 2.6524, random
-  2.6013 under the median-over-340-fold-×-repeat-MedAEs convention and 2.6260
-  under median-of-fold-medians. The two random conventions differ at every `k`,
-  so any quoted random value must name its convention.
+  for every corrected LOFO number. At `k=4`: greedy 1.8781 and `k=0` 2.6524, both
+  as medians of the 34 fold medians; random 2.6013 under convention A
+  (median over all 340 fold × repeat MedAEs) and 2.6260 under convention B
+  (median of fold medians). The two random conventions differ at every `k`, so
+  any quoted random value must name its convention.
 - Paired per-fold results are the well-supported part: greedy beats `k=0` in 18 of
   34 folds (Wilcoxon `p = 0.0088`) and random in 22 of 34 (`p = 0.0151`). The
   bootstrap-over-folds 95% CI on the reduction is [2.8%, 58.7%] versus `k=0` and
   [3.4%, 53.5%] versus random, so the 29.2% point estimate must not be quoted to
-  three significant figures.
+  three significant figures. The random-arm test and CI are computed on
+  **convention B** (2.6260), not on the convention-A value 2.6013 that is usually
+  quoted beside them — a paired test needs one random value per fold. Table value
+  and test statistic therefore use different conventions, and that is stated here
+  rather than left implicit.
 - Per-column skill is null: 86 of 174 scored columns (49.4%, CI [42.0%, 56.9%])
   have a matched greedy `k=4` MedAE below their matched `k=0` MedAE. Including
   all 187 columns gives 94/187 (50.3%, CI [43.3%, 57.2%]); 8 of the 12
@@ -268,7 +278,7 @@ PYTHONPATH=src python3 experiments/run_temporal_deployment.py
   mapping. Genuinely new models use a separate interval population and abstain
   from this trust probability.
 - [Unseen-model confidence](new_model_confidence_rank1.json) and its
-  [30,992-row audit](new_model_confidence_predictions_rank1.csv) use only
+  [33,272-row audit](new_model_confidence_predictions_rank1.csv) use only
   leave-one-model-out sparse-probe and temporal residuals. Nested target-group
   exclusion prevents hidden-score leakage; unsupported contexts abstain.
 - [Temporal deployment](temporal_deployment_rank1.json) evaluates seven
