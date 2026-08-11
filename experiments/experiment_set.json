@@ -12,7 +12,7 @@
     {
       "name": "maintenance_dry_run",
       "command": "python3 scripts/dry_run_experiment_set.py",
-      "inputs": ["experiments/experiment_set.json", "scripts/dry_run_experiment_set.py", "src/pathopress/maintenance.py"],
+      "inputs": ["experiments/experiment_set.json", "scripts/dry_run_experiment_set.py", "src/pathopress/maintenance.py", "src/pathopress/matrix.py", "src/pathopress/probe_compression.py", "src/pathopress/completion.py", "src/pathopress/metrics.py", "src/pathopress/ranking.py"],
       "artifacts": ["experiments/experiment_set_dry_run.json"],
       "external_calls": false
     },
@@ -40,14 +40,14 @@
     {
       "name": "probe_selection",
       "command": "python3 experiments/run_probe_selection.py",
-      "inputs": ["data/scores.csv", "experiments/run_probe_selection.py", "src/pathopress"],
+      "inputs": ["data/scores.csv", "data/model_metadata.csv", "experiments/run_probe_selection.py", "src/pathopress"],
       "artifacts": ["experiments/probe_selection_results_rank1.json", "outputs/probe_informativeness_rank1.csv"],
       "external_calls": false
     },
     {
       "name": "probe_compression",
       "command": "python3 experiments/run_probe_compression.py",
-      "inputs": ["data/scores.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/probe_selection_results_rank1.json", "experiments/run_probe_compression.py", "src/pathopress"],
+      "inputs": ["data/scores.csv", "data/model_metadata.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/probe_selection_results_rank1.json", "experiments/run_probe_compression.py", "src/pathopress"],
       "artifacts": ["experiments/probe_compression_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv.gz", "outputs/probe_compression_random_all_known_raw_rank1.csv.gz"],
       "external_calls": false
     },
@@ -100,28 +100,28 @@
       "name": "budgeted_probe_selection_preflight",
       "command": "python3 experiments/run_budgeted_probe_selection.py --workers 4",
       "release_status": "insufficient_cost_coverage_no_recommendation",
-      "inputs": ["data/scores.csv", "data/tasks.csv", "data/evaluation_burden_measurements.schema.json", "data/evaluation_burden_measurements_v1.example.json", "data/probe_budget_v1.example.json", "experiments/run_budgeted_probe_selection.py", "src/pathopress/budgeted_probes.py"],
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/evaluation_burden_measurements.schema.json", "data/evaluation_burden_measurements_v1.example.json", "data/probe_budget_v1.example.json", "data/model_metadata.csv", "experiments/run_budgeted_probe_selection.py", "src/pathopress/budgeted_probes.py", "src/pathopress/matrix.py", "src/pathopress/probe_compression.py", "src/pathopress/probes.py", "src/pathopress/model_metadata.py", "src/pathopress/completion.py", "src/pathopress/metrics.py", "src/pathopress/ranking.py"],
       "artifacts": ["experiments/budgeted_probe_selection_rank1.json"],
       "external_calls": false
     },
     {
       "name": "evaluation_cost_evidence",
       "command": "python3 scripts/build_evaluation_cost_evidence.py",
-      "inputs": ["data/scores.csv", "data/tasks.csv", "scripts/build_evaluation_cost_evidence.py"],
+      "inputs": ["data/scores.csv", "data/tasks.csv", "scripts/build_evaluation_cost_evidence.py", "src/pathopress/matrix.py"],
       "artifacts": ["data/evaluation_cost_evidence.json", "data/evaluation_cost_evidence.csv"],
       "external_calls": false
     },
     {
       "name": "benchpress_publication_figures",
       "command": "python3 scripts/plot_benchpress_style_hero.py && python3 scripts/plot_probe_dual_objective.py",
-      "inputs": ["experiments/probe_compression_rank1.json", "experiments/probe_selection_results_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv.gz", "outputs/probe_informativeness_rank1.csv", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py"],
+      "inputs": ["experiments/probe_compression_rank1.json", "experiments/probe_selection_results_rank1.json", "outputs/probe_compression_selected_raw_rank1.csv.gz", "outputs/probe_informativeness_rank1.csv", "scripts/plot_benchpress_style_hero.py", "scripts/plot_probe_dual_objective.py", "src/pathopress/probe_compression.py", "src/pathopress/completion.py", "src/pathopress/metrics.py", "src/pathopress/ranking.py"],
       "artifacts": ["experiments/benchpress_style_hero_summary.json", "outputs/probe_dual_objective_rank1.csv", "figures/pathopress_benchpress_hero_rank1.png", "figures/pathopress_benchpress_hero_rank1.pdf", "figures/probe_dual_objective_rank1.png", "figures/probe_dual_objective_rank1.pdf"],
       "external_calls": false
     },
     {
       "name": "public_export",
       "command": "python3 scripts/build_public_release.py && python3 scripts/build_website_starter_sets.py && python3 scripts/publish_hf_dataset.py",
-      "inputs": ["data/scores.csv", "data/tasks.csv", "data/suites.csv", "data/provenance.json", "data/model_metadata.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/confidence_calibration_rank1.json", "experiments/confidence_cells_rank1.csv", "experiments/new_model_confidence_rank1.json", "experiments/probe_compression_rank1.json", "uv.lock", "scripts/build_public_release.py", "scripts/build_hf_dataset.py", "scripts/build_website_starter_sets.py", "scripts/publish_hf_dataset.py", "src/pathopress"],
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/suites.csv", "data/provenance.json", "data/model_metadata.csv", "data/low_friction_allowlist_v2_top25.json", "data/low_friction_allowlist_v2_legacy25.json", "data/low_friction_pipeline_eligible_v2_all.json", "experiments/confidence_calibration_rank1.json", "experiments/confidence_cells_rank1.csv", "experiments/new_model_confidence_rank1.json", "experiments/probe_compression_rank1.json", "uv.lock", "scripts/build_public_release.py", "scripts/build_hf_dataset.py", "scripts/build_website_starter_sets.py", "scripts/publish_hf_dataset.py", "src/pathopress"],
       "artifacts": ["experiments/deployment_confidence_rank1.json", "exports/pathopress_public", "website/data.json", "website/starter_sets.json"],
       "external_calls": false
     }

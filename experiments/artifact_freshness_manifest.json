@@ -3,7 +3,7 @@
   "kind": "pathopress_completed_result_graph",
   "experiment_set": {
     "path": "experiments/experiment_set.json",
-    "sha256": "0c3a8752304010f7e4735e66c61e876499a1708bb996103f872c505e01003339"
+    "sha256": "12b3c43aa44977fec4ba27edc848857c91ace4e626731b238c1ccc4c24755703"
   },
   "components": {
     "shared_analysis_contract": {
@@ -25,7 +25,12 @@
       "inputs": [
         "experiments/experiment_set.json",
         "scripts/dry_run_experiment_set.py",
-        "src/pathopress/maintenance.py"
+        "src/pathopress/maintenance.py",
+        "src/pathopress/matrix.py",
+        "src/pathopress/probe_compression.py",
+        "src/pathopress/completion.py",
+        "src/pathopress/metrics.py",
+        "src/pathopress/ranking.py"
       ],
       "dependencies": [],
       "artifacts": [
@@ -81,6 +86,7 @@
       "command": "python3 experiments/run_probe_selection.py",
       "inputs": [
         "data/scores.csv",
+        "data/model_metadata.csv",
         "experiments/run_probe_selection.py",
         "src/pathopress"
       ],
@@ -94,6 +100,7 @@
       "command": "python3 experiments/run_probe_compression.py",
       "inputs": [
         "data/scores.csv",
+        "data/model_metadata.csv",
         "data/low_friction_allowlist_v2_top25.json",
         "experiments/probe_selection_results_rank1.json",
         "experiments/run_probe_compression.py",
@@ -192,8 +199,16 @@
         "data/evaluation_burden_measurements.schema.json",
         "data/evaluation_burden_measurements_v1.example.json",
         "data/probe_budget_v1.example.json",
+        "data/model_metadata.csv",
         "experiments/run_budgeted_probe_selection.py",
-        "src/pathopress/budgeted_probes.py"
+        "src/pathopress/budgeted_probes.py",
+        "src/pathopress/matrix.py",
+        "src/pathopress/probe_compression.py",
+        "src/pathopress/probes.py",
+        "src/pathopress/model_metadata.py",
+        "src/pathopress/completion.py",
+        "src/pathopress/metrics.py",
+        "src/pathopress/ranking.py"
       ],
       "dependencies": [],
       "artifacts": [
@@ -205,7 +220,8 @@
       "inputs": [
         "data/scores.csv",
         "data/tasks.csv",
-        "scripts/build_evaluation_cost_evidence.py"
+        "scripts/build_evaluation_cost_evidence.py",
+        "src/pathopress/matrix.py"
       ],
       "dependencies": [],
       "artifacts": [
@@ -221,7 +237,11 @@
         "outputs/probe_compression_selected_raw_rank1.csv.gz",
         "outputs/probe_informativeness_rank1.csv",
         "scripts/plot_benchpress_style_hero.py",
-        "scripts/plot_probe_dual_objective.py"
+        "scripts/plot_probe_dual_objective.py",
+        "src/pathopress/probe_compression.py",
+        "src/pathopress/completion.py",
+        "src/pathopress/metrics.py",
+        "src/pathopress/ranking.py"
       ],
       "dependencies": [],
       "artifacts": [
@@ -242,6 +262,8 @@
         "data/provenance.json",
         "data/model_metadata.csv",
         "data/low_friction_allowlist_v2_top25.json",
+        "data/low_friction_allowlist_v2_legacy25.json",
+        "data/low_friction_pipeline_eligible_v2_all.json",
         "experiments/confidence_calibration_rank1.json",
         "experiments/confidence_cells_rank1.csv",
         "experiments/new_model_confidence_rank1.json",
@@ -273,10 +295,20 @@
       "sha256": "f1d9cc353979ad642a05b963f61cd8f6fe3ddd4783a38addff3d133ed8ef8be1",
       "bytes": 3912
     },
+    "data/low_friction_allowlist_v2_legacy25.json": {
+      "kind": "file",
+      "sha256": "3cfd8bfb3370ad799d556de71d2e4325eed449c26ffa2122a257098b41ce0ebe",
+      "bytes": 1839
+    },
     "data/low_friction_allowlist_v2_top25.json": {
       "kind": "file",
       "sha256": "da227c3127534c8fdb3cd91d34d40490aad109de739f19c8377ce6e2a16aa9be",
       "bytes": 3348
+    },
+    "data/low_friction_pipeline_eligible_v2_all.json": {
+      "kind": "file",
+      "sha256": "aa20a549a7634d26d2952704d7eb768ee67639dc5a08c5a85fdc33b28563b957",
+      "bytes": 2148
     },
     "data/model_metadata.csv": {
       "kind": "file",
@@ -325,8 +357,8 @@
     },
     "experiments/experiment_set.json": {
       "kind": "file",
-      "sha256": "0c3a8752304010f7e4735e66c61e876499a1708bb996103f872c505e01003339",
-      "bytes": 8767
+      "sha256": "12b3c43aa44977fec4ba27edc848857c91ace4e626731b238c1ccc4c24755703",
+      "bytes": 9482
     },
     "experiments/folds_s10_f3_bs42.json": {
       "kind": "file",
@@ -494,10 +526,45 @@
       "sha256": "ece8176d54abbe2ef417ac2c261e2a43220cbd832427171bb1ca7ebf0449e102",
       "bytes": 23652
     },
+    "src/pathopress/completion.py": {
+      "kind": "file",
+      "sha256": "accb13033a21187a4afeb44d4c9bff917a994475cafc7648cb529e746cf0fdb5",
+      "bytes": 11268
+    },
     "src/pathopress/maintenance.py": {
       "kind": "file",
       "sha256": "f3ccf6a7bffbc27bbba895915f1d0d3d583cc8ba0a566ce2f769cbc01e64a200",
       "bytes": 18749
+    },
+    "src/pathopress/matrix.py": {
+      "kind": "file",
+      "sha256": "ed7295049be8e71f72c74cf7670df72c2def3c0df1f5a348afb18f7a247a5cb2",
+      "bytes": 3840
+    },
+    "src/pathopress/metrics.py": {
+      "kind": "file",
+      "sha256": "65d094a1ddba3d488d84ee0de13087dcb84090eed0c79c108e3cf70e6f226fb0",
+      "bytes": 1717
+    },
+    "src/pathopress/model_metadata.py": {
+      "kind": "file",
+      "sha256": "c8cfedefa0da4399710ee03d0cc2aa6097e0c58813c562b56288afb033c15a20",
+      "bytes": 6951
+    },
+    "src/pathopress/probe_compression.py": {
+      "kind": "file",
+      "sha256": "35d19ee5d64b8729aae1c02dc5b59ef5b8a94d96cdc287c337b73c36a4ab4078",
+      "bytes": 31713
+    },
+    "src/pathopress/probes.py": {
+      "kind": "file",
+      "sha256": "015fa4ac8eb27b552a9d0406d76279459b0a6d74cf7778400c41fb3be77dece8",
+      "bytes": 35916
+    },
+    "src/pathopress/ranking.py": {
+      "kind": "file",
+      "sha256": "72f9b7d1c3705360e805ce37974034b7bea033a6150380589f7d42608f5f9a50",
+      "bytes": 11236
     },
     "uv.lock": {
       "kind": "file",
@@ -559,8 +626,8 @@
     },
     "experiments/experiment_set_dry_run.json": {
       "kind": "file",
-      "sha256": "3cc0cf7d49887feaac7669c89b0418c0421031033d4cb753cae06f8de45ae39f",
-      "bytes": 5909
+      "sha256": "9385230f503761c466daab76e2a6c896d43986555d8f33811cf131c5e6fc38d1",
+      "bytes": 5912
     },
     "experiments/folds_s10_f3_bs42.json": {
       "kind": "file",
@@ -729,5 +796,5 @@
       "bytes": 1822
     }
   },
-  "manifest_sha256": "26994911b1c008e4eb164eafd9d50c916d5c45750d894e3f399362b8b0d5e5d9"
+  "manifest_sha256": "959438905d6203f7c11c4b3c7f8e6bda38bb3cf3033dd6b4d7cc7f63c67d639d"
 }
