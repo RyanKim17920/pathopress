@@ -121,7 +121,7 @@
     {
       "name": "public_export",
       "command": "python3 scripts/build_public_release.py && python3 scripts/build_website_starter_sets.py && python3 scripts/publish_hf_dataset.py",
-      "inputs": ["data/scores.csv", "data/tasks.csv", "data/suites.csv", "data/provenance.json", "data/model_metadata.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/confidence_calibration_rank1.json", "experiments/confidence_cells_rank1.csv", "experiments/new_model_confidence_rank1.json", "experiments/probe_compression_rank1.json", "pyproject.toml", "uv.lock", "scripts/build_public_release.py", "scripts/build_hf_dataset.py", "scripts/build_website_starter_sets.py", "scripts/publish_hf_dataset.py", "src/pathopress"],
+      "inputs": ["data/scores.csv", "data/tasks.csv", "data/suites.csv", "data/provenance.json", "data/model_metadata.csv", "data/low_friction_allowlist_v2_top25.json", "experiments/confidence_calibration_rank1.json", "experiments/confidence_cells_rank1.csv", "experiments/new_model_confidence_rank1.json", "experiments/probe_compression_rank1.json", "uv.lock", "scripts/build_public_release.py", "scripts/build_hf_dataset.py", "scripts/build_website_starter_sets.py", "scripts/publish_hf_dataset.py", "src/pathopress"],
       "artifacts": ["experiments/deployment_confidence_rank1.json", "exports/pathopress_public", "website/data.json", "website/starter_sets.json"],
       "external_calls": false
     }

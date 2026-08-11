@@ -3,7 +3,7 @@
   "kind": "pathopress_completed_result_graph",
   "experiment_set": {
     "path": "experiments/experiment_set.json",
-    "sha256": "1b7dabc857df0cf13bbae6a17921c95a2cda85a1533307276c04cb48e155ac47"
+    "sha256": "0c3a8752304010f7e4735e66c61e876499a1708bb996103f872c505e01003339"
   },
   "components": {
     "shared_analysis_contract": {
@@ -246,7 +246,6 @@
         "experiments/confidence_cells_rank1.csv",
         "experiments/new_model_confidence_rank1.json",
         "experiments/probe_compression_rank1.json",
-        "pyproject.toml",
         "uv.lock",
         "scripts/build_public_release.py",
         "scripts/build_hf_dataset.py",
@@ -326,8 +325,8 @@
     },
     "experiments/experiment_set.json": {
       "kind": "file",
-      "sha256": "1b7dabc857df0cf13bbae6a17921c95a2cda85a1533307276c04cb48e155ac47",
-      "bytes": 8785
+      "sha256": "0c3a8752304010f7e4735e66c61e876499a1708bb996103f872c505e01003339",
+      "bytes": 8767
     },
     "experiments/folds_s10_f3_bs42.json": {
       "kind": "file",
@@ -423,11 +422,6 @@
       "kind": "file",
       "sha256": "b2f6130e3aad589d56ab01e37efe8ba4a91d54d81df90c8e723cd8c4ea42a1c8",
       "bytes": 82526
-    },
-    "pyproject.toml": {
-      "kind": "file",
-      "sha256": "fac45a82704ee8a75a1a71df50e2d39af041a9a672aa2653c39eeb415ff0c386",
-      "bytes": 1759
     },
     "scripts/build_evaluation_cost_evidence.py": {
       "kind": "file",
@@ -565,8 +559,8 @@
     },
     "experiments/experiment_set_dry_run.json": {
       "kind": "file",
-      "sha256": "7e473ae1dbd5b550e9e47032e2199c6232d8e987e94dc3b369b8bffd62a025d1",
-      "bytes": 5560
+      "sha256": "3cc0cf7d49887feaac7669c89b0418c0421031033d4cb753cae06f8de45ae39f",
+      "bytes": 5909
     },
     "experiments/folds_s10_f3_bs42.json": {
       "kind": "file",
@@ -735,5 +729,5 @@
       "bytes": 1822
     }
   },
-  "manifest_sha256": "bcb26fc2efd8d22854289b8f21af5cb2cc45ddc6e57bc3f9ae6b684cee6fb66e"
+  "manifest_sha256": "26994911b1c008e4eb164eafd9d50c916d5c45750d894e3f399362b8b0d5e5d9"
 }
