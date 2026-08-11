@@ -426,8 +426,8 @@
     },
     "pyproject.toml": {
       "kind": "file",
-      "sha256": "c10b3a72305aa829657230807fbad266588e9706a882016cb30d92099e2dc95b",
-      "bytes": 1740
+      "sha256": "fac45a82704ee8a75a1a71df50e2d39af041a9a672aa2653c39eeb415ff0c386",
+      "bytes": 1759
     },
     "scripts/build_evaluation_cost_evidence.py": {
       "kind": "file",
@@ -735,5 +735,5 @@
       "bytes": 1822
     }
   },
-  "manifest_sha256": "85188c977e77a73fcc32f903fe55610ceb9fe9d4e683b119e2295e91f2c4f7c8"
+  "manifest_sha256": "6a1681dc6718212192a4492047f16b6ce736b669ce52be336d10942aa1c83d0b"
 }
