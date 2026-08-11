@@ -1,13 +1,28 @@
-# PathoPress
-
-[Scope & claims](docs/scope-and-claims.md) | [Parity notes](docs/benchpress-parity.md) | [Figures](figures/README.md) | [Experiments](experiments/README.md) | [License](LICENSE)
-
-**PathoPress asks whether published pathology-benchmark scores predict the unpublished ones, and how few evaluations are worth running on a new model.** Most pathology foundation models never run on most pathology evaluations, so the score matrix is mostly holes. It is a port of [Microsoft BenchPress](https://github.com/microsoft/benchpress) to a 59-model × 187-evaluation pathology score matrix.
-
-Headline: revealing **4 probe evaluations** cuts median absolute error from **2.6524** (no probes) to **1.8781** normalized points, beating a random probe control in **22 of 34** leave-one-family-out folds (p = 0.0151) and the no-probe baseline in **18 of 34** (p = 0.0088). The direction is solid; the magnitude is not precisely estimable — see [scope & claims](docs/scope-and-claims.md).
+<h1 align="center">PathoPress</h1>
 
 <p align="center">
-  <img width="900" alt="PathoPress hero figure" src="figures/pathopress_benchpress_hero_rank1.png">
+  <b>Do published pathology-benchmark scores predict the unpublished ones — and how few evaluations are worth running on a new model?</b>
+</p>
+
+<p align="center">
+  <a href="https://github.com/RyanKim17920/pathopress/actions/workflows/ci.yml"><img alt="CI status" src="https://github.com/RyanKim17920/pathopress/actions/workflows/ci.yml/badge.svg"></a>
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
+</p>
+
+<p align="center">
+  <a href="docs/scope-and-claims.md">Scope &amp; claims</a> &nbsp;·&nbsp;
+  <a href="docs/benchpress-parity.md">Parity notes</a> &nbsp;·&nbsp;
+  <a href="figures/README.md">Figures</a> &nbsp;·&nbsp;
+  <a href="experiments/README.md">Experiments</a> &nbsp;·&nbsp;
+  <a href="LICENSE">License</a>
+</p>
+
+Most pathology foundation models never run on most pathology evaluations, so the score matrix is mostly holes. PathoPress is a port of [Microsoft BenchPress](https://github.com/microsoft/benchpress) to a 59-model × 187-evaluation pathology score matrix, and it asks which few evaluations are worth running on a new model.
+
+**Headline.** Revealing **4 probe evaluations** cuts median absolute error from **2.6524** (no probes) to **1.8781** normalized points, beating a random probe control in **22 of 34** leave-one-family-out folds (p = 0.0151) and the no-probe baseline in **18 of 34** (p = 0.0088). The direction is solid; the magnitude is not precisely estimable — see [scope & claims](docs/scope-and-claims.md).
+
+<p align="center">
+  <img width="900" alt="Retrospective all-known-cell reconstruction: prediction error against number of revealed probe evaluations, showing error falling as the first few probes are revealed" src="figures/pathopress_benchpress_hero_rank1.png">
 </p>
 
 ## Installation
@@ -43,7 +58,10 @@ pathopress-build-release
 pathopress-download-release BASE_URL DESTINATION
 ```
 
-The full selection and compression sweeps are multi-hour jobs — read [experiments/README.md](experiments/README.md) before rerunning them. Everything above runs on the checked-in `data/scores.csv`; rebuilding *that* file needs the eight pinned upstream checkouts recorded in `data/provenance.json` (`scripts/fetch_sources.py`, then `scripts/build_registry.py`), also documented in [experiments/README.md](experiments/README.md).
+Two caveats before you go further:
+
+- The full selection and compression sweeps are multi-hour jobs — read [experiments/README.md](experiments/README.md) first.
+- Everything above runs on the checked-in `data/scores.csv`. Rebuilding *that* file needs the eight pinned upstream checkouts in `data/provenance.json` (`scripts/fetch_sources.py`, then `scripts/build_registry.py`), also documented in [experiments/README.md](experiments/README.md).
 
 ## Method
 
@@ -77,14 +95,19 @@ flowchart TD
 
 | Claim | Number | Protocol |
 |---|---|---|
-| Probe utility (headline) | MedAE **1.8781** at k=4 vs **2.6524** at k=0 (medians of 34 fold medians), random control **2.6013** (convention A: median over all 340 fold × repeat MedAEs; **2.6260** under convention B, median of fold medians) | LOFO, 34 family folds, matched cells |
-| Paired-fold significance | 18/34 vs k=0 (p = 0.0088); 22/34 vs random (p = 0.0151) — the random test uses **convention B** fold medians, not the convention-A value in the row above | Wilcoxon signed-rank over folds |
+| Probe utility (headline) | MedAE **1.8781** at k=4 vs **2.6524** at k=0, random control **2.6013** | LOFO, 34 family folds, matched cells |
+| Paired-fold significance | 18/34 vs k=0 (p = 0.0088); 22/34 vs random (p = 0.0151) | Wilcoxon signed-rank over folds |
 | Effect size | 29.2% point estimate, 95% CI **[2.8%, 58.7%]** | bootstrap over folds |
 | Ranking preservation | **0.679** greedy vs **0.552** random | all 17,159 model pairs, margin 0 |
 | Per-evaluation utility | **86 / 174 = 49.4%**, CI [42.0%, 56.9%] | per-column matched-cell, leave-one-out |
 
+Conventions behind row 1 and row 2, which differ and are not interchangeable:
+
+- The MedAE numbers are medians of 34 fold medians. The random control **2.6013** is **convention A** (median over all 340 fold × repeat MedAEs); it is **2.6260** under **convention B** (median of fold medians).
+- The random significance test in row 2 uses **convention B** fold medians, not the convention-A value in row 1.
+
 <p align="center">
-  <img width="900" alt="Task utility and held-out mean prediction" src="figures/probe_dual_objective_rank1.png">
+  <img width="900" alt="Two-panel figure: transductive single-task probe utility, and held-out mean-score prediction under a leave-one-family-out protocol" src="figures/probe_dual_objective_rank1.png">
 </p>
 
 ## Limitations and scope
