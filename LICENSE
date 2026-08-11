@@ -19,13 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
-Scope: this MIT license covers PathoPress code. It does not relicense the
-reported benchmark scores in data/scores.csv, which are machine-parsed from
-separately licensed upstream publications and leaderboards and retain their own
-terms of use. See DATA_NOTICE.md and data/LICENSE.
-
-Third-party attribution: portions of this distribution are adapted from
-Microsoft BenchPress under its MIT License. The applicable copyright notice,
-license text, pinned source revision, and component-level provenance are
-preserved in THIRD_PARTY_NOTICES.md.
