@@ -1,6 +1,6 @@
 # PathoPress
 
-[Scope & claims](docs/scope-and-claims.md) | [Parity notes](docs/benchpress-parity.md) | [Figures](figures/README.md) | [Experiments](experiments/README.md) | [Cite](#how-to-cite) | [License](LICENSE)
+[Scope & claims](docs/scope-and-claims.md) | [Parity notes](docs/benchpress-parity.md) | [Figures](figures/README.md) | [Experiments](experiments/README.md) | [License](LICENSE)
 
 **PathoPress asks whether published pathology-benchmark scores predict the unpublished ones, and how few evaluations are worth running on a new model.** Most pathology foundation models never run on most pathology evaluations, so the score matrix is mostly holes. It is a port of [Microsoft BenchPress](https://github.com/microsoft/benchpress) to a 59-model × 187-evaluation pathology score matrix.
 
@@ -94,21 +94,6 @@ flowchart TD
 - **Scale, sample size, and provenance.** Raw MedAE 1.609 vs BenchPress's 4.6 is *not* a three-fold win — pathology dispersion is roughly four times tighter, and the scale-corrected ratio is modestly *worse* than upstream. The 59 models collapse to 34 family groups, so nulls mean "not established", not "disproven". Scores are machine-parsed from pinned primary sources, not dual-human-verified.
 
 Full treatment — conventions, the underpowered allowlist comparison, the optimistic selection objective, and the external BenchPress dependency — is in [docs/scope-and-claims.md](docs/scope-and-claims.md), with protocol distinctions against upstream in [docs/benchpress-parity.md](docs/benchpress-parity.md), cost evidence in [docs/evaluation-cost-evidence.md](docs/evaluation-cost-evidence.md), and source coverage in [docs/score-source-coverage.md](docs/score-source-coverage.md).
-
-## How to cite
-
-This work is unpublished; there is no venue, DOI, or publication year to cite yet. Until then, cite the repository — **the entry below is a placeholder, and the `year`, `howpublished`, and `note` fields must be updated before use**:
-
-```bibtex
-@misc{pathopress,
-  title        = {PathoPress: probe-based completion of a pathology benchmark score matrix},
-  author       = {PathoPress contributors},
-  howpublished = {Software repository},
-  note         = {Unpublished; placeholder entry --- no venue, DOI, or publication year assigned}
-}
-```
-
-If you use the score tables, also cite the upstream sources of the scores you rely on — see [DATA_NOTICE.md](DATA_NOTICE.md). PathoPress adapts [Microsoft BenchPress](https://github.com/microsoft/benchpress); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Licensing
 

@@ -47,6 +47,8 @@ class PathoBenchScoreEvidenceTests(unittest.TestCase):
     def test_registry_parser_emits_all_exaone_cells(self) -> None:
         registry = load_script("build_registry_test", ROOT / "scripts/build_registry.py")
         source = Path("/tmp/pathopress_sources")
+        if not (source / "pathobench_hf").is_dir():
+            self.skipTest("pinned upstream source clones are unavailable")
         tasks = [
             *registry.build_pathobench(source / "pathobench_hf", registry.git(source / "pathobench_hf", "rev-parse", "HEAD")),
             *registry.build_eva(source / "eva", registry.git(source / "eva", "rev-parse", "HEAD")),
