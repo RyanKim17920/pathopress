@@ -13,14 +13,16 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 DISPLAY_K = (1, 5, 10)
+# Darkened from the pastel Vega set: these hues double as the direct-label text
+# colour, and the light pink/teal originals fell below readable contrast on white.
 TARGET_COLORS = (
-    "#4C78A8",
-    "#F58518",
-    "#54A24B",
-    "#E45756",
-    "#72B7B2",
-    "#B279A2",
-    "#FF9DA6",
+    "#2F5D8C",
+    "#C05A00",
+    "#2E7D32",
+    "#C62828",
+    "#00796B",
+    "#7B4E9E",
+    "#B0306B",
 )
 
 
@@ -76,29 +78,36 @@ def build_temporal_figure(payload: dict):
 
     plt.rcParams.update(
         {
-            "font.family": "sans-serif",
-            "font.sans-serif": ["DejaVu Sans"],
+            # Serif, matching the other three public figures.
+            "font.family": "serif",
+            "font.serif": ["Times New Roman", "DejaVu Serif"],
+            "font.size": 13,
+            "axes.labelsize": 13,
+            "xtick.labelsize": 12.5,
+            "ytick.labelsize": 12.5,
             "axes.spines.top": False,
             "axes.spines.right": False,
             "axes.edgecolor": "#333333",
+            "figure.facecolor": "white",
+            "savefig.facecolor": "white",
         }
     )
-    fig, ax = plt.subplots(figsize=(9.6, 5.7))
+    fig, ax = plt.subplots(figsize=(9.4, 5.8))
     x = np.asarray(DISPLAY_K, dtype=float)
 
     final_values = []
     for target, color in zip(targets, TARGET_COLORS):
         values = np.asarray(trajectories[target], dtype=float)
         final_values.append(float(values[-1]))
-        ax.plot(x, values, "o-", color=color, lw=1.8, ms=5.5, alpha=0.88)
+        ax.plot(x, values, "o-", color=color, lw=2.2, ms=6.5, alpha=0.95)
 
     label_y = _nonoverlapping_label_positions(final_values)
     for target, color, actual_y, text_y in zip(targets, TARGET_COLORS, final_values, label_y):
-        ax.plot([10.0, 10.35], [actual_y, text_y], color=color, lw=0.9, alpha=0.75)
-        ax.text(10.42, text_y, target, color=color, va="center", fontsize=9)
+        ax.plot([10.0, 10.35], [actual_y, text_y], color=color, lw=1.1, alpha=0.8)
+        ax.text(10.45, text_y, target, color=color, va="center", fontsize=12.5)
 
     ax.set(
-        xlim=(0.6, 12.65),
+        xlim=(0.6, 13.6),
         ylim=(0, max(2.3, max(label_y) + 0.15)),
         xticks=DISPLAY_K,
         xlabel="Revealed target evaluations (k)",
@@ -107,23 +116,30 @@ def build_temporal_figure(payload: dict):
             "(includes exact revealed cells; normalized points)"
         ),
     )
+    # Stop the axis spine at the last measured k so it does not run on under the
+    # direct-label gutter, which read as an axis extending past the data.
+    ax.spines["bottom"].set_bounds(min(DISPLAY_K), max(DISPLAY_K))
     ax.grid(axis="y", color="#D7D7D7", alpha=0.65, lw=0.8)
     fig.suptitle(
         "Prior-only temporal reconstruction: seven 2025 pathology targets",
-        fontsize=15,
+        fontsize=17,
         fontweight="bold",
         y=0.97,
     )
+    # Identical wording, rewrapped onto two lines: as one line it was wider than
+    # the axes and therefore dictated the saved figure width.
     fig.text(
         0.5,
-        0.035,
-        "Each trajectory is the target-model median across ten probe seeds. "
+        0.03,
+        "Each trajectory is the target-model median across ten probe seeds.\n"
         "MedAE includes k exact revealed cells plus all supported hidden predictions.",
         ha="center",
-        fontsize=10.2,
+        va="bottom",
+        fontsize=11,
+        linespacing=1.3,
         color="#444444",
     )
-    fig.subplots_adjust(left=0.15, right=0.80, bottom=0.20, top=0.86)
+    fig.subplots_adjust(left=0.135, right=0.985, bottom=0.20, top=0.88)
     return fig, ax
 
 
@@ -133,8 +149,10 @@ def main() -> None:
     fig, _ = build_temporal_figure(payload)
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(args.output, dpi=300, bbox_inches="tight")
-    fig.savefig(args.output.with_suffix(".pdf"), bbox_inches="tight")
+    fig.savefig(args.output, dpi=300, bbox_inches="tight", pad_inches=0.06, facecolor="white")
+    fig.savefig(
+        args.output.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.06, facecolor="white"
+    )
     plt.close(fig)
     print(f"wrote {args.output} and {args.output.with_suffix('.pdf')}")
 

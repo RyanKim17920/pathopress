@@ -29,13 +29,20 @@ def apply_style() -> None:
         {
             "font.family": "serif",
             "font.serif": ["Times New Roman", "DejaVu Serif"],
-            "font.size": 11,
+            "font.size": 13,
+            "axes.labelsize": 13.5,
+            "axes.titlesize": 16,
+            "xtick.labelsize": 12.5,
+            "ytick.labelsize": 12.5,
+            "legend.fontsize": 12.5,
             "axes.spines.top": False,
             "axes.spines.right": False,
             "axes.edgecolor": CHARCOAL,
             "axes.labelcolor": CHARCOAL,
             "xtick.color": CHARCOAL,
             "ytick.color": CHARCOAL,
+            "figure.facecolor": "white",
+            "savefig.facecolor": "white",
             "figure.dpi": 150,
             "savefig.dpi": 300,
         }
@@ -79,7 +86,8 @@ def build_rank_selection_figure(result: dict[str, object]):
     selected_error = float(values["selected_pooled_medae"])
     baseline = float(values["baseline_medae"])
 
-    fig, ax = plt.subplots(figsize=(8.7, 5.2))
+    apply_style()
+    fig, ax = plt.subplots(figsize=(9.0, 5.6))
     ax.fill_between(ranks, q1, q3, color=BLUE, alpha=0.16, label="Fold MedAE IQR")
     ax.plot(ranks, pooled, "o-", color=BLUE, lw=2.4, ms=5.5, label="Pooled OOF MedAE")
     ax.axhline(
@@ -116,13 +124,16 @@ def build_rank_selection_figure(result: dict[str, object]):
     )
     ax.set_ylim(min(q1) - 0.08, baseline + 0.10)
     ax.grid(axis="y", alpha=0.24)
+    # The upper-left of the axes is empty (all curves sit near the bottom, the
+    # baseline is a single line at the top), so the legend goes inside rather
+    # than stealing ~27% of the figure width in an outside column.
     ax.legend(
         frameon=True,
         facecolor="white",
-        framealpha=1.0,
+        framealpha=0.95,
         edgecolor="#D9D9D9",
         loc="upper left",
-        bbox_to_anchor=(1.015, 1.0),
+        bbox_to_anchor=(0.015, 0.86),
         borderaxespad=0,
     )
     ax.set_title("Cell-level cross-validation selects interaction rank 1", fontweight="bold")
@@ -140,18 +151,23 @@ def build_rank_selection_figure(result: dict[str, object]):
         semantics,
         ha="center",
         va="bottom",
-        fontsize=9.2,
-        linespacing=1.35,
+        fontsize=11,
+        linespacing=1.3,
         color=CHARCOAL,
     )
-    fig.subplots_adjust(left=0.11, right=0.73, bottom=0.25, top=0.88)
+    fig.subplots_adjust(left=0.105, right=0.985, bottom=0.20, top=0.91)
     return fig, ax
 
 
 def save(fig, output_dir: Path, stem: str) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
     for extension in ("png", "pdf"):
-        fig.savefig(output_dir / f"{stem}.{extension}", bbox_inches="tight", pad_inches=0.08)
+        fig.savefig(
+            output_dir / f"{stem}.{extension}",
+            bbox_inches="tight",
+            pad_inches=0.06,
+            facecolor="white",
+        )
     plt.close(fig)
 
 

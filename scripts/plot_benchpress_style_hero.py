@@ -99,16 +99,25 @@ def build_hero_figure(values: dict[str, object]):
     random_q1 = np.asarray(values["random_q1"])
     random_q3 = np.asarray(values["random_q3"])
 
+    # Sized for a README embed at ~900 px: keeping the figure narrow (in inches)
+    # while raising point sizes is what makes the text legible after downscaling.
     plt.rcParams.update(
         {
             "font.family": "serif",
             "font.serif": ["Times New Roman", "DejaVu Serif"],
-            "font.size": 11,
+            "font.size": 13,
+            "axes.labelsize": 13.5,
+            "axes.titlesize": 16,
+            "xtick.labelsize": 12.5,
+            "ytick.labelsize": 12.5,
+            "legend.fontsize": 12.5,
             "axes.spines.top": False,
             "axes.spines.right": False,
+            "figure.facecolor": "white",
+            "savefig.facecolor": "white",
         }
     )
-    fig, ax = plt.subplots(figsize=(8.1, 5.1))
+    fig, ax = plt.subplots(figsize=(9.0, 5.7))
     x_with_zero = np.r_[0, random_x]
     ax.fill_between(
         x_with_zero,
@@ -164,25 +173,30 @@ def build_hero_figure(values: dict[str, object]):
         xticks=range(0, 11),
     )
     ax.grid(axis="y", alpha=0.22)
-    ax.legend(frameon=False, loc="upper right")
+    # Lower left is the only region no series passes through. Upper right put the
+    # white baseline swatch directly on the random-probe curve (it read as a stray
+    # data point), and framing it there covered the curve instead.
+    ax.legend(frameon=False, loc="lower left", borderaxespad=0.8, labelspacing=0.55)
     ax.set_title("Retrospective all-known matrix reconstruction", fontweight="bold")
+    # Same caveat wording as before, rewrapped onto three shorter lines so the
+    # disclosure block no longer sets the figure width (which starved the axes).
     semantics = (
         f"{values['source_shape'][0]} models × {values['source_shape'][1]} protocols; "
         f"{values['n_observed']:,} reported cells. Revealed probes are scored as exact.\n"
-        "Probe selection and evaluation use the same model population; this is not model-level holdout. "
-        "The 25-task feasibility pool is not measured cost."
+        "Probe selection and evaluation use the same model population;\n"
+        "this is not model-level holdout. The 25-task feasibility pool is not measured cost."
     )
     fig.text(
         0.5,
-        0.015,
+        0.018,
         semantics,
         ha="center",
         va="bottom",
-        fontsize=9.2,
-        linespacing=1.35,
+        fontsize=11,
+        linespacing=1.3,
         color=CHARCOAL,
     )
-    fig.subplots_adjust(left=0.13, right=0.98, bottom=0.27, top=0.89)
+    fig.subplots_adjust(left=0.115, right=0.985, bottom=0.245, top=0.92)
     return fig, ax
 
 
@@ -220,7 +234,13 @@ def main() -> int:
 
     args.hero_output.parent.mkdir(parents=True, exist_ok=True)
     for suffix in ("png", "pdf"):
-        fig.savefig(args.hero_output.with_suffix(f".{suffix}"), dpi=240, bbox_inches="tight")
+        fig.savefig(
+            args.hero_output.with_suffix(f".{suffix}"),
+            dpi=300,
+            bbox_inches="tight",
+            pad_inches=0.06,
+            facecolor="white",
+        )
     plt.close(fig)
 
     summary = {

@@ -51,17 +51,31 @@ MODE_COLORS = {
     "any_candidate": MAGENTA,
     "pre_error_low_friction_allowlist": BLUE,
 }
+# Marker + dash pattern so the two series stay separable without relying on hue
+# alone (they overlap closely at low k, and red/blue is the common CVD confusion).
+MODE_STYLES = {
+    "any_candidate": ("o", "-"),
+    "pre_error_low_friction_allowlist": ("s", "--"),
+}
 
 
 def _style() -> None:
     plt.rcParams.update(
         {
-            "font.family": "sans-serif",
-            "font.sans-serif": ["DejaVu Sans"],
+            # Serif, matching the other three public figures.
+            "font.family": "serif",
+            "font.serif": ["Times New Roman", "DejaVu Serif"],
+            "font.size": 12.5,
+            "axes.labelsize": 13,
+            "xtick.labelsize": 12,
+            "ytick.labelsize": 12,
+            "legend.fontsize": 12,
             "axes.spines.top": False,
             "axes.spines.right": False,
-            "axes.linewidth": 0.8,
+            "axes.linewidth": 0.9,
             "axes.titleweight": "bold",
+            "figure.facecolor": "white",
+            "savefig.facecolor": "white",
         }
     )
 
@@ -335,9 +349,10 @@ def write_records(path: Path, records: list[dict[str, Any]]) -> None:
 def _caption_text(metadata: dict[str, Any]) -> str:
     """Build the prediction-subplot caption from metadata."""
     if metadata.get("split_mode") == "leave_one_family_out":
+        # Wrapped onto two lines; wording unchanged.
         return (
             f"Nested prefixes, leave-one-family-out over "
-            f"{metadata['n_folds']} family folds; "
+            f"{metadata['n_folds']} family folds;\n"
             f"{metadata['total_heldout']} held-out model instances "
             f"(median {metadata['n_validation']} validation model/fold)"
         )
@@ -352,11 +367,13 @@ def build_figure(
     records: list[dict[str, Any]],
     metadata: dict[str, Any],
 ):
+    # 10.2 in wide rather than 12.0: the README embeds this at 900 px, so every
+    # inch of figure width shrinks the on-screen point size of every label.
     fig, (utility_ax, prediction_ax) = plt.subplots(
         1,
         2,
-        figsize=(12.0, 5.7),
-        gridspec_kw={"width_ratios": (1.05, 1.15), "wspace": 0.35},
+        figsize=(10.2, 6.1),
+        gridspec_kw={"width_ratios": (1.05, 1.15), "wspace": 0.30},
     )
 
     ordered = list(reversed(utility))
@@ -367,10 +384,10 @@ def build_figure(
         color=[SUITE_COLORS.get(row["suite_id"], GRAY) for row in ordered],
         alpha=0.92,
     )
-    utility_ax.set_yticks(y, [row["label"] for row in ordered], fontsize=8.5)
+    utility_ax.set_yticks(y, [row["label"] for row in ordered], fontsize=11.5)
     utility_ax.set_xlabel("All-known MedAE reduction (points; higher is better)")
     utility_ax.set_title(
-        "A   Retrospective single-task utility", loc="left", fontsize=12, pad=28
+        "A   Retrospective single-task utility", loc="left", fontsize=14, pad=34
     )
     coverage_values = {round(float(row["coverage"]), 12) for row in ordered}
     common_coverage = next(iter(coverage_values)) if len(coverage_values) == 1 else None
@@ -386,10 +403,12 @@ def build_figure(
     )
     utility_ax.text(
         0,
-        1.01,
-        "Transductive; exact probe cells included" + coverage_note,
+        1.015,
+        "Transductive; exact probe cells included" + coverage_note.replace("; all", ";\nall", 1),
         transform=utility_ax.transAxes,
-        fontsize=9.1,
+        fontsize=11,
+        linespacing=1.25,
+        va="bottom",
         color=CHARCOAL,
     )
     utility_ax.grid(axis="x", color=GRID, alpha=0.8, lw=0.7)
@@ -417,14 +436,16 @@ def build_figure(
         q25 = np.asarray([float(row["model_average_q25"]) for row in rows])
         q75 = np.asarray([float(row["model_average_q75"]) for row in rows])
         color = MODE_COLORS[mode]
+        marker, linestyle = MODE_STYLES[mode]
         prediction_ax.fill_between(x, q25, q75, color=color, alpha=0.10, linewidth=0)
         prediction_ax.plot(
             x,
             median,
-            "o-",
+            marker=marker,
+            linestyle=linestyle,
             color=color,
-            lw=2.2,
-            ms=5,
+            lw=2.4,
+            ms=6.5,
             label=MODE_LABELS[mode],
         )
     prediction_ax.set(
@@ -434,47 +455,60 @@ def build_figure(
     )
     prediction_ax.set_ylim(bottom=0)
     prediction_ax.set_title(
-        "B   Error predicting mean reported score", loc="left", fontsize=12, pad=28
+        "B   Error predicting mean reported score", loc="left", fontsize=14, pad=34
     )
     prediction_ax.text(
         0,
-        1.01,
+        1.015,
         _caption_text(metadata),
         transform=prediction_ax.transAxes,
-        fontsize=9.1,
+        fontsize=11,
+        linespacing=1.25,
+        va="bottom",
         color=CHARCOAL,
     )
     prediction_ax.grid(color=GRID, alpha=0.8, lw=0.7)
     prediction_ax.set_axisbelow(True)
-    prediction_ax.legend(frameon=False, fontsize=8.5, loc="upper right")
+    prediction_ax.legend(
+        frameon=True,
+        facecolor="white",
+        framealpha=0.92,
+        edgecolor="#DDDDDD",
+        fontsize=12,
+        loc="upper right",
+    )
     prediction_ax.text(
         0.02,
         0.03,
         "Shading: held-out-model IQR\n"
         "No k=0/random model-mean controls in current artifacts",
         transform=prediction_ax.transAxes,
-        fontsize=8.4,
+        fontsize=10.5,
+        linespacing=1.3,
         color=CHARCOAL,
         va="bottom",
     )
 
     fig.suptitle(
         "Which pathology evaluations matter, and how much is enough?",
-        fontsize=16,
+        fontsize=17,
         fontweight="bold",
-        y=0.98,
+        y=0.985,
     )
+    # Same wording, rewrapped so the disclosure no longer runs the full figure width.
     fig.text(
         0.5,
-        0.018,
-        "A ranks retrospective utility—not causal task importance. B predicts each held-out "
-        "model's mean over its reported normalized scores.\n"
+        0.02,
+        "A ranks retrospective utility—not causal task importance.\n"
+        "B predicts each held-out model's mean over its reported normalized scores.\n"
         "The 25-task pool is a feasibility proxy—not measured cost.",
         ha="center",
-        fontsize=8.8,
+        va="bottom",
+        fontsize=11,
+        linespacing=1.3,
         color=CHARCOAL,
     )
-    fig.subplots_adjust(left=0.15, right=0.98, bottom=0.20, top=0.84)
+    fig.subplots_adjust(left=0.155, right=0.985, bottom=0.225, top=0.82)
     return fig, utility_ax, prediction_ax
 
 
@@ -519,7 +553,7 @@ def main() -> int:
     for suffix in ("png", "pdf"):
         path = args.output.with_suffix(f".{suffix}")
         path.parent.mkdir(parents=True, exist_ok=True)
-        fig.savefig(path, dpi=220, bbox_inches="tight")
+        fig.savefig(path, dpi=300, bbox_inches="tight", pad_inches=0.06, facecolor="white")
     plt.close(fig)
     print(f"wrote {args.table} and {args.output}.{{png,pdf}}")
     print(
