@@ -528,3 +528,13 @@ normalization, and provenance work is MIT licensed with a CC-BY-style
 attribution expectation; the reported numbers themselves are not PathoPress's to
 license. See [`../DATA_NOTICE.md`](../DATA_NOTICE.md) and
 [`../data/LICENSE`](../data/LICENSE).
+
+A related question is whether the committed `source_data/*.csv` snapshots can be
+re-derived from publicly reachable sources. The snapshot SHA-256 digests in
+`data/provenance.json` confirm snapshot integrity, but three source blocks (Group
+B, Wave E, and Wave F) record no source URL — their extractions are auditable
+through prose only. The H-optimus-1 entry has a URL but is a live marketing page
+whose content may have changed since the hash was captured. `eva_openmidnight` is
+pinned in `scripts/fetch_sources.py` rather than in `data/provenance.json`. Full
+detail is in the "Source snapshot replayability" section of
+[`../DATA_NOTICE.md`](../DATA_NOTICE.md).

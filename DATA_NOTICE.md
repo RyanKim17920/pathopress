@@ -64,6 +64,68 @@ figure into a machine-readable table does not create a new copyright in that
 figure, and nothing in this repository should be read as granting rights the
 upstream publishers did not grant.
 
+## Source snapshot replayability
+
+`data/scores.csv` is reproducible from a clean machine using the eight upstream
+repository checkouts pinned in `data/provenance.json` and the committed
+`source_data/*.csv` snapshots (`scripts/fetch_sources.py` then
+`scripts/build_registry.py`). The committed snapshots themselves have varying
+replayability: whether the extraction from the original upstream source can be
+repeated depends on which `source_reports` entry covers a given snapshot.
+
+**Retrievable and verifiable.** Seven `source_reports` entries record a URL
+alongside a SHA-256 of the archived source file:
+
+- Five arXiv e-prints: `exaone_path_2_5_pathobench`, `threads_pathobench_public`,
+  `wave_d_virchow2_official`, `wave_d_virchow_official`, `wave_d_uni_official`
+  (source-archive SHA-256), and `h0mini_uni2h_official` (paper source-archive
+  SHA-256 plus pinned PLISM and UNI repository revisions).
+- The PathoROB Nature Source Data workbook (`pathorob_nature2026`): PMC
+  supplementary file SHA-256.
+
+Because arXiv source archives and PMC supplementary workbooks are stable once
+posted, a reader can re-fetch the same URL, verify the SHA-256 against the
+recorded digest, and confirm byte-for-byte that the input is unchanged.
+
+**Hash recorded, but source is a live page.** The H-optimus-1 entry
+(`wave_d_hoptimus1_official`) records a URL
+(`https://www.bioptimus.com/news/bioptimus-launches-h-optimus-1`) and an
+`html_sha256` fingerprint in `data/provenance.json`; model card revisions for
+H-optimus-0 and H-optimus-1 are also pinned. However, the news page is a live
+marketing page with no archival guarantee. Its content can change after the hash
+was captured, so a future visitor cannot assume the current page matches what
+was originally read. The recorded hash documents the state at extraction time;
+it cannot be relied on to verify a fresh download of the same URL.
+
+**Not retrievable from the record.** Three `source_reports` entries have
+snapshot SHA-256 digests in `data/provenance.json` but no source URL:
+
+- `group_b_official` — GenBio-PathFM, Midnight MICCAI 2025, and OpenMidnight
+- `wave_e_official` — CONCH, CONCHv1.5, Phikon, and Phikon-v2
+- `wave_f_official` — Hibou, MUSK, and GPFM
+
+The snapshot digests confirm that the committed `source_data/*.csv` files are
+intact, but because no source URL is recorded, the extraction cannot be replayed
+from this repository alone. The audit trail for these snapshots is prose only,
+in `source_data/group_b_source_audit.md`, `source_data/wave_e_source_audit.md`,
+and `source_data/wave_f_source_audit.md`.
+
+**Extractor-only dependency not in `data/provenance.json`.** The
+`eva_openmidnight` repository (`https://github.com/MedARC-AI/OpenMidnight`) is
+used by `scripts/extract_group_b_official_scores.py` to regenerate the committed
+`openmidnight_technical_report_2025.csv` snapshot. Its pinned commit
+(`4c3e4a83…`) is recorded in `scripts/fetch_sources.py` under
+`EXTRACTOR_ONLY_REPOSITORIES`, not in `data/provenance.json`. It is not fetched
+by default; pass `--include-extractor-sources` to `scripts/fetch_sources.py` to
+materialize it.
+
+The net position: `data/scores.csv` is reproducible from a clean machine. The
+hash-pinned snapshots are auditable and their integrity is checkable against
+`data/provenance.json`. The extraction of the Group B, Wave E, and Wave F
+snapshots from their original upstream sources is not independently replayable
+from the information recorded in this repository; those extractions are auditable
+only through their prose source audits.
+
 ## Model weights and datasets
 
 `docs/model-sources.md` and `data/model_sources.csv` link primary papers and

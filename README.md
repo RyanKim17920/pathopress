@@ -1,221 +1,53 @@
 # PathoPress
 
-<p align="center">
-  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
-  <a href="docs/scope-and-claims.md"><img alt="Scope and claims" src="https://img.shields.io/badge/docs-scope--and--claims-informational.svg"></a>
-</p>
+[Scope & claims](docs/scope-and-claims.md) | [Parity notes](docs/benchpress-parity.md) | [Figures](figures/README.md) | [Experiments](experiments/README.md) | [Cite](#how-to-cite) | [License](LICENSE)
 
-**Most pathology foundation models are never run on most pathology evaluations.**
-PathoPress asks whether the scores that *have* been published can predict the
-ones that have not, and which handful of evaluations is worth running on a new
-model. It is a port of [Microsoft BenchPress](https://github.com/microsoft/benchpress)
-to a 59-model × 187-evaluation pathology score matrix.
+**PathoPress asks whether published pathology-benchmark scores predict the unpublished ones, and how few evaluations are worth running on a new model.** Most pathology foundation models never run on most pathology evaluations, so the score matrix is mostly holes. It is a port of [Microsoft BenchPress](https://github.com/microsoft/benchpress) to a 59-model × 187-evaluation pathology score matrix.
 
-The headline: under leave-one-family-out validation on matched cells, revealing
-**4 probe evaluations** cuts median absolute error from **2.6524** (predict with
-no probes) to **1.8781** normalized points. Greedy probe selection beats the
-no-probe baseline in **18 of 34** family folds (Wilcoxon p = 0.0088) and a random
-probe control in **22 of 34** (p = 0.0151). The effect is real; its *size* is
-not pinned down — the bootstrap CI on the 29.2% point-estimate reduction runs
-**[2.8%, 58.7%]**.
+Headline: revealing **4 probe evaluations** cuts median absolute error from **2.6524** (no probes) to **1.8781** normalized points, beating a random probe control in **22 of 34** leave-one-family-out folds (p = 0.0151) and the no-probe baseline in **18 of 34** (p = 0.0088). The direction is solid; the magnitude is not precisely estimable — see [scope & claims](docs/scope-and-claims.md).
 
 <p align="center">
   <img width="900" alt="PathoPress hero figure" src="figures/pathopress_benchpress_hero_rank1.png">
 </p>
 
-## The method
-
-The score matrix is 59 pathology foundation models × 187 evaluation protocols
-across 6 benchmark suites, with 2,122 observed cells — **19.2% density**. A
-rank-1 bias-decomposed ALS completion (parity-verified against the pinned
-BenchPress primitive to ~1e-13) fits the observed history. For a new model you
-run a small probe set; the fit completes the rest of its row.
-
-```mermaid
-flowchart LR
-    subgraph HIST["Published history — 59 models x 187 evaluations"]
-        M["2,122 observed cells (19.2%)<br/>80.8% never run"]
-    end
-
-    subgraph ALS["Rank-1 bias-decomposed ALS"]
-        A["s(m,e) = mu + b_model(m) + b_eval(e) + u(m) * v(e)"]
-    end
-
-    subgraph NEW["A new model — 187 evaluations"]
-        direction TB
-        R["4 probe evaluations<br/>MEASURED (revealed)"]:::rev
-        U["183 remaining evaluations<br/>PREDICTED"]:::pred
-    end
-
-    M --> A
-    R -- "fit b_model, u for this model" --> A
-    A -- "complete the row" --> U
-
-    classDef rev fill:#1d4ed8,stroke:#1e3a8a,stroke-width:2px,color:#ffffff
-    classDef pred fill:#cbd5e1,stroke:#475569,stroke-width:2px,color:#0f172a
-```
-
-Probe columns are revealed; the remainder is predicted. Which columns to reveal
-is chosen greedily on the training models of each fold, never on the model being
-predicted.
-
-## Results
-
-| Claim | Number | Protocol |
-|---|---|---|
-| Probe utility (headline) | MedAE **1.8781** at k=4 vs **2.6524** at k=0 (medians of 34 fold medians), random control **2.6013** (convention A: median over all 340 fold × repeat MedAEs; **2.6260** under convention B, median of fold medians) | LOFO, 34 family folds, matched cells |
-| Paired-fold significance | 18/34 vs k=0 (p = 0.0088); 22/34 vs random (p = 0.0151) — the random test uses **convention B** fold medians, not the convention-A value in the row above | Wilcoxon signed-rank over folds |
-| Effect size | 29.2% point estimate, 95% CI **[2.8%, 58.7%]** | bootstrap over folds |
-| Ranking preservation | **0.679** greedy vs **0.552** random | all 17,159 model pairs, margin 0 |
-| Per-evaluation utility | **86 / 174 = 49.4%**, CI [42.0%, 56.9%] | per-column matched-cell, leave-one-out |
-
-The last row is a **null result**. Asked column by column — does revealing four
-probes improve the prediction of *this particular* evaluation? — the answer is
-indistinguishable from a coin flip. The matrix-wide gain is real; a
-per-evaluation gain is not established.
-
-<p align="center">
-  <img width="900" alt="Task utility and held-out mean prediction" src="figures/probe_dual_objective_rank1.png">
-</p>
-
-## The cost inversion
-
-The most informative probes are the *heaviest* benchmarks. The top-ranked probe,
-`thunder.spider_skin.linear_probing`, covers 159,854 images; `thunder.esca`
-covers 367k and `thunder.tcga_uniform` 272k. Restricting selection to a 25-task
-low-friction allowlist erases the effect entirely. On the allowlist's own
-matched-cell set at k=4 (1,237 cells, 34 LOFO folds), allowlist greedy reaches
-MedAE **1.9463** against an allowlist-restricted random control of **2.0251**
-(median-of-fold-medians convention; **2.0118** under the median-over-340-fold-×-
-repeat convention), from a k=0 baseline of **2.8555**. The nominal gap favours
-greedy but is not a result: greedy wins 10 of 34 folds, ties 15, and loses 9
-(Wilcoxon p = 0.4939), and the bootstrap CI on the reduction is
-**[-11.5%, +20.7%]**. The conclusion is unchanged at every tested depth k = 1..5
-(p ranges from 0.05 to 0.49; every CI straddles zero).
-
-**This comparison is underpowered by design, and that must be disclosed with
-it.** The 15 ties are exactly the **15 of 34 folds** where the allowlist arms are
-*zero-information*: the held-out family has no observed score on any of the 25
-allowlist evaluations, so greedy and random produce literally identical predictions
-(not merely "too close to call") and both reduce to the k=0 arm. This identity
-between tied folds and zero-information folds holds at every k = 1..5, not just k=4.
-Restricting to the 19 informative folds alone (10 wins vs 9 losses) is still
-non-significant, so the null is not an artifact of tie-handling — the informative
-folds are genuinely balanced. Only 19 folds carry any signal. The unrestricted 187-candidate arm, by contrast,
-beats random in 22 of 34 folds at p = 0.0151.
-
-So the appealing version of this result — "run five cheap evaluations instead of
-187" — is not supported here. And it cannot be repaired with better cost
-modeling, because the cost audit found directly reported runtime, hardware,
-annotation-hour, or dollar cost for **0 of 187** evaluations. Sample counts and
-the feasibility allowlist are metadata proxies, not a cost curve.
-
-## Scale correction
-
-The raw cell-level MedAE is 1.609 against BenchPress's 4.6. That is **not** a
-three-fold improvement. Pathology per-column dispersion is roughly four times
-tighter than the upstream LLM matrix (median column SD **3.75** here vs **14.1**
-upstream). On a scale-corrected error-to-dispersion basis the ratio is **0.43**
-here versus **0.33** upstream — this port is modestly *worse* than upstream, not
-better.
-
-The upstream side of that comparison is an **external dependency, not vendored
-here**. The BenchPress matrix (84 models × 133 benchmarks, 2,604 cells, median
-column SD 14.1, MedAE 4.6) lives in a separate checkout of
-`microsoft/benchpress` at pinned commit
-`0a684b63ee0e4a401cb907a3827a82ea997d74c4`, so those dispersion figures — and
-the 0.33 ratio built from them — cannot be reproduced from this repository
-alone.
-
-<p align="center">
-  <img width="900" alt="Cell-level rank validation" src="figures/benchpress_style_validation_rank1.png">
-</p>
-
-## Limitations
-
-- **Selection objective is optimistic.** The greedy objective scores revealed
-  probe cells as literal 0.0, reading 1.5142 at four probes against a held-out
-  1.7994 — about 15.9% optimistic. Correcting it changes which probes get picked
-  and needs an ~8.7-hour rerun.
-- **Held-out ranking is not estimable.** Under LOFO the hidden-only ranking
-  measurement reaches `pairwise_n_pairs = 1`; no precise inference follows from it.
-- **N = 59 is small.** The 59 models collapse to 34 independent family groups,
-  with a median of 1 validation model per fold. The nulls above are "not
-  established", not "disproven".
-- Scores are machine-parsed from pinned primary sources, not dual-human-verified.
-  Normalized points mix several native metrics and are not a clinical unit.
-  Retrospective interpolation is not prospective clinical validation.
-
-<p align="center">
-  <img width="900" alt="Temporal deployment" src="figures/temporal_deployment_rank1.png">
-</p>
-
-## Quickstart
+## Installation
 
 ```bash
+git clone <this-repo> && cd pathopress
 uv pip install -e .          # or: python3 -m pip install -e .
+```
 
+## Usage
+
+Audit the registry and predict an unobserved cell:
+
+```bash
 pathopress audit --scores data/scores.csv
 pathopress predict --model atlas \
   --evaluation eva.leaderboard.bach.validation --confidence
 ```
 
-Reproduce the corrected headline numbers offline — no GPU, no benchmark runs:
+Reproduce the headline numbers offline. This needs **no GPU and runs no benchmarks** — it rebuilds the matrix from `data/scores.csv`, replays the LOFO matched-cell comparison, and writes `experiments/lofo_matched_cells_rank1.json`:
 
 ```bash
 pathopress-replay
 ```
 
-It rebuilds the matrix from `data/scores.csv`, replays the LOFO matched-cell
-comparison, and writes `experiments/lofo_matched_cells_rank1.json`. It needs
-three inputs, all checked in: `data/scores.csv`, the selection/compression JSON
-under `experiments/`, and
-`outputs/probe_compression_selected_raw_rank1.csv.gz`.
-
 Other console scripts:
 
 ```bash
-pathopress-run --list             # every reproducible workflow
+pathopress-run --list                  # list reproducible workflow steps
 pathopress-run build-shared-artifacts
 pathopress-check-freshness
 pathopress-build-release
 pathopress-download-release BASE_URL DESTINATION
 ```
 
-The long selection and compression sweeps are multi-hour jobs; see
-[experiments/README.md](experiments/README.md) before rerunning them.
+The full selection and compression sweeps are multi-hour jobs — read [experiments/README.md](experiments/README.md) before rerunning them. Everything above runs on the checked-in `data/scores.csv`; rebuilding *that* file needs the eight pinned upstream checkouts recorded in `data/provenance.json` (`scripts/fetch_sources.py`, then `scripts/build_registry.py`), also documented in [experiments/README.md](experiments/README.md).
 
-### Rebuilding `data/scores.csv` itself
+## Method
 
-Everything above runs from the checked-in `data/scores.csv`. Rebuilding *that*
-file additionally needs the pinned upstream checkouts, which are not vendored
-here. Fetch them at the exact revisions recorded in `data/provenance.json`:
-
-```bash
-python3 scripts/fetch_sources.py --dry-run   # resolve all 8 pins, fetch nothing
-python3 scripts/fetch_sources.py             # ~150 MB into /tmp/pathopress_sources
-python3 scripts/build_registry.py --sources /tmp/pathopress_sources
-```
-
-`fetch_sources.py` takes an optional destination argument, defaults to the
-directory `build_registry.py --sources` defaults to, skips checkouts already at
-their pin, refuses any revision that is not a full 40-character commit SHA, and
-exits non-zero on a pin mismatch rather than continuing with a wrong source. It
-then verifies content, not just revisions: the five files vendored byte-exact
-under `source_data/pinned/` must match the fresh checkout, and the 18 committed
-`source_data/*.csv` snapshots must match the SHA-256 digests recorded in
-`data/provenance.json`. No credentials or Hugging Face token are
-needed, and no Git LFS payloads are downloaded. `--check` re-verifies an
-existing tree without touching the network.
-
-Run it before `build_registry.py`: the build records whichever commit it finds
-checked out, so it will not catch a drifted source on its own.
-
-What this does **not** cover: the `source_data/*.csv` snapshots are committed
-and hash-verified, but regenerating them from the original papers is not fully
-automated. See [Source snapshots](#source-snapshots) below.
-
-## Pipeline
+The score matrix is 59 pathology foundation models × 187 evaluation protocols across 6 benchmark suites, with 2,122 observed cells — **19.2% density**. A rank-1 bias-decomposed ALS completion (parity-verified against the pinned BenchPress primitive to ~1e-13) is fit to the observed history. For a new model you run a small probe set, and the fit completes the rest of its row. Which columns to reveal is chosen greedily on the training models of each fold, never on the model being predicted.
 
 ```mermaid
 flowchart TD
@@ -241,52 +73,45 @@ flowchart TD
     class REG,SHARED,SEL,COMP,REPLAY,RANK,FIG,REL code
 ```
 
-## Source snapshots
+## Results
 
-The registry has two kinds of input. The eight pinned repository checkouts are
-fully automatable — every pin in `data/provenance.json` was confirmed still
-fetchable at its exact commit from GitHub and Hugging Face, and
-`scripts/fetch_sources.py` materializes them end to end.
+| Claim | Number | Protocol |
+|---|---|---|
+| Probe utility (headline) | MedAE **1.8781** at k=4 vs **2.6524** at k=0 (medians of 34 fold medians), random control **2.6013** (convention A: median over all 340 fold × repeat MedAEs; **2.6260** under convention B, median of fold medians) | LOFO, 34 family folds, matched cells |
+| Paired-fold significance | 18/34 vs k=0 (p = 0.0088); 22/34 vs random (p = 0.0151) — the random test uses **convention B** fold medians, not the convention-A value in the row above | Wilcoxon signed-rank over folds |
+| Effect size | 29.2% point estimate, 95% CI **[2.8%, 58.7%]** | bootstrap over folds |
+| Ranking preservation | **0.679** greedy vs **0.552** random | all 17,159 model pairs, margin 0 |
+| Per-evaluation utility | **86 / 174 = 49.4%**, CI [42.0%, 56.9%] | per-column matched-cell, leave-one-out |
 
-The other kind is the 18 `source_data/*.csv` snapshots, which carry the scores
-extracted from papers, model cards, vendor reports, and one Nature Source Data
-spreadsheet. Those files are **committed and hash-verified**, so a rebuild of
-`data/scores.csv` never re-downloads a PDF. Regenerating the snapshots from
-their origins is a different matter, and is only partly automatable:
+<p align="center">
+  <img width="900" alt="Task utility and held-out mean prediction" src="figures/probe_dual_objective_rank1.png">
+</p>
 
-- Retrievable and hashed: the arXiv e-print archives (EXAONE Path 2.5, THREADS,
-  H0-mini/UNI2-h, Virchow, Virchow2, UNI) and the PathoROB Nature Source Data
-  `.xlsx`. `data/provenance.json` records a URL and a SHA-256 for each; all were
-  confirmed to still return HTTP 200.
-- Retrievable but unhashed: the H-optimus-1 vendor news page, which is a live
-  marketing page with no archival copy or content hash. It can change or vanish
-  without notice.
-- **Not retrievable from the record**: the Group B, Wave E, and Wave F snapshots
-  (GenBio PathFM, Midnight MICCAI 2025, OpenMidnight, CONCH, CONCH1.5/TITAN,
-  Phikon family, CTransPath, Hibou, MUSK, GPFM) have snapshot SHA-256 digests in
-  `data/provenance.json` but **no source URL**. Their extraction cannot be
-  replayed from this repository alone; the committed CSVs are the authoritative
-  record. The `source_data/*_source_audit.md` files document what was taken from
-  where in prose.
-- `scripts/extract_group_b_official_scores.py` also reads an OpenMidnight
-  checkout that `data/provenance.json` does not pin. `fetch_sources.py
-  --include-extractor-sources` fetches it at the revision this project used,
-  which is recorded in the script rather than in provenance.
-- The extractors are hand-tuned parsers written against specific table layouts.
-  Even where a source is retrievable, they are not a general-purpose pipeline.
+## Limitations and scope
 
-In short: `data/scores.csv` is reproducible from a clean machine; the
-paper-derived snapshots feeding it are auditable but not, in every case,
-re-derivable.
+- **Per-evaluation utility is null.** Asked column by column — does revealing four probes improve prediction for *this particular* evaluation? — the answer is **86 / 174 = 49.4%**, indistinguishable from a coin flip. The matrix-wide gain is real; the per-evaluation gain is not established.
+- **Cost inversion.** The most informative probes are the *heaviest* benchmarks — the top-ranked probe, `thunder.spider_skin.linear_probing`, covers 159,854 images — and restricting selection to a 25-task low-friction allowlist erases the effect (Wilcoxon p = 0.4939, bootstrap CI **[-11.5%, +20.7%]**, underpowered by design). "Run five cheap evaluations instead of 187" is not supported here, and better cost modeling cannot repair it: directly reported runtime, hardware, annotation-hour, or dollar cost exists for **0 of 187** evaluations.
+- **Scale, sample size, and provenance.** Raw MedAE 1.609 vs BenchPress's 4.6 is *not* a three-fold win — pathology dispersion is roughly four times tighter, and the scale-corrected ratio is modestly *worse* than upstream. The 59 models collapse to 34 family groups, so nulls mean "not established", not "disproven". Scores are machine-parsed from pinned primary sources, not dual-human-verified.
 
-## Documentation and licensing
+Full treatment — conventions, the underpowered allowlist comparison, the optimistic selection objective, and the external BenchPress dependency — is in [docs/scope-and-claims.md](docs/scope-and-claims.md), with protocol distinctions against upstream in [docs/benchpress-parity.md](docs/benchpress-parity.md), cost evidence in [docs/evaluation-cost-evidence.md](docs/evaluation-cost-evidence.md), and source coverage in [docs/score-source-coverage.md](docs/score-source-coverage.md).
 
-A consolidated statement of what this project does and does not establish is in
-[docs/scope-and-claims.md](docs/scope-and-claims.md). Protocol distinctions
-against upstream are in [docs/benchpress-parity.md](docs/benchpress-parity.md);
-the four public figures are indexed in [figures/README.md](figures/README.md).
+## How to cite
 
-Code is [MIT-licensed](LICENSE), including the attributed BenchPress adaptations
-listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Registry facts do
-not relicense benchmark data, publications, images, labels, or model weights —
-see [data/LICENSE](data/LICENSE) and [DATA_NOTICE.md](DATA_NOTICE.md).
+This work is unpublished; there is no venue, DOI, or publication year to cite yet. Until then, cite the repository — **the entry below is a placeholder, and the `year`, `howpublished`, and `note` fields must be updated before use**:
+
+```bibtex
+@misc{pathopress,
+  title        = {PathoPress: probe-based completion of a pathology benchmark score matrix},
+  author       = {PathoPress contributors},
+  howpublished = {Software repository},
+  note         = {Unpublished; placeholder entry --- no venue, DOI, or publication year assigned}
+}
+```
+
+If you use the score tables, also cite the upstream sources of the scores you rely on — see [DATA_NOTICE.md](DATA_NOTICE.md). PathoPress adapts [Microsoft BenchPress](https://github.com/microsoft/benchpress); see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+## Licensing
+
+Code is [MIT-licensed](LICENSE), including the attributed BenchPress adaptations listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+Registry facts do not relicense benchmark data, publications, images, labels, or model weights — see [data/LICENSE](data/LICENSE) and [DATA_NOTICE.md](DATA_NOTICE.md).
