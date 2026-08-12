@@ -9,6 +9,7 @@ from pathlib import Path
 from pathopress.matrix import filter_matrix, load_scores, make_matrix
 from scripts import build_registry
 from scripts.extract_pathorob_scores import paper_rows, repository_example_rows
+from tests.pinned_sources import missing_inputs, sources_root
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -112,9 +113,18 @@ class PathoROBScoreEvidenceTests(unittest.TestCase):
 
     def test_extractor_reproduces_snapshot_when_pinned_inputs_are_available(self) -> None:
         workbook = Path("/tmp/pathorob_source_data.xlsx")
-        repository = Path("/tmp/pathopress_sources/pathorob")
-        if not workbook.is_file() or not repository.is_dir():
-            self.skipTest("pinned PathoROB workbook/repository are unavailable")
+        repository = sources_root() / "pathorob"
+        if not repository.is_dir():
+            missing_inputs(self, "the pinned PathoROB repository is unavailable")
+        if not workbook.is_file():
+            # The Nature source-data workbook is served from a publisher
+            # endpoint that refuses automated clients, so no CI job can
+            # provision it; only PATHOPRESS_REQUIRE_PINNED_SOURCES=all demands it.
+            missing_inputs(
+                self,
+                "the pinned PathoROB source-data workbook is unavailable",
+                fetchable=False,
+            )
         generated = paper_rows(workbook) + repository_example_rows(repository)
         with SNAPSHOT.open(newline="", encoding="utf-8") as handle:
             committed = list(csv.DictReader(handle))
@@ -154,9 +164,9 @@ class PathoROBScoreEvidenceTests(unittest.TestCase):
         )
 
     def test_registry_ingests_paper_means_and_never_examples(self) -> None:
-        source = Path("/tmp/pathopress_sources")
+        source = sources_root()
         if not (source / "pathorob").is_dir():
-            self.skipTest("pinned upstream source clones are unavailable")
+            missing_inputs(self, "pinned upstream source clones are unavailable")
         tasks = [
             *build_registry.build_pathobench(
                 source / "pathobench_hf",

@@ -10,6 +10,7 @@ from scripts.extract_group_b_official_scores import (
     midnight_rows,
     openmidnight_rows,
 )
+from tests.pinned_sources import missing_inputs, sources_root
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,11 +129,21 @@ class GroupBOfficialScoreEvidenceTests(unittest.TestCase):
         genbio_pdf = Path("/tmp/genbio-pathfm.pdf")
         midnight_pdf = Path("/tmp/midnight-4651.pdf")
         openmidnight_html = Path("/tmp/openmidnight_report.html")
-        openmidnight_repo = Path("/tmp/pathopress_sources/eva_openmidnight")
-        if not all(path.exists() for path in (
-            genbio_pdf, midnight_pdf, openmidnight_html, openmidnight_repo
-        )):
-            self.skipTest("pinned Group B primary inputs are unavailable")
+        openmidnight_repo = sources_root() / "eva_openmidnight"
+        if not openmidnight_repo.is_dir():
+            missing_inputs(
+                self,
+                "the pinned OpenMidnight checkout is unavailable "
+                "(scripts/fetch_sources.py --include-extractor-sources)",
+            )
+        if not all(p.exists() for p in (genbio_pdf, midnight_pdf, openmidnight_html)):
+            # data/provenance.json records no retrieval URL for these three
+            # publisher artifacts, so nothing in this repository can fetch them.
+            missing_inputs(
+                self,
+                "pinned Group B publisher artifacts are unavailable",
+                fetchable=False,
+            )
         self.assertEqual(genbio_rows(genbio_pdf), read(GENBIO))
         self.assertEqual(midnight_rows(midnight_pdf), read(MIDNIGHT))
         self.assertEqual(openmidnight_rows(openmidnight_html, openmidnight_repo), read(OPENMIDNIGHT))

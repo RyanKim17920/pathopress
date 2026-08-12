@@ -12,6 +12,7 @@ from scripts.extract_wave_f_official_scores import (
     hibou_rows,
     musk_rows,
 )
+from tests.pinned_sources import missing_inputs
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -96,7 +97,11 @@ class WaveFOfficialScoresTests(unittest.TestCase):
         musk_pdf = base / "musk" / "41586_2024_8378_MOESM1_ESM.pdf"
         gpfm_pdf = base / "gpfm" / "41551_2025_1488_MOESM1_ESM.pdf"
         if not all(p.exists() for p in (hibou_pdf, musk_pdf, gpfm_pdf)):
-            self.skipTest("pinned Wave F publisher artifacts unavailable")
+            # Publisher supplementary PDFs with no recorded retrieval URL; see
+            # tests/pinned_sources.py for why CI cannot provision them.
+            missing_inputs(
+                self, "pinned Wave F publisher artifacts unavailable", fetchable=False
+            )
         self.assertEqual(hibou_rows(hibou_pdf), read("hibou_official_scores_2024.csv"))
         self.assertEqual(musk_rows(musk_pdf), read("musk_official_scores_2025.csv"))
         self.assertEqual(gpfm_rows(gpfm_pdf, base / "gpfm"), read("gpfm_official_scores_2025.csv"))

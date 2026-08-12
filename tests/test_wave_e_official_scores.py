@@ -11,6 +11,7 @@ from scripts.extract_wave_e_official_scores import (
     ctranspath_rows,
     phikon_family_rows,
 )
+from tests.pinned_sources import missing_inputs
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -77,7 +78,9 @@ class WaveEOfficialScoresTests(unittest.TestCase):
             "v2": Path("/tmp/phikon_v2.pdf"), "supp": Path("/tmp/phikon_supp.pdf"),
         }
         if not all(path.exists() for path in paths.values()):
-            self.skipTest("pinned Wave E source PDFs unavailable")
+            # Publisher supplementary PDFs with no recorded retrieval URL; see
+            # tests/pinned_sources.py for why CI cannot provision them.
+            missing_inputs(self, "pinned Wave E source PDFs unavailable", fetchable=False)
         self.assertEqual(conch_rows(paths["conch"]), read("conch_official_scores_2024.csv"))
         self.assertEqual(conch15_rows(paths["titan"]), read("conch15_titan_official_scores_2025.csv"))
         self.assertEqual(phikon_family_rows(paths["v2"], paths["supp"]), read("phikon_family_official_scores_2023_2024.csv"))

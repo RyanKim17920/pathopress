@@ -2,6 +2,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from tests.pinned_sources import missing_inputs, sources_root
+
 from scripts.evidence.eva_scores import (
     merge_scores,
     parse_midnight_scores,
@@ -12,10 +14,10 @@ from scripts.evidence.eva_scores import (
 
 class EvaScoreExtractionTests(unittest.TestCase):
     def test_official_pinned_sources_have_expected_shape(self) -> None:
-        eva = Path("/tmp/pathopress_sources/eva")
-        midnight = Path("/tmp/pathopress_sources/eva_midnight")
+        eva = sources_root() / "eva"
+        midnight = sources_root() / "eva_midnight"
         if not eva.is_dir() or not midnight.is_dir():
-            self.skipTest("pinned upstream source clones are unavailable")
+            missing_inputs(self, "pinned upstream source clones are unavailable")
         repository = parse_repository_scores(eva, "e43e74a99b75660b0014f790f25a33dd9f11e121")
         report = parse_midnight_scores(midnight, "adc6b15679c981cce6f9b018bbad09d16eeeda9f")
         selected, duplicates = merge_scores(repository, report)
@@ -53,10 +55,10 @@ class EvaScoreExtractionTests(unittest.TestCase):
         self.assertIn("eva.leaderboard.monusac.test", ids)
 
     def test_current_repository_wins_duplicate_without_losing_audit(self) -> None:
-        eva = Path("/tmp/pathopress_sources/eva")
-        midnight = Path("/tmp/pathopress_sources/eva_midnight")
+        eva = sources_root() / "eva"
+        midnight = sources_root() / "eva_midnight"
         if not eva.is_dir() or not midnight.is_dir():
-            self.skipTest("pinned upstream source clones are unavailable")
+            missing_inputs(self, "pinned upstream source clones are unavailable")
         repository = parse_repository_scores(eva, "repo")
         report = parse_midnight_scores(midnight, "report")
         selected, duplicates = merge_scores(repository, report)

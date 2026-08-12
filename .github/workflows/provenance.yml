@@ -1,0 +1,121 @@
+name: Provenance check
+
+# Verifies the claim the rest of CI cannot: that data/scores.csv and the
+# source_data/*.csv snapshots really do derive from the sources this repository
+# cites. The extraction-fidelity tests re-run each extractor against the pinned
+# upstream checkout and compare against what is committed. Those checkouts are
+# ~149 MB and are deliberately not vendored, so in the pull-request gate the
+# tests skip -- which meant, until this workflow existed, that the project's
+# central provenance claim was never checked anywhere.
+#
+# FRAGILITY, STATED PLAINLY: this workflow fetches eight external repositories
+# at the exact SHAs recorded in data/provenance.json. If an upstream repository
+# is deleted, made private, or has its history rewritten, this workflow turns
+# red for a reason nobody here can fix by changing this repository. That is
+# acceptable -- arguably it is the point, since it means the cited source is no
+# longer retrievable and the provenance claim has genuinely weakened -- but it
+# is why this job is scheduled and manually dispatchable and is deliberately
+# NOT part of the pull-request gate in ci.yml. Do not add it there, and do not
+# paper over a failure with continue-on-error: a red run here is information.
+#
+# There is a second, narrower gap this workflow cannot close. Four extraction
+# tests read publisher supplementary PDFs, a Nature source-data workbook and a
+# vendor HTML report. data/provenance.json records no retrieval URL for the
+# Group B / Wave E / Wave F artifacts at all, and no automated client can pull
+# the ones it does record. Those tests still skip here; the run below prints
+# them with `-rs` so the skips are visible rather than silent, and
+# PATHOPRESS_REQUIRE_PINNED_SOURCES=all demands them on a workstation that has
+# them. See tests/pinned_sources.py.
+
+"on":
+  workflow_dispatch:
+  schedule:
+    # Mondays, 06:17 UTC. Off the hour because GitHub's scheduler is heavily
+    # oversubscribed at :00 and delays cron runs accordingly.
+    - cron: "17 6 * * 1"
+
+concurrency:
+  group: provenance-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-sources:
+    name: pinned sources + extraction fidelity
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    env:
+      # Both scripts/fetch_sources.py and scripts/build_registry.py --sources
+      # default to this path, and tests/pinned_sources.py reads it from
+      # PATHOPRESS_SOURCES.
+      PATHOPRESS_SOURCES: /tmp/pathopress_sources
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      # Kept byte-identical to ci.yml so a failure here is never an artefact of
+      # a different toolchain than the pull-request gate resolves.
+      - name: Install uv
+        uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.7"
+          python-version: "3.13"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Sync dependencies
+        run: >-
+          uv sync --locked
+          --extra test
+          --extra plots
+          --extra confidence
+          --extra research
+          --extra evidence
+          --extra hf
+
+      # Keyed on the pin file itself, so a run that changes no pin restores the
+      # checkouts and touches the network only for the integrity re-verification
+      # below. scripts/fetch_sources.py is part of the key because it also
+      # carries the OpenMidnight pin, which data/provenance.json does not.
+      - name: Restore pinned upstream checkouts
+        uses: actions/cache@v4
+        with:
+          path: /tmp/pathopress_sources
+          key: pinned-sources-${{ hashFiles('data/provenance.json', 'scripts/fetch_sources.py') }}
+
+      # Idempotent: a checkout already at its pin is left alone. Fetching is
+      # blobless and shallow where the remote allows it, and LFS smudging is
+      # disabled, so this transfers text, not model weights.
+      - name: Materialize pinned sources
+        run: uv run python scripts/fetch_sources.py --include-extractor-sources
+
+      # Separate pass so a cache that was restored from an earlier key, or a
+      # checkout mutated by a previous step, cannot go unnoticed. --check
+      # fetches nothing and fails on any drift from data/provenance.json.
+      - name: Re-verify the tree against the pins
+        run: uv run python scripts/fetch_sources.py --check --include-extractor-sources
+
+      # The whole suite, not just the extraction files: the point of this
+      # workflow is that a guard which quietly stops running is exactly the
+      # failure mode being fixed, so every source-dependent guard in the suite
+      # is held to the same rule. PATHOPRESS_REQUIRE_PINNED_SOURCES=1 makes a
+      # missing pinned checkout a failure instead of a skip. -rs lists the
+      # remaining skips (the publisher artifacts described above).
+      - name: Run the suite with pinned sources required
+        env:
+          PATHOPRESS_REQUIRE_PINNED_SOURCES: "1"
+        run: uv run pytest tests/ -q -rs
+
+      # Both scripts need the pinned BenchPress checkout, so they cannot run in
+      # the pull-request gate. They compare this repository's completion and
+      # method-grid primitives against upstream's own implementations, which is
+      # the numerical half of the same provenance question.
+      - name: BenchPress predictor parity
+        run: uv run python scripts/verify_benchpress_parity.py /tmp/pathopress_sources/benchpress
+
+      - name: BenchPress method-grid parity
+        run: uv run python scripts/verify_method_comparison_parity.py /tmp/pathopress_sources/benchpress

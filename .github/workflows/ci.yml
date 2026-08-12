@@ -64,6 +64,24 @@ jobs:
       - name: Run tests
         run: uv run pytest tests/ -q
 
+      # experiments/experiment_set_dry_run.json is a committed artifact that the
+      # freshness check below can only confirm is unmodified. Regenerating it
+      # here and requiring a clean diff upgrades that hash comparison into a
+      # real check that the declared experiment set still resolves: every input,
+      # dependency and artifact each component claims must still exist on disk.
+      # Hermetic (no network, reads only tracked files) and ~0.6 s.
+      - name: Re-derive the experiment-set dry run
+        run: |
+          uv run python scripts/dry_run_experiment_set.py > /dev/null
+          git diff --exit-code -- experiments/experiment_set_dry_run.json
+
+      # ~0.3 s, no network. Overlaps tests/test_score_review.py but is not
+      # redundant with it: the test asserts a subset of the summary fields,
+      # while this requires every key of the recomputed ledger summary to equal
+      # the committed data/score_review_summary.json.
+      - name: Validate the score-review ledger
+        run: uv run python scripts/validate_score_review_ledger.py > /dev/null
+
       # Verifies the hash-bound manifest in
       # experiments/artifact_freshness_manifest.json still matches the committed
       # artifacts. This reads experiments/probe_compression_rank1.json (~26 MB),
@@ -73,6 +91,15 @@ jobs:
       - name: Check artifact freshness
         run: uv run python scripts/check_artifact_freshness.py check
 
+  # NOTE: the extraction-fidelity tests skip in this job because the pinned
+  # upstream checkouts they read are not vendored. They are exercised by
+  # .github/workflows/provenance.yml, which provisions those checkouts and
+  # fails rather than skips. That workflow is scheduled and manually
+  # dispatchable and must stay out of this gate: it depends on eight external
+  # repositories staying reachable at fixed SHAs, which is not something a pull
+  # request should be blocked on. scripts/verify_benchpress_parity.py and
+  # scripts/verify_method_comparison_parity.py live there for the same reason.
+  #
   # NOTE: experiments/run_probe_compression.py and
   # experiments/run_probe_selection.py are multi-hour research jobs and are
   # deliberately NOT run in CI. Their outputs are committed artifacts and are
