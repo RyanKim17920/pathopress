@@ -207,9 +207,10 @@ def _greedy(
         # it is buying the answer.
         #
         # Size of the gap on the published LOFO run at k=4: parity MedAE
-        # 1.5142 versus hidden-only MedAE 1.7994, i.e. the parity objective
-        # reads ~16% more optimistic than the held-out quantity anyone
-        # actually cares about.
+        # 1.5026 (revealed cells scored as zero error, n_target 2122) versus
+        # hidden-only MedAE 1.6055 (hidden cells only, n_hidden 2037), i.e.
+        # the parity objective reads ~6.4% more optimistic than the held-out
+        # quantity anyone actually cares about.
         #
         # Switching to ``hidden_only`` would change WHICH probes are selected
         # and so invalidates every published probe set; that is an 8.7-hour

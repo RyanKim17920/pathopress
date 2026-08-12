@@ -102,8 +102,10 @@ value per fold, whereas the 2.6013 figure usually quoted alongside them is
 **convention A**. Table value and test statistic use different aggregations, and
 that is stated rather than left implicit. Two scope notes travel with this: the
 greedy selector optimizes `parity.median_absolute_error`, which scores revealed
-probe cells as literal 0.0 and is about 15.9% optimistic at four probes (1.5142
-against a held-out 1.7994); and per-evaluation utility on this protocol is null,
+probe cells as literal 0.0 and is about 6.4% optimistic at four probes (1.5026
+with the 85 revealed cells counted at zero error, against 1.6055 on the 2,037
+hidden cells of the same completion); and per-evaluation utility on this protocol
+is null,
 at 86 of 174 scored columns (49.4%, 95% CI [42.0%, 56.9%]). Reproduce with
 `scripts/replay_lofo_matched_cells.py`, artifact
 [matched-cell LOFO results](../experiments/lofo_matched_cells_rank1.json).

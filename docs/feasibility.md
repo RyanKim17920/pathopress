@@ -131,11 +131,14 @@ input/label pipeline rule, not a measured cost model. It matches BenchPress's
 candidate count while adapting the task identities to pathology. A defensible
 practical panel still needs runtime, GPU/memory, sample acquisition, staining,
 annotation, tissue, and licensing audits. Exact choose-five plans cover 53,130
-pre-error and 142,506 error-informed combinations. Both searches are complete:
-their certified MedAE optima are 1.485944 and 1.427339, respectively. This does
-not turn the 25-task proxy into measured cost, and neither result is globally
-exhaustive over the legacy 168-column snapshot. The current 187-column probe
-artifacts must be regenerated before those values are used as current results.
+pre-error and 142,506 error-informed combinations, and both searches ran to
+completion — but they ran on the **legacy 168-column snapshot**, not on the
+current 187-column matrix. **Their certified MedAE optima, 1.485944 and 1.427339,
+are stale and must not be read as current results.** Neither value appears in any
+current artifact, neither search was globally exhaustive even on that snapshot,
+and the 187-column probe artifacts have to be regenerated before any choose-five
+optimum can be quoted again. Regenerating them would still not turn the 25-task
+proxy into measured cost.
 
 ## What remains difficult
 

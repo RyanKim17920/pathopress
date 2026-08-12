@@ -481,9 +481,23 @@ revealed, independent of how much it tells the model about the rest of the row. 
 selector is thus partly optimizing "reveal the cells that would be predicted worst"
 rather than pure informativeness.
 
-The gap is measurable. At k=4 the selection objective reads **1.5142** against the
-held-out quantity **1.7994** — the objective is about **15.9% optimistic** relative to
-what it is being used to improve.
+The gap is measurable, and it has to be measured against the *same* completion rather
+than against some other protocol's held-out number. At k=4 the selection objective reads
+**1.5026** with the 85 revealed cells counted at zero error, against **1.6055** on the
+2,037 hidden cells of that identical probe set and completion — so the objective is about
+**6.4% optimistic**, purely from scoring revealed cells as 0.0. Both figures come from
+`experiments/probe_compression_rank1.json`,
+`curves.any_candidate.all_known_greedy_medae[k=4].selection_metrics.medae` and
+`.hidden_medae`; they are reproduced independently as
+`all_known_greedy[step=4].parity.medae` and `.hidden_only.medae` in
+`experiments/probe_selection_results_rank1.json`.
+
+Two things this number is *not*. It is not a generalization gap: the matched-cell LOFO
+greedy value (1.8781, 3.5) is a different protocol on a different cell set, and folding
+it in would conflate the zero-scoring bias with fold-to-fold generalization. And it is
+not the previously published **15.9%**: that figure compared **1.5142** against
+**1.7994**, both legacy 168-column values, and 1.7994 is itself the held-out number
+withdrawn in 3.5. That comparison is retracted.
 
 This is disclosed as a limitation, not corrected. Fixing it means selecting on a
 hidden-only objective, which would change which probes are chosen and requires an
@@ -542,7 +556,7 @@ well-supported (3.5); the held-out *ranking* result is not.
    per-column, leave-one-out, matched-cell measurement is 86/174 (49.4%, CI
    [42.0%, 56.9%]), which is null. The 58.9% figure it replaced is withdrawn.
 3a. **Rerun greedy selection against a hidden-only objective.** The current selector
-   optimizes an objective that is about 15.9% optimistic at k=4 because it scores revealed
+   optimizes an objective that is about 6.4% optimistic at k=4 because it scores revealed
    probe cells as zero (5.3a). Fixing this changes which probes are selected and needs an
    approximately 8.7-hour rerun.
 4. ~~**Restate 0.878 with scope wherever it appears.**~~ **Done.** Every current

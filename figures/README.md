@@ -39,8 +39,9 @@ model-level holdout.
 **Scope caveat.** Revealed probes are exact, and selection/evaluation use the same model
 population, so this is not a held-out comparison; for the matched-cell held-out numbers see
 [`lofo_matched_cells_rank1.json`](../experiments/lofo_matched_cells_rank1.json). Probes are
-also selected on an objective that scores revealed cells as 0.0 and is about 15.9% optimistic
-at four probes. The 25-task track is a low-friction proxy, not measured cost.
+also selected on an objective that scores revealed cells as 0.0 and is about 6.4% optimistic
+at four probes (1.5026 with revealed cells counted at zero error, against 1.6055 on the
+hidden cells of the same completion). The 25-task track is a low-friction proxy, not measured cost.
 
 ### 3. Task utility and held-out mean prediction
 

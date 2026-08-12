@@ -6,8 +6,8 @@ This directory is a static, no-backend interface for three PathoPress workflows:
 - append a new model from one or more known normalized scores and run the selected rank-1 bias-ALS recipe entirely in the browser.
 - browse the complete reported/predicted matrix with model, evaluation, and cell-kind filters; every cell links back to its lookup details.
 
-Generated `data.json` contains the fixed 59-model × 168-evaluation paper matrix,
-2,027 reported cells, rank-1 estimates, source links, existing-row intervals and
+Generated `data.json` contains the fixed 59-model × 187-evaluation paper matrix,
+2,122 reported cells, rank-1 estimates, source links, existing-row intervals and
 trust probabilities (with explicit abstention statuses),
 and the compact unseen-model confidence lookup. The browser implementation uses the same logit, per-evaluation
 standardization, ridge `0.1`, 40 ALS iterations, and seeded ten-start recipe as
@@ -40,7 +40,7 @@ below and explicitly abstain from this existing-row trust probability.
 New-model intervals use a separate group-balanced artifact built only from
 leave-one-model-out sparse-probe and temporal-release residuals at k=1/3/5/10.
 The UI shows its risk, fallback scope, model-group/prediction counts, and an
-explicit abstention for unsupported columns. Its 94.98% held-out coverage at a
+explicit abstention for unsupported columns. Its 94.80% held-out coverage at a
 nominal 90% level is a retrospective empirical result, not a prospective,
 distribution-free, or clinical guarantee.
 

@@ -160,8 +160,12 @@ precise and should not be quoted to three significant figures.
 
 Two disclosures belong with these figures. Greedy selects on
 `parity.median_absolute_error`, which scores revealed probe cells as literal 0.0,
-so the selection objective is about 15.9% optimistic at four probes (1.5142
-against a held-out 1.7994). And per-evaluation utility is null: 86 of 174 scored
+so the selection objective is about 6.4% optimistic at four probes: 1.5026 with
+the 85 revealed cells counted at zero error against 1.6055 on the 2,037 hidden
+cells of that same k=4 completion. That percentage isolates the zero-scoring
+inflation only; it is not the gap to the matched-cell held-out numbers above,
+which come from a different protocol on a different cell set. And per-evaluation
+utility is null: 86 of 174 scored
 columns (49.4%, 95% CI [42.0%, 56.9%]) improve at four greedy probes over their
 own k=0 baseline. Reproduce all of these with
 `scripts/replay_lofo_matched_cells.py`, which writes

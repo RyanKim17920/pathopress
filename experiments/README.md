@@ -18,8 +18,9 @@ python3 scripts/fetch_sources.py                 # pins from data/provenance.jso
 python3 scripts/build_registry.py --sources /tmp/pathopress_sources
 ```
 
-See the README's [Source snapshots](../README.md#source-snapshots) section for
-which upstream inputs are re-derivable and which are only auditable.
+See [Source snapshot replayability](../DATA_NOTICE.md#source-snapshot-replayability)
+in the data notice for which upstream inputs are re-derivable and which are only
+auditable.
 
 ## Artifact storage forms
 

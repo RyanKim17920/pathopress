@@ -53,10 +53,12 @@ Other console scripts:
 ```bash
 pathopress-run --list                  # list reproducible workflow steps
 pathopress-run build-shared-artifacts
-pathopress-check-freshness
+pathopress-check-freshness check       # verify artifacts against the freshness manifest
 pathopress-build-release
 pathopress-download-release BASE_URL DESTINATION
 ```
+
+There is also a tracked static browser predictor in [`website/`](website/README.md) (`index.html`, `app.js`, `data.json`, `starter_sets.json`, plus its own `NOTICE.txt`). It runs the same rank-1 recipe client-side with no backend: look up a cell of the published matrix, or complete a new model's row from a few pasted scores. It reports no results beyond the ones in this repository. To run it locally, serve the repository root with `python3 -m http.server 8000` and open <http://localhost:8000/website/>.
 
 Two caveats before you go further:
 

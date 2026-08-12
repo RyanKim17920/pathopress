@@ -45,8 +45,11 @@ Other modules independently reimplement or pathology-adapt BenchPress
   exhaustive probe protocols;
 - `src/pathopress/ranking.py` implements the pairwise-margin and top-fraction
   leaderboard metrics used by the ranking-preservation experiments;
-- `src/pathopress/predictability.py` and `src/pathopress/temporal.py` implement
-  the hide-half predictability and prior-release-only deployment protocols; and
+- `src/pathopress/temporal.py` implements the prior-release-only deployment
+  protocol;
+- `scripts/verify_benchpress_parity.py` and
+  `scripts/verify_method_comparison_parity.py` load the pinned upstream checkout
+  directly and compare its numerical output with the PathoPress ports; and
 - structure, error-factor, plotting, table, maintenance, export, CLI, and the
   remainder of the site code follow analogous scientific roles where
   documented, but use
