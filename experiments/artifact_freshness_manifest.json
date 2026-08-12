@@ -422,8 +422,8 @@
     },
     "experiments/run_probe_selection.py": {
       "kind": "file",
-      "sha256": "d6247b4600775e6e351dc8627b9311a593ccff06bac2bf96bd43f3833337aced",
-      "bytes": 37601
+      "sha256": "18ffe4f4255bb1917730a8671650815d03d5318c7c5809f7d3a8461d3f0da783",
+      "bytes": 37700
     },
     "experiments/run_ranking_preservation.py": {
       "kind": "file",
@@ -517,9 +517,9 @@
     },
     "src/pathopress": {
       "kind": "directory",
-      "sha256": "febf1b74fe6301de87e772e9341f7554edd32dbb67ea86f6c28f0084dc198aa7",
+      "sha256": "a2a4f01130b2e50cbae00d29c65314f7cdeadd9224691b7bc48a6c2ad54b3529",
       "file_count": 25,
-      "bytes": 328565
+      "bytes": 329730
     },
     "src/pathopress/budgeted_probes.py": {
       "kind": "file",
@@ -568,8 +568,8 @@
     },
     "uv.lock": {
       "kind": "file",
-      "sha256": "a59bc71cdf51bfaf78fad5df67a52f114033e3d7350213e26de46d98e480fc43",
-      "bytes": 424030
+      "sha256": "d099ba2ca167bfe984651b9297588b2ece10cd003aba46a835941af8b11ad969",
+      "bytes": 424488
     }
   },
   "dependencies": {},
@@ -796,5 +796,5 @@
       "bytes": 1822
     }
   },
-  "manifest_sha256": "959438905d6203f7c11c4b3c7f8e6bda38bb3cf3033dd6b4d7cc7f63c67d639d"
+  "manifest_sha256": "dbd8d874755c845d9c173fbaf6a99c18ea7c3142263f0680d21d59033d8cbbdc"
 }

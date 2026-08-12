@@ -369,6 +369,38 @@ class PublicExportTests(ProductFixture):
                     min_models_per_evaluation=2, parquet_mode="yes",
                 )
 
+    def test_auto_mode_never_deletes_parquet_it_cannot_regenerate(self) -> None:
+        # Regression: `pathopress-build-release` runs parquet_mode="auto".  With
+        # pyarrow absent it fell back to CSV and unlinked every committed
+        # *.parquet in the export, silently destroying tracked artifacts.
+        out = self._build("auto-rebuild")
+        before = sorted(path.name for path in (out / "data").glob("*.parquet"))
+        self.assertEqual(len(before), 9)
+        with patch("pathopress.public_data.parquet_available", return_value=False):
+            with self.assertRaisesRegex(RuntimeError, "Refusing to delete"):
+                build_public_export(
+                    scores_path=self.scores, tasks_path=self.tasks,
+                    suites_path=self.suites, provenance_path=self.provenance,
+                    model_metadata_path=self.models, out_dir=out,
+                    min_scores_per_model=2, min_models_per_evaluation=2,
+                )
+        self.assertEqual(
+            sorted(path.name for path in (out / "data").glob("*.parquet")), before
+        )
+        # Explicit CSV-only builds are allowed, but must warn and still not delete.
+        with patch("pathopress.public_data.parquet_available", return_value=False):
+            with self.assertWarnsRegex(RuntimeWarning, "left untouched"):
+                build_public_export(
+                    scores_path=self.scores, tasks_path=self.tasks,
+                    suites_path=self.suites, provenance_path=self.provenance,
+                    model_metadata_path=self.models, out_dir=out,
+                    min_scores_per_model=2, min_models_per_evaluation=2,
+                    parquet_mode="no",
+                )
+        self.assertEqual(
+            sorted(path.name for path in (out / "data").glob("*.parquet")), before
+        )
+
     def test_hf_publication_is_dry_run_and_upload_is_doubly_opt_in(self) -> None:
         source = self._build("publish")
         plan = publish_hf_export(source, repo_id="org/dataset")

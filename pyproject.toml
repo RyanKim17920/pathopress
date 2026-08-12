@@ -8,7 +8,10 @@ version = "0.1.0"
 description = "Citation-backed matrix completion for pathology foundation-model benchmarks"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["numpy>=1.24"]
+# `scipy` is a core dependency, not a research extra: the documented headline
+# reproduction command (`pathopress-replay`) runs the paired Wilcoxon test on
+# its default code path, so a core-only install must be able to complete it.
+dependencies = ["numpy>=1.24", "scipy>=1.10"]
 
 [project.optional-dependencies]
 plots = ["matplotlib>=3.8"]

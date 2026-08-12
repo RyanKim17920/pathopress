@@ -10,6 +10,7 @@ import json
 import os
 import shutil
 import tempfile
+import warnings
 from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Iterable, Mapping
@@ -429,10 +430,30 @@ def build_public_export(
             "Parquet export requested but pyarrow is unavailable; install `pathopress[hf]`."
         )
     exporter = _exporter_identity(write_parquet=write_parquet)
-    # Never let Parquet produced by an older build leak into a CSV-only upload.
-    if data_dir.exists():
-        for stale_parquet in data_dir.glob("*.parquet"):
+    existing_parquet = sorted(data_dir.glob("*.parquet")) if data_dir.exists() else []
+    if write_parquet:
+        # Every one of these is rewritten below, so removing them first only
+        # clears Parquet produced by an older build; nothing is lost.
+        for stale_parquet in existing_parquet:
             stale_parquet.unlink()
+    elif existing_parquet:
+        # A CSV-only build must never silently delete Parquet it cannot
+        # regenerate: those files are committed artifacts of this repository.
+        if parquet_mode == "auto":
+            raise RuntimeError(
+                f"{len(existing_parquet)} Parquet file(s) already exist in {data_dir} "
+                "but pyarrow is unavailable, so this build cannot regenerate them. "
+                "Refusing to delete them. Install `pathopress[hf]` to rebuild the "
+                "Parquet tables, or pass parquet_mode='no' to build a CSV-only "
+                "export and leave the existing Parquet files in place."
+            )
+        warnings.warn(
+            f"CSV-only export requested; {len(existing_parquet)} pre-existing Parquet "
+            f"file(s) in {data_dir} were left untouched and are NOT covered by this "
+            "manifest. Treat them as stale and remove them before publishing.",
+            RuntimeWarning,
+            stacklevel=2,
+        )
 
     raw_scores = _read_csv(scores_path)
     tasks = _read_csv(tasks_path)

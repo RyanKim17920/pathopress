@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import math
 import unittest
 from collections import Counter
 from pathlib import Path
@@ -48,6 +49,67 @@ class PathoROBScoreEvidenceTests(unittest.TestCase):
         )
         self.assertEqual(phikon_cam["value"], "-0.9912678739397616")
 
+    # Tight enough that any change with scientific meaning still fails (it is
+    # ~4 orders of magnitude above the ~1e-16 double-precision ULP and ~10
+    # orders below the smallest difference that could move a reported digit),
+    # loose enough to absorb last-ULP drift between supported NumPy/CPython
+    # stacks.
+    NUMERIC_TOLERANCE = 1e-12
+
+    def _cells_match(self, produced: str, expected: str) -> bool:
+        """True when two serialized cells agree up to last-ULP float drift.
+
+        Byte-comparing serialized cells pins the committed CSV to exactly one
+        floating-point stack: the extractor's aggregation lands on a different
+        last ULP under other supported interpreters, so a bit-exact assertion
+        fails for no scientific reason.  Numbers are therefore compared as
+        parsed floats within ``NUMERIC_TOLERANCE``; everything else (labels,
+        identifiers, key names, and the structure of ``key=value;...``
+        payloads such as ``uncertainty``) is still compared byte-for-byte.
+        """
+
+        if produced == expected:
+            return True
+        try:
+            return math.isclose(float(produced), float(expected),
+                                rel_tol=self.NUMERIC_TOLERANCE, abs_tol=0.0)
+        except ValueError:
+            pass
+        # Structured `key=value;key=value` payloads: keys and ordering must be
+        # identical; only the individual values may drift in their last ULP.
+        produced_parts = produced.split(";")
+        expected_parts = expected.split(";")
+        if len(produced_parts) < 2 or len(produced_parts) != len(expected_parts):
+            return False
+        for produced_part, expected_part in zip(produced_parts, expected_parts):
+            if produced_part == expected_part:
+                continue
+            produced_key, _, produced_number = produced_part.partition("=")
+            expected_key, _, expected_number = expected_part.partition("=")
+            if produced_key != expected_key:
+                return False
+            try:
+                if not math.isclose(float(produced_number), float(expected_number),
+                                    rel_tol=self.NUMERIC_TOLERANCE, abs_tol=0.0):
+                    return False
+            except ValueError:
+                return False
+        return True
+
+    def _assert_rows_match_snapshot(
+        self, generated: list[dict[str, str]], committed: list[dict[str, str]]
+    ) -> None:
+        self.assertEqual(len(generated), len(committed))
+        for index, (produced, expected) in enumerate(zip(generated, committed)):
+            self.assertEqual(sorted(produced), sorted(expected), f"row {index} fields")
+            for field, expected_value in expected.items():
+                self.assertTrue(
+                    self._cells_match(produced[field], expected_value),
+                    f"row {index} field {field!r}: {produced[field]!r} does not match "
+                    f"snapshot {expected_value!r} within a "
+                    f"{self.NUMERIC_TOLERANCE:g} relative tolerance",
+                )
+
     def test_extractor_reproduces_snapshot_when_pinned_inputs_are_available(self) -> None:
         workbook = Path("/tmp/pathorob_source_data.xlsx")
         repository = Path("/tmp/pathopress_sources/pathorob")
@@ -56,7 +118,40 @@ class PathoROBScoreEvidenceTests(unittest.TestCase):
         generated = paper_rows(workbook) + repository_example_rows(repository)
         with SNAPSHOT.open(newline="", encoding="utf-8") as handle:
             committed = list(csv.DictReader(handle))
-        self.assertEqual(generated, committed)
+        self._assert_rows_match_snapshot(generated, committed)
+
+    def test_snapshot_comparison_still_rejects_a_real_extraction_regression(self) -> None:
+        with SNAPSHOT.open(newline="", encoding="utf-8") as handle:
+            committed = list(csv.DictReader(handle))
+        # A last-ULP difference is tolerated ...
+        nudged = [dict(row) for row in committed]
+        nudged[0]["value"] = repr(math.nextafter(float(nudged[0]["value"]), math.inf))
+        self.assertNotEqual(nudged[0]["value"], committed[0]["value"])
+        self._assert_rows_match_snapshot(nudged, committed)
+        # ... a change big enough to matter scientifically is not.
+        broken = [dict(row) for row in committed]
+        broken[0]["value"] = repr(float(broken[0]["value"]) * (1 + 1e-9))
+        with self.assertRaises(AssertionError):
+            self._assert_rows_match_snapshot(broken, committed)
+        # ... and non-numeric drift is still byte-compared.
+        relabelled = [dict(row) for row in committed]
+        relabelled[0]["model_id"] = relabelled[0]["model_id"] + "-v2"
+        with self.assertRaises(AssertionError):
+            self._assert_rows_match_snapshot(relabelled, committed)
+        # Structured `key=value;...` payloads get the same treatment.
+        payload = "95%_ci_half_width=0.772179915336249;n=60;df=59"
+        self.assertTrue(
+            self._cells_match("95%_ci_half_width=0.772179915336248;n=60;df=59", payload)
+        )
+        self.assertFalse(
+            self._cells_match("95%_ci_half_width=0.772179925336249;n=60;df=59", payload)
+        )
+        self.assertFalse(
+            self._cells_match("95%_ci_half_width=0.772179915336249;n=61;df=59", payload)
+        )
+        self.assertFalse(
+            self._cells_match("ci_half_width=0.772179915336249;n=60;df=59", payload)
+        )
 
     def test_registry_ingests_paper_means_and_never_examples(self) -> None:
         source = Path("/tmp/pathopress_sources")
